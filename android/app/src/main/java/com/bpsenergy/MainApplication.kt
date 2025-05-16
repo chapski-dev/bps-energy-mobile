@@ -1,4 +1,4 @@
-package com.bpsenergy
+package com.bpsenergy.charging
 
 import android.app.Application
 import com.facebook.react.PackageList

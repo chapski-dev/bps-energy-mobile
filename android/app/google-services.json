@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "86874327227",
+    "project_id": "bps-energy",
+    "storage_bucket": "bps-energy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86874327227:android:57674c33752fcf7d99419e",
+        "android_client_info": {
+          "package_name": "com.bpsenergy.charging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1eAze5BpwwReG0yPdCVoctwLQVqm7qG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
