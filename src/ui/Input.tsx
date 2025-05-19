@@ -1,130 +1,99 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import {
-  NativeSyntheticEvent,
-  StyleProp,
-  StyleSheet,
+  Text,
   TextInput,
-  TextInputFocusEventData,
   TextInputProps,
-  View,
-  ViewStyle
+  TouchableOpacity,
 } from 'react-native';
-import SearchIcon from '@assets/svg/search.svg';
-
-import { useAppTheme } from '@src/theme/theme';
-
-import { Text } from './Text';
+import { Box } from './Box';
+import ClosedEyeIcon from '../../assets/svg/closed-eye.svg';
+import OpenEyeIcon from '../../assets/svg/open-eye.svg';
 
 interface InputProps extends TextInputProps {
-  label?: string;
   prompting?: string;
-  value?: string;
-  onChangeText?: (text: string) => void;
-  error?: boolean;
-  errorText?: string;
-  required?: boolean;
-  wrapperStyle?: StyleProp<ViewStyle>;
-  type?: 'search' | 'classic';
-  color?: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  icon?: React.ReactNode;
+  isPassword?: boolean;
+  validate?: (text: string) => string | null;
 }
 
-export const Input = forwardRef<InputProps, InputProps>(
-  (
-    {
-      label,
-      prompting,
-      value,
-      onChangeText,
-      error,
-      errorText,
-      required,
-      wrapperStyle,
-      onFocus,
-      onBlur,
-      type,
-      ...props
-    },
-    ref
-  ) => {
-    const localRef: React.Ref<TextInput> & React.Ref<React.PropsWithChildren<InputProps>> =
-      useRef(null);
+export const Input: FC<InputProps> = ({
+  value,
+  onChangeText,
+  prompting,
+  icon,
+  isPassword = false,
+  validate,
+  ...restProps
+}) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const [isFocused, setIsFocused] = useState(false);
-    const { colors } = useAppTheme();
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
-    const _onFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-      setIsFocused(true);
-      if (onFocus) {
-        onFocus(e);
-      }
-    };
+  const handleBlur = () => {
+    setIsFocused(false);
+    if (validate) {
+      setErrorMessage(validate(value));
+    }
+  };
 
-    const _onBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-      setIsFocused(false);
-      if (onBlur) {
-        onBlur(e);
-      }
-    };
+  const borderColor = errorMessage
+    ? '#E73030'
+    : isFocused
+      ? '#000A0A'
+      : '#D1D4DA';
 
-    return (
-      <View style={[{ flexGrow: 1, gap: 4 }, wrapperStyle]}>
-        {label && (
-          <Text style={styles.label}>
-            <Text children={label} />
-            {required ? <Text children=" *" color={colors.red} /> : null}
-          </Text>
+  const borderWidth = isFocused ? 2 : 1;
+
+  return (
+    <>
+      <Box
+        row
+        alignItems="center"
+        borderWidth={borderWidth}
+        borderRadius={12}
+        borderColor={borderColor}
+        p={16}
+        gap={12}
+      >
+        {icon && <Box>{icon}</Box>}
+        <TextInput
+          value={value}
+          style={{ flex: 1, fontSize: 18 }}
+          onChangeText={(text) => {
+            onChangeText(text);
+            setErrorMessage(null);
+          }}
+          onFocus={() => setIsFocused(true)}
+          onBlur={handleBlur}
+          secureTextEntry={isPassword && !isPasswordVisible}
+          {...restProps}
+        />
+        {isPassword && (
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            {isPasswordVisible ? (
+              <OpenEyeIcon width={24} height={24} />
+            ) : (
+              <ClosedEyeIcon width={24} height={24} />
+            )}
+          </TouchableOpacity>
         )}
-        <View
-          style={[
-            { ...styles.inputWrapper, borderColor: colors.border },
-            isFocused && { borderColor: colors.main },
-            error && styles.inputError
-          ]}
-        >
-          {type === 'search' && <SearchIcon />}
-          <TextInput
-            value={value}
-            style={[styles.input, { color: colors.textDefault }]}
-            onChangeText={onChangeText}
-            onFocus={_onFocus}
-            onBlur={_onBlur}
-            placeholderTextColor={colors.border}
-            //@ts-ignore
-            ref={ref || localRef}
-            {...props}
-          />
-        </View>
-        {error && <Text style={styles.errorText} children={errorText} />}
-        {prompting && (
-          <Text style={{ ...styles.label, color: colors.label }} children={prompting} />
-        )}
-      </View>
-    );
-  }
-);
-
-const styles = StyleSheet.create({
-  errorText: {
-    color: 'red',
-  },
-  input: {
-    flexGrow: 1,
-    fontSize: 15,
-    minHeight: 50,
-  },
-  inputError: {
-    borderColor: 'red',
-  },
-  inputWrapper: {
-    alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 1.5,
-    flexDirection: 'row',
-    flexGrow: 1,
-    gap: 9,
-    paddingHorizontal: 10,
-  },
-  label: {
-    fontSize: 13,
-  },
-});
+      </Box>
+      <Text
+        style={{
+          fontSize: 13,
+          paddingTop: 8,
+          lineHeight: 18,
+          color: errorMessage ? '#E73030' : '#8A8F93',
+        }}
+      >
+        {errorMessage || prompting}
+      </Text>
+    </>
+  );
+};
