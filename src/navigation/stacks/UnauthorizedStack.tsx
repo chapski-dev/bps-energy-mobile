@@ -15,7 +15,7 @@ export const UnauthorizedStack = () => {
   return (
     <Stack.Navigator screenOptions={{
       headerTintColor: colors.main,
-      headerTitleStyle: { color: colors.textDefault },
+      headerTitleStyle: { color: colors.grey_800 },
       title: ''
     }}>
       <Stack.Screen

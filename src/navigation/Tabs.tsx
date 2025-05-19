@@ -5,8 +5,9 @@ import { ProfileScreen } from '@src/screens/ProfileScreen';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 
-import OrderIcon from '../../assets/svg/orders.svg';
-import ProfileIcon from '../../assets/svg/profile-outline.svg';
+import MapPinIcon from '@assets/svg/map-pin.svg';
+import BPSIcon from '@assets/svg/BPS.svg';
+import ProfileIcon from '@assets/svg/user.svg';
 
 import { TabsParamList } from './types';
 import MapScreen from '@src/screens/MapScreen';
@@ -21,7 +22,7 @@ export const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.main,
-        tabBarInactiveTintColor: colors.textDefault,
+        tabBarInactiveTintColor: colors.grey_800,
         tabBarLabelStyle: { color: 'black' },
       }}
     >
@@ -29,7 +30,7 @@ export const Tabs = () => {
         name="map"
         component={MapScreen}
         options={{
-          tabBarIcon: ({ color }) => <OrderIcon color={color} />,
+          tabBarIcon: ({ color }) => <MapPinIcon color={color} />,
           title: t('my-orders'),
         }}
       />
@@ -37,7 +38,7 @@ export const Tabs = () => {
         name="charging"
         component={ChargingScreen}
         options={{
-          tabBarIcon: ({ color }) => <OrderIcon color={color} />,
+          tabBarIcon: ({ color }) => <BPSIcon color={color} />,
           title: t('my-orders'),
         }}
       />

@@ -75,8 +75,8 @@ const Text: FC<TextProps> = ({
   ...rest
 }) => {
   const theme = useAppTheme();
-  // const key = colorName || (theme.dark ? darkColorName : lightColorName) || 'textDefault';
-  const key = colorName || 'textDefault';
+  // const key = colorName || (theme.dark ? darkColorName : lightColorName) || 'grey_800';
+  const key = colorName || 'grey_800';
 
 
   const computedStyle = useMemo(() => {

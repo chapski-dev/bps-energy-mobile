@@ -17,7 +17,7 @@ export const RootStack = () => {
       initialRouteName="tabs"
       screenOptions={{
         headerTintColor: colors.main,
-        headerTitleStyle: { color: colors.textDefault },
+        headerTitleStyle: { color: colors.grey_800 },
         title: '',
       }}
     >

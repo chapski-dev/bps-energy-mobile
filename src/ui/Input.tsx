@@ -76,7 +76,7 @@ export const Input = forwardRef<InputProps, InputProps>(
         )}
         <View
           style={[
-            { ...styles.inputWrapper, borderColor: colors.border },
+            { ...styles.inputWrapper, borderColor: colors.grey_200 },
             isFocused && { borderColor: colors.main },
             error && styles.inputError
           ]}
@@ -84,11 +84,11 @@ export const Input = forwardRef<InputProps, InputProps>(
           {type === 'search' && <SearchIcon />}
           <TextInput
             value={value}
-            style={[styles.input, { color: colors.textDefault }]}
+            style={[styles.input, { color: colors.grey_800 }]}
             onChangeText={onChangeText}
             onFocus={_onFocus}
             onBlur={_onBlur}
-            placeholderTextColor={colors.border}
+            placeholderTextColor={colors.grey_200}
             //@ts-ignore
             ref={ref || localRef}
             {...props}
@@ -96,7 +96,7 @@ export const Input = forwardRef<InputProps, InputProps>(
         </View>
         {error && <Text style={styles.errorText} children={errorText} />}
         {prompting && (
-          <Text style={{ ...styles.label, color: colors.label }} children={prompting} />
+          <Text style={{ ...styles.label, color: colors.grey_600 }} children={prompting} />
         )}
       </View>
     );

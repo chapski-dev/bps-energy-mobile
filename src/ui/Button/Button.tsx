@@ -71,9 +71,9 @@ export const Button: FC<PropsType> = ({
     if (textColor) {
       return colors[textColor];
     } else if (type === 'filled' && !textColor) {
-      return colors.textDefaultReverse;
+      return colors.white;
     } else {
-      return colors.textDefault;
+      return colors.grey_800;
     }
   }, [colors, textColor, type]);
 

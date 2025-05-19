@@ -42,7 +42,7 @@ export const Accordion: FC<AccordionProps> = ({
         activeOpacity={0.5}
         onPress={_onPress}
       >
-        <Text children={label} style={[styles.buttonLabel, { color: colors.textDefault }]} />
+        <Text children={label} style={[styles.buttonLabel, { color: colors.grey_800 }]} />
         <Animated.View style={arrowStyle}>
           <ArrowIcon />
         </Animated.View>
@@ -50,7 +50,7 @@ export const Accordion: FC<AccordionProps> = ({
 
       <AccordionContent isExpanded={isOpen} viewKey="Accordion">
         {typeof children === 'string' ? (
-          <Text children={children} style={{ color: colors.textDefault }} />
+          <Text children={children} style={{ color: colors.grey_800 }} />
         ) : (
           children
         )}

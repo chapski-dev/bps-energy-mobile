@@ -1,10 +1,10 @@
 import React from 'react'
 import { Box, Text } from '@src/ui'
 
-export default function ChargingScreen() {
+export default function RegistrationScreen() {
   return (
     <Box>
-      <Text  children="ChargingScreen" />
+      <Text children="RegistrationScreen" />
     </Box>
   )
 }

@@ -90,7 +90,7 @@ const MapWithDistance = ({
         )}
       </YaMap>
 
-      <Text color={colors.dark_grey} right>
+      <Text color={colors.grey_700} right>
         <Text children={`${t('distance')}: `} />
         <Text type="body_500" children={`${distance} км.`} />
       </Text>

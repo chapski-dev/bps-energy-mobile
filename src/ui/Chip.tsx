@@ -12,7 +12,7 @@ export const Chip = ({ children }: ChipProps) => {
   const { colors } = useAppTheme();
 
   return (
-    <Box borderColor={colors.grey} borderWidth={1} px={10} borderRadius={5}>
+    <Box borderColor={colors.grey_100} borderWidth={1} px={10} borderRadius={5}>
       <Text children={children} />
     </Box>
   );

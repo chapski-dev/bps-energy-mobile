@@ -27,7 +27,7 @@ export enum NotifictationOption {
   push_notifications = 'push_notifications',
 }
 
-export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
+export const ProfileDetailsScreen = ({ navigation }: ScreenProps<'profile'>) => {
   const { t } = useLocalization();
   const { onLogout, user } = useAuth();
 
