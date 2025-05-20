@@ -24,6 +24,7 @@ import {
 import app from '@src/service/app';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { navigationRef } from '@src/navigation/navigationRef';
 
 export enum AuthState {
   /**
@@ -47,7 +48,7 @@ export enum AuthState {
 export interface IAuthProvider {
   authState: AuthState;
   user: null | Profile;
-  onSignin: (data: { phone: string; otp: string }) => Promise<void>;
+  onSignin: (data: any) => Promise<void>;
   onLogout: () => void;
   updateUser: (data: Partial<Profile>) => Promise<void>;
 }
@@ -102,26 +103,30 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     try {
       authDispatch({ type: AuthActionType.setConnecting });
 
-      const { access_token, refresh_token } = await postSignIn(data);
+      // const { access_token, refresh_token } = await postSignIn(data);
       authDispatch({ type: AuthActionType.setReady });
-      await AsyncStorage.multiSet([
-        [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
-        [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
-        [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
-      ]);
-      const userData = await getProfileData();
-      setUser(userData);
-      app.isFirebaseAuthorized = AppServiceStatus.on;
+      // await AsyncStorage.multiSet([
+      //   [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
+      //   [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
+      //   [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
+      // ]);
+      // const userData = await getProfileData();
+      // setUser(userData);
+      // app.isFirebaseAuthorized = AppServiceStatus.on;
     } catch (error) {
       authDispatch({ type: AuthActionType.setEmpty });
       throw error;
     }
-  },[authDispatch]);
+  }, [authDispatch]);
 
   const onLogout = useCallback(() => {
     vibrate(HapticFeedbackTypes.notificationSuccess);
     app.logout();
     setUser(null);
+    navigationRef.reset({
+      index: 0,
+      routes: [{ name: 'login' }]
+    })
   }, []);
 
   const updateUser = useCallback(async (updatedData: Partial<Profile>) => {

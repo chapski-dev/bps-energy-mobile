@@ -2,10 +2,10 @@ import React from 'react'
 import { Box, Text } from '@src/ui'
 import { ScreenProps } from '@src/navigation/types'
 
-export default function RegistrationScreen({ navigation }: ScreenProps<'registration'>) {
+export default function ResetPasswordScreen({ navigation }: ScreenProps<'reset-password'>) {
   return (
     <Box>
-      <Text children="RegistrationScreen" />
+      <Text children="ResetPasswordScreen" />
     </Box>
   )
 }

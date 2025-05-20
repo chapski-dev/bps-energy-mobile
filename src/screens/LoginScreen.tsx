@@ -1,37 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LogoIcon from '@assets/svg/logo.svg';
 
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
-import { Box, Button, Text } from '@src/ui';
+import { Box, Button, Input, Text } from '@src/ui';
+import { phoneMask } from '@src/utils/masks';
+import { useMaskedInputProps } from 'react-native-mask-input';
+import { useAuth } from '@src/providers/auth';
 
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
-  const { insets } = useAppTheme();
+  const { insets, colors } = useAppTheme();
 
   const { t } = useLocalization()
+  const { onSignin } = useAuth();
+
+  const handleSubmit = () => {
+    onSignin()
+  };
+
+  const [phone, setPhone] = useState('');
+
+  const maskedInputProps = useMaskedInputProps({
+    mask: phoneMask,
+    onChangeText: setPhone,
+    value: phone
+  });
 
   return (
-    <Box flexGrow={1} pt={insets.top} pl={16} pr={16} alignItems="center" gap={24} justifyContent="center">
+    <Box pr={16} pl={16} pt={insets.top + 82} gap={24} pb={insets.bottom + 35} alignItems='center' flex={1} >
       <LogoIcon />
-      <Text type="h3"
-        center
-        children={t('log_in_or_register_to_manage_your_routes')}
-      />
-      <Box gap={12} w="full" >
-        <Button
-          children={t('enter')}
-          onPress={() => navigation.navigate('login-via-phone')}
+      <Box flex={1} w='full' gap={24}>
 
-        />
-        <Button
+      <Box gap={16} w='full'>
+        <Input required {...maskedInputProps} placeholder='Email' />
+        <Input required {...maskedInputProps} placeholder={t('password')} />
+      </Box>
+      <Box style={{ alignSelf: 'flex-end' }} onPress={handleSubmit} >
+        <Text color={colors.grey_600} children='Забыли пароль?' />
+      </Box>
+      
+      <Button children={t('enter')} onPress={handleSubmit} />
+
+      <Button
           type="clear"
           children={t('registration')}
           textColor="main"
-          onPress={() => navigation.navigate('registration', { step: 'driver_performer_or_invaitetion' })}
+          onPress={() => navigation.navigate('registration')}
         />
       </Box>
+
+      <Button
+        type="clear"
+        children={t('skip')}
+        onPress={() => navigation.navigate('tabs')}
+      />
     </Box>
   );
 };

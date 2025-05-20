@@ -152,7 +152,7 @@ const Text: FC<TextProps> = ({
 
 const styles = StyleSheet.create({
   body: {
-    fontSize: 14
+    fontSize: 15
   },
   body_500: {
     color: '#000',

@@ -22,12 +22,15 @@ import { Box, Button, Text } from '@src/ui';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import SelectLanguageModal from '@src/widgets/SelectLanguageModal';
+import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
 }
 
-export const ProfileDetailsScreen = ({ navigation }: ScreenProps<'profile'>) => {
+export const ProfileDetailsScreen = ({
+  navigation,
+}: ScreenProps<'profile-details'>) => {
   const { t } = useLocalization();
   const { onLogout, user } = useAuth();
 
@@ -76,9 +79,6 @@ export const ProfileDetailsScreen = ({ navigation }: ScreenProps<'profile'>) => 
   const openIdentityData = () => navigation.push('identity');
 
   const { colors, insets } = useAppTheme();
-  const modal = useRef<BottomSheetModal>(null);
-  const modalClose = () => modal?.current?.forceClose();
-  const modalOpen = () => modal?.current?.present();
 
   const onLogoutPress = () =>
     Alert.alert(t('do-you-want-to-logout?'), undefined, [
@@ -111,226 +111,56 @@ export const ProfileDetailsScreen = ({ navigation }: ScreenProps<'profile'>) => 
       <ScrollView
         contentContainerStyle={{
           paddingBottom: insets.bottom || 15,
-          paddingTop: 20,
+          paddingTop: insets.top,
+          paddingHorizontal: 16,
+          gap: 56
         }}
       >
-        <Box
-          flex={1}
-          alignItems="center"
-          justifyContent="space-between"
-          backgroundColor={colors.background}
-          gap={15}
-        >
-          <Box
+        <Box>
+
+
+          <SectionListItemWithArrow
             onPress={openProfileData}
-            w="full"
-            h={50}
-            px={15}
-            row
-            alignItems="center"
-            justifyContent="space-between"
+            borderBottom={false}
           >
-            <Box row alignItems="center" gap={15}>
-              {user?.iconUrl ? (
-                <Image source={{ uri: user.iconUrl }} />
-              ) : (
-                <NoAvatarIcon />
-              )}
-              <Text
-                type="body_500"
-                fontSize={18}
-                children={`${user?.firstName || ''} ${user?.middleName || ''} ${user?.lastName || ''}`}
-              />
+            <Box gap={3}>
+              <Text type="body_500" children={'alexander_p@gmail.com'} />
+              <Text>
+                <Text colorName="grey_600" children={'Email · '} />
+                <Text colorName="red" children={'Не подтверждён'} />
+              </Text>
             </Box>
-            <ArrowIcon />
-          </Box>
+          </SectionListItemWithArrow>
+          <SectionListItemWithArrow
+            title={'Изменить пароль'}
+            onPress={() => null}
+          />
+          <SectionListItemWithArrow
+            title={'Как к вам обращаться?'}
+            onPress={openIdentityData}
+          />
+          <SectionListItemWithArrow
+            title={'Добавить номер телефона'}
+            onPress={() => null}
+          />
+          <Text mt={16} colorName='grey_600' children="Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки" />
+        </Box>
 
-          {/* <Box row w="full" gap={5} px={15}>
-            <Box
-              backgroundColor={colors.grey_100}
-              borderRadius={9}
-              justifyContent="center"
-              alignItems="flex-start"
-              gap={3}
-              p={10}
-              w={126}
-              h={72}
-            >
-              <Box
-                backgroundColor={colors.green}
-                borderRadius={35}
-                px={10}
-                py={3}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color={colors.white} fontWeight={700} children="4.5" />
-              </Box>
-              <Text fontSize={10} fontWeight={400} children={t('my_rating')} />
-            </Box>
-
-            <Box
-              backgroundColor={colors.grey_100}
-              borderRadius={9}
-              justifyContent="center"
-              alignItems="flex-start"
-              gap={3}
-              p={10}
-              w={126}
-              h={72}
-            >
-              <Box
-                backgroundColor={colors.grey_700}
-                borderRadius={35}
-                px={10}
-                py={3}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color={colors.white} fontWeight={700} children="115" />
-              </Box>
-              <Text
-                fontSize={10}
-                fontWeight={400}
-                children={t('transportations')}
-              />
-            </Box>
-
-            <Box
-              backgroundColor={colors.grey_100}
-              borderRadius={9}
-              justifyContent="center"
-              alignItems="flex-start"
-              gap={3}
-              p={10}
-              w={126}
-              h={72}
-            >
-              <Box
-                backgroundColor={colors.grey_700}
-                borderRadius={35}
-                px={10}
-                py={3}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text
-                  color={colors.white}
-                  fontWeight={700}
-                  children="351 тыс."
-                />
-              </Box>
-              <Text
-                fontSize={10}
-                fontWeight={400}
-                children={t('traveled_kilometers')}
-              />
-            </Box>
-          </Box> */}
-          <Box backgroundColor={colors.white}>
-            <SectionListItemWithArrow
-              title={t('reports')}
-              onPress={() => null}
-              disabled
-            />
-          </Box>
-
-          <Box backgroundColor={colors.white}>
-            <SectionListItemWithArrow
-              title={t('identity')}
-              onPress={openIdentityData}
-              disabled
-            />
-            <SectionListItemWithArrow
-              title={t('drivers_licence')}
-              onPress={() => null}
-              disabled
-            />
-          </Box>
-
-          <Box backgroundColor={colors.white}>
-            <SectionListItemWithArrow
-              title={t('apps_language')}
-              onPress={modalOpen}
-            />
-            <Box
-              w="full"
-              h={50}
-              px={15}
-              row
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Text type="body_500" children={t('push_notifications')} />
-              {loading ? (
-                <Box mr={20}>
-                  <ActivityIndicator />
-                </Box>
-              ) : (
-                <Switch
-                  trackColor={{ false: colors.grey_100, true: colors.main }}
-                  thumbColor={colors.white}
-                  onValueChange={(val) =>
-                    togglePushNotification({
-                      ...getValues().settings,
-                      [NotifictationOption.push_notifications]: val,
-                    })
-                  }
-                  value={watch('settings.push_notifications')}
-                />
-              )}
-            </Box>
-          </Box>
-
+        <Box gap={48}>
           <Button
             backgroundColor="white"
-            textColor="red"
-            children={t('exit')}
+            textColor="grey_600"
+            children={'Выйти из аккаунта'}
             onPress={onLogoutPress}
           />
-
           <Button
             type="clear"
-            textColor="grey_600"
+            textColor="red"
             children={t('delete-account')}
             onPress={onDeleteAccountPress}
           />
         </Box>
       </ScrollView>
-      <SelectLanguageModal ref={modal} modalClose={modalClose} />
     </>
-  );
-};
-
-type SectionListItemWithArrowProps = {
-  title: string;
-  onPress: () => void;
-  disabled?: boolean;
-};
-const SectionListItemWithArrow = ({
-  title,
-  onPress,
-  disabled,
-}: SectionListItemWithArrowProps) => {
-  const { colors } = useAppTheme();
-
-  return (
-    <Box
-      w="full"
-      h={50}
-      px={16}
-      row
-      alignItems="center"
-      justifyContent="space-between"
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <Text
-        color={disabled ? colors.grey_100 : undefined}
-        type="body_500"
-        children={title}
-      />
-      <ArrowIcon color={disabled ? colors.grey_100 : undefined} />
-    </Box>
   );
 };
