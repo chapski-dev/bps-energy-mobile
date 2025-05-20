@@ -8,7 +8,7 @@ import {
   Switch,
 } from 'react-native';
 import ArrowIcon from '@assets/svg/caret-right.svg';
-import NoAvatarIcon from '@assets/svg/no-avatar.svg';
+import NoAvatarIcon from '@assets/svg/user-fill.svg';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 // import { setNotificationSettings } from '@src/api';

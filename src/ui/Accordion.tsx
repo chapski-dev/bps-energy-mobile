@@ -7,7 +7,7 @@ import Animated, {
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
-import ArrowIcon from '@assets/svg/arrow-down.svg';
+import ArrowIcon from '@assets/svg/caret-down.svg'
 
 import { useAppTheme } from '@src/theme/theme';
 
