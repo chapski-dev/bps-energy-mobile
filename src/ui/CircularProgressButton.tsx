@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import Svg, { Circle, Defs, RadialGradient, Stop } from 'react-native-svg';
-import SwitchOnIcon from '@assets/svg/switch-on.svg';
 
 import { useAppTheme } from '@src/theme/theme';
 
@@ -170,11 +169,7 @@ export const CircularProgressButton = ({
           ]}
         >
           {/* Счётчик обратного отсчёта, если он не равен 0, иначе иконка */}
-          {countdown ? (
-            <Text style={styles.countdownText}>{countdown}</Text>
-          ) : (
-            <SwitchOnIcon />
-          )}
+          <Text style={styles.countdownText}>{countdown}</Text>
           {/* Внутренний теневой оверлей для эффекта "ямки" с улучшенным градиентом */}
           <Animated.View
             style={[StyleSheet.absoluteFill, { opacity: shadowOpacity }]}

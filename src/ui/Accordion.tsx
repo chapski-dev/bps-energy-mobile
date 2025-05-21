@@ -5,9 +5,8 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withTiming
+  withTiming,
 } from 'react-native-reanimated';
-import ArrowIcon from '@assets/svg/arrow-down.svg';
 
 import { useAppTheme } from '@src/theme/theme';
 
@@ -21,7 +20,7 @@ export const Accordion: FC<AccordionProps> = ({
   label = 'Press me',
   children = 'Some info',
   onPress,
-  open = false
+  open = false,
 }) => {
   const isOpen = useSharedValue(open);
   const { colors } = useAppTheme();
@@ -32,7 +31,11 @@ export const Accordion: FC<AccordionProps> = ({
   };
 
   const arrowStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: withTiming(isOpen.value ? '180deg' : '0deg', { duration: 300 }) }]
+    transform: [
+      {
+        rotate: withTiming(isOpen.value ? '180deg' : '0deg', { duration: 300 }),
+      },
+    ],
   }));
 
   return (
@@ -42,10 +45,11 @@ export const Accordion: FC<AccordionProps> = ({
         activeOpacity={0.5}
         onPress={_onPress}
       >
-        <Text children={label} style={[styles.buttonLabel, { color: colors.textDefault }]} />
-        <Animated.View style={arrowStyle}>
-          <ArrowIcon />
-        </Animated.View>
+        <Text
+          children={label}
+          style={[styles.buttonLabel, { color: colors.textDefault }]}
+        />
+        <Animated.View style={arrowStyle}></Animated.View>
       </TouchableOpacity>
 
       <AccordionContent isExpanded={isOpen} viewKey="Accordion">
@@ -69,22 +73,25 @@ const AccordionContent: FC<AccordionContentProps> = ({
   isExpanded,
   children,
   viewKey,
-  duration = 300
+  duration = 300,
 }) => {
   const height = useSharedValue(0);
 
   const derivedHeight = useDerivedValue(() =>
     withTiming(height.value * Number(isExpanded.value), {
-      duration
-    })
+      duration,
+    }),
   );
   const bodyStyle = useAnimatedStyle(() => ({
     height: derivedHeight.value,
-    marginVertical: 12 * Number(isExpanded.value)
+    marginVertical: 12 * Number(isExpanded.value),
   }));
 
   return (
-    <Animated.View key={`accordionContent_${viewKey}`} style={[styles.animatedView, bodyStyle]}>
+    <Animated.View
+      key={`accordionContent_${viewKey}`}
+      style={[styles.animatedView, bodyStyle]}
+    >
       <View
         onLayout={(e) => {
           height.value = e.nativeEvent.layout.height;
@@ -100,7 +107,7 @@ const AccordionContent: FC<AccordionContentProps> = ({
 const styles = StyleSheet.create({
   animatedView: {
     overflow: 'hidden',
-    width: '100%'
+    width: '100%',
   },
   button: {
     alignItems: 'center',
@@ -109,12 +116,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     minHeight: 40,
     paddingHorizontal: 12,
-    width: '100%'
+    width: '100%',
   },
   buttonLabel: { flex: 1, fontSize: 16, fontWeight: '600' },
   wrapper: {
     paddingHorizontal: 12,
     position: 'absolute',
-    width: '100%'
-  }
+    width: '100%',
+  },
 });

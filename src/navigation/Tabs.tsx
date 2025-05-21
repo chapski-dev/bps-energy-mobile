@@ -5,9 +5,6 @@ import { ProfileScreen } from '@src/screens/ProfileScreen';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 
-import OrderIcon from '../../assets/svg/orders.svg';
-import ProfileIcon from '../../assets/svg/profile-outline.svg';
-
 import { TabsParamList } from './types';
 import MapScreen from '@src/screens/MapScreen';
 import ChargingScreen from '@src/screens/ChargingScreen';
@@ -15,7 +12,7 @@ import ChargingScreen from '@src/screens/ChargingScreen';
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export const Tabs = () => {
-  const { t } = useLocalization()
+  const { t } = useLocalization();
   const { colors } = useAppTheme();
   return (
     <Tab.Navigator
@@ -29,7 +26,6 @@ export const Tabs = () => {
         name="map"
         component={MapScreen}
         options={{
-          tabBarIcon: ({ color }) => <OrderIcon color={color} />,
           title: t('my-orders'),
         }}
       />
@@ -37,7 +33,6 @@ export const Tabs = () => {
         name="charging"
         component={ChargingScreen}
         options={{
-          tabBarIcon: ({ color }) => <OrderIcon color={color} />,
           title: t('my-orders'),
         }}
       />
@@ -45,7 +40,6 @@ export const Tabs = () => {
         name="profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color }) => <ProfileIcon color={color} />,
           title: t('profile'),
         }}
       />

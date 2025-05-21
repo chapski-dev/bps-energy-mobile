@@ -7,8 +7,6 @@ import {
   ScrollView,
   Switch,
 } from 'react-native';
-import ArrowIcon from '@assets/svg/arrow-right.svg';
-import NoAvatarIcon from '@assets/svg/no-avatar.svg';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 // import { setNotificationSettings } from '@src/api';
@@ -131,18 +129,12 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
             justifyContent="space-between"
           >
             <Box row alignItems="center" gap={15}>
-              {user?.iconUrl ? (
-                <Image source={{ uri: user.iconUrl }} />
-              ) : (
-                <NoAvatarIcon />
-              )}
               <Text
                 type="body_500"
                 fontSize={18}
                 children={`${user?.firstName || ''} ${user?.middleName || ''} ${user?.lastName || ''}`}
               />
             </Box>
-            <ArrowIcon />
           </Box>
 
           {/* <Box row w="full" gap={5} px={15}>
@@ -330,7 +322,6 @@ const SectionListItemWithArrow = ({
         type="body_500"
         children={title}
       />
-      <ArrowIcon color={disabled ? colors.disabled : undefined} />
     </Box>
   );
 };

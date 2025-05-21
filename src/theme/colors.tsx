@@ -2,7 +2,7 @@ export const DefaultColors = {
   background: '#FAFAFA',
   black: '#000000',
   blue: '#639DF4',
-  border: '#E1E1E1',
+  border: '#D7DCE0',
   dark_grey: '#494D4E',
   disabled: '#D7D6D6',
   green: '#81CC20',
