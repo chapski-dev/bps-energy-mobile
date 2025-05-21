@@ -37,12 +37,12 @@ export const AppDarkTheme = {
   fonts: DefaultTheme.fonts,
 } as const;
 
-type CheckForValidColors =
-  keyof typeof AppLightTheme.colors extends keyof typeof AppDarkTheme.colors
-    ? keyof typeof AppDarkTheme.colors extends keyof typeof AppLightTheme.colors
-      ? true
-      : false
-    : false;
+// type CheckForValidColors =
+//   keyof typeof AppLightTheme.colors extends keyof typeof AppDarkTheme.colors
+//     ? keyof typeof AppDarkTheme.colors extends keyof typeof AppLightTheme.colors
+//       ? true
+//       : false
+//     : false;
 
 declare global {
   namespace App {

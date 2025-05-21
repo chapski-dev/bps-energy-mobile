@@ -18,7 +18,7 @@ const Checkbox = ({ selected, children, onPress }: SelectProps) => {
       <Box
         w={20}
         h={20}
-        borderColor={colors.disabled}
+        borderColor={colors.grey_100}
         borderWidth={1}
         alignItems="center"
         justifyContent="center"

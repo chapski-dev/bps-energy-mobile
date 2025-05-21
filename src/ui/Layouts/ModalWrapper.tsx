@@ -53,7 +53,7 @@ export const ModalWrapper: FC<IModalWrapperProps> = ({
           mr={marginHorizontal || 0}
           ml={marginHorizontal || 0}
           borderRadius={25}
-          backgroundColor={colors.textDefault}
+          backgroundColor={colors.grey_800}
         >
           {children}
         </Box>

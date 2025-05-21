@@ -32,7 +32,7 @@ export const TransportationRoute: React.FC<TransportationRouteProps> = ({
                   h={15}
                   alignItems="center"
                   justifyContent="center"
-                  borderColor={colors.dark_grey}
+                  borderColor={colors.grey_700}
                   borderWidth={1}
                   borderRadius={5}
                 >
@@ -40,7 +40,7 @@ export const TransportationRoute: React.FC<TransportationRouteProps> = ({
                 </Box>
               )}
               {index !== lastElement && (
-                <Box flex={1} w={1} backgroundColor={colors.dark_grey} />
+                <Box flex={1} w={1} backgroundColor={colors.grey_700} />
               )}
             </Box>
 
