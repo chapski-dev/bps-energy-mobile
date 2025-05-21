@@ -1,3 +1,5 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+
 export const DefaultColors = {
   background: '#fff',
   black: '#000000',

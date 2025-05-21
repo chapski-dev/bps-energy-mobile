@@ -7,7 +7,12 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import { useAppTheme } from '@src/theme/theme';
-import { LANGUAGE_LIST, saveLanguageAsyncStorage, useLocalization, AppLangEnum } from '@src/translations/i18n';
+import {
+  AppLangEnum,
+  LANGUAGE_LIST,
+  saveLanguageAsyncStorage,
+  useLocalization
+} from '@src/translations/i18n';
 import { Box, Text } from '@src/ui';
 
 type SelectLanguageModalProps = Omit<BottomSheetModalProps, 'children'> & {

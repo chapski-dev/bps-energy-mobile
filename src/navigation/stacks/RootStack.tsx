@@ -1,20 +1,19 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { AuthState, useAuth } from '@src/providers/auth';
+import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
+import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
+import LoginScreen from '@src/screens/LoginScreen';
+import { ProfileDetailsScreen } from '@src/screens/ProfileDetailsScreen';
+import RegistrationScreen from '@src/screens/RegistrationScreen';
+import ResetPasswordScreen from '@src/screens/ResetPasswordScreen';
+import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 
-import RegistrationScreen from '@src/screens/RegistrationScreen';
-import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
-import ResetPasswordScreen from '@src/screens/ResetPasswordScreen';
-import LoginScreen from '@src/screens/LoginScreen';
-
 import { Tabs } from '../Tabs';
 import { RootStackParamList } from '../types';
-import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
-import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
-import { AuthState, useAuth } from '@src/providers/auth';
-import { ProfileDetailsScreen } from '@src/screens/ProfileDetailsScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

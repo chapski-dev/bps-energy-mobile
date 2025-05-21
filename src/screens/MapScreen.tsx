@@ -1,16 +1,17 @@
-import React, {  useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { NativeSyntheticEvent } from 'react-native';
 import {
   ClusteredYamap,
   Marker,
   Point,
 } from 'react-native-yamap';
-import { Box, Text } from '@src/ui';
-import { useAppTheme } from '@src/theme/theme';
-import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
-import { NativeSyntheticEvent, View } from 'react-native';
+import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
+
 import { AuthState, useAuth } from '@src/providers/auth';
+import { useAppTheme } from '@src/theme/theme';
+import { Box, Text } from '@src/ui';
 import { getHighAccuracyPosition } from '@src/utils/get-current-geo-position';
 
 export default function MapScreen() {
@@ -41,7 +42,7 @@ export default function MapScreen() {
     <Box flex={1}>
       <ClusteredYamap
         clusterColor={'black'}
-        clusteredMarkers={markers.map((marker, i) => ({
+        clusteredMarkers={markers.map((marker) => ({
           data: {
 
           },
@@ -51,7 +52,12 @@ export default function MapScreen() {
         style={{ flex: 1 }}
         ref={mapRef}
         renderMarker={(info, index) => (
-          <Marker key={index} point={info.point} source={require('@assets/png/dot-default.png')} scale={2} />
+          <Marker
+            key={index}
+            point={info.point}
+            source={require('@assets/png/dot-default.png')}
+            scale={2}
+          />
         )}
       />
       {authState === AuthState.ready && (
@@ -91,7 +97,7 @@ const UserBalance = () => {
 };
 
 const Filters = () => {
-  const { insets, colors } = useAppTheme();
+  const { colors } = useAppTheme();
   return (
     <Box
       absolute
@@ -123,7 +129,7 @@ const Filters = () => {
 };
 
 const UserLocation = ({ onPress }: { onPress: () => void }) => {
-  const { insets, colors } = useAppTheme();
+  const { colors } = useAppTheme();
   return (
     <Box
       absolute
@@ -146,13 +152,13 @@ const UserLocation = ({ onPress }: { onPress: () => void }) => {
 };
 
 const shadowStyle = {
+  elevation: 8,
   shadowColor: '#000',
   shadowOffset: {
-    width: 0,
     height: 4,
+    width: 0,
   },
   shadowOpacity: 0.3,
-  shadowRadius: 4.65,
 
-  elevation: 8,
+  shadowRadius: 4.65,
 };

@@ -19,10 +19,10 @@ import messaging from '@src/service/messaging';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
+import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import SelectLanguageModal from '@src/widgets/SelectLanguageModal';
-import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
@@ -110,10 +110,10 @@ export const ProfileDetailsScreen = ({
     <>
       <ScrollView
         contentContainerStyle={{
+          gap: 56,
           paddingBottom: insets.bottom || 15,
-          paddingTop: insets.top,
           paddingHorizontal: 16,
-          gap: 56
+          paddingTop: insets.top
         }}
       >
         <Box>

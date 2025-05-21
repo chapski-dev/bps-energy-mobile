@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
+import { useMaskedInputProps } from 'react-native-mask-input';
 import LogoIcon from '@assets/svg/logo.svg';
 
 import { ScreenProps } from '@src/navigation/types';
+import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input, Text } from '@src/ui';
 import { phoneMask } from '@src/utils/masks';
-import { useMaskedInputProps } from 'react-native-mask-input';
-import { useAuth } from '@src/providers/auth';
 
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {

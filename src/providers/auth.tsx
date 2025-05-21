@@ -16,6 +16,7 @@ import { vibrate } from '@src/actions/vibrate';
 import { getProfileData, postSignIn, updateUserProfile } from '@src/api';
 import { Profile } from '@src/api/types';
 import { AppServiceStatus } from '@src/events';
+import { navigationRef } from '@src/navigation/navigationRef';
 import {
   AuthAction,
   AuthActionType,
@@ -24,7 +25,6 @@ import {
 import app from '@src/service/app';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
-import { navigationRef } from '@src/navigation/navigationRef';
 
 export enum AuthState {
   /**
@@ -48,7 +48,7 @@ export enum AuthState {
 export interface IAuthProvider {
   authState: AuthState;
   user: null | Profile;
-  onSignin: (data: any) => Promise<void>;
+  onSignin: (data?: any) => Promise<void>;
   onLogout: () => void;
   updateUser: (data: Partial<Profile>) => Promise<void>;
 }

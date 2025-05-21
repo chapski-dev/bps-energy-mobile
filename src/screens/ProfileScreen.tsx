@@ -19,10 +19,10 @@ import messaging from '@src/service/messaging';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
+import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import SelectLanguageModal from '@src/widgets/SelectLanguageModal';
-import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import UserBalance from '@src/widgets/UserBalance';
 
 export enum NotifictationOption {
@@ -46,8 +46,8 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
       <ScrollView
         contentContainerStyle={{
           paddingBottom: insets.bottom || 15,
-          paddingTop: insets.top + 40,
           paddingHorizontal: 16,
+          paddingTop: insets.top + 40,
         }}
       >
         <SectionListItemWithArrow

@@ -1,22 +1,21 @@
 import React from 'react';
+import { Pressable, View } from 'react-native';
+import BPSIcon from '@assets/svg/BPS.svg';
+import MapPinIcon from '@assets/svg/map-pin.svg';
+import ProfileIcon from '@assets/svg/user-fill.svg';
 import {
   BottomTabBarButtonProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 
+import ChargingScreen from '@src/screens/ChargingScreen';
+import MapScreen from '@src/screens/MapScreen';
 import { ProfileScreen } from '@src/screens/ProfileScreen';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
-
-import MapPinIcon from '@assets/svg/map-pin.svg';
-import BPSIcon from '@assets/svg/BPS.svg';
-import ProfileIcon from '@assets/svg/user-fill.svg';
+import { Box } from '@src/ui';
 
 import { TabsParamList } from './types';
-import MapScreen from '@src/screens/MapScreen';
-import ChargingScreen from '@src/screens/ChargingScreen';
-import { Box } from '@src/ui';
-import { Pressable, View } from 'react-native';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -33,19 +32,19 @@ export const Tabs = () => {
         name="map"
         component={MapScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color }) => <MapPinIcon color={color} />,
           title: t('map'),
-          headerShown: false,
         }}
       />
       <Tab.Screen
         name="charging"
         component={ChargingScreen}
         options={{
+          headerShown: false,
+          tabBarButton: (props) => <ChargingTabButton {...props} />,
           tabBarIcon: ({ color }) => null,
           title: t('charging-session'),
-          tabBarButton: (props) => <ChargingTabButton {...props} />,
-          headerShown: false,
         }}
       />
       <Tab.Screen

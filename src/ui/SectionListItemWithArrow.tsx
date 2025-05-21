@@ -1,8 +1,10 @@
+import React, { PropsWithChildren } from 'react';
+import CaretRightIcon from '@assets/svg/caret-right.svg';
+
 import { useAppTheme } from '@src/theme/theme';
+
 import { Box } from './Box';
 import { Text } from './Text';
-import CaretRightIcon from '@assets/svg/caret-right.svg';
-import { PropsWithChildren } from 'react';
 
 type SectionListItemWithArrowProps = PropsWithChildren & {
   title?: string;

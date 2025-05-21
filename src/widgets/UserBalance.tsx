@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box, Text } from '@src/ui';
-import { useAppTheme } from '@src/theme/theme';
 import BelarusIcon from '@assets/svg/flags/Belarus.svg';
 import RussiaIcon from '@assets/svg/flags/Russia.svg';
-
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
+
+import { useAppTheme } from '@src/theme/theme';
+import { Box, Text } from '@src/ui';
 
 export default function UserBalance({ currency }: { currency: 'RUB' | 'BYN' }) {
   const { colors } = useAppTheme();
