@@ -21,7 +21,7 @@ const Select = ({
     <TouchableOpacity
       style={{
         alignItems: 'center',
-        borderColor: selected ? colors.main : colors.disabled,
+        borderColor: selected ? colors.main : colors.grey_100,
         borderRadius: 15,
         borderWidth: 1,
         flexDirection: 'row',
@@ -32,8 +32,8 @@ const Select = ({
       }}
       onPress={onPress}
       >
-        <TickIcon color={selected ? colors.main : colors.disabled} width={15} height={15} />
-        <Text children={children} style={{color: colors.textDefault}} />
+        <TickIcon color={selected ? colors.main : colors.grey_100} width={15} height={15} />
+        <Text children={children} style={{color: colors.grey_800}} />
     </TouchableOpacity>
   );
 };

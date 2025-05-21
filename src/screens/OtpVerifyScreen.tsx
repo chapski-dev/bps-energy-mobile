@@ -68,17 +68,17 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
         ? { borderColor: colors.red, borderRadius: 16, borderWidth: 1 }
         : { borderColor: colors.main, borderRadius: 16, borderWidth: 1 },
       focusedPinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red : colors.border,
+        borderColor: notMatch ? colors.red : colors.grey_200,
         borderRadius: 15,
         borderWidth: 1
       },
       pinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red : colors.border,
+        borderColor: notMatch ? colors.red : colors.grey_200,
         borderRadius: 15,
         borderWidth: 1,
         width: 47
       },
-      pinCodeTextStyle: { color: colors.textDefault, fontSize: 24 }
+      pinCodeTextStyle: { color: colors.grey_800, fontSize: 24 }
     }),
     [colors, notMatch]
   );

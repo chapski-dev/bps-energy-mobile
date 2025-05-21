@@ -1,23 +1,26 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
+
 export const DefaultColors = {
-  background: '#FAFAFA',
+  background: '#fff',
   black: '#000000',
-  blue: '#639DF4',
-  border: '#D7DCE0',
-  dark_grey: '#494D4E',
-  disabled: '#D7D6D6',
-  green: '#81CC20',
-  grey: '#EDEDED',
-  label: '#798391',
-  light_green: '#81CC20',
-  light_grey: '#EEEEEE',
-  light_red: '#FFCCCC',
+  green: '#34C759',
+  grey_50: '#F2F5F7',
+  /** disabled color */
+  grey_100: '#E6EAED',
+  /** border color */
+  grey_200: '#D7DCE0',
+  grey_300: '#C2C7CC',
+  grey_400: '#A7ADB2',
+  grey_500: '#9BA4AD',
+  /** label */
+  grey_600: '#8A8F93',
+  grey_700: '#46484A',
+  /** text default */
+  grey_800: '#000A0A',
   main: '#008C92',
-  main_light: '#FAB54D26',
-  red: '#EC1B2E',
-  textDefault: '#091C21',
-  textDefaultReverse: '#FFFFFF',
-  textSecondary: '#979797',
-  white: '#FFFFFF',
+  red: '#E73054',
+  white: '#FFF',
+  white_transparent: '#ffffffea',
 } as const;
 
 export const lightColors = {

@@ -13,8 +13,7 @@ import '@src/translations/i18n';
 
 import { useAppColorTheme } from './hooks/useAppColorTheme';
 import { navigationRef } from './navigation/navigationRef';
-import { UnauthorizedStack } from './navigation/stacks/UnauthorizedStack';
-import { AuthProvider, AuthState, useAuth } from './providers/auth';
+import { AuthProvider } from './providers/auth';
 import { ModalLayout } from './ui/Layouts/ModalLayout';
 import { AppServiceStatus } from './events';
 
@@ -38,7 +37,7 @@ function App(): React.JSX.Element {
             ref={navigationRef}
           >
             <BottomSheetModalProvider>
-              <Content />
+              <RootStack /> 
               <Toasts />
               <ModalLayout />
             </BottomSheetModalProvider>
@@ -48,10 +47,5 @@ function App(): React.JSX.Element {
     </AuthProvider>
   );
 }
-
-const Content = () => {
-  const { authState } = useAuth();
-  return authState === AuthState.ready ? <RootStack /> : <UnauthorizedStack />;
-};
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import React, {forwardRef, useRef, useState} from 'react';
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -11,9 +11,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import { useAppTheme } from '@src/theme/theme';
+import {useAppTheme} from '@src/theme/theme';
 
-import { Text } from './Text';
+import {Text} from './Text';
 import ClosedEyeIcon from '../../assets/svg/closed-eye.svg';
 import OpenEyeIcon from '../../assets/svg/open-eye.svg';
 
@@ -57,7 +57,7 @@ export const Input = forwardRef<InputProps, InputProps>(
 
     const [isFocused, setIsFocused] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const { colors } = useAppTheme();
+    const {colors} = useAppTheme();
 
     const _onFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       if (!disabled) {
@@ -84,7 +84,7 @@ export const Input = forwardRef<InputProps, InputProps>(
     };
 
     return (
-      <View style={[{ flexGrow: 1, gap: 4 }, wrapperStyle]}>
+      <View style={[{flexGrow: 1, gap: 4}, wrapperStyle]}>
         {label && (
           <Text style={styles.label}>
             <Text children={label} />
@@ -96,25 +96,25 @@ export const Input = forwardRef<InputProps, InputProps>(
             styles.inputWrapper,
             {
               borderColor: colors.border,
-              backgroundColor: disabled ? '#F2F5F7' : 'white',
+              backgroundColor: disabled ? colors.grey_50 : colors.background,
             },
             isFocused &&
-              !disabled && { borderColor: colors.black, borderWidth: 2 },
+              !disabled && {borderColor: colors.black, borderWidth: 2},
             error && styles.inputError,
-          ]}
-        >
+          ]}>
           {icon && <View>{icon}</View>}
           <TextInput
             value={value}
+            textContentType="password"
             style={[
               styles.input,
-              { color: disabled ? '#A7ADB2' : colors.textDefault },
+              {color: disabled ? colors.grey_400 : colors.grey_800},
             ]}
             onChangeText={disabled ? undefined : onChangeText}
             onFocus={_onFocus}
             onBlur={_onBlur}
             placeholderTextColor={colors.border}
-            cursorColor={disabled ? '#A7ADB2' : 'black'}
+            cursorColor={disabled ? colors.grey_400 : colors.black}
             secureTextEntry={type === 'password' && !isPasswordVisible}
             editable={!disabled}
             //@ts-ignore
@@ -124,8 +124,7 @@ export const Input = forwardRef<InputProps, InputProps>(
           {type === 'password' && (
             <TouchableOpacity
               onPress={togglePasswordVisibility}
-              disabled={disabled}
-            >
+              disabled={disabled}>
               {isPasswordVisible ? (
                 <OpenEyeIcon width={24} height={24} />
               ) : (
@@ -137,7 +136,7 @@ export const Input = forwardRef<InputProps, InputProps>(
         {error && <Text style={styles.errorText} children={errorText} />}
         {prompting && (
           <Text
-            style={[styles.label, { color: colors.label }]}
+            style={[styles.label, {color: colors.grey_600}]}
             children={prompting}
           />
         )}

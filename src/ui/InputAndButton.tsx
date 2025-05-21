@@ -33,7 +33,7 @@ export const InputWithButton: React.FC<InputWithButtonProps> = ({
     <Box w="full" row flexGrow={1}>
       <Box flex={1}>
         <TextInput
-          style={[styles.input, inputStyle, { color: colors.textDefault }]}
+          style={[styles.input, inputStyle, { color: colors.grey_800 }]}
           placeholder={placeholder}
           placeholderTextColor="#999"
           value={value}
@@ -49,7 +49,7 @@ export const InputWithButton: React.FC<InputWithButtonProps> = ({
                 onPress={onButtonPress}
               >
                 <Text
-                  style={[styles.buttonText, { color: colors.textDefault }, buttonTextStyle]}
+                  style={[styles.buttonText, { color: colors.grey_800 }, buttonTextStyle]}
                   children={buttonText[0]}
                 />
               </TouchableOpacity>
@@ -57,7 +57,7 @@ export const InputWithButton: React.FC<InputWithButtonProps> = ({
             <Box flex={1}>
               <TouchableOpacity style={[styles.button, buttonStyle]} onPress={onButtonPress}>
                 <Text
-                  style={[styles.buttonText, { color: colors.textDefault }, buttonTextStyle]}
+                  style={[styles.buttonText, { color: colors.grey_800 }, buttonTextStyle]}
                   children={buttonText[1]}
                 />
               </TouchableOpacity>
@@ -66,7 +66,7 @@ export const InputWithButton: React.FC<InputWithButtonProps> = ({
         ) : (
           <Box flex={1}>
             <TouchableOpacity style={[styles.button, buttonStyle]} onPress={onButtonPress}>
-              <Text style={[styles.buttonText, { color: colors.textDefault }, buttonTextStyle]}>
+              <Text style={[styles.buttonText, { color: colors.grey_800 }, buttonTextStyle]}>
                 {buttonText}
               </Text>
             </TouchableOpacity>
