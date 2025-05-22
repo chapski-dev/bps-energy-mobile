@@ -20,7 +20,7 @@ export const DefaultColors = {
   main: '#008C92',
   red: '#E73054',
   white: '#FFF',
-  white_transparent: '#ffffffea'
+  white_transparent: '#ffffffea',
 } as const;
 
 export const lightColors = {

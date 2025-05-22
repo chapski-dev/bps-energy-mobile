@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo } from 'react';
+import React, {FC, ReactNode, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   StyleProp,
@@ -7,13 +7,18 @@ import {
   TouchableOpacity,
   View,
   ViewProps,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
-import { merge } from 'lodash';
+import {merge} from 'lodash';
 
-import { AppLightTheme, useAppTheme } from '@src/theme/theme';
+import {AppLightTheme, useAppTheme} from '@src/theme/theme';
 
-import { clearStyle, commonStytle, filledStyle, outlineStyle } from './Button.styles';
+import {
+  clearStyle,
+  commonStytle,
+  filledStyle,
+  outlineStyle,
+} from './Button.styles';
 
 type ButtonType = keyof typeof typeStyle;
 
@@ -23,7 +28,6 @@ interface PropsType extends ViewProps {
   onPress?: () => void;
   wrapperStyle?: StyleProp<ViewStyle>;
   buttonStyle?: StyleProp<ViewStyle>;
-  buttonDisabledStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   type?: ButtonType;
   backgroundColor?: keyof typeof AppLightTheme.colors;
@@ -35,7 +39,7 @@ interface PropsType extends ViewProps {
 const typeStyle = {
   clear: merge({}, commonStytle, clearStyle),
   filled: merge({}, commonStytle, filledStyle),
-  outline: merge({}, commonStytle, outlineStyle)
+  outline: merge({}, commonStytle, outlineStyle),
 };
 
 export const Button: FC<PropsType> = ({
@@ -44,18 +48,23 @@ export const Button: FC<PropsType> = ({
   onPress,
   wrapperStyle,
   buttonStyle,
-  buttonDisabledStyle,
   textStyle,
   children,
   type = 'filled',
   backgroundColor,
   textColor,
   borderColor,
-  icon
+  icon,
 }) => {
-  const { colors } = useAppTheme();
+  const {colors} = useAppTheme();
+  const [pressed, setPressed] = useState(false);
+
   const styles = useMemo(() => typeStyle[type], [type]);
+
   const _bgColor = useMemo(() => {
+    if (disabled && type === 'filled') {
+      return colors.grey_100;
+    }
     if (backgroundColor && type !== 'filled') {
       return colors[backgroundColor];
     } else if (!backgroundColor && type === 'filled') {
@@ -65,7 +74,7 @@ export const Button: FC<PropsType> = ({
     } else {
       return 'transparent';
     }
-  }, [backgroundColor, colors, type]);
+  }, [backgroundColor, colors, type, disabled]);
 
   const _textColor = useMemo(() => {
     if (textColor) {
@@ -81,39 +90,34 @@ export const Button: FC<PropsType> = ({
     if (borderColor) {
       return colors[borderColor];
     } else if (type === 'outline' && !borderColor) {
-      return colors.black;
+      return colors.border;
     }
   }, [borderColor, type, colors]);
 
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
       <TouchableOpacity
-        activeOpacity={0.3}
-        style={
-          disabled
-            ? [
-                styles.button,
-                buttonStyle,
-                styles.buttonDisabled,
-                buttonDisabledStyle,
-                { backgroundColor: _bgColor }
-              ]
-            : [
-                styles.button,
-                buttonStyle,
-                { backgroundColor: _bgColor },
-                { borderColor: _borderColor }
-              ]
-        }
+        onPressIn={() => setPressed(true)}
+        onPressOut={() => setPressed(false)}
+        style={[
+          styles.button,
+          buttonStyle,
+          {backgroundColor: _bgColor},
+          pressed ? styles.buttonTap : {},
+          {borderColor: _borderColor},
+        ]}
         disabled={disabled}
-        onPress={onPress}
-      >
+        onPress={onPress}>
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
+          <View style={{alignItems: 'center', flexDirection: 'row', gap: 10}}>
             <Text
-              style={[styles.text, { color: _textColor }, textStyle]}
+              style={[
+                styles.text,
+                {color: disabled ? styles.textDisabled?.color : _textColor},
+                textStyle,
+              ]}
               children={children}
             />
             {icon}
