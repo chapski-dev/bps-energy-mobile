@@ -14,11 +14,10 @@ import {
 import {useAppTheme} from '@src/theme/theme';
 
 import {Text} from './Text';
-import ClosedEyeIcon from '../../assets/svg/closed-eye.svg';
-import OpenEyeIcon from '../../assets/svg/open-eye.svg';
+import ClosedEyeIcon from '@assets/svg/closed-eye.svg';
+import OpenEyeIcon from '@assets/svg/open-eye.svg';
 
 interface InputProps extends TextInputProps {
-  label?: string;
   prompting?: string;
   value?: string;
   onChangeText?: (text: string) => void;
@@ -26,7 +25,7 @@ interface InputProps extends TextInputProps {
   errorText?: string;
   required?: boolean;
   wrapperStyle?: StyleProp<ViewStyle>;
-  type?: 'universal' | 'password';
+  type?: 'default' | 'password';
   disabled?: boolean;
   color?: string;
   icon?: React.ReactNode;
@@ -35,7 +34,6 @@ interface InputProps extends TextInputProps {
 export const Input = forwardRef<InputProps, InputProps>(
   (
     {
-      label,
       prompting,
       value,
       onChangeText,
@@ -85,12 +83,6 @@ export const Input = forwardRef<InputProps, InputProps>(
 
     return (
       <View style={[{flexGrow: 1, gap: 4}, wrapperStyle]}>
-        {label && (
-          <Text style={styles.label}>
-            <Text children={label} />
-            {required ? <Text children=" *" color={colors.red} /> : null}
-          </Text>
-        )}
         <View
           style={[
             styles.inputWrapper,

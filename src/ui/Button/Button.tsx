@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo, useState } from 'react';
+import React, {FC, ReactNode, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   StyleProp,
@@ -9,9 +9,9 @@ import {
   ViewProps,
   ViewStyle,
 } from 'react-native';
-import { merge } from 'lodash';
+import {merge} from 'lodash';
 
-import { AppLightTheme, useAppTheme } from '@src/theme/theme';
+import {AppLightTheme, useAppTheme} from '@src/theme/theme';
 
 import {
   clearStyle,
@@ -28,7 +28,6 @@ interface PropsType extends ViewProps {
   onPress?: () => void;
   wrapperStyle?: StyleProp<ViewStyle>;
   buttonStyle?: StyleProp<ViewStyle>;
-  buttonDisabledStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   type?: ButtonType;
   backgroundColor?: keyof typeof AppLightTheme.colors;
@@ -49,7 +48,6 @@ export const Button: FC<PropsType> = ({
   onPress,
   wrapperStyle,
   buttonStyle,
-  buttonDisabledStyle,
   textStyle,
   children,
   type = 'filled',
@@ -58,14 +56,14 @@ export const Button: FC<PropsType> = ({
   borderColor,
   icon,
 }) => {
-  const { colors } = useAppTheme();
+  const {colors} = useAppTheme();
   const [pressed, setPressed] = useState(false);
 
   const styles = useMemo(() => typeStyle[type], [type]);
 
   const _bgColor = useMemo(() => {
     if (disabled && type === 'filled') {
-      return '#E6EAED';
+      return colors.grey_100;
     }
     if (backgroundColor && type !== 'filled') {
       return colors[backgroundColor];
@@ -104,22 +102,20 @@ export const Button: FC<PropsType> = ({
         style={[
           styles.button,
           buttonStyle,
-          disabled ? styles.buttonDisabled : {},
-          { backgroundColor: _bgColor },
+          {backgroundColor: _bgColor},
           pressed ? styles.buttonTap : {},
-          { borderColor: _borderColor },
+          {borderColor: _borderColor},
         ]}
         disabled={disabled}
-        onPress={onPress}
-      >
+        onPress={onPress}>
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
+          <View style={{alignItems: 'center', flexDirection: 'row', gap: 10}}>
             <Text
               style={[
                 styles.text,
-                { color: disabled ? styles.textDisabled?.color : _textColor },
+                {color: disabled ? styles.textDisabled?.color : _textColor},
                 textStyle,
               ]}
               children={children}

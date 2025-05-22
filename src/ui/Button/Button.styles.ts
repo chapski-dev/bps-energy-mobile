@@ -8,9 +8,6 @@ export const commonStytle = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
   text: {
     fontSize: 18,
     fontWeight: '500'
