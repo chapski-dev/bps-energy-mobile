@@ -28,22 +28,33 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
     value: phone
   });
 
+  const handleSkip = async () => {
+    navigation.preload('tabs');
+    navigation.navigate('tabs');
+  }
+
   return (
-    <Box pr={16} pl={16} pt={insets.top + 82} gap={24} pb={insets.bottom + 35} alignItems='center' flex={1} >
+    <Box
+      pr={16}
+      pl={16}
+      pt={insets.top + 82}
+      gap={24}
+      pb={insets.bottom + 35}
+      alignItems='center'
+      flex={1} >
       <LogoIcon />
       <Box flex={1} w='full' gap={24}>
+        <Box gap={16} w='full'>
+          <Input required {...maskedInputProps} placeholder='Email' />
+          <Input required {...maskedInputProps} placeholder={t('password')} />
+        </Box>
+        <Box style={{ alignSelf: 'flex-end' }} onPress={handleSubmit} >
+          <Text color={colors.grey_600} children='Забыли пароль?' />
+        </Box>
 
-      <Box gap={16} w='full'>
-        <Input required {...maskedInputProps} placeholder='Email' />
-        <Input required {...maskedInputProps} placeholder={t('password')} />
-      </Box>
-      <Box style={{ alignSelf: 'flex-end' }} onPress={handleSubmit} >
-        <Text color={colors.grey_600} children='Забыли пароль?' />
-      </Box>
-      
-      <Button children={t('enter')} onPress={handleSubmit} />
+        <Button children={t('enter')} onPress={handleSubmit} />
 
-      <Button
+        <Button
           type="clear"
           children={t('registration')}
           textColor="main"
@@ -54,7 +65,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
       <Button
         type="clear"
         children={t('skip')}
-        onPress={() => navigation.navigate('tabs')}
+        onPress={handleSkip}
       />
     </Box>
   );
