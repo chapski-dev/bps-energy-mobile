@@ -3,7 +3,6 @@ import { ActivityIndicator, Vibration } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
 
-import { vibrate } from '@src/actions/vibrate';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -12,6 +11,7 @@ import { Box, Button, Text } from '@src/ui';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { isIOS } from '@src/utils/vars/platform';
+import { vibrate } from '@src/utils/vibrate';
 
 const OTP_PASSWORD_LENGTH = 4;
 

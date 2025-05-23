@@ -12,7 +12,6 @@ import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useImmerReducer } from 'use-immer';
 
-import { vibrate } from '@src/actions/vibrate';
 import { getProfileData, postSignIn, updateUserProfile } from '@src/api';
 import { Profile } from '@src/api/types';
 import { AppServiceStatus } from '@src/events';
@@ -25,6 +24,7 @@ import {
 import app from '@src/service/app';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { vibrate } from '@src/utils/vibrate';
 
 export enum AuthState {
   /**
