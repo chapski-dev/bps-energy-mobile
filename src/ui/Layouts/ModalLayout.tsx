@@ -9,6 +9,7 @@ export interface IModalParams {
   element: ReactElement | null
   justifyContent: ViewStyle['justifyContent']
   marginHorizontal?: number
+  marginVertical?: number
 }
 
 let setupModalRef: ((modalData: IModalParams) => void) | undefined;
@@ -63,6 +64,7 @@ export const ModalLayout: FC = () => {
       visible={_modalVisible}
       justifyContent={modalState.justifyContent}
       marginHorizontal={modalState.marginHorizontal}
+      marginVertical={modalState.marginVertical}
     >
       {modalState.element}
     </ModalWrapper>
