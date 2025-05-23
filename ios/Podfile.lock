@@ -1611,6 +1611,8 @@ PODS:
     - React-Core
   - RNCAsyncStorage (2.1.2):
     - React-Core
+  - RNCClipboard (1.16.2):
+    - React-Core
   - RNFBApp (21.14.0):
     - Firebase/CoreOnly (= 11.11.0)
     - React-Core
@@ -1813,6 +1815,12 @@ PODS:
     - React
     - YandexMapsMobile (= 4.8.0-full)
   - SocketRocket (0.7.0)
+  - VisionCamera (4.6.4):
+    - VisionCamera/Core (= 4.6.4)
+    - VisionCamera/React (= 4.6.4)
+  - VisionCamera/Core (4.6.4)
+  - VisionCamera/React (4.6.4):
+    - React-Core
   - YandexMapsMobile (4.8.0-full)
   - Yoga (0.0.0)
 
@@ -1887,6 +1895,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -1896,6 +1905,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNYamap (from `../node_modules/react-native-yamap`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2051,6 +2061,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
@@ -2069,6 +2081,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNYamap:
     :path: "../node_modules/react-native-yamap"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2151,6 +2165,7 @@ SPEC CHECKSUMS:
   ReactCommon: 2a02ad6348566d64bb1429aa952f0e4466a51a9d
   RNBootSplash: efd6dbf15b2579fb86bc575b8b676d1c5ac5709f
   RNCAsyncStorage: b9f5f78da5d16a853fe3dc22e8268d932fc45a83
+  RNCClipboard: e1d17c9d093d8129ef50b39b63a17a0e8ccd0ade
   RNFBApp: a448037d2df74af9d374a0b765be12ff1e844dc0
   RNFBMessaging: 0f0498a95c605e3afcf13ac5f349d0b201ea65f6
   RNGestureHandler: ae56ec9557e0569b3f83c220e3bc5e1f55cb76d6
@@ -2161,6 +2176,7 @@ SPEC CHECKSUMS:
   RNSVG: e3ad69848b6357587545e0a49628b1148acf082c
   RNYamap: e9e022763db4b546333d68af89f93d3313d028dd
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
+  VisionCamera: f56eaedde0d3fa095143b78374d29e89e71735f9
   YandexMapsMobile: 576340ead47bb112b6387eac1e605cfe7565c162
   Yoga: 929fa3162dc47b68bdbd4b7b794b6353ef9b53c5
 

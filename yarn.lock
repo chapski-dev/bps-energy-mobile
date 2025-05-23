@@ -2092,6 +2092,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-clipboard/clipboard@^1.16.2":
+  version "1.16.2"
+  resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.16.2.tgz#d8517eea937d336b8fe1ca44e955e691d27f5ba4"
+  integrity sha512-VqUYwVxo7DyHMz7v2LxLMaAOSu3pKFvzpqR4jQezdH0VyaudILTTcUf7dR4TroARU/lLkTU8nZA11UniTvGVXg==
+
 "@react-native-community/cli-clean@14.1.0":
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-14.1.0.tgz#fee1a178fa58c84dfe18e23ee79fd3110d974971"
@@ -7621,6 +7626,11 @@ react-is@^19.1.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.1.0.tgz#805bce321546b7e14c084989c77022351bbdd11b"
   integrity sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==
 
+react-native-awesome-slider@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-awesome-slider/-/react-native-awesome-slider-2.9.0.tgz#7d5013a0e0e15ed84d59b4fa4c26a8b7ab9b2454"
+  integrity sha512-sc5qgX4YtM6IxjtosjgQLdsal120MvU+YWs0F2MdgQWijps22AXLDCUoBnZZ8vxVhVyJ2WnnIPrmtVBvVJjSuQ==
+
 react-native-bootsplash@^6.3.8:
   version "6.3.8"
   resolved "https://registry.yarnpkg.com/react-native-bootsplash/-/react-native-bootsplash-6.3.8.tgz#9d9883993f397daa18a69bd1ac23f90f3643fc0b"
@@ -7737,6 +7747,11 @@ react-native-svg@^15.12.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
     warn-once "0.1.1"
+
+react-native-vision-camera@^4.6.4:
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-4.6.4.tgz#f1c51dda2c5d558ea0ec235e2401abf5efa46875"
+  integrity sha512-d998uTHsGJ9bTlsClgT37RK1sK7ZQekv5y6ylynds3vmdK6YbFQJUoi2cvMrFN4dp9qvSlCjEfwekjMIz3guQA==
 
 react-native-webview@^13.13.5:
   version "13.13.5"
