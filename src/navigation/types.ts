@@ -10,6 +10,7 @@ export type RootStackParamList = {
   'top-up-account': undefined
   'adding-card-and-payment': undefined
   'profile-details': undefined;
+  'filters-of-stations': undefined
 };
 
 export type TabsParamList = {
