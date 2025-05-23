@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { GestureResponderEvent, Pressable } from 'react-native';
 import BPSIcon from '@assets/svg/BPS.svg';
 import MapPinIcon from '@assets/svg/map-pin.svg';
 import ProfileIcon from '@assets/svg/user-fill.svg';
@@ -43,7 +43,7 @@ export const Tabs = () => {
         options={{
           headerShown: false,
           tabBarButton: (props) => <ChargingTabButton {...props} />,
-          tabBarIcon: ({ color }) => null,
+          tabBarIcon: () => null,
           title: t('charging-session'),
         }}
       />
@@ -67,8 +67,14 @@ const ChargingTabButton = ({
 }: BottomTabBarButtonProps) => {
   const { colors } = useAppTheme();
 
+  const handlePress = (event: GestureResponderEvent) => {
+    event.preventDefault();
+    // setCodeScanedRef!(null)
+    onPress(event)
+  };
+
   return (
-    <Pressable onPress={onPress} style={[style, { position: 'relative' }]}>
+    <Pressable onPress={handlePress} style={[style, { position: 'relative' }]}>
       <Box
         w={72}
         h={72}
