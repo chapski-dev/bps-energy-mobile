@@ -8,7 +8,7 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 
-import ChargingScreen from '@src/screens/ChargingScreen';
+import ChargingScreen, { setCodeScanedRef } from '@src/screens/ChargingScreen';
 import MapScreen from '@src/screens/MapScreen';
 import { ProfileScreen } from '@src/screens/ProfileScreen';
 import { useAppTheme } from '@src/theme/theme';
@@ -69,9 +69,10 @@ const ChargingTabButton = ({
 
   const handlePress = (event: GestureResponderEvent) => {
     event.preventDefault();
-    // setCodeScanedRef!(null)
+    
+    setCodeScanedRef && setCodeScanedRef!(null)
     onPress(event)
-  };
+  }
 
   return (
     <Pressable onPress={handlePress} style={[style, { position: 'relative' }]}>
