@@ -15,7 +15,7 @@ import { useAppTheme } from '@src/theme/theme';
 
 import { Text } from './Text';
 
-interface InputProps extends TextInputProps {
+export interface InputProps extends TextInputProps {
   label?: string;
   prompting?: string;
   value?: string;
