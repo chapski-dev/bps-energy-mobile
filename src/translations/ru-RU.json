@@ -6,7 +6,7 @@
   "add": "Добавить",
   "map": "Карта",
   "charging-session": "Сессия зарядки",
-
+  "forgot-password": "Забыли пароль",
   "orders_for_cargo_transportation_quickly_and_conveniently": "Заказы на грузоперевозку быстро и удобно",
   "continue_in_language": "Продолжить на {{language}}",
   "languages": {

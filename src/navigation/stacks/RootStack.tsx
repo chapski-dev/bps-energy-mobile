@@ -39,7 +39,7 @@ export const RootStack = () => {
             component={LoginScreen}
           />
           <Stack.Screen
-            options={{ headerShown: false }}
+            options={{ title: t('registration') }}
             name="registration"
             component={RegistrationScreen}
           />
@@ -51,9 +51,8 @@ export const RootStack = () => {
         component={Tabs}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: t('forgot-password') }}
         name="forgot-password"
         component={ForgotPasswordScreen}
       />
@@ -73,7 +72,7 @@ export const RootStack = () => {
         component={AddingCardAndPayment}
       />
       <Stack.Screen
-            options={{ title: t('filters') }}
+        options={{ title: t('filters') }}
         name='filters-of-stations'
         component={FiltersOfStations}
       />

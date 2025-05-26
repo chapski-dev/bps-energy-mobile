@@ -5,7 +5,8 @@ import api from './config';
 import {
   NotificationSettings,
   Profile,
-  SigInResponse
+  SigInResponse,
+  SignInReq
 } from './types';
 
 // Authentication API
@@ -13,14 +14,14 @@ import {
  * Аутентификация пользователя по email и паролю
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_sign_in
  */
-export const postSignIn = (body: { phone: string; otp: string }) =>
+export const postSignIn = (body: SignInReq) =>
   api.post<SigInResponse>('/mobile/sign-in', body).then((res) => res.data);
 
 /**
  * Регистрация нового пользователя по email и паролю
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_sign_up
  */
-export const postSignUp = (body: { phone: string; otp: string }) =>
+export const postSignUp = (body: SignInReq) =>
   api.post<SigInResponse>('/mobile/sign-up', body).then((res) => res.data);
 
 /**
@@ -36,7 +37,7 @@ export const postRefreshToken = (body: { access_token: string, refresh_token: st
  * Подтверждение email пользователя по коду
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_confirm_email
  */
-export const postConfirmEmail = (body: { access_token: string, refresh_token: string }) =>
+export const postConfirmEmail = (body: { email: string, verification_code: string }) =>
   axios
     .post<SigInResponse>('/mobile/confirm-email', body)
     .then((res) => res.data);

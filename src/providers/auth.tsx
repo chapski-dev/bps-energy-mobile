@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useImmerReducer } from 'use-immer';
 
 import { getProfileData, postSignIn, updateUserProfile } from '@src/api';
-import { Profile } from '@src/api/types';
+import { Profile, SignInReq } from '@src/api/types';
 import { AppServiceStatus } from '@src/events';
 import { navigationRef } from '@src/navigation/navigationRef';
 import {
@@ -48,7 +48,7 @@ export enum AuthState {
 export interface IAuthProvider {
   authState: AuthState;
   user: null | Profile;
-  onSignin: (data?: any) => Promise<void>;
+  onSignIn: (data: { email: string; password: string }) => Promise<void>;
   onLogout: () => void;
   updateUser: (data: Partial<Profile>) => Promise<void>;
 }
@@ -56,7 +56,7 @@ export interface IAuthProvider {
 export const AuthContext = createContext<IAuthProvider>({
   authState: AuthState.checking,
   onLogout: () => null,
-  onSignin: () => Promise.resolve(),
+  onSignIn: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),
   user: null,
 });
@@ -99,19 +99,18 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     checkAuthState();
   }, [checkAuthState]);
 
-  const onSignin = useCallback(async (data: { phone: string; otp: string }) => {
+  const onSignIn = useCallback(async (data: SignInReq) => {
     try {
       authDispatch({ type: AuthActionType.setConnecting });
-
-      // const { access_token, refresh_token } = await postSignIn(data);
+      const { access_token, refresh_token } = await postSignIn(data);
       authDispatch({ type: AuthActionType.setReady });
-      // await AsyncStorage.multiSet([
-      //   [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
-      //   [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
-      //   [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
-      // ]);
-      // const userData = await getProfileData();
-      // setUser(userData);
+      await AsyncStorage.multiSet([
+        [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
+        [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
+        [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
+      ]);
+      const userData = await getProfileData();
+      setUser(userData);
       // app.isFirebaseAuthorized = AppServiceStatus.on;
     } catch (error) {
       authDispatch({ type: AuthActionType.setEmpty });
@@ -163,7 +162,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authState, onLogout, onSignin, updateUser, user }}
+      value={{ authState, onLogout, onSignIn, updateUser, user }}
     >
       {children}
     </AuthContext.Provider>
