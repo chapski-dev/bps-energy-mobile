@@ -67,11 +67,11 @@ export const Input = forwardRef<InputProps, InputProps>(
     };
 
     return (
-      <View style={[{ flexGrow: 1, gap: 4 }, wrapperStyle]}>
+      <View style={[{ gap: 4 }, wrapperStyle]}>
         {label && (
           <Text style={styles.label}>
             <Text children={label} />
-            {required ? <Text children=" *" color={colors.red} /> : null}
+            {required ? <Text children=" *" color={colors.red_500} /> : null}
           </Text>
         )}
         <View
@@ -94,7 +94,7 @@ export const Input = forwardRef<InputProps, InputProps>(
             {...props}
           />
         </View>
-        {error && <Text style={styles.errorText} children={errorText} />}
+        {(error && errorText) && <Text style={styles.errorText} children={errorText} />}
         {prompting && (
           <Text style={{ ...styles.label, color: colors.grey_600 }} children={prompting} />
         )}
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1.5,
     flexDirection: 'row',
-    flexGrow: 1,
     gap: 9,
     paddingHorizontal: 10,
   },

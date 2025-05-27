@@ -2,14 +2,14 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 
 export type RootStackParamList = {
-  tabs: undefined;
-  login: undefined;
-  registration: undefined;
-  'forgot-password': undefined;
-  'reset-password': undefined;
+  tabs: undefined
+  login: undefined
+  registration: undefined
+  'forgot-password': undefined
+  'reset-password': undefined
   'top-up-account': undefined
   'adding-card-and-payment': undefined
-  'profile-details': undefined;
+  'profile-details': undefined
   'filters-of-stations': undefined
 };
 

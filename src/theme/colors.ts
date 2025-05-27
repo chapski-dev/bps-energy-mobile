@@ -19,8 +19,9 @@ export const DefaultColors = {
   /** text default */
   grey_800: '#000A0A',
   main: '#008C92',
-  red: '#E73054',
+  red_500: '#E73054',
   red_light: '#E7303026',
+  orange_500: '#E7B930',
   white: '#FFF',
   white_transparent: '#ffffffea'
 } as const;
