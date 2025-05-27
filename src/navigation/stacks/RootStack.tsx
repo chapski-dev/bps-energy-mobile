@@ -62,7 +62,7 @@ export const RootStack = () => {
         component={ResetPasswordScreen}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: 'Пополнение баланса' }}
         name="top-up-account"
         component={TopUpAccountScreen}
       />

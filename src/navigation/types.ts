@@ -8,7 +8,7 @@ export type RootStackParamList = {
   'forgot-password': undefined
   'reset-password': undefined
   'top-up-account': undefined
-  'adding-card-and-payment': undefined
+  'adding-card-and-payment': { sum: string | number }
   'profile-details': undefined
   'filters-of-stations': undefined
 };
@@ -26,7 +26,7 @@ export type AvailableRoutes = keyof AllStackParamList;
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends AllStackParamList {}
+    interface RootParamList extends AllStackParamList { }
   }
 }
 

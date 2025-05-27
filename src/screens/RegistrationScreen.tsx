@@ -9,7 +9,7 @@ import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
-import { Box, Button, Input, Text } from '@src/ui';
+import { Box, Button, Input } from '@src/ui';
 import { InputProps } from '@src/ui/Input';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { validator } from '@src/utils/validations';
@@ -126,13 +126,10 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   autoComplete="password"
+                  prompting='Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки'
                 />
               )}
             />
-            <Text
-              children="Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки"
-              colorName='grey_600'
-              fontSize={13} />
           </Box>
 
           <Button

@@ -14,7 +14,7 @@ import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { inputMasks } from '@src/utils/inputMasks';
 
-function AddingCardAndPaymentScreen({ navigation }: ScreenProps<'adding-card-and-payment'>) {
+function AddingCardAndPaymentScreen({ navigation, route }: ScreenProps<'adding-card-and-payment'>) {
   const { insets } = useAppTheme();
   const { t } = useLocalization();
   const { toastSuccess } = useThemedToasts();
@@ -114,7 +114,7 @@ function AddingCardAndPaymentScreen({ navigation }: ScreenProps<'adding-card-and
       </Box>
       <Box gap={12}>
         <Button 
-        children="Добавить и оплатить 20 BYN"
+        children={`Добавить и оплатить ${route.params.sum} BYN`}
         disabled={!formState.isValid || loading}
         loading={loading}
         onPress={handleSubmit(submitCardData)}
