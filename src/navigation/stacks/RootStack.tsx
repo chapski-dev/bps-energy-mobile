@@ -67,7 +67,7 @@ export const RootStack = () => {
         component={TopUpAccountScreen}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: t('pay-by-card') }}
         name="adding-card-and-payment"
         component={AddingCardAndPayment}
       />
