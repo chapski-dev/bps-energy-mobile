@@ -84,20 +84,22 @@ export const Button: FC<PropsType> = ({
   icon,
 }) => {
   const { colors } = useAppTheme();
-  const scaleValue = useRef(new Animated.Value(1)).current; // Для анимации масштаба
-  const overlayOpacity = useRef(new Animated.Value(0)).current; // Для оверлея
+  const scaleValue = useRef(new Animated.Value(1)).current;
+  const overlayOpacity = useRef(new Animated.Value(0)).current;
 
   const handlePressIn = () => {
+    if (disabled) return;
     Animated.parallel([
       Animated.spring(scaleValue, { toValue: 0.99, useNativeDriver: true }),
-      Animated.timing(overlayOpacity, { duration: 10, toValue: 1, useNativeDriver: true }),
+      Animated.timing(overlayOpacity, { duration: 20, toValue: .25, useNativeDriver: true }),
     ]).start();
   };
 
   const handlePressOut = () => {
+    if (disabled) return;
     Animated.parallel([
       Animated.spring(scaleValue, { toValue: 1, useNativeDriver: true }),
-      Animated.timing(overlayOpacity, { duration: 10, toValue: 0, useNativeDriver: true }),
+      Animated.timing(overlayOpacity, { duration: 20, toValue: 0, useNativeDriver: true }),
     ]).start();
   };
 
@@ -117,7 +119,6 @@ export const Button: FC<PropsType> = ({
 
   }, [backgroundColor, colors, disabled, type]);
 
-  // Цвет текста
   const _textColor = useMemo(() => {
     switch (true) {
       case type === 'filled' && disabled:
@@ -144,31 +145,29 @@ export const Button: FC<PropsType> = ({
     }
   }, [borderColor, colors, disabled, type]);
 
-  // Стили кнопки
   const buttonStyles = useMemo(() => ([
     styles.button,
     buttonStyle,
-    disabled ? buttonDisabledStyle : undefined,
     { backgroundColor: _bgColor },
     { borderColor: _borderColor },
+    disabled ? buttonDisabledStyle : undefined,
   ]),
     [_bgColor, _borderColor, buttonDisabledStyle, buttonStyle, disabled, styles.button],
   );
 
-  // Общий контент кнопки
   const buttonContent = (
     loading ? (
-      <ActivityIndicator color="white" />
+      <ActivityIndicator color={colors.background} />
     ) : (
       <>
         <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
           <Text style={[{ color: _textColor, fontWeight: '600' }, textStyle]} children={children} />
           {icon}
         </View>
-        {type === 'filled' && !disabled && !loading && (
+        {type === 'filled' &&
           <Animated.View
             style={{
-              backgroundColor: '#00000040',
+              backgroundColor: colors.black,
               bottom: 0,
               left: 0,
               opacity: overlayOpacity,
@@ -176,8 +175,7 @@ export const Button: FC<PropsType> = ({
               right: 0,
               top: 0,
             }}
-          />
-        )}
+          />}
       </>
     )
   );
@@ -209,7 +207,6 @@ export const Button: FC<PropsType> = ({
           </TouchableHighlight>
         )}
       </Animated.View>
-
     </View>
   );
 };
