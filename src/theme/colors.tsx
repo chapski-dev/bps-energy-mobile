@@ -18,6 +18,7 @@ export const DefaultColors = {
   /** text default */
   grey_800: '#000A0A',
   main: '#008C92',
+  main_dark: '#00696d',
   red: '#E73054',
   white: '#FFF',
   white_transparent: '#ffffffea',

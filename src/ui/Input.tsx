@@ -14,8 +14,8 @@ import {
 import {useAppTheme} from '@src/theme/theme';
 
 import {Text} from './Text';
-import ClosedEyeIcon from '@assets/svg/closed-eye.svg';
-import OpenEyeIcon from '@assets/svg/open-eye.svg';
+import ClosedEyeIcon from '@assets/svg/eye-closed.svg';
+import OpenEyeIcon from '@assets/svg/eye.svg';
 
 interface InputProps extends TextInputProps {
   prompting?: string;
@@ -97,16 +97,16 @@ export const Input = forwardRef<InputProps, InputProps>(
           {icon && <View>{icon}</View>}
           <TextInput
             value={value}
-            textContentType="password"
             style={[
               styles.input,
               {color: disabled ? colors.grey_400 : colors.grey_800},
             ]}
+            textContentType={type === 'password' ? 'password' : undefined}
             onChangeText={disabled ? undefined : onChangeText}
             onFocus={_onFocus}
             onBlur={_onBlur}
             placeholderTextColor={colors.border}
-            cursorColor={disabled ? colors.grey_400 : colors.black}
+            cursorColor={colors.black}
             secureTextEntry={type === 'password' && !isPasswordVisible}
             editable={!disabled}
             //@ts-ignore
@@ -118,9 +118,9 @@ export const Input = forwardRef<InputProps, InputProps>(
               onPress={togglePasswordVisibility}
               disabled={disabled}>
               {isPasswordVisible ? (
-                <OpenEyeIcon width={24} height={24} />
+                <OpenEyeIcon color={colors.grey_400} width={24} height={24} />
               ) : (
-                <ClosedEyeIcon width={24} height={24} />
+                <ClosedEyeIcon color={colors.grey_400} width={24} height={24} />
               )}
             </TouchableOpacity>
           )}
@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     flexDirection: 'row',
-    flexGrow: 1,
     gap: 9,
     paddingHorizontal: 10,
   },

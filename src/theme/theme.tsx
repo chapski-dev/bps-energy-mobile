@@ -1,4 +1,4 @@
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {
   DarkTheme,
   DefaultTheme,
@@ -6,7 +6,7 @@ import {
   useTheme,
 } from '@react-navigation/native';
 
-import { darkColors, lightColors } from './colors';
+import {darkColors, lightColors} from './colors';
 
 const navigationLightColors: NavigationTheme['colors'] = {
   ...DefaultTheme.colors,
@@ -56,5 +56,7 @@ export const useAppTheme = () => {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
 
-  return { ...theme, insets } as App.Theme;
+  return {...theme, insets} as App.Theme;
 };
+
+export {lightColors};
