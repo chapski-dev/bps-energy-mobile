@@ -125,7 +125,9 @@ export const Input = forwardRef<InputProps, InputProps>(
             </TouchableOpacity>
           )}
         </View>
-        {error && <Text style={styles.errorText} children={errorText} />}
+        {error && errorText && (
+          <Text style={styles.errorText} children={errorText} />
+        )}
         {prompting && (
           <Text
             style={[styles.label, {color: colors.grey_600}]}

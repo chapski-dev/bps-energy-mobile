@@ -14,7 +14,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 
-import { vibrate } from '@src/actions/vibrate';
+import { vibrate } from '@src/utils/vibrate';
 
 const BUTTON_WIDTH = Dimensions.get('screen').width - 32;
 const BUTTON_HEIGHT = 50;

@@ -3,7 +3,7 @@ import { ActivityIndicator, Vibration } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
 
-import { vibrate } from '@src/actions/vibrate';
+import { isIOS } from '@src/misc/platform';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -11,7 +11,7 @@ import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
-import { isIOS } from '@src/utils/vars/platform';
+import { vibrate } from '@src/utils/vibrate';
 
 const OTP_PASSWORD_LENGTH = 4;
 
@@ -65,15 +65,15 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
     () => ({
       containerStyle: { gap: 12, width: 'auto' },
       filledPinCodeContainerStyle: notMatch
-        ? { borderColor: colors.red, borderRadius: 16, borderWidth: 1 }
+        ? { borderColor: colors.red_500, borderRadius: 16, borderWidth: 1 }
         : { borderColor: colors.main, borderRadius: 16, borderWidth: 1 },
       focusedPinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red : colors.grey_200,
+        borderColor: notMatch ? colors.red_500 : colors.grey_200,
         borderRadius: 15,
         borderWidth: 1
       },
       pinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red : colors.grey_200,
+        borderColor: notMatch ? colors.red_500 : colors.grey_200,
         borderRadius: 15,
         borderWidth: 1,
         width: 47

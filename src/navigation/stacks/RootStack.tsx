@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { AuthState, useAuth } from '@src/providers/auth';
 import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
+import FiltersOfStations from '@src/screens/FiltersOfStations';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
 import LoginScreen from '@src/screens/LoginScreen';
 import { ProfileDetailsScreen } from '@src/screens/ProfileDetailsScreen';
@@ -38,7 +39,7 @@ export const RootStack = () => {
             component={LoginScreen}
           />
           <Stack.Screen
-            options={{ headerShown: false }}
+            options={{ title: t('registration') }}
             name="registration"
             component={RegistrationScreen}
           />
@@ -50,9 +51,8 @@ export const RootStack = () => {
         component={Tabs}
         options={{ headerShown: false }}
       />
-
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: t('forgot-password') }}
         name="forgot-password"
         component={ForgotPasswordScreen}
       />
@@ -62,14 +62,19 @@ export const RootStack = () => {
         component={ResetPasswordScreen}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: 'Пополнение баланса' }}
         name="top-up-account"
         component={TopUpAccountScreen}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{ title: t('pay-by-card') }}
         name="adding-card-and-payment"
         component={AddingCardAndPayment}
+      />
+      <Stack.Screen
+        options={{ title: t('filters') }}
+        name='filters-of-stations'
+        component={FiltersOfStations}
       />
 
       {authState === AuthState.ready && (

@@ -1,7 +1,8 @@
 import { NativeModules } from 'react-native'
 import { LanguageDetectorModule } from 'i18next'
 
-import { isIOS } from '@src/utils/vars/platform'
+import { isIOS } from '@src/misc/platform'
+
 
 
 const RNLanguageDetector: LanguageDetectorModule = {

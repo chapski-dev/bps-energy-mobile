@@ -1,4 +1,4 @@
-import { Point } from 'react-native-yamap';
+export type SignInReq = { email: string; password: string };
 
 export type SigInResponse = {
   access_token: string;

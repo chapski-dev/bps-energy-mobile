@@ -2,14 +2,15 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 
 export type RootStackParamList = {
-  tabs: undefined;
-  login: undefined;
-  registration: undefined;
-  'forgot-password': undefined;
-  'reset-password': undefined;
+  tabs: undefined
+  login: undefined
+  registration: undefined
+  'forgot-password': undefined
+  'reset-password': undefined
   'top-up-account': undefined
-  'adding-card-and-payment': undefined
-  'profile-details': undefined;
+  'adding-card-and-payment': { sum: string | number }
+  'profile-details': undefined
+  'filters-of-stations': undefined
 };
 
 export type TabsParamList = {
@@ -25,7 +26,7 @@ export type AvailableRoutes = keyof AllStackParamList;
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends AllStackParamList {}
+    interface RootParamList extends AllStackParamList { }
   }
 }
 

@@ -4,6 +4,7 @@ export const DefaultColors = {
   background: '#fff',
   black: '#000000',
   green: '#34C759',
+  green_light: '#34c75926',
   grey_50: '#F2F5F7',
   /** disabled color */
   grey_100: '#E6EAED',
@@ -18,8 +19,9 @@ export const DefaultColors = {
   /** text default */
   grey_800: '#000A0A',
   main: '#008C92',
-  main_dark: '#00696d',
-  red: '#E73054',
+  red_500: '#E73054',
+  red_light: '#E7303026',
+  orange_500: '#E7B930',
   white: '#FFF',
   white_transparent: '#ffffffea',
 } as const;

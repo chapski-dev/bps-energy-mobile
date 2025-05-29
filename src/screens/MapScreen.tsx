@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
 import {
   ClusteredYamap,
@@ -8,17 +8,23 @@ import {
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
+import { useNavigation } from '@react-navigation/native';
+import lodash from 'lodash';
 
+import { ScreenProps } from '@src/navigation/types';
 import { AuthState, useAuth } from '@src/providers/auth';
+import { defaultState, useFilterStore } from '@src/store/useFilterOfStationsStore';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
+import { modal } from '@src/ui/Layouts/ModalLayout';
 import { getHighAccuracyPosition } from '@src/utils/get-current-geo-position';
+import { handleCatchError } from '@src/utils/handleCatchError';
+import { StationPreviewModal } from '@src/widgets/StationPreviewModal';
 
-export default function MapScreen() {
-  const { authState } = useAuth();
-
+export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const [markers, setMarkers] = useState<Point[]>([]);
+  const { insets, colors } = useAppTheme();
 
   const onMapPress = (event: NativeSyntheticEvent<Point>) => {
     const { lat, lon } = event.nativeEvent;
@@ -32,40 +38,67 @@ export default function MapScreen() {
     setMarkers(newPolyline);
   };
 
-  async function getCurrentPosition() {
-    const point = await getHighAccuracyPosition()
+  const onStationPress = (point: Point) => {
+    const Element = (
+      <StationPreviewModal point={point} />
+    );
 
-    mapRef.current?.fitMarkers([point]);
+    modal().setupModal?.({
+      element: Element,
+      justifyContent: 'flex-start',
+      marginHorizontal: 12,
+      marginVertical: insets.top + 20,
+    });
+
   }
+  const getCurrentPosition = useCallback(async () => {
+    try {
+      const point = await getHighAccuracyPosition()
+
+      mapRef.current?.setCenter(point, 16.5, undefined, undefined, 0.5, 0);
+
+    } catch (error) {
+      handleCatchError(
+        'Не удалось определить ваше местоположение. Убедитесь что включили доступ в настройках вашего устройства.',
+        'MapScreen - getCurrentPosition')
+    }
+  }, [])
+
+
+  useLayoutEffect(() => {
+    getCurrentPosition()
+  }, [getCurrentPosition])
+
+
 
   return (
     <Box flex={1}>
       <ClusteredYamap
         clusterColor={'black'}
+        showUserPosition
+        rotateGesturesEnabled={false}
         clusteredMarkers={markers.map((marker) => ({
           data: {
-
+            foo: 'Hello'
           },
           point: marker,
         }))}
+        initialRegion={{ lat: 53.902284, lon: 27.561831 }}
         onMapPress={onMapPress}
         style={{ flex: 1 }}
         ref={mapRef}
         renderMarker={(info, index) => (
           <Marker
+            onPress={() => onStationPress(info.point)}
             key={index}
             point={info.point}
             source={require('@assets/png/dot-default.png')}
-            scale={2}
+            scale={3}
           />
         )}
       />
-      {authState === AuthState.ready && (
-        <>
-          <UserBalance />
-          <Filters />
-        </>
-      )}
+      <UserBalance />
+      <Filters />
       <UserLocation onPress={getCurrentPosition} />
     </Box>
   );
@@ -73,8 +106,8 @@ export default function MapScreen() {
 
 const UserBalance = () => {
   const { insets, colors } = useAppTheme();
-
-  return (
+  const { authState } = useAuth();
+  return authState === AuthState.ready ? (
     <Box
       absolute
       top={insets.top + 8}
@@ -93,11 +126,16 @@ const UserBalance = () => {
         <PlusCircleFillIcon color={colors.main} width={20} height={20} />
       </Box>
     </Box>
-  );
+  ) : null;
 };
 
 const Filters = () => {
   const { colors } = useAppTheme();
+  const nav = useNavigation();
+  const { persisted } = useFilterStore();
+
+  const isEqual = useMemo(() => lodash.isEqual(defaultState, persisted), [persisted])
+
   return (
     <Box
       absolute
@@ -110,9 +148,9 @@ const Filters = () => {
       w={48}
       h={48}
       style={shadowStyle}
-      onPress={() => null}
+      onPress={() => nav.navigate('filters-of-stations')}
     >
-      <Box
+      {!isEqual && <Box
         absolute
         w={6}
         h={6}
@@ -120,7 +158,7 @@ const Filters = () => {
         top={5}
         backgroundColor={colors.main}
         borderRadius={50}
-      />
+      />}
       <Box flex={1} justifyContent="center" alignItems="center">
         <FiltersIcon />
       </Box>

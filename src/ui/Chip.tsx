@@ -9,8 +9,8 @@ export const Chip = ({ children }: PropsWithChildren) => {
   const { colors } = useAppTheme();
 
   return (
-    <Box borderColor={colors.grey_100} borderWidth={1} px={10} borderRadius={5}>
-      <Text children={children} />
+    <Box backgroundColor={colors.grey_50} px={10} borderRadius={5}>
+      <Text children={children} colorName='grey_700' />
     </Box>
   );
 };
