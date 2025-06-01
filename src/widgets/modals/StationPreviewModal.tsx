@@ -2,16 +2,14 @@ import React, { useState } from 'react'
 import { Alert } from 'react-native';
 import { Point } from 'react-native-yamap';
 import ShareIcon from '@assets/svg/arrow-square-out.svg';
-import CopySuccessIcon from '@assets/svg/check-circle-fill.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
-import CopyIcon from '@assets/svg/copy.svg';
 import XIcon from '@assets/svg/X.svg';
 
+import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
 import { modal } from '@src/ui/Layouts/ModalLayout';
 import { StatusBanner } from '@src/ui/StatusBanner';
-import { copyToClipboard } from '@src/utils/copyToClipboard';
 import { getHighAccuracyPosition } from '@src/utils/get-current-geo-position';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { openYandexMaps } from '@src/utils/yandex-maps';
@@ -21,7 +19,6 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
   const { colors } = useAppTheme();
   const closeModal = () => modal()?.closeModal?.();
   const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   const handleMoreDetails = () => Alert.alert('Детали:')
   const openRoute = async () => {
@@ -37,10 +34,6 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
     }
   }
 
-  const handleCopyAddress = () => {
-    copyToClipboard('Аранская улица, 11, Минск', 'Адрес скопирован!')
-    setCopied(true)
-  }
 
   return (
     <Box relative borderRadius={16} backgroundColor={colors.background} p={24} gap={16} >
@@ -51,13 +44,7 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
         <Text fontWeight='700' fontSize={22} children="BPS Energy" mb={2} />
         <Box row gap={8} >
           <Text children="Аранская улица, 11" colorName='grey_400' />
-          {copied ? <CopySuccessIcon color={colors.green} width={16} height={16} /> :
-            <CopyIcon
-              width={16}
-              height={16}
-              color={colors.grey_400}
-              onPress={handleCopyAddress}
-            />}
+          <CopyToClipboard value={'Аранская улица, 11, Минск'} message='Адрес скопирован!' />
         </Box>
       </Box>
 
