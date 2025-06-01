@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native';
 import dayjs from 'dayjs'
 import { pickBy } from 'lodash';
 
@@ -38,3 +39,5 @@ export const createdAtFormat = (date: string | number): string => {
     return parsedDate.format('dddd, DD MMMM')
   }
 }
+export const windowWidth = Dimensions.get('window').width;
+export const windowHeight = Dimensions.get('window').height;
