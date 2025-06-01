@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Alert } from 'react-native';
 import { Point } from 'react-native-yamap';
 import ShareIcon from '@assets/svg/arrow-square-out.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
 import XIcon from '@assets/svg/X.svg';
+import { useNavigation } from '@react-navigation/native';
 
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { useAppTheme } from '@src/theme/theme';
@@ -19,8 +19,14 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
   const { colors } = useAppTheme();
   const closeModal = () => modal()?.closeModal?.();
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
-  const handleMoreDetails = () => Alert.alert('Детали:')
+  const handleMoreDetails = () => {
+    closeModal();
+    navigation.preload('charging-station')
+    navigation.navigate('charging-station')
+  }
+
   const openRoute = async () => {
     try {
       setLoading(true);
