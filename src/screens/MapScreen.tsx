@@ -19,7 +19,7 @@ import { Box, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 import { getHighAccuracyPosition } from '@src/utils/get-current-geo-position';
 import { handleCatchError } from '@src/utils/handleCatchError';
-import { StationPreviewModal } from '@src/widgets/StationPreviewModal';
+import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);

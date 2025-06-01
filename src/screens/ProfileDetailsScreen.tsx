@@ -22,7 +22,7 @@ import { Box, Button, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
-import SelectLanguageModal from '@src/widgets/SelectLanguageModal';
+import SelectLanguageModal from '@src/widgets/modals/SelectLanguageModal';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',

@@ -14,7 +14,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Chip, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 
-import { ContectorNotInsertedModal } from './ContectorNotInsertedModal';
+import { ContectorNotInsertedModal } from './modals/ContectorNotInsertedModal';
 
 type ChargerType = 'CCS' | 'CHAdeMO' | 'Type 2';
 
