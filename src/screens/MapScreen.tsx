@@ -148,8 +148,11 @@ const Filters = () => {
       w={48}
       h={48}
       style={shadowStyle}
+      effect="highlight"
+      underlayColor={colors.grey_100}
       onPress={() => nav.navigate('filters-of-stations')}
     >
+      <>
       {!isEqual && <Box
         absolute
         w={6}
@@ -162,6 +165,7 @@ const Filters = () => {
       <Box flex={1} justifyContent="center" alignItems="center">
         <FiltersIcon />
       </Box>
+      </>
     </Box>
   );
 };
