@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LogoIcon from '@assets/svg/logo.svg';
+import LockIcon from '@assets/svg/lock.svg';
+import EnvelopeIcon from '@assets/svg/envelope.svg';
 
 import { SignInReq } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
@@ -13,6 +15,8 @@ import { InputProps } from '@src/ui/Input';
 import { wait } from '@src/utils';
 import { validator } from '@src/utils/validations';
 
+const LoginScreen = ({navigation}: ScreenProps<'login'>) => {
+  const {insets, colors} = useAppTheme();
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
   const { insets, colors } = useAppTheme();

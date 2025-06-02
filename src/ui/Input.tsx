@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import React, {forwardRef, useRef, useState} from 'react';
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -7,16 +7,17 @@ import {
   TextInputFocusEventData,
   TextInputProps,
   View,
-  ViewStyle
+  ViewStyle,
+  TouchableOpacity,
 } from 'react-native';
-import SearchIcon from '@assets/svg/search.svg';
 
-import { useAppTheme } from '@src/theme/theme';
+import {useAppTheme} from '@src/theme/theme';
 
-import { Text } from './Text';
+import {Text} from './Text';
+import ClosedEyeIcon from '@assets/svg/eye-closed.svg';
+import OpenEyeIcon from '@assets/svg/eye.svg';
 
-export interface InputProps extends TextInputProps {
-  label?: string;
+interface InputProps extends TextInputProps {
   prompting?: string;
   value?: string;
   onChangeText?: (text: string) => void;
@@ -24,14 +25,15 @@ export interface InputProps extends TextInputProps {
   errorText?: string;
   required?: boolean;
   wrapperStyle?: StyleProp<ViewStyle>;
-  type?: 'search' | 'classic';
+  type?: 'default' | 'password';
+  disabled?: boolean;
   color?: string;
+  icon?: React.ReactNode;
 }
 
 export const Input = forwardRef<InputProps, InputProps>(
   (
     {
-      label,
       prompting,
       value,
       onChangeText,
@@ -42,65 +44,99 @@ export const Input = forwardRef<InputProps, InputProps>(
       onFocus,
       onBlur,
       type,
+      disabled,
+      icon,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const localRef: React.Ref<TextInput> & React.Ref<React.PropsWithChildren<InputProps>> =
-      useRef(null);
+    const localRef: React.Ref<TextInput> &
+      React.Ref<React.PropsWithChildren<InputProps>> = useRef(null);
 
     const [isFocused, setIsFocused] = useState(false);
-    const { colors } = useAppTheme();
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const {colors} = useAppTheme();
 
     const _onFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-      setIsFocused(true);
-      if (onFocus) {
-        onFocus(e);
+      if (!disabled) {
+        setIsFocused(true);
+        if (onFocus) {
+          onFocus(e);
+        }
       }
     };
 
     const _onBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-      setIsFocused(false);
-      if (onBlur) {
-        onBlur(e);
+      if (!disabled) {
+        setIsFocused(false);
+        if (onBlur) {
+          onBlur(e);
+        }
+      }
+    };
+
+    const togglePasswordVisibility = () => {
+      if (!disabled) {
+        setIsPasswordVisible(!isPasswordVisible);
       }
     };
 
     return (
-      <View style={[{ gap: 4 }, wrapperStyle]}>
-        {label && (
-          <Text style={styles.label}>
-            <Text children={label} />
-            {required ? <Text children=" *" color={colors.red_500} /> : null}
-          </Text>
-        )}
+      <View style={[{flexGrow: 1, gap: 4}, wrapperStyle]}>
         <View
           style={[
-            { ...styles.inputWrapper, borderColor: colors.grey_200 },
-            isFocused && { borderColor: colors.main },
-            error && styles.inputError
-          ]}
-        >
-          {type === 'search' && <SearchIcon />}
+            styles.inputWrapper,
+            {
+              borderColor: colors.border,
+              backgroundColor: disabled ? colors.grey_50 : colors.background,
+            },
+            isFocused &&
+              !disabled && {borderColor: colors.black, borderWidth: 2},
+            error && styles.inputError,
+          ]}>
+          {icon && <View>{icon}</View>}
           <TextInput
             value={value}
-            style={[styles.input, { color: colors.grey_800 }]}
-            onChangeText={onChangeText}
+            style={[
+              styles.input,
+              {color: disabled ? colors.grey_400 : colors.grey_800},
+            ]}
+            textContentType={type === 'password' ? 'password' : undefined}
+            onChangeText={disabled ? undefined : onChangeText}
             onFocus={_onFocus}
             onBlur={_onBlur}
-            placeholderTextColor={colors.grey_200}
+            placeholderTextColor={colors.border}
+            cursorColor={colors.black}
+            secureTextEntry={type === 'password' && !isPasswordVisible}
+            editable={!disabled}
             //@ts-ignore
             ref={ref || localRef}
             {...props}
           />
+          {type === 'password' && (
+            <TouchableOpacity
+              onPress={togglePasswordVisibility}
+              disabled={disabled}>
+              {isPasswordVisible ? (
+                <OpenEyeIcon color={colors.grey_400} width={24} height={24} />
+              ) : (
+                <ClosedEyeIcon color={colors.grey_400} width={24} height={24} />
+              )}
+            </TouchableOpacity>
+          )}
         </View>
-        {(error && errorText) && <Text style={styles.errorText} children={errorText} />}
+        {error && errorText && (
+          <Text style={styles.errorText} children={errorText} />
+        )}
         {prompting && (
-          <Text style={{ ...styles.label, color: colors.grey_600 }} children={prompting} />
+          <Text
+            style={[styles.label, {color: colors.grey_600}]}
+            children={prompting}
+          />
         )}
       </View>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({
@@ -109,16 +145,16 @@ const styles = StyleSheet.create({
   },
   input: {
     flexGrow: 1,
-    fontSize: 15,
-    minHeight: 50,
+    fontSize: 18,
+    minHeight: 56,
   },
   inputError: {
     borderColor: 'red',
   },
   inputWrapper: {
     alignItems: 'center',
-    borderRadius: 10,
-    borderWidth: 1.5,
+    borderRadius: 8,
+    borderWidth: 1,
     flexDirection: 'row',
     gap: 9,
     paddingHorizontal: 10,

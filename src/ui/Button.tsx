@@ -1,20 +1,20 @@
-import React, { FC, ReactNode, useMemo, useRef } from 'react';
+import React, {FC, ReactNode, useMemo, useRef} from 'react';
 import {
   ActivityIndicator,
   Animated,
   Pressable,
   StyleProp,
-  StyleSheet, Text,
+  StyleSheet,
+  Text,
   TextStyle,
   TouchableHighlight,
   View,
   ViewProps,
-  ViewStyle
+  ViewStyle,
 } from 'react-native';
-import { merge } from 'lodash';
+import {merge} from 'lodash';
 
-import { AppLightTheme, useAppTheme } from '@src/theme/theme';
-
+import {AppLightTheme, useAppTheme} from '@src/theme/theme';
 
 type ButtonType = keyof typeof typeStyle;
 
@@ -50,11 +50,9 @@ const commonStytle = StyleSheet.create({
   },
 });
 
-const clearStyle = StyleSheet.create({
-});
+const clearStyle = StyleSheet.create({});
 
-const filledStyle = StyleSheet.create({
-});
+const filledStyle = StyleSheet.create({});
 
 const outlineStyle = StyleSheet.create({
   button: {
@@ -83,23 +81,31 @@ export const Button: FC<PropsType> = ({
   borderColor,
   icon,
 }) => {
-  const { colors } = useAppTheme();
+  const {colors} = useAppTheme();
   const scaleValue = useRef(new Animated.Value(1)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
 
   const handlePressIn = () => {
     if (disabled) return;
     Animated.parallel([
-      Animated.spring(scaleValue, { toValue: 0.99, useNativeDriver: true }),
-      Animated.timing(overlayOpacity, { duration: 20, toValue: .25, useNativeDriver: true }),
+      Animated.spring(scaleValue, {toValue: 0.99, useNativeDriver: true}),
+      Animated.timing(overlayOpacity, {
+        duration: 20,
+        toValue: 0.25,
+        useNativeDriver: true,
+      }),
     ]).start();
   };
 
   const handlePressOut = () => {
     if (disabled) return;
     Animated.parallel([
-      Animated.spring(scaleValue, { toValue: 1, useNativeDriver: true }),
-      Animated.timing(overlayOpacity, { duration: 20, toValue: 0, useNativeDriver: true }),
+      Animated.spring(scaleValue, {toValue: 1, useNativeDriver: true}),
+      Animated.timing(overlayOpacity, {
+        duration: 20,
+        toValue: 0,
+        useNativeDriver: true,
+      }),
     ]).start();
   };
 
@@ -116,7 +122,6 @@ export const Button: FC<PropsType> = ({
       default:
         return colors.background;
     }
-
   }, [backgroundColor, colors, disabled, type]);
 
   const _textColor = useMemo(() => {
@@ -145,52 +150,61 @@ export const Button: FC<PropsType> = ({
     }
   }, [borderColor, colors, disabled, type]);
 
-  const buttonStyles = useMemo(() => ([
-    styles.button,
-    buttonStyle,
-    { backgroundColor: _bgColor },
-    { borderColor: _borderColor },
-    disabled ? buttonDisabledStyle : undefined,
-  ]),
-    [_bgColor, _borderColor, buttonDisabledStyle, buttonStyle, disabled, styles.button],
+  const buttonStyles = useMemo(
+    () => [
+      styles.button,
+      buttonStyle,
+      {backgroundColor: _bgColor},
+      {borderColor: _borderColor},
+      disabled ? buttonDisabledStyle : undefined,
+    ],
+    [
+      _bgColor,
+      _borderColor,
+      buttonDisabledStyle,
+      buttonStyle,
+      disabled,
+      styles.button,
+    ],
   );
 
-  const buttonContent = (
-    loading ? (
-      <ActivityIndicator color={colors.background} />
-    ) : (
-      <>
-        <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
-          <Text style={[{ color: _textColor, fontWeight: '600' }, textStyle]} children={children} />
-          {icon}
-        </View>
-        {type === 'filled' &&
-          <Animated.View
-            style={{
-              backgroundColor: colors.black,
-              bottom: 0,
-              left: 0,
-              opacity: overlayOpacity,
-              position: 'absolute',
-              right: 0,
-              top: 0,
-            }}
-          />}
-      </>
-    )
+  const buttonContent = loading ? (
+    <ActivityIndicator color={colors.background} />
+  ) : (
+    <>
+      <View style={{alignItems: 'center', flexDirection: 'row', gap: 10}}>
+        <Text
+          style={[{color: _textColor, fontWeight: '600'}, textStyle]}
+          children={children}
+        />
+        {icon}
+      </View>
+      {type === 'filled' && (
+        <Animated.View
+          style={{
+            backgroundColor: colors.black,
+            bottom: 0,
+            left: 0,
+            opacity: overlayOpacity,
+            position: 'absolute',
+            right: 0,
+            top: 0,
+          }}
+        />
+      )}
+    </>
   );
 
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
-      <Animated.View style={{ transform: [{ scale: scaleValue }], width: '100%' }}>
+      <Animated.View style={{transform: [{scale: scaleValue}], width: '100%'}}>
         {type === 'filled' ? (
           <Pressable
             style={buttonStyles}
             disabled={disabled || loading}
             onPress={onPress}
             onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-          >
+            onPressOut={handlePressOut}>
             {buttonContent}
           </Pressable>
         ) : (
@@ -201,8 +215,7 @@ export const Button: FC<PropsType> = ({
             disabled={disabled || loading}
             onPress={onPress}
             onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-          >
+            onPressOut={handlePressOut}>
             {buttonContent}
           </TouchableHighlight>
         )}
