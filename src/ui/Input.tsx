@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState} from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 import {
   NativeSyntheticEvent,
   StyleProp,
@@ -6,24 +6,23 @@ import {
   TextInput,
   TextInputFocusEventData,
   TextInputProps,
+  TouchableOpacity,
   View,
   ViewStyle,
-  TouchableOpacity,
 } from 'react-native';
-
-import {useAppTheme} from '@src/theme/theme';
-
-import {Text} from './Text';
-import ClosedEyeIcon from '@assets/svg/eye-closed.svg';
 import OpenEyeIcon from '@assets/svg/eye.svg';
+import ClosedEyeIcon from '@assets/svg/eye-closed.svg';
 
-interface InputProps extends TextInputProps {
+import { useAppTheme } from '@src/theme/theme';
+
+import { Text } from './Text';
+
+export interface InputProps extends TextInputProps {
   prompting?: string;
   value?: string;
   onChangeText?: (text: string) => void;
   error?: boolean;
   errorText?: string;
-  required?: boolean;
   wrapperStyle?: StyleProp<ViewStyle>;
   type?: 'default' | 'password';
   disabled?: boolean;
@@ -39,7 +38,6 @@ export const Input = forwardRef<InputProps, InputProps>(
       onChangeText,
       error,
       errorText,
-      required,
       wrapperStyle,
       onFocus,
       onBlur,
@@ -55,7 +53,7 @@ export const Input = forwardRef<InputProps, InputProps>(
 
     const [isFocused, setIsFocused] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const {colors} = useAppTheme();
+    const { colors } = useAppTheme();
 
     const _onFocus = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       if (!disabled) {
@@ -82,27 +80,27 @@ export const Input = forwardRef<InputProps, InputProps>(
     };
 
     return (
-      <View style={[{flexGrow: 1, gap: 4}, wrapperStyle]}>
+      <View style={[{ gap: 4 }, wrapperStyle]}>
         <View
           style={[
             styles.inputWrapper,
             {
-              borderColor: colors.border,
-              backgroundColor: disabled ? colors.grey_50 : colors.background,
+              backgroundColor: colors.background,
+              borderColor: colors.grey_200,
             },
-            isFocused &&
-              !disabled && {borderColor: colors.black, borderWidth: 2},
-            error && styles.inputError,
+            error && { borderColor: colors.red_500 },
+            isFocused && { borderColor: colors.main },
+            disabled && { borderColor: colors.grey_50 },
           ]}>
-          {icon && <View>{icon}</View>}
+          {icon}
           <TextInput
             value={value}
             style={[
               styles.input,
-              {color: disabled ? colors.grey_400 : colors.grey_800},
+              { color: disabled ? colors.grey_600 : colors.grey_800 },
             ]}
             textContentType={type === 'password' ? 'password' : undefined}
-            onChangeText={disabled ? undefined : onChangeText}
+            onChangeText={onChangeText}
             onFocus={_onFocus}
             onBlur={_onBlur}
             placeholderTextColor={colors.border}
@@ -125,12 +123,10 @@ export const Input = forwardRef<InputProps, InputProps>(
             </TouchableOpacity>
           )}
         </View>
-        {error && errorText && (
-          <Text style={styles.errorText} children={errorText} />
-        )}
+        {(error && errorText) && <Text style={{ color: colors.red_500 }} children={errorText} />}
         {prompting && (
           <Text
-            style={[styles.label, {color: colors.grey_600}]}
+            style={[styles.promting, { color: colors.grey_600 }]}
             children={prompting}
           />
         )}
@@ -140,16 +136,10 @@ export const Input = forwardRef<InputProps, InputProps>(
 );
 
 const styles = StyleSheet.create({
-  errorText: {
-    color: 'red',
-  },
   input: {
     flexGrow: 1,
     fontSize: 18,
     minHeight: 56,
-  },
-  inputError: {
-    borderColor: 'red',
   },
   inputWrapper: {
     alignItems: 'center',
@@ -157,9 +147,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: 'row',
     gap: 9,
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
-  label: {
+  promting: {
     fontSize: 13,
   },
 });
