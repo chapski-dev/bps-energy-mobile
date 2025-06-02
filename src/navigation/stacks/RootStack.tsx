@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { AuthState, useAuth } from '@src/providers/auth';
 import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
+import CharginStationScreen from '@src/screens/CharginStationScreen';
 import FiltersOfStations from '@src/screens/FiltersOfStations';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
 import LoginScreen from '@src/screens/LoginScreen';
@@ -76,7 +77,11 @@ export const RootStack = () => {
         name='filters-of-stations'
         component={FiltersOfStations}
       />
-
+      <Stack.Screen
+        options={{ title: '' }}
+        name='charging-station'
+        component={CharginStationScreen}
+      />
       {authState === AuthState.ready && (
         <Stack.Group navigationKey="authorized">
           <Stack.Screen

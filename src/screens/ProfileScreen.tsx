@@ -16,13 +16,14 @@ import {NotificationSettings} from '@src/api/types';
 import {ScreenProps} from '@src/navigation/types';
 import {AuthState, useAuth} from '@src/providers/auth';
 import messaging from '@src/service/messaging';
-import {useAppTheme} from '@src/theme/theme';
-import {useLocalization} from '@src/translations/i18n';
-import {Box, Button, Text} from '@src/ui';
-import {SectionListItemWithArrow} from '@src/ui/SectionListItemWithArrow';
-import {wait} from '@src/utils';
-import {handleCatchError} from '@src/utils/handleCatchError';
-import SelectLanguageModal from '@src/widgets/SelectLanguageModal';
+import { useAppTheme } from '@src/theme/theme';
+import { useLocalization } from '@src/translations/i18n';
+import { Box, Button, Text } from '@src/ui';
+import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
+import { wait } from '@src/utils';
+import { handleCatchError } from '@src/utils/handleCatchError';
+import SelectLanguageModal from '@src/widgets/modals/SelectLanguageModal';
+
 import UserBalance from '@src/widgets/UserBalance';
 
 export enum NotifictationOption {

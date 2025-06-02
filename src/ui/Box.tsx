@@ -1,5 +1,6 @@
 import { ComponentProps, forwardRef, useMemo } from 'react';
 import { Dimensions, StyleSheet, ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated'
 
 import { View } from '@src/theme/themed';
 
@@ -17,6 +18,7 @@ type BoxSpacers = Pick<
   | 'bottom'
   | 'alignSelf'
   | 'borderWidth'
+  | 'borderBottomWidth'
   | 'borderColor'
   | 'borderRadius'
   | 'zIndex'
@@ -114,6 +116,7 @@ function divideSpacers<T extends BoxSpacers>(spacers: T): { spacers: BoxSpacers;
     bottom,
     alignSelf,
     borderWidth,
+    borderBottomWidth,
     borderColor,
     borderRadius,
     zIndex,
@@ -137,6 +140,7 @@ function divideSpacers<T extends BoxSpacers>(spacers: T): { spacers: BoxSpacers;
       alignItems,
       alignSelf,
       backgroundColor,
+      borderBottomWidth,
       borderColor,
       borderRadius,
       borderWidth,
@@ -210,3 +214,5 @@ export const Box = forwardRef<View, BoxProps>(({ style, children, ...props }, re
     </View>
   );
 });
+
+export const AnimatedBox = Animated.createAnimatedComponent(Box)

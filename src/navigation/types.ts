@@ -11,6 +11,7 @@ export type RootStackParamList = {
   'adding-card-and-payment': { sum: string | number }
   'profile-details': undefined
   'filters-of-stations': undefined
+  'charging-station': undefined
 };
 
 export type TabsParamList = {
