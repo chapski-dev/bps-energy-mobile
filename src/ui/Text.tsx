@@ -1,5 +1,10 @@
 import React, { FC, useMemo } from 'react';
-import { StyleSheet, Text as RNText, TextProps as RNTextProps, TextStyle } from 'react-native';
+import {
+  StyleSheet,
+  Text as RNText,
+  TextProps as RNTextProps,
+  TextStyle
+} from 'react-native';
 
 import { useAppTheme } from '@src/theme/theme';
 import { removeUndefinedOnes } from '@src/utils';
@@ -17,7 +22,7 @@ type ThemeProps = {
 
 type TextProps = RNTextProps &
   ThemeProps & {
-    type?: TextType;
+    variant?: TextType;
     color?: string;
     fontWeight?: TextStyle['fontWeight'];
     fontSize?: number;
@@ -44,12 +49,10 @@ type TextProps = RNTextProps &
   };
 
 const Text: FC<TextProps> = ({
-  type,
+  variant,
   style,
   color,
   colorName,
-  // lightColorName,
-  // darkColorName,
   fontWeight,
   fontSize,
   left,
@@ -75,22 +78,20 @@ const Text: FC<TextProps> = ({
   ...rest
 }) => {
   const theme = useAppTheme();
-  // const key = colorName || (theme.dark ? darkColorName : lightColorName) || 'grey_800';
   const key = colorName || 'grey_800';
-
 
   const computedStyle = useMemo(() => {
     const textAlign = left ? 'left' : right ? 'right' : center ? 'center' : undefined;
     const textTransform = uppercase
       ? 'uppercase'
       : lowercase
-        ? 'lowercase'
-        : capitalize
-          ? 'capitalize'
-          : undefined;
+      ? 'lowercase'
+      : capitalize
+      ? 'capitalize'
+      : undefined;
 
     return [
-      styles[type ? type : 'body'],
+      styles[variant ? variant : 'p1'],
       {
         color: theme.colors[key],
         ...removeUndefinedOnes({
@@ -143,7 +144,7 @@ const Text: FC<TextProps> = ({
     right,
     style,
     theme.colors,
-    type,
+    variant,
     uppercase
   ]);
 
@@ -151,31 +152,22 @@ const Text: FC<TextProps> = ({
 };
 
 const styles = StyleSheet.create({
-  body: {
-    fontSize: 15
-  },
-  body_500: {
-    color: '#000',
-    fontSize: 15,
-    fontWeight: '500'
-  },
-  h1: {
-    fontSize: 32,
-    fontWeight: 'bold'
-  },
-  h2: {
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
-  h3: {
-    fontSize: 16,
-    fontWeight: 'bold'
-  },
-  label: {
-    color: '#798391',
-    fontSize: 13,
-    lineHeight: 16
-  }
+  caption: { fontSize: 12, fontWeight: '400', letterSpacing: -0.12, lineHeight: 16 },
+  'caption-medium': { fontSize: 12, fontWeight: '500', letterSpacing: -0.12, lineHeight: 16 },
+  h1: { fontSize: 32, fontWeight: '700', letterSpacing: -0.32, lineHeight: 40 },
+  h2: { fontSize: 28, fontWeight: '700', letterSpacing: -0.28, lineHeight: 34 },
+  h3: { fontSize: 24, fontWeight: '700', letterSpacing: -0.24, lineHeight: 30 },
+  h4: { fontSize: 20, fontWeight: '700', letterSpacing: -0.2, lineHeight: 26 },
+  h5: { fontSize: 17, fontWeight: '700', letterSpacing: -0.17, lineHeight: 22 },
+  label: { fontSize: 10, fontWeight: '500', letterSpacing: -0.1, lineHeight: 12 },
+  p1: { fontSize: 17, fontWeight: '400', letterSpacing: -0.17, lineHeight: 22 },
+  'p1-semibold': { fontSize: 17, fontWeight: '600', letterSpacing: -0.17, lineHeight: 22 },
+  p2: { fontSize: 16, fontWeight: '400', letterSpacing: -0.16, lineHeight: 21 },
+  'p2-semibold': { fontSize: 16, fontWeight: '600', letterSpacing: -0.16, lineHeight: 21 },
+  p3: { fontSize: 15, fontWeight: '400', letterSpacing: -0.15, lineHeight: 20 },
+  'p3-semibold': { fontSize: 15, fontWeight: '600', letterSpacing: -0.15, lineHeight: 20 },
+  p4: { fontSize: 13, fontWeight: '400', letterSpacing: -0.13, lineHeight: 16 },
+  'p4-semibold': { fontSize: 13, fontWeight: '600', letterSpacing: -0.13, lineHeight: 16 }
 });
 
 export { Text };
