@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 export const handleCatchError = (e: AxiosError | unknown | Error | string, where: string = '') => {
   const serverError =
   // @ts-ignore
-    e?.response?.data?.message?.kk || e?.response?.data?.message?.ru || e?.response?.data?.error;
+    e?.response?.data?.message?.kk || e?.response?.data?.message?.ru || e?.response?.data?.error_message;
 
   let errorText;
   switch (true) {
