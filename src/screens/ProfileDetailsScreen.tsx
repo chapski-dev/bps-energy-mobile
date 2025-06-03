@@ -123,7 +123,7 @@ export const ProfileDetailsScreen = ({
           </SectionListItemWithArrow>
           <SectionListItemWithArrow
             title={'Изменить пароль'}
-            onPress={() => null}
+            onPress={() => navigation.navigate('change-password')}
           />
           <SectionListItemWithArrow
             title={'Как к вам обращаться?'}

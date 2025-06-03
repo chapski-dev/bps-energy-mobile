@@ -12,6 +12,9 @@ export type RootStackParamList = {
   'profile-details': undefined
   'filters-of-stations': undefined
   'charging-station': undefined
+  'otp-verify': { verify: 'registration' | 'reset-password', email: string }
+  'set-new-password': { email: string; otp: string };
+  'change-password': undefined;
 };
 
 export type TabsParamList = {

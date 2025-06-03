@@ -1,103 +1,159 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Vibration } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, AppState, AppStateStatus, Keyboard, Vibration } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
 
-import { isIOS } from '@src/misc/platform';
+import { postConfirmEmail } from '@src/api';
+import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
-import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
+import { FakeView } from '@src/ui/Layouts/FakeView';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
 const OTP_PASSWORD_LENGTH = 4;
+const COUNTDOWN_SECONDS = 60;
 
 const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
   const { colors } = useAppTheme();
   const { t } = useLocalization();
-
-  const action = route.params.action;
+  const { toastSuccess } = useThemedToasts();
 
   const otpInput = useRef<OtpInputRef>(null);
 
   const [notMatch, setNotMatch] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { onSignin } = useAuth();
+  const [retryLoading, setRetryLoading] = useState(false);
+  const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
 
-  const handleInputChanges = async (text: string) => {
-    try {
-      if (text.length === OTP_PASSWORD_LENGTH) {
-        setDisabled(true);
-        await wait(300);
-        setLoading(true);
-        if (action === 'login' && route.params.phone) {
-          await onSignin({
-            otp: text,
-            phone: route.params.phone.replaceAll(' ', '')
-          });
-          vibrate(HapticFeedbackTypes.notificationSuccess);
-          return;
-        } else if (action === 'phone-verify') {
-          navigation.replace('settings-profile');
-          return;
-        } else {
-          navigation.replace('registration', { step: 'residency' });
-          return;
-        }
+  const countdownStartedAt = useRef<number>(Date.now());
+  const appState = useRef<AppStateStatus>(AppState.currentState);
+
+  const updateCountdown = useCallback(() => {
+    const elapsed = Math.floor((Date.now() - countdownStartedAt.current) / 1000);
+    const remaining = COUNTDOWN_SECONDS - elapsed;
+    setSeconds(Math.max(remaining, 0));
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [updateCountdown]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        updateCountdown();
       }
+      appState.current = nextAppState;
+    });
+    return () => subscription.remove();
+  }, [updateCountdown]);
+
+  const retrySend = useCallback(async () => {
+    try {
+      setRetryLoading(true);
+      await wait(300);
+      toastSuccess('Мы повторно выслали код. Проверьте почту!');
+      countdownStartedAt.current = Date.now();
+      updateCountdown();
+    } catch (error) {
+      handleCatchError(error, 'retrySend');
+    } finally {
+      setRetryLoading(false);
+    }
+  }, [toastSuccess, updateCountdown]);
+
+  const handleInputChanges = useCallback(async (code: string) => {
+    if (code.length !== OTP_PASSWORD_LENGTH) return;
+    try {
+      setDisabled(true);
+      setLoading(true);
+      if (route.params.verify === 'reset-password') {
+        setDisabled(false);
+        navigation.navigate('set-new-password', { email: route.params?.email, otp: code })
+      }
+      if (route.params.verify === 'registration') {
+        await postConfirmEmail({
+          email: route.params?.email,
+          verification_code: code
+        })
+        navigation.navigate('top-up-account')
+        vibrate(HapticFeedbackTypes.notificationSuccess);
+      }
+      return;
     } catch (e) {
-      handleCatchError(e)
+      handleCatchError(e);
       Vibration.vibrate();
       setNotMatch(true);
       setDisabled(false);
       otpInput.current?.setValue('');
-      isIOS && otpInput.current?.focus();
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigation, route.params?.email, route.params.verify]);
 
   const theme: OtpInputProps['theme'] = useMemo(
     () => ({
-      containerStyle: { gap: 12, width: 'auto' },
-      filledPinCodeContainerStyle: notMatch
-        ? { borderColor: colors.red_500, borderRadius: 16, borderWidth: 1 }
-        : { borderColor: colors.main, borderRadius: 16, borderWidth: 1 },
+      containerStyle: {
+        flexShrink: 1,
+        flexWrap: 'wrap',
+        gap: 12,
+        justifyContent: 'center',
+        width: '100%'
+      },
+      filledPinCodeContainerStyle: {
+        borderColor: notMatch ? colors.red_500 : colors.main,
+        borderRadius: 8,
+        borderWidth: 1
+      },
       focusedPinCodeContainerStyle: {
         borderColor: notMatch ? colors.red_500 : colors.grey_200,
-        borderRadius: 15,
+        borderRadius: 8,
         borderWidth: 1
       },
       pinCodeContainerStyle: {
         borderColor: notMatch ? colors.red_500 : colors.grey_200,
-        borderRadius: 15,
+        borderRadius: 8,
         borderWidth: 1,
-        width: 47
+        flex: 1,
+        height: 74,
+        maxWidth: 59,
+        minWidth: 39,
       },
-      pinCodeTextStyle: { color: colors.grey_800, fontSize: 24 }
+      pinCodeTextStyle: { color: colors.grey_800, fontSize: 28, fontWeight: '800' }
     }),
     [colors, notMatch]
   );
 
   return (
-    <>
-      <Box p={16} pt={54} gap={54} alignItems="center">
-        {action !== 'invite' ? (
-          <>
-            <Text type="h2" children={t('confirm_the_number')} />
-            <Box row flexWrap="wrap" justifyContent="center">
-              <Text children={t('we_sent_it_to_a_number')} />
-              <Text children={route.params?.phone} />
-              <Text children={t('confirmation_code_enter_it_below')} />
-            </Box>
-          </>
-        ) : (
-          <Text type="h2" children={t('enter_the_invitation_code')} />
-        )}
+    <Box
+      p={16}
+      pt={54}
+      alignItems="center"
+      accessible={false}
+      onPress={Keyboard.dismiss}
+      effect="none"
+      flex={1}
+    >
+      <Box flex={1}
+        gap={56}
+      >
+        <Box gap={8} alignItems="center">
+          <Text variant="h4" children={t('confirm_the_email')} />
+          <Box row flexWrap="wrap" justifyContent="center">
+            <Text variant="p2" children={t('we_sent_it_to_a_number')} colorName='grey_600' />
+            <Text variant="p2" children={route.params?.email} />
+            <Text variant="p2" children={t('confirmation_code_enter_it_below')} colorName='grey_600' />
+          </Box>
+        </Box>
         {loading ? (
           <ActivityIndicator color={colors.main} />
         ) : (
@@ -109,13 +165,20 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
             numberOfDigits={OTP_PASSWORD_LENGTH}
             onTextChange={handleInputChanges}
             focusColor={colors.main}
+            onFocus={() => setNotMatch(false)}
           />
         )}
-        {action === 'phone-verify' && (
-          <Button children={t('sms-code-failed-to-arrive')} type="clear" onPress={() => null} />
-        )}
       </Box>
-    </>
+      <Button
+        loading={retryLoading}
+        disabled={retryLoading || seconds !== 0}
+        type="clear"
+        onPress={retrySend}
+      >
+        Выслать код повторно {seconds !== 0 ? `(0:${seconds})` : ''}
+      </Button>
+      <FakeView />
+    </Box>
   );
 };
 

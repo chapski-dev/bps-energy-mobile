@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Keyboard } from 'react-native';
+import LockIcon from '@assets/svg/lock.svg';
 
-import { postForgotPassword } from '@src/api';
+import { postChangePasswordViaOtp } from '@src/api';
+import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
+import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input } from '@src/ui';
@@ -13,66 +16,69 @@ import { handleCatchError } from '@src/utils/handleCatchError';
 import { validator } from '@src/utils/validations';
 
 
-const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) => {
-  const { insets } = useAppTheme();
+const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-password'>) => {
+  const { insets, colors } = useAppTheme();
   const { t } = useLocalization()
+  const { onSignIn } = useAuth();
   const { control, handleSubmit, formState } = useForm({
-    defaultValues: { email: '' },
+    defaultValues: { password: '' },
     mode: 'all',
   });
 
   const [loading, setLoading] = useState(false);
+  const { toastSuccess } = useThemedToasts();
 
-  const handleSendOtpToResetPassword = async (data: { email: string }) => {
+  const handleSendOtpToResetPassword = async (data: { password: string }) => {
     try {
       setLoading(true);
-      await postForgotPassword(data)
-      navigation.navigate('otp-verify', {
-        email: data.email,
-        verify: 'reset-password',
+      await postChangePasswordViaOtp({
+        email: route.params.email,
+        new_password: data.password,
+        verification_code: route.params.otp,
       })
+
+      await onSignIn({ email: route.params?.email, password: data.password })
+      toastSuccess('Пароль успешно изменен!')
+      navigation.replace('tabs')
     } catch (error) {
       handleCatchError(error)
     } finally {
       setLoading(false);
     }
   }
-  
+
   return (
     <Box accessible={false} onPress={Keyboard.dismiss} effect="none" flex={1} px={20} pt={30}>
       <Box flex={1}>
         <Controller
           control={control}
-          name='email'
-          rules={{ required: true, validate: validator.email }}
+          name='password'
+          rules={{ required: true, validate: validator.password }}
           render={({ field: { value, onBlur, onChange }, fieldState: { invalid } }) => (
             <Input
               value={value}
-              onChangeText={(v) => onChange(v.trim())}
+              onChangeText={onChange}
               onBlur={onBlur}
-              placeholder='E-mail'
+              placeholder={t('password')}
               error={invalid}
-              keyboardType="email-address"
+              returnKeyType="done"
+              importantForAutofill="yes"
               autoCapitalize="none"
               autoCorrect={false}
-              textContentType="username"
-              inputMode="email"
-              autoComplete="username"
-              returnKeyType='done'
-              importantForAutofill="yes"
+              autoComplete="password"
+              type='password'
+              icon={<LockIcon color={colors.grey_400} />}
               autoFocus
-              prompting='Укажите E-mail на который создавали аккаунт и мы вышлем на него ссылку для восстановления пароля'
-              onSubmitEditing={handleSubmit(handleSendOtpToResetPassword)}
             />
           )}
         />
       </Box>
 
       <Button
-        children={t('confirm')}
+        children={t('save')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
+        disabled={loading || !formState.isValid}
         loading={loading}
-        disabled={loading || !formState.isValid }
       />
       <FakeView additionalOffset={-insets.bottom / 2} />
       <Gap y={insets.bottom || 16} />
@@ -80,4 +86,4 @@ const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) =>
   );
 };
 
-export default ForgotPasswordScreen;
+export default SetNewPasswordScreen;

@@ -1,141 +1,104 @@
 import Config from 'react-native-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
+import axiosRetry from 'axios-retry';
 import { t } from 'i18next';
 
 import { dispatchLogout } from '@src/providers/auth';
-// import geolocationService from '@src/service/geolocation-service';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
 import { postRefreshToken } from './index';
 
-export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   _retry?: boolean;
 }
 
-interface IServerError {
-  code?: number;
-  message?: string;
-  status?: 'ERROR';
-  type?: ServerErrorTypeEnum;
-  details?: string[];
-}
-enum ServerErrorTypeEnum {
-  /** токен истек - можно рефрешить */
-  TOKEN_INVALID_EXP = 'TOKEN_INVALID_EXP',
-  /** токен отозван - необходимо перелогиниться */
-  TOKEN_INVALID_REV = 'TOKEN_INVALID_REV'
-}
+const instance = axios.create({
+  baseURL: Config.API_HOST,
+  headers: { 'Content-Type': 'application/json' },
+});
 
-type TRefreshCallback = (token: string) => void;
+axiosRetry(instance, {
+  retries: 3,
+  retryCondition: axiosRetry.isNetworkOrIdempotentRequestError,
+});
 
-export const defaultHeaders = { 'Content-Type': 'application/json' };
-
-const getAuthToken = async () => {
-  try {
-    const token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN);
-    if (token) {
-      return 'Bearer ' + (await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN));
-    }
-  } catch (err) {
-    console.error('getAuthToken', err);
-  }
+const getStoredAccessToken = async () => {
+  const token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN);
+  return token ? `${token}` : undefined;
 };
+
 let isRefreshing = false;
-const refreshSubscribes: Array<(token: string) => void> = [];
+const subscribers: Array<(token: string) => void> = [];
+
+const notifySubscribers = (token: string) => {
+  subscribers.forEach((cb) => cb(token));
+  subscribers.length = 0;
+  isRefreshing = false;
+};
+
+const addSubscriber = (cb: (token: string) => void) => {
+  subscribers.push(cb);
+};
 
 const refreshTokenAndRetry = async (
   originalRequest: CustomAxiosRequestConfig
 ): Promise<AxiosResponse> => {
   try {
-    const refresh_token = (await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN)) || '';
+    const refresh_token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN);
+    const { access_token, refresh_token: new_refresh_token } = await postRefreshToken({ refresh_token });
 
-    const response = await postRefreshToken({ refresh_token });
-    const accessToken = response.access_token;
-    onTokenRefreshed(response.access_token);
-    // await geolocationService.updateConfig({ accessToken, refreshToken });
-    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
-    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN, response.refresh_token);
+    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token);
+    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN, new_refresh_token);
 
-    originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-    return await instance(originalRequest);
-  } catch (error: any) {
-    if (error?.response && error?.response?.status === 400) {
-      dispatchLogout?.();
-      throw new Error(t('translation:the_session_has_timed_out_please_log_in'));
-    } else {
-      throw error;
-    }
+    instance.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+    notifySubscribers(access_token);
+
+    originalRequest.headers.Authorization = `Bearer ${access_token}`;
+    return instance(originalRequest);
+  } catch (error) {
+    await AsyncStorage.multiRemove([ASYNC_STORAGE_KEYS.ACCESS_TOKEN, ASYNC_STORAGE_KEYS.REFRESH_TOKEN]);
+    dispatchLogout?.();
+    throw new Error(t('translation:the_session_has_timed_out_please_log_in'));
   }
 };
 
-const instance = axios.create({
-  baseURL: Config.API_HOST,
-  headers: defaultHeaders
-});
-
-axiosRetry(instance, {
-  retries: 3,
-  retryCondition: (error) => isNetworkOrIdempotentRequestError(error)
-});
-
+// Attach token to each request
 instance.interceptors.request.use(async (config) => {
-  const authToken = await getAuthToken();
-  if (authToken && !config.headers.Authorization) {
-    config.headers.Authorization = authToken;
+  const token = await getStoredAccessToken();
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = token;
   }
   return config;
 });
 
 instance.interceptors.response.use(
-  (options) => options,
-  async (error: AxiosError<IServerError>) => {
+  (response) => response,
+  async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
-    const errorResponseData = error?.response?.data;
 
-    if (error?.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       if (isRefreshing) {
-        return new Promise<AxiosResponse>((resolve, reject) => {
-          try {
-            refreshSubscribes.push(async (token: string) => {
+        return new Promise((resolve, reject) => {
+          addSubscriber(async (token: string) => {
+            try {
               originalRequest.headers.Authorization = `Bearer ${token}`;
-              const response = await instance(originalRequest);
-              resolve(response);
-            });
-          } catch (e: unknown) {
-            reject(e);
-          }
+              resolve(await instance(originalRequest));
+            } catch (err) {
+              reject(err);
+            }
+          });
         });
-      } else {
-        // if (errorResponseData?.type) {
-        originalRequest._retry = true;
-        isRefreshing = true;
-
-        return await refreshTokenAndRetry(originalRequest);
-
-        // switch (errorResponseData.type) {
-        //   // Обновление токена
-        //   case ServerErrorTypeEnum.TOKEN_INVALID_EXP:
-        //     return await refreshTokenAndRetry(originalRequest);
-
-        //   // Проверка на девайсы
-        //   case ServerErrorTypeEnum.TOKEN_INVALID_REV:
-        //     // return await checkLastSessionInfo();
-        // }
-        // }
       }
+
+      isRefreshing = true;
+      return refreshTokenAndRetry(originalRequest);
     }
 
     return Promise.reject(error);
   }
 );
-
-const onTokenRefreshed = (token: string): void => {
-  instance.defaults.headers.common.Authorization = `Bearer ${token}`;
-  refreshSubscribes.forEach((callback: TRefreshCallback) => callback(token));
-  refreshSubscribes.length = 0;
-  isRefreshing = false;
-};
 
 export default instance;

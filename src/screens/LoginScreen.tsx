@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { Vibration } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import LogoIcon from '@assets/svg/logo.svg';
-import LockIcon from '@assets/svg/lock.svg';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
+import LockIcon from '@assets/svg/lock.svg';
+import LogoIcon from '@assets/svg/logo.svg';
+import { isAxiosError } from 'axios';
 
 import { SignInReq } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
@@ -13,17 +15,14 @@ import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input, Text } from '@src/ui';
 import { InputProps } from '@src/ui/Input';
 import { wait } from '@src/utils';
+import { handleCatchError } from '@src/utils/handleCatchError';
 import { validator } from '@src/utils/validations';
 
-const LoginScreen = ({navigation}: ScreenProps<'login'>) => {
-  const {insets, colors} = useAppTheme();
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
   const { insets, colors } = useAppTheme();
-
   const { t } = useLocalization()
   const { onSignIn } = useAuth();
-
   const { control, handleSubmit } = useForm<SignInReq>({
     defaultValues: {
       email: '',
@@ -37,7 +36,25 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
     await wait(100)
     navigation.navigate('tabs');
   }
+  const [loading, setLoading] = useState(false);
 
+  const handleLogIn = async (data: SignInReq) => {
+    try {
+      setLoading(true)
+      await onSignIn(data)
+    } catch (error) {
+      if (isAxiosError(error) && error?.response?.status === 403) {
+        navigation.navigate('otp-verify', {
+          email: data.email,
+          verify: 'registration',
+        })
+      }
+      handleCatchError(error)
+      Vibration.vibrate();
+    } finally {
+      setLoading(false)
+    }
+  }
   const secInputRef = useRef<InputProps>(null);
 
   return (
@@ -62,9 +79,8 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
               rules={{ required: true, validate: validator.email }}
               render={({ field: { value, onBlur, onChange }, fieldState }) => (
                 <Input
-                  required
                   value={value}
-                  onChangeText={onChange}
+                  onChangeText={(v) => onChange(v.trim())}
                   onBlur={onBlur}
                   placeholder='E-mail'
                   error={fieldState.invalid}
@@ -77,6 +93,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
                   returnKeyType="next"
                   importantForAutofill="yes"
                   onSubmitEditing={() => secInputRef?.current?.focus()}
+                  icon={<EnvelopeIcon color={colors.grey_400} />}
                 />
               )}
             />
@@ -86,9 +103,8 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
               rules={{ required: true, validate: validator.password }}
               render={({ field: { value, onBlur, onChange }, fieldState: { invalid } }) => (
                 <Input
-                  required
                   value={value}
-                  onChangeText={onChange}
+                  onChangeText={(v) => onChange(v.trim())}
                   onBlur={onBlur}
                   placeholder={t('password')}
                   error={invalid}
@@ -98,8 +114,9 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   autoComplete="password"
+                  type='password'
+                  icon={<LockIcon color={colors.grey_400} />}
                 />
-
               )}
             />
           </Box>
@@ -110,12 +127,15 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
             <Text color={colors.grey_600} children='Забыли пароль?' />
           </Box>
 
-          <Button children={t('enter')} onPress={handleSubmit(onSignIn)} />
-
           <Button
-            type="clear"
-            children={t('registration')}
-            textColor="main"
+            children={t('enter')}
+            onPress={handleSubmit(handleLogIn)}
+            loading={loading}
+            disabled={loading}
+          />
+          <Button
+            type='outline'
+            children="Создать аккаунт"
             onPress={() => navigation.navigate('registration')}
           />
         </Box>

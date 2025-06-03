@@ -5,6 +5,8 @@
   "change": "Изменить",
   "add": "Добавить",
   "map": "Карта",
+  "user_agreement_checkbox": "<agree><0>Ознакомлен и согласен с </0></agree><user_agreement><0>Пользовательским соглашением</0></user_agreement> и <privacy_policy><0>Политикой конфеденциальности</0></privacy_policy>",
+
   "pay-by-card": "Оплатить картой",
   "charging-session": "Сессия зарядки",
   "forgot-password": "Забыли пароль",
@@ -48,7 +50,7 @@
   "citizenship": "Гражданство",
   "choose_a_country": "Выберите страну",
   "passport_data": "Данные паспорта",
-  "confirm_the_number": "Подтвердите номер",
+  "confirm_the_email": "Подтвердите E-mail",
   "we_sent_it_to_a_number": "Мы отправили на номер ",
   "confirmation_code_enter_it_below": " код для подтверждения. Введите его ниже",
   "enter_the_invitation_code": "Введите код приглашения",

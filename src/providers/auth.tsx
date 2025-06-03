@@ -101,17 +101,17 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const onSignIn = useCallback(async (data: SignInReq) => {
     try {
-      authDispatch({ type: AuthActionType.setConnecting });
-      const { access_token, refresh_token } = await postSignIn(data);
-      authDispatch({ type: AuthActionType.setReady });
-      await AsyncStorage.multiSet([
-        [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
-        [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
-        [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
-      ]);
-      const userData = await getProfileData();
-      setUser(userData);
-      // app.isFirebaseAuthorized = AppServiceStatus.on;
+    authDispatch({ type: AuthActionType.setConnecting });
+    const { access_token, refresh_token } = await postSignIn(data);
+    await AsyncStorage.multiSet([
+      [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
+      [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
+      [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
+    ]);
+    const userData = await getProfileData();
+    setUser(userData);
+    authDispatch({ type: AuthActionType.setReady });
+    app.isFirebaseAuthorized = AppServiceStatus.on;
     } catch (error) {
       authDispatch({ type: AuthActionType.setEmpty });
       throw error;
@@ -119,13 +119,15 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   }, [authDispatch]);
 
   const onLogout = useCallback(() => {
-    vibrate(HapticFeedbackTypes.notificationSuccess);
     app.logout();
     setUser(null);
-    navigationRef.reset({
-      index: 0,
-      routes: [{ name: 'login' }]
-    })
+    if (navigationRef.getCurrentRoute()?.name !== 'login') {
+      vibrate(HapticFeedbackTypes.notificationSuccess);
+      navigationRef.reset({
+        index: 0,
+        routes: [{ name: 'login' }]
+      })
+    }
   }, []);
 
   const updateUser = useCallback(async (updatedData: Partial<Profile>) => {

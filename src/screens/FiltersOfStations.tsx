@@ -7,8 +7,6 @@ import React, {
 } from 'react';
 import { Control, Controller, FormProvider, useForm } from 'react-hook-form';
 import { ScrollView, Switch, SwitchProps } from 'react-native';
-import CheckboxIcon from '@assets/svg/checkbox.svg';
-import CheckboxFillIcon from '@assets/svg/checkbox-fill.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
 import GBTIcon from '@assets/svg/connector/GBT.svg';
 import Type2Icon from '@assets/svg/connector/Type 2.svg';
@@ -23,7 +21,7 @@ import {
   useFilterStore,
 } from '@src/store/useFilterOfStationsStore';
 import { useAppTheme } from '@src/theme/theme';
-import { Box, Button, Chip, Text } from '@src/ui';
+import { Box, Button, Checkbox, Chip, Text } from '@src/ui';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 
@@ -125,17 +123,12 @@ export default function FiltersOfStations({
               control={control}
               name='hide_disabled'
               render={({ field: { value, onChange } }) => (
-                <Box
-                  py={12}
-                  row
-                  gap={18}
-                  activeOpacity={1}
+                <Checkbox
+                  checked={value}
+                  children='Скрывать выключенные коннекторы из описания станций'
                   onPress={() => onChange(!value)}
-                  borderColor={colors.grey_100}
-                  style={{ borderBottomWidth: 1 }}>
-                  {value ? <CheckboxFillIcon /> : <CheckboxIcon />}
-                  <Text children="Скрывать выключенные коннекторы из описания станций" />
-                </Box>
+                  wrapperStyle={{ paddingVertical: 18 }}
+                />
               )}
             />
 
