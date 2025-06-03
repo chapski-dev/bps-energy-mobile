@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useMemo, useRef} from 'react';
+import React, { FC, ReactNode, useMemo, useRef } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -12,9 +12,9 @@ import {
   ViewProps,
   ViewStyle,
 } from 'react-native';
-import {merge} from 'lodash';
+import { merge } from 'lodash';
 
-import {AppLightTheme, useAppTheme} from '@src/theme/theme';
+import { AppLightTheme, useAppTheme } from '@src/theme/theme';
 
 type ButtonType = keyof typeof typeStyle;
 
@@ -81,14 +81,14 @@ export const Button: FC<PropsType> = ({
   borderColor,
   icon,
 }) => {
-  const {colors} = useAppTheme();
+  const { colors } = useAppTheme();
   const scaleValue = useRef(new Animated.Value(1)).current;
   const overlayOpacity = useRef(new Animated.Value(0)).current;
 
   const handlePressIn = () => {
     if (disabled) return;
     Animated.parallel([
-      Animated.spring(scaleValue, {toValue: 0.99, useNativeDriver: true}),
+      Animated.spring(scaleValue, { toValue: 0.99, useNativeDriver: true }),
       Animated.timing(overlayOpacity, {
         duration: 20,
         toValue: 0.25,
@@ -100,7 +100,7 @@ export const Button: FC<PropsType> = ({
   const handlePressOut = () => {
     if (disabled) return;
     Animated.parallel([
-      Animated.spring(scaleValue, {toValue: 1, useNativeDriver: true}),
+      Animated.spring(scaleValue, { toValue: 1, useNativeDriver: true }),
       Animated.timing(overlayOpacity, {
         duration: 20,
         toValue: 0,
@@ -154,8 +154,8 @@ export const Button: FC<PropsType> = ({
     () => [
       styles.button,
       buttonStyle,
-      {backgroundColor: _bgColor},
-      {borderColor: _borderColor},
+      { backgroundColor: _bgColor },
+      { borderColor: _borderColor },
       disabled ? buttonDisabledStyle : undefined,
     ],
     [
@@ -172,9 +172,9 @@ export const Button: FC<PropsType> = ({
     <ActivityIndicator color={colors.background} />
   ) : (
     <>
-      <View style={{alignItems: 'center', flexDirection: 'row', gap: 10}}>
+      <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
         <Text
-          style={[{color: _textColor, fontWeight: '600'}, textStyle]}
+          style={[{ color: _textColor, fontSize: 16, fontWeight: '600' }, textStyle]}
           children={children}
         />
         {icon}
@@ -197,7 +197,7 @@ export const Button: FC<PropsType> = ({
 
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
-      <Animated.View style={{transform: [{scale: scaleValue}], width: '100%'}}>
+      <Animated.View style={{ transform: [{ scale: scaleValue }], width: '100%' }}>
         {type === 'filled' ? (
           <Pressable
             style={buttonStyles}
