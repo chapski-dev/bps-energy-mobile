@@ -38,7 +38,7 @@ export const SectionListItemWithArrow = ({
         {children || (
           <Text
             color={disabled ? colors.grey_100 : undefined}
-            type="body_500"
+            variant="p2"
             children={title}
           />
         )}

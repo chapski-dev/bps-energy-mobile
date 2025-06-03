@@ -1,4 +1,7 @@
 import React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
+import CheckboxIcon from '@assets/svg/checkbox.svg';
+import CheckboxFillIcon from '@assets/svg/checkbox-fill.svg';
 
 import { useAppTheme } from '@src/theme/theme';
 
@@ -6,29 +9,18 @@ import { Box } from './Box';
 import { Text } from './Text';
 
 interface SelectProps {
-  selected?: boolean;
-  children?: string;
+  checked?: boolean;
+  children?: React.ReactNode;
   onPress?: () => void;
+  wrapperStyle?: StyleProp<ViewStyle>
 }
-const Checkbox = ({ selected, children, onPress }: SelectProps) => {
+const Checkbox = ({ checked, children, onPress, wrapperStyle }: SelectProps) => {
   const { colors } = useAppTheme();
 
   return (
-    <Box onPress={onPress} row gap={8} h={30} alignItems="center" w="full" >
-      <Box
-        w={20}
-        h={20}
-        borderColor={colors.grey_100}
-        borderWidth={1}
-        alignItems="center"
-        justifyContent="center"
-        borderRadius={5}
-      >
-        {selected && (
-          <Box w={15} h={15} backgroundColor={colors.main} borderRadius={4} />
-        )}
-      </Box>
-      <Text color="black" fontWeight={400} children={children} />
+    <Box onPress={onPress} row gap={12} style={wrapperStyle} >
+      {checked ? <CheckboxFillIcon /> : <CheckboxIcon color={colors.grey_400} />}
+      <Text style={{ flexShrink: 1 }} >{children}</Text>
     </Box>
   );
 };

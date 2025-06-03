@@ -1,17 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  ActivityIndicator,
   Alert,
-  Image,
   ScrollView,
-  Switch,
 } from 'react-native';
-import ArrowIcon from '@assets/svg/caret-right.svg';
-import NoAvatarIcon from '@assets/svg/user-fill.svg';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
-// import { setNotificationSettings } from '@src/api';
 import { NotificationSettings } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -22,7 +15,6 @@ import { Box, Button, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
-import SelectLanguageModal from '@src/widgets/modals/SelectLanguageModal';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
@@ -117,17 +109,15 @@ export const ProfileDetailsScreen = ({
         }}
       >
         <Box>
-
-
           <SectionListItemWithArrow
             onPress={openProfileData}
             borderBottom={false}
           >
             <Box gap={3}>
-              <Text type="body_500" children={'alexander_p@gmail.com'} />
+              <Text variant="p2" children={'alexander_p@gmail.com'} />
               <Text>
                 <Text colorName="grey_600" children={'Email · '} />
-                <Text colorName="red" children={'Не подтверждён'} />
+                <Text colorName="red_500" children={'Не подтверждён'} />
               </Text>
             </Box>
           </SectionListItemWithArrow>
@@ -155,7 +145,7 @@ export const ProfileDetailsScreen = ({
           />
           <Button
             type="clear"
-            textColor="red"
+            textColor='red_500'
             children={t('delete-account')}
             onPress={onDeleteAccountPress}
           />

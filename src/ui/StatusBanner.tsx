@@ -18,8 +18,8 @@ export const StatusBanner = ({ status, title, description }: StatusBannerProps) 
   const { colors } = useAppTheme();
 
   const statusConfig = {
-    error: { bgColor: colors.red_light, icon: <WarningIcon color={colors.red_500} /> },
-    success: { bgColor: colors.green_light, icon: <WarningIcon color={colors.green} /> },
+    error: { bgColor: colors.red_500_15, icon: <WarningIcon color={colors.red_500} /> },
+    success: { bgColor: colors.green_500_15, icon: <WarningIcon color={colors.green} /> },
     warning: { bgColor: colors.grey_50, icon: <WarningIcon color={colors.grey_500} /> },
   };
 

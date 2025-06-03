@@ -113,18 +113,22 @@ const UserBalance = () => {
       top={insets.top + 8}
       left={12}
       borderRadius={8}
-      backgroundColor={colors.white_transparent}
+      backgroundColor={colors.white_90}
       px={12}
       py={8}
       gap={2}
       style={shadowStyle}
+      effect="highlight"
+      underlayColor={colors.grey_100}
       onPress={() => null}
     >
-      <Text children="Текущий баланс" fontSize={13} colorName="grey_600" />
-      <Box row gap={4} alignItems="center" justifyContent="center">
-        <Text children="17,30 BYN" fontWeight="600" fontSize={20} />
-        <PlusCircleFillIcon color={colors.main} width={20} height={20} />
-      </Box>
+      <>
+        <Text children="Текущий баланс" fontSize={13} colorName="grey_600" />
+        <Box row gap={4} alignItems="center" justifyContent="center">
+          <Text children="17,30 BYN" fontWeight="600" fontSize={20} />
+          <PlusCircleFillIcon color={colors.main} width={20} height={20} />
+        </Box>
+      </>
     </Box>
   ) : null;
 };
@@ -142,7 +146,7 @@ const Filters = () => {
       bottom={12}
       left={12}
       borderRadius={8}
-      backgroundColor={colors.white_transparent}
+      backgroundColor={colors.white_90}
       px={12}
       py={8}
       w={48}
@@ -153,18 +157,18 @@ const Filters = () => {
       onPress={() => nav.navigate('filters-of-stations')}
     >
       <>
-      {!isEqual && <Box
-        absolute
-        w={6}
-        h={6}
-        right={5}
-        top={5}
-        backgroundColor={colors.main}
-        borderRadius={50}
-      />}
-      <Box flex={1} justifyContent="center" alignItems="center">
-        <FiltersIcon />
-      </Box>
+        {!isEqual && <Box
+          absolute
+          w={6}
+          h={6}
+          right={5}
+          top={5}
+          backgroundColor={colors.main}
+          borderRadius={50}
+        />}
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <FiltersIcon />
+        </Box>
       </>
     </Box>
   );
@@ -178,7 +182,7 @@ const UserLocation = ({ onPress }: { onPress: () => void }) => {
       bottom={12}
       right={12}
       borderRadius={8}
-      backgroundColor={colors.white_transparent}
+      backgroundColor={colors.white_90}
       px={12}
       py={8}
       w={48}

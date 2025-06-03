@@ -72,7 +72,7 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
         </Box>
 
         <Box mb={16}>
-          <Text type="h1" children="BPS Energy" />
+          <Text variant="h1" children="BPS Energy" />
           <Box row gap={6}>
             <Text children="Аранская улица, 11, Минск" />
             <CopyToClipboard value={'Аранская улица, 11, Минск'} message="Адрес скопирован!" />
