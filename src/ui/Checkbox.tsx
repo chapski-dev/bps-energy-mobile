@@ -18,7 +18,7 @@ const Checkbox = ({ checked, children, onPress, wrapperStyle }: SelectProps) => 
   const { colors } = useAppTheme();
 
   return (
-    <Box onPress={onPress} row gap={12} style={wrapperStyle} >
+    <Box onPress={onPress} row gap={12} style={[{ width: '100%' }, wrapperStyle]} >
       {checked ? <CheckboxFillIcon /> : <CheckboxIcon color={colors.grey_400} />}
       <Text style={{ flexShrink: 1 }} >{children}</Text>
     </Box>
