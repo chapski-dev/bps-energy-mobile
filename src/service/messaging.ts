@@ -14,7 +14,6 @@ import { AppStatus, getAppStatus } from '@src/utils/system';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 import { vibrate } from '@src/utils/vibrate';
 
-import orders from './orders';
 
 async function onMessageReceived(
   message: FirebaseMessagingTypes.RemoteMessage,
@@ -24,7 +23,6 @@ async function onMessageReceived(
   // TODO check data compatibility
   if (message.data?.eventType === 'new_order') {
     vibrate(HapticFeedbackTypes.notificationSuccess);
-    void orders.refresh();
     void notifications.refresh();
   }
   try {

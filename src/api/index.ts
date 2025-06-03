@@ -5,8 +5,10 @@ import api from './config';
 import {
   NotificationSettings,
   Profile,
-  SigInResponse,
-  SignInReq
+  RegistrationReq,
+  RegistrationResponse,
+  SignInReq,
+  SignInResponse,
 } from './types';
 
 // Authentication API
@@ -15,14 +17,14 @@ import {
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_sign_in
  */
 export const postSignIn = (body: SignInReq) =>
-  api.post<SigInResponse>('/mobile/sign-in', body).then((res) => res.data);
+  api.post<SignInResponse>('/mobile/sign-in', body).then((res) => res.data);
 
 /**
  * Регистрация нового пользователя по email и паролю
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_sign_up
  */
-export const postSignUp = (body: SignInReq) =>
-  api.post<SigInResponse>('/mobile/sign-up', body).then((res) => res.data);
+export const postSignUp = (body: RegistrationReq) =>
+  api.post<RegistrationResponse>('/mobile/sign-up', body).then((res) => res.data);
 
 /**
  * Refreshes the JWT token using refresh_token
@@ -30,7 +32,7 @@ export const postSignUp = (body: SignInReq) =>
  */
 export const postRefreshToken = (body: { access_token: string, refresh_token: string }) =>
   axios
-    .post<SigInResponse>(Config.API_HOST + '/mobile/refresh-token', body)
+    .post<SignInResponse>(Config.API_HOST + '/mobile/refresh-token', body)
     .then((res) => res.data);
 
 /**
@@ -39,7 +41,7 @@ export const postRefreshToken = (body: { access_token: string, refresh_token: st
  */
 export const postConfirmEmail = (body: { email: string, verification_code: string }) =>
   axios
-    .post<SigInResponse>('/mobile/confirm-email', body)
+    .post<SignInResponse>('/mobile/confirm-email', body)
     .then((res) => res.data);
 
 

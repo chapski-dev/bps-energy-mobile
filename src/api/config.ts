@@ -49,8 +49,9 @@ const refreshTokenAndRetry = async (
   originalRequest: CustomAxiosRequestConfig
 ): Promise<AxiosResponse> => {
   try {
-    const refreshToken = (await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN)) || '';
-    const response = await postRefreshToken({ refreshToken });
+    const refresh_token = (await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN)) || '';
+
+    const response = await postRefreshToken({ refresh_token });
     const accessToken = response.access_token;
     onTokenRefreshed(response.access_token);
     // await geolocationService.updateConfig({ accessToken, refreshToken });

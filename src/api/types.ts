@@ -1,11 +1,21 @@
 export type SignInReq = { email: string; password: string };
 
-export type SigInResponse = {
+export type SignInResponse = {
   access_token: string;
   expires_in: number;
   refresh_token: string;
   refresh_expires_in: number;
 };
+
+export type RegistrationReq = { email: string; password: string; phone?: string; agree: boolean };
+
+export type RegistrationResponse = {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  refresh_expires_in: number;
+};
+
 
 export type NotificationSettings = {
   settings: {
@@ -26,11 +36,10 @@ export type NotificationDetails = {
 
 //* Profile
 export type Profile = {
-  firstName: string;
-  lastName: string;
-  middleName: string;
-  roles: ['EXECUTOR'];
-  iconUrl: string;
-  language: string;
-  themeMode: 'LIGHT' | 'DARK';
-};
+  email: string,
+  id: number,
+  name: string,
+  phone_by: string,
+  phone_ru: string,
+  registration_date: string
+}
