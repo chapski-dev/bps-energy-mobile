@@ -4,7 +4,7 @@ export const DefaultColors = {
   background: '#fff',
   black: '#000000',
   green: '#34C759',
-  green_light: '#34c75926',
+  green_500_15: '#34C75926',
   grey_50: '#F2F5F7',
   /** disabled color */
   grey_100: '#E6EAED',
@@ -19,11 +19,12 @@ export const DefaultColors = {
   /** text default */
   grey_800: '#000A0A',
   main: '#008C92',
+  main_700_15: '#008C9226',
   red_500: '#E73054',
-  red_light: '#E7303026',
+  red_500_15: '#E7303026',
   orange_500: '#E7B930',
   white: '#FFF',
-  white_transparent: '#ffffffea',
+  white_90: '#ffffffea',
 } as const;
 
 export const lightColors = {
