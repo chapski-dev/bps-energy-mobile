@@ -1,5 +1,5 @@
 import React from 'react';
-import {GestureResponderEvent, Pressable} from 'react-native';
+import { GestureResponderEvent, Pressable } from 'react-native';
 import BPSIcon from '@assets/svg/BPS.svg';
 import MapPinIcon from '@assets/svg/map-pin.svg';
 import ProfileIcon from '@assets/svg/user-fill.svg';
@@ -8,20 +8,22 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 
-import ChargingScreen, {setCodeScanedRef} from '@src/screens/ChargingScreen';
+import ChargingScreen, { setCodeScanedRef } from '@src/screens/ChargingScreen';
 import MapScreen from '@src/screens/MapScreen';
-import {ProfileScreen} from '@src/screens/ProfileScreen';
-import {useAppTheme} from '@src/theme/theme';
-import {useLocalization} from '@src/translations/i18n';
-import {Box} from '@src/ui';
+import { ProfileScreen } from '@src/screens/ProfileScreen';
+import { useAppTheme } from '@src/theme/theme';
+import { useLocalization } from '@src/translations/i18n';
+import { Box } from '@src/ui';
 
-import {TabsParamList} from './types';
+import { withProtectedScreen } from './guards/withProtectedScreen';
+import { TabsParamList } from './types';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export const Tabs = () => {
-  const {t} = useLocalization();
-  const {colors} = useAppTheme();
+  const { t } = useLocalization();
+  const { colors } = useAppTheme();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -32,13 +34,13 @@ export const Tabs = () => {
         component={MapScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => <MapPinIcon color={color} />,
+          tabBarIcon: ({ color }) => <MapPinIcon color={color} />,
           title: t('map'),
         }}
       />
       <Tab.Screen
         name="charging"
-        component={ChargingScreen}
+        component={withProtectedScreen(ChargingScreen)}
         options={{
           headerShown: false,
           tabBarButton: props => <ChargingTabButton {...props} />,
@@ -48,10 +50,10 @@ export const Tabs = () => {
       />
       <Tab.Screen
         name="profile"
-        component={ProfileScreen}
+        component={withProtectedScreen(ProfileScreen)}
         options={{
           headerShown: false,
-          tabBarIcon: ({color}) => <ProfileIcon color={color} />,
+          tabBarIcon: ({ color }) => <ProfileIcon color={color} />,
           title: t('profile'),
         }}
       />
@@ -64,17 +66,16 @@ const ChargingTabButton = ({
   style,
   children,
 }: BottomTabBarButtonProps) => {
-  const {colors} = useAppTheme();
+  const { colors } = useAppTheme();
 
   const handlePress = (event: GestureResponderEvent) => {
     event.preventDefault();
-
-    setCodeScanedRef && setCodeScanedRef!(null);
-    onPress(event);
+    setCodeScanedRef && setCodeScanedRef(null)
+    onPress && onPress(event);
   };
 
   return (
-    <Pressable onPress={handlePress} style={[style, {position: 'relative'}]}>
+    <Pressable onPress={handlePress} style={[style, { position: 'relative' }]}>
       <Box
         w={72}
         h={72}
