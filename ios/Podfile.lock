@@ -1324,9 +1324,9 @@ PODS:
     - Yoga
   - react-native-netinfo (11.4.1):
     - React-Core
-  - react-native-safe-area-context (5.4.0):
+  - react-native-safe-area-context (5.4.1):
     - React-Core
-  - react-native-webview (13.13.5):
+  - react-native-webview (13.14.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1609,7 +1609,7 @@ PODS:
     - React-utils (= 0.75.5)
   - RNBootSplash (6.3.8):
     - React-Core
-  - RNCAsyncStorage (2.1.2):
+  - RNCAsyncStorage (2.2.0):
     - React-Core
   - RNCClipboard (1.16.2):
     - React-Core
@@ -1668,7 +1668,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.17.5):
+  - RNReanimated (3.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1690,10 +1690,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.17.5)
-    - RNReanimated/worklets (= 3.17.5)
+    - RNReanimated/reanimated (= 3.18.0)
+    - RNReanimated/worklets (= 3.18.0)
     - Yoga
-  - RNReanimated/reanimated (3.17.5):
+  - RNReanimated/reanimated (3.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1715,9 +1715,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 3.17.5)
+    - RNReanimated/reanimated/apple (= 3.18.0)
     - Yoga
-  - RNReanimated/reanimated/apple (3.17.5):
+  - RNReanimated/reanimated/apple (3.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1740,7 +1740,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.17.5):
+  - RNReanimated/worklets (3.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1762,9 +1762,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 3.17.5)
+    - RNReanimated/worklets/apple (= 3.18.0)
     - Yoga
-  - RNReanimated/worklets/apple (3.17.5):
+  - RNReanimated/worklets/apple (3.18.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2135,8 +2135,8 @@ SPEC CHECKSUMS:
   react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
   react-native-geolocation: 4e579df11fd10f90eae937e6040d71523fc6addc
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
-  react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
-  react-native-webview: df1e438a80ad1a280404b5c00f0a92442880baea
+  react-native-safe-area-context: dde2052b903c11d677c320b599c3244021c34ce8
+  react-native-webview: 615a49215d888ec7de4909700a79aded0cc764bd
   React-nativeconfig: c7743aabd506fc9756e2bc3225b44f6a6f4490c9
   React-NativeModulesApple: 007ac9ffc5e43040a7e0d70c04ad4a8b845a832c
   React-perflogger: 46ce3b295add69087b7c5ff325b55a6c7af204fc
@@ -2164,14 +2164,14 @@ SPEC CHECKSUMS:
   ReactCodegen: cab4b6fc4f1e049e565fefa4cbf6829e900da1ba
   ReactCommon: 2a02ad6348566d64bb1429aa952f0e4466a51a9d
   RNBootSplash: efd6dbf15b2579fb86bc575b8b676d1c5ac5709f
-  RNCAsyncStorage: b9f5f78da5d16a853fe3dc22e8268d932fc45a83
+  RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNCClipboard: e1d17c9d093d8129ef50b39b63a17a0e8ccd0ade
   RNFBApp: a448037d2df74af9d374a0b765be12ff1e844dc0
   RNFBMessaging: 0f0498a95c605e3afcf13ac5f349d0b201ea65f6
   RNGestureHandler: ae56ec9557e0569b3f83c220e3bc5e1f55cb76d6
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
   RNReactNativeHapticFeedback: c873497ad3f9fa80447baa18daa9474e671d24bf
-  RNReanimated: 3519cc6f8206f78e20b767708e1832348c5e023f
+  RNReanimated: 01e0ebd3bf73e710d70b1d23d490c1df2d5a02a0
   RNScreens: adea7e5059df296816014c8a5b2ea0be07c21b51
   RNSVG: e3ad69848b6357587545e0a49628b1148acf082c
   RNYamap: e9e022763db4b546333d68af89f93d3313d028dd
