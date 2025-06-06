@@ -25,7 +25,7 @@ axiosRetry(instance, {
 
 const getStoredAccessToken = async () => {
   const token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN);
-  return token ? `${token}` : undefined;
+  return token ? token : undefined;
 };
 
 let isRefreshing = false;
@@ -51,13 +51,12 @@ const refreshTokenAndRetry = async (
     await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token);
     await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN, new_refresh_token);
 
-    instance.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+    instance.defaults.headers.common.Authorization = `${access_token}`;
     notifySubscribers(access_token);
 
-    originalRequest.headers.Authorization = `Bearer ${access_token}`;
+    originalRequest.headers.Authorization = `${access_token}`;
     return instance(originalRequest);
   } catch (error) {
-    await AsyncStorage.multiRemove([ASYNC_STORAGE_KEYS.ACCESS_TOKEN, ASYNC_STORAGE_KEYS.REFRESH_TOKEN]);
     dispatchLogout?.();
     throw new Error(t('translation:the_session_has_timed_out_please_log_in'));
   }
@@ -67,7 +66,7 @@ const refreshTokenAndRetry = async (
 instance.interceptors.request.use(async (config) => {
   const token = await getStoredAccessToken();
   if (token && !config.headers.Authorization) {
-    config.headers.Authorization = token;
+    config.headers.Authorization = `${token}`;
   }
   return config;
 });
@@ -84,7 +83,7 @@ instance.interceptors.response.use(
         return new Promise((resolve, reject) => {
           addSubscriber(async (token: string) => {
             try {
-              originalRequest.headers.Authorization = `Bearer ${token}`;
+              originalRequest.headers.Authorization = `${token}`;
               resolve(await instance(originalRequest));
             } catch (err) {
               reject(err);
@@ -94,7 +93,7 @@ instance.interceptors.response.use(
       }
 
       isRefreshing = true;
-      return refreshTokenAndRetry(originalRequest);
+      return await refreshTokenAndRetry(originalRequest);
     }
 
     return Promise.reject(error);

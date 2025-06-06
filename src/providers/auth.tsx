@@ -12,8 +12,8 @@ import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useImmerReducer } from 'use-immer';
 
-import { getProfileData, postSignIn, updateUserProfile } from '@src/api';
-import { Profile, SignInReq } from '@src/api/types';
+import * as api from '@src/api';
+import { ChangeUserFieldsReq, Profile, SignInReq, UserBalance } from '@src/api/types';
 import { AppServiceStatus } from '@src/events';
 import { navigationRef } from '@src/navigation/navigationRef';
 import {
@@ -48,13 +48,19 @@ export enum AuthState {
 export interface IAuthProvider {
   authState: AuthState;
   user: null | Profile;
+  balance: UserBalance;
+  cards: string[];
   onSignIn: (data: { email: string; password: string }) => Promise<void>;
   onLogout: () => void;
-  updateUser: (data: Partial<Profile>) => Promise<void>;
+  updateUser: (data: ChangeUserFieldsReq) => Promise<void>;
+  getUserBalance: () => Promise<void>;
 }
 
 export const AuthContext = createContext<IAuthProvider>({
   authState: AuthState.checking,
+  balance: { value_by: 0, value_ru: 0 },
+  cards: [],
+  getUserBalance: () => Promise.resolve(),
   onLogout: () => null,
   onSignIn: () => Promise.resolve(),
   updateUser: () => Promise.resolve(),
@@ -72,6 +78,26 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   );
 
   const [user, setUser] = useState<Profile | null>(null);
+  const [cards, setCards] = useState<string[]>([]);
+  const [balance, setBalance] = useState<UserBalance>({
+    value_by: 0,
+    value_ru: 0,
+  });
+
+  const getUserBalance = useCallback(async () => {
+    const balance_res = await api.getUserBalance();
+    setBalance(balance_res);
+  }, []);
+
+  const getUserData = useCallback(async () => {
+    const userData = await api.getProfileData();
+    setUser(userData);
+  }, []);
+
+  const getUserCards = useCallback(async () => {
+    const res = await api.getUserCards();
+    setCards(res.cards);
+  }, []);
 
   const checkAuthState = useCallback(async () => {
     try {
@@ -83,64 +109,69 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         authDispatch({ type: AuthActionType.setEmpty });
         return;
       }
+      await getUserData();
+      await getUserBalance();
+      await getUserCards();
 
-      const userData = await getProfileData();
-      setUser(userData);
       authDispatch({ type: AuthActionType.setReady });
       app.isFirebaseAuthorized = AppServiceStatus.on;
     } catch (error) {
-      await AsyncStorage.clear();
-      authDispatch({ type: AuthActionType.setEmpty });
+      app.logout()
       handleCatchError(error, 'checkAuthState');
     }
-  }, [authDispatch]);
+  }, [authDispatch, getUserBalance, getUserCards, getUserData]);
 
   useEffect(() => {
     checkAuthState();
   }, [checkAuthState]);
 
-  const onSignIn = useCallback(async (data: SignInReq) => {
-    try {
-    authDispatch({ type: AuthActionType.setConnecting });
-    const { access_token, refresh_token } = await postSignIn(data);
-    await AsyncStorage.multiSet([
-      [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
-      [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
-      [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
-    ]);
-    const userData = await getProfileData();
-    setUser(userData);
-    authDispatch({ type: AuthActionType.setReady });
-    app.isFirebaseAuthorized = AppServiceStatus.on;
-    } catch (error) {
-      authDispatch({ type: AuthActionType.setEmpty });
-      throw error;
-    }
-  }, [authDispatch]);
+  const onSignIn = useCallback(
+    async (data: SignInReq) => {
+      try {
+        authDispatch({ type: AuthActionType.setConnecting });
+        const { access_token, refresh_token } = await api.postSignIn(data);
+        await AsyncStorage.multiSet([
+          [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
+          [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
+          [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
+        ]);
+        await getUserData();
+        await getUserBalance();
+        await getUserCards();
+        
+        authDispatch({ type: AuthActionType.setReady });
+        app.isFirebaseAuthorized = AppServiceStatus.on;
+      } catch (error) {
+        app.logout()
+        throw error;
+      }
+    },
+    [authDispatch, getUserBalance, getUserCards, getUserData],
+  );
 
   const onLogout = useCallback(() => {
     app.logout();
     setUser(null);
+    setBalance({ value_by: 0, value_ru: 0 })
+    setCards([]);
     if (navigationRef.getCurrentRoute()?.name !== 'login') {
       vibrate(HapticFeedbackTypes.notificationSuccess);
       navigationRef.reset({
         index: 0,
-        routes: [{ name: 'login' }]
-      })
+        routes: [{ name: 'login' }],
+      });
     }
   }, []);
 
-  const updateUser = useCallback(async (updatedData: Partial<Profile>) => {
+  const updateUser = useCallback(async (updatedData: ChangeUserFieldsReq) => {
     try {
-      await updateUserProfile(updatedData); // Обновляем данные на сервере
-      setUser((prevUser) =>
-        prevUser ? { ...prevUser, ...updatedData } : null,
-      ); // Обновляем локально
+      await api.updateUserProfile(updatedData);
+      await getUserData()
     } catch (error) {
       console.error('Ошибка обновления данных пользователя:', error);
       throw error;
     }
-  }, []);
+  }, [getUserData]);
 
   useEffect(() => {
     if (authState === AuthState.ready) {
@@ -164,7 +195,16 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authState, onLogout, onSignIn, updateUser, user }}
+      value={{
+        authState,
+        balance,
+        cards,
+        getUserBalance,
+        onLogout,
+        onSignIn,
+        updateUser,
+        user,
+      }}
     >
       {children}
     </AuthContext.Provider>

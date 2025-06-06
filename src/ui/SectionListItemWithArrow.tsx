@@ -38,8 +38,8 @@ export const SectionListItemWithArrow = ({
         {children || (
           <Text
             color={disabled ? colors.grey_100 : undefined}
-            variant="p2"
-            children={title}
+            variant='p2-semibold'
+            children={children || title}
           />
         )}
         <CaretRightIcon color={disabled ? colors.grey_100 : colors.grey_400} />

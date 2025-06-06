@@ -43,3 +43,13 @@ export type Profile = {
   phone_ru: string,
   registration_date: string
 }
+
+export type UserBalance = {
+  value_by: number;
+  value_ru: number ;
+}
+
+export type ChangeUserFieldsReq = {
+  field: 'Name' | 'PhoneBY' | 'PhoneRU';
+  value: string;
+}

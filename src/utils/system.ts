@@ -1,5 +1,6 @@
-import { AppState } from 'react-native'
+import { AppState , NativeModules } from 'react-native'
 
+import { isIOS } from '@src/misc/platform'
 import { navigationRef } from '@src/navigation/navigationRef.ts'
 
 export enum AppStatus {
@@ -24,3 +25,9 @@ export const waitForNavigationReady = () => {
     handler()
   })
 }
+
+export const getRegion = () => {
+  const region = !isIOS ? NativeModules.I18nManager.localeIdentifier : NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages?.[0];
+
+  region.split('_')[1];
+};
