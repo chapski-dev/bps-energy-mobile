@@ -3,14 +3,14 @@ import { ActivityIndicator, AppState, AppStateStatus, Keyboard, Vibration } from
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
 
-import { postConfirmEmail } from '@src/api';
+import { postConfirmEmail, postResendOtp } from '@src/api';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
+import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
-import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
@@ -18,12 +18,12 @@ const OTP_PASSWORD_LENGTH = 4;
 const COUNTDOWN_SECONDS = 60;
 
 const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
-  const { colors } = useAppTheme();
+  const { colors, insets } = useAppTheme();
   const { t } = useLocalization();
   const { toastSuccess } = useThemedToasts();
 
   const otpInput = useRef<OtpInputRef>(null);
-
+  const { onSignIn } = useAuth();
   const [notMatch, setNotMatch] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
   const retrySend = useCallback(async () => {
     try {
       setRetryLoading(true);
-      await wait(300);
+      await postResendOtp({ email: route.params?.email,})
       toastSuccess('Мы повторно выслали код. Проверьте почту!');
       countdownStartedAt.current = Date.now();
       updateCountdown();
@@ -69,7 +69,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
     } finally {
       setRetryLoading(false);
     }
-  }, [toastSuccess, updateCountdown]);
+  }, [route.params?.email, toastSuccess, updateCountdown]);
 
   const handleInputChanges = useCallback(async (code: string) => {
     if (code.length !== OTP_PASSWORD_LENGTH) return;
@@ -77,7 +77,6 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
       setDisabled(true);
       setLoading(true);
       if (route.params.verify === 'reset-password') {
-        setDisabled(false);
         navigation.navigate('set-new-password', { email: route.params?.email, otp: code })
       }
       if (route.params.verify === 'registration') {
@@ -85,20 +84,23 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
           email: route.params?.email,
           verification_code: code
         })
-        navigation.navigate('top-up-account')
+        await onSignIn({
+          email: route.params.email,
+          password: route.params?.password,
+        })
+        navigation.replace('top-up-account')
         vibrate(HapticFeedbackTypes.notificationSuccess);
       }
-      return;
     } catch (e) {
       handleCatchError(e);
       Vibration.vibrate();
       setNotMatch(true);
-      setDisabled(false);
       otpInput.current?.setValue('');
     } finally {
       setLoading(false);
+      setDisabled(false);
     }
-  }, [navigation, route.params?.email, route.params.verify]);
+  }, [navigation, onSignIn, route.params.email, route.params?.password, route.params.verify]);
 
   const theme: OtpInputProps['theme'] = useMemo(
     () => ({
@@ -137,6 +139,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
     <Box
       p={16}
       pt={54}
+      pb={insets.bottom + 35}
       alignItems="center"
       accessible={false}
       onPress={Keyboard.dismiss}
@@ -177,7 +180,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
       >
         Выслать код повторно {seconds !== 0 ? `(0:${seconds})` : ''}
       </Button>
-      <FakeView />
+      <FakeView additionalOffset={-insets.bottom - 20} />
     </Box>
   );
 };

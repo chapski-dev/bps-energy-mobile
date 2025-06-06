@@ -1,20 +1,24 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-
 export type RootStackParamList = {
   tabs: undefined
   login: undefined
   registration: undefined
   'forgot-password': undefined
   'reset-password': undefined
-  'top-up-account': undefined
-  'adding-card-and-payment': { sum: string | number }
+  'top-up-account'?: { currency: 'RUB' | 'BYN' }
+  'adding-card-and-payment': { url: string }
   'profile-details': undefined
   'filters-of-stations': undefined
   'charging-station': undefined
-  'otp-verify': { verify: 'registration' | 'reset-password', email: string }
+  'otp-verify': {
+    verify: 'registration' | 'reset-password'
+    email: string
+    password?: string
+  };
   'set-new-password': { email: string; otp: string };
   'change-password': undefined;
+  'change-user-fields': { filed: 'name' | 'phone' };
 };
 
 export type TabsParamList = {
@@ -23,14 +27,13 @@ export type TabsParamList = {
   profile: undefined;
 };
 
-export type AllStackParamList = RootStackParamList &
-  TabsParamList;
+export type AllStackParamList = RootStackParamList & TabsParamList;
 
 export type AvailableRoutes = keyof AllStackParamList;
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends AllStackParamList { }
+    interface RootParamList extends AllStackParamList {}
   }
 }
 

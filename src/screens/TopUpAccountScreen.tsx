@@ -1,86 +1,104 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import BepaidIcon from '@assets/svg/brand/bepaid.svg';
 import CreditIcon from '@assets/svg/credit-card.svg';
 import BelarusIcon from '@assets/svg/flags/Belarus.svg';
 import RussiaIcon from '@assets/svg/flags/Russia.svg';
 import LogoIcon from '@assets/svg/logo.svg';
 
+import { postCreateTransaction } from '@src/api';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input, Text } from '@src/ui';
+import { AnimatedBox } from '@src/ui/Box';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
-
-const TopUpAccountScreen = ({ navigation }: ScreenProps<'top-up-account'>) => {
+const TopUpAccountScreen = ({
+  navigation,
+  route,
+}: ScreenProps<'top-up-account'>) => {
   const { insets, colors } = useAppTheme();
-
-  const { t } = useLocalization()
-  const [sum, setSum] = useState('')
+  const { t } = useLocalization();
+  const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
   const submitPay = async () => {
     try {
-      setLoading(true)
-      await wait(300)
-      navigation.navigate('adding-card-and-payment', { sum })
+      setLoading(true);
+      const { url } = await postCreateTransaction({ amount: Number(amount) });
+      navigation.navigate('adding-card-and-payment', { url });
     } catch (error) {
-      handleCatchError(error, 'TopUpAccountScreen')
+      handleCatchError(error, 'TopUpAccountScreen');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const pressAddSum = (val: number) => {
-    vibrate(HapticFeedbackTypes.clockTick)
-    setSum((s) => (Number(s) + val).toString())
-  }
+    vibrate(HapticFeedbackTypes.clockTick);
+    setAmount((s) => (Number(s) + val).toString());
+  };
 
+  const handleSkip = async () => {
+    navigation.preload('tabs');
+    await wait(100);
+    navigation.navigate('tabs');
+  };
+
+  
   return (
     <KeyboardAwareScrollView
-      contentContainerStyle={{ flex: 1 }}
+      contentContainerStyle={{
+        flex: 1,
+        paddingBottom: insets.bottom + 35,
+        paddingHorizontal: 16,
+        paddingTop: 47,
+      }}
       keyboardShouldPersistTaps="handled"
     >
-      <Box
-        px={16}
-        pt={47}
-        gap={24}
-        pb={insets.bottom + 35}
-        alignItems='center'
-        flex={1} >
+      <Box gap={24} alignItems="center" flex={1}>
         <LogoIcon />
-        <CurrencySwitcher />
-        <Box flex={1} w='full' gap={24}>
+        <CurrencySwitcher initialCurr={route.params?.currency} />
+        <Box flex={1} w="full" gap={24}>
           <Input
-            required
-            value={sum}
-            onChangeText={setSum}
-            placeholder='Сумма'
+            value={amount}
+            onChangeText={(val) => setAmount(val.replaceAll(',', ''))}
+            placeholder="Сумма"
             autoCorrect={false}
             inputMode='numeric'
             keyboardType='numeric'
-            returnKeyType='done'
+            returnKeyType="done"
           />
-          <Box row gap={9}>
-            <AddSumButton sum='5' onPress={() => pressAddSum(5)} />
-            <AddSumButton sum='10' onPress={() => pressAddSum(10)} />
-            <AddSumButton sum='20' onPress={() => pressAddSum(20)} />
-            <AddSumButton sum='50' onPress={() => pressAddSum(50)} />
+          <Box row gap={9} mb={12}>
+            <AddSumButton sum="5" onPress={() => pressAddSum(5)} />
+            <AddSumButton sum="10" onPress={() => pressAddSum(10)} />
+            <AddSumButton sum="20" onPress={() => pressAddSum(20)} />
+            <AddSumButton sum="50" onPress={() => pressAddSum(50)} />
           </Box>
 
           <Button
-            disabled={!Number(sum) || loading}
+            disabled={!Number(amount) || loading}
             loading={loading}
             children={t('pay-by-card')}
             onPress={submitPay}
             icon={<CreditIcon color={colors.background} />}
           />
-
         </Box>
+      </Box>
+      <Box gap={24}>
+        <Box maxHeight={38}>
+          <BepaidIcon width="100%" height="100%" />
+        </Box>
+        {!route.params?.currency ? <Button type="clear" children={t('skip')} onPress={handleSkip} /> : null}
       </Box>
     </KeyboardAwareScrollView>
   );
@@ -88,30 +106,28 @@ const TopUpAccountScreen = ({ navigation }: ScreenProps<'top-up-account'>) => {
 
 export default TopUpAccountScreen;
 
-const CurrencySwitcher = () => {
+const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
   const { colors } = useAppTheme();
+  const [selectedCurrency, setSelectedCurrency] = useState<'BY' | 'RU'>(
+    initialCurr === 'RUB' ? 'RU' : 'BY',
+  );
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  const [selectedCurrency, setSelectedCurrency] = useState('BY');
+  const indicatorTranslateX = useSharedValue(0);
+
+  useEffect(() => {
+    const toValue = selectedCurrency === 'BY' ? 0 : containerWidth / 2;
+    indicatorTranslateX.value = withTiming(toValue, { duration: 300 });
+  }, [containerWidth, indicatorTranslateX, selectedCurrency]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: indicatorTranslateX.value }],
+  }));
+
   const handleTapCurrency = (val: 'BY' | 'RU') => {
     vibrate(HapticFeedbackTypes.selection);
     setSelectedCurrency(val);
   };
-
-  const [containerWidth, setContainerWidth] = useState(0);
-  const animatedValue = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const toValue = selectedCurrency === 'BY' ? 0 : 1;
-    Animated.spring(animatedValue, {
-      toValue,
-      useNativeDriver: true,
-    }).start();
-  }, [selectedCurrency]);
-
-  const indicatorTranslateX = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, containerWidth / 2],
-  });
 
   return (
     <Box
@@ -120,21 +136,20 @@ const CurrencySwitcher = () => {
       height={40}
       p={4}
       borderRadius={8}
-      onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width - 8)}
+      onLayout={(event) =>
+        setContainerWidth(event.nativeEvent.layout.width - 8)
+      }
     >
-      <Animated.View
-        style={{
-          backgroundColor: 'white',
-          borderRadius: 4,
-          height: '100%',
-          left: 4,
-          position: 'absolute',
-          top: 4,
-          transform: [{ translateX: indicatorTranslateX }],
-          width: containerWidth / 2,
-          zIndex: 1,
-          ...shadowStyle,
-        }}
+      <AnimatedBox
+        backgroundColor={colors.background}
+        borderRadius={4}
+        h="full"
+        left={4}
+        top={4}
+        absolute
+        w={containerWidth / 2}
+        zIndex={1}
+        style={[shadowStyle, animatedStyle]}
       />
       <Box
         alignItems="center"
@@ -145,10 +160,12 @@ const CurrencySwitcher = () => {
         justifyContent="center"
         gap={6}
         onPress={() => handleTapCurrency('BY')}
+        effect="none"
       >
         <BelarusIcon />
         <Text
           children="BY Кошелёк"
+          variant="p3"
           fontWeight={selectedCurrency === 'BY' ? '600' : 'normal'}
         />
       </Box>
@@ -159,12 +176,14 @@ const CurrencySwitcher = () => {
         zIndex={2}
         borderRadius={4}
         onPress={() => handleTapCurrency('RU')}
+        effect="none"
         gap={6}
         justifyContent="center"
       >
         <RussiaIcon />
         <Text
           children="RU Кошелёк"
+          variant="p3"
           fontWeight={selectedCurrency === 'RU' ? '600' : 'normal'}
         />
       </Box>
@@ -183,19 +202,23 @@ const shadowStyle = {
   shadowRadius: 1,
 };
 
-const AddSumButton = (props: { sum: '5' | '10' | '20' | '50', onPress: () => void }) => {
+const AddSumButton = (props: {
+  sum: '5' | '10' | '20' | '50';
+  onPress: () => void;
+}) => {
   const { colors } = useAppTheme();
 
   return (
     <Box
       h={46}
-      justifyContent='center'
-      alignItems='center'
+      justifyContent="center"
+      alignItems="center"
       flexGrow={1}
       onPress={props.onPress}
       backgroundColor={colors.grey_50}
-      borderRadius={8}>
-      <Text children={'+' + props.sum} fontWeight='800' fontSize={18} />
+      borderRadius={8}
+    >
+      <Text children={'+' + props.sum} fontWeight="800" fontSize={18} />
     </Box>
-  )
-}
+  );
+};

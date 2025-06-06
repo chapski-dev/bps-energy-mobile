@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthState, useAuth } from '@src/providers/auth';
 import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
 import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
+import ChangeUserFieldsScreen from '@src/screens/ChangeUserFieldsScreen';
 import CharginStationScreen from '@src/screens/CharginStationScreen';
 import FiltersOfStations from '@src/screens/FiltersOfStations';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
@@ -60,12 +61,12 @@ export const RootStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        options={{ title: 'Пополнение баланса' }}
+        options={{ title: 'Пополнить баланс' }}
         name="top-up-account"
         component={TopUpAccountScreen}
       />
       <Stack.Screen
-        options={{ title: t('pay-by-card') }}
+        options={{ title: 'Пополнить баланс' }}
         name="adding-card-and-payment"
         component={AddingCardAndPayment}
       />
@@ -95,6 +96,11 @@ export const RootStack = () => {
             options={{ title: t('profile') }}
             name="profile-details"
             component={ProfileDetailsScreen}
+          />
+          <Stack.Screen
+            options={({ route }) => ({ title: route.params.filed === 'name' ? 'Как к вам обращаться?' : 'Номер телефона' })}
+            name='change-user-fields'
+            component={ChangeUserFieldsScreen}
           />
           <Stack.Screen
             options={{ title: 'Изменить пароль' }}
