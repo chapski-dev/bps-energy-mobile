@@ -127,7 +127,8 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
               onBlur={onBlur}
               autoComplete="off"
               importantForAutofill="no"
-              returnKeyType="done"
+              autoFocus
+              prompting='Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки'
             />
           )
         }}
@@ -135,7 +136,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
       <BottomSlideModal keyboardBehavior="fillParent" ref={modal} enableContentPanningGesture={false}>
         <Box pl={20} pr={20} flex={1} mb={insets.bottom} gap={20}>
           <Input
-            icon={<SearchIcon width={20} height={20} color={colors.text} />}
+            icon={<SearchIcon width={20} height={20} color={colors.grey_600} />}
             onChangeText={handleFilterCounties}
             placeholder='Поиск'
           />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { Keyboard } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import UserIcon from '@assets/svg/user.svg';
 
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
@@ -15,13 +15,15 @@ import { handleCatchError } from '@src/utils/handleCatchError';
 import { PhoneInput } from '@src/widgets/PhoneInput';
 
 type FormValues = {
-  value: string;
+  name: string;
+  phone: string;
 };
 
 function ChangeUserFieldsScreen({
   navigation,
   route,
 }: ScreenProps<'change-user-fields'>) {
+  const { user } = useAuth();
   const { insets, colors } = useAppTheme();
   const { t } = useLocalization();
   const { toastSuccess } = useThemedToasts();
@@ -30,11 +32,12 @@ function ChangeUserFieldsScreen({
   const isNameField = route.params.filed === 'name';
 
   const form = useForm<FormValues>({
-    defaultValues: { value: '' },
+    defaultValues: { name: user?.name, phone: user?.phone_by },
     mode: 'all',
   });
 
-  const { control, handleSubmit, formState } = form;
+  const { control, handleSubmit, formState, setValue } = form;
+
   const [loading, setLoading] = useState(false);
 
   const handleUpdateData = async (data: FormValues) => {
@@ -53,6 +56,22 @@ function ChangeUserFieldsScreen({
     }
   };
 
+  const openConfirmationDeletePhone = () => {
+    Alert.alert(t('do-you-want-to-logout?'), undefined, [
+      {
+        onPress: () => null,
+        text: t('cancel'),
+      },
+      {
+        onPress: () => {
+          // TODO: доработать удаление номера телефона.
+          handleUpdateData()
+        },
+        style: 'destructive',
+        text: t('exit'),
+      },
+    ]);
+  };
   return (
     <FormProvider {...form}>
       <Box
@@ -68,7 +87,7 @@ function ChangeUserFieldsScreen({
             {isNameField ? (
               <Controller
                 control={control}
-                name="value"
+                name="name"
                 rules={{ required: true }}
                 render={({
                   field: { value, onBlur, onChange },
@@ -88,7 +107,17 @@ function ChangeUserFieldsScreen({
                 )}
               />
             ) : (
-              <PhoneInput placeholder="Телефон" autoFocus />
+              <Box gap={56}>
+                <PhoneInput />
+                {user?.phone_by && (
+                  <Button
+                    type="clear"
+                    children="Удалить номер"
+                    textColor="red_500"
+                    onPress={openConfirmationDeletePhone}
+                  />
+                )}
+              </Box>
             )}
           </Box>
         </Box>
