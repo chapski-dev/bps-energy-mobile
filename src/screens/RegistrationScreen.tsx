@@ -9,10 +9,9 @@ import LogoIcon from '@assets/svg/logo.svg';
 import PhoneIcon from '@assets/svg/phone.svg';
 
 import { postSignUp } from '@src/api';
-import { RegistrationReq, SignInReq } from '@src/api/types';
+import { RegistrationReq } from '@src/api/types';
 import { OFFERS, PRIVACY_POLICY } from '@src/misc/documents';
 import { ScreenProps } from '@src/navigation/types';
-import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Checkbox, Input, Text } from '@src/ui';
@@ -24,7 +23,6 @@ import { validator } from '@src/utils/validations';
 const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
   const { insets, colors } = useAppTheme();
   const { t, i18n: { language }, } = useLocalization()
-  const { onSignIn } = useAuth();
   const { control, handleSubmit, formState } = useForm<RegistrationReq>({
     defaultValues: {
       agree: false,
@@ -39,7 +37,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
 
   const [loading, setLoading] = useState(false);
 
-  const submitRegistatrion = async (data: SignInReq) => {
+  const submitRegistatrion = async (data: RegistrationReq) => {
     try {
       setLoading(true)
       await postSignUp(data);
