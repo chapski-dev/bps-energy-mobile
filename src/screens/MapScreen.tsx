@@ -24,7 +24,7 @@ import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const [markers, setMarkers] = useState<Point[]>([]);
-  const { insets, colors } = useAppTheme();
+  const { insets } = useAppTheme();
 
   const onMapPress = (event: NativeSyntheticEvent<Point>) => {
     const { lat, lon } = event.nativeEvent;
@@ -106,7 +106,9 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 
 const UserBalance = () => {
   const { insets, colors } = useAppTheme();
-  const { authState } = useAuth();
+  const { authState, balance } = useAuth();
+  const navigation = useNavigation()
+
   return authState === AuthState.ready ? (
     <Box
       absolute
@@ -120,12 +122,12 @@ const UserBalance = () => {
       style={shadowStyle}
       effect="highlight"
       underlayColor={colors.grey_100}
-      onPress={() => null}
+      onPress={() => navigation.navigate('top-up-account', { currency: 'BYN' })}
     >
       <>
         <Text children="Текущий баланс" fontSize={13} colorName="grey_600" />
         <Box row gap={4} alignItems="center" justifyContent="center">
-          <Text children="17,30 BYN" fontWeight="600" fontSize={20} />
+          <Text children={`${balance.value_by} BYN`} fontWeight="600" fontSize={20} />
           <PlusCircleFillIcon color={colors.main} width={20} height={20} />
         </Box>
       </>
