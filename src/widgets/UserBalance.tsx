@@ -7,7 +7,15 @@ import { useNavigation } from '@react-navigation/native';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 
-export default function UserBalance({ currency, value, }: { currency: 'RUB' | 'BYN', value: number }) {
+export default function UserBalance({
+  currency,
+  value,
+  disabled,
+}: {
+  currency: 'RUB' | 'BYN';
+  value: number;
+  disabled?: boolean;
+}) {
   const { colors } = useAppTheme();
   const naigation = useNavigation();
 
@@ -20,20 +28,30 @@ export default function UserBalance({ currency, value, }: { currency: 'RUB' | 'B
       gap={8}
     >
       <Box row gap={8}>
-        {currency === 'BYN' ? <BelarusIcon width={16} height={16} /> : <RussiaIcon />}
-        <Text colorName='grey_600' children="Текущий баланс" />
+        {currency === 'BYN' ? (
+          <BelarusIcon width={16} height={16} />
+        ) : (
+          <RussiaIcon />
+        )}
+        <Text disabled={disabled} colorName="grey_600" children="Текущий баланс" />
       </Box>
       <Box row justifyContent="space-between">
-        <Text fontSize={20} fontWeight="600" children={`${value} ${currency}`} />
+        <Text
+          fontSize={20}
+          fontWeight="600"
+          disabled={disabled}
+          children={`${value} ${currency}`}
+        />
         <Box
           row
           gap={4}
           justifyContent="center"
           alignItems="center"
+          disabled={disabled}
           onPress={() => naigation.navigate('top-up-account', { currency })}
         >
-          <Text children="Пополнить" colorName="main" />
-          <PlusCircleFillIcon color={colors.main} />
+          <Text disabled={disabled} children="Пополнить" colorName="main" />
+          <PlusCircleFillIcon color={disabled ? colors.grey_400 : colors.main} />
         </Box>
       </Box>
     </Box>

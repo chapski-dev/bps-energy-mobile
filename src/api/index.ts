@@ -30,7 +30,7 @@ export const postSignUp = (body: RegistrationReq) =>
  * Refreshes the JWT token using refresh_token
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_refresh_token
  */
-export const postRefreshToken = (body: { refresh_token: string; }) =>
+export const postRefreshToken = (body: { refresh_token: string }) =>
   api
     .post<SignInResponse>('/mobile/refresh-token', body)
     .then((res) => res.data);
@@ -81,7 +81,16 @@ export const postCreateTransaction = (body: { amount: number }) =>
     .then((res) => res.data);
 
 /**
- * Создание транзакции для пополнения баланса
+ * Проведение платежа с карты пользователя
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%BE%D0%BC/post_mobile_make_payment
+ */
+export const postTopUpBalance = (body: { amount: number; card: string }) =>
+  api
+    .post<{ url: string }>('/mobile/make-payment', body)
+    .then((res) => res.data);
+
+/**
+ * Повторная отправка кода верификации на email
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_resend_otp
  */
 export const postResendOtp = (body: { email: string }) =>

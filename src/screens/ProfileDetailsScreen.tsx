@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Alert, ScrollView } from 'react-native';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -7,6 +8,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
+import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
@@ -21,7 +23,6 @@ export const ProfileDetailsScreen = ({
 
   const openChangeUserFilelds = (filed: 'phone' | 'name') =>
     navigation.push('change-user-fields', { filed });
-
 
   const onLogoutPress = () =>
     Alert.alert(t('do-you-want-to-logout?'), undefined, [
@@ -43,11 +44,16 @@ export const ProfileDetailsScreen = ({
         text: t('cancel'),
       },
       {
-        onPress: onLogout,
+        onPress: modalCardsOpen,
         style: 'destructive',
         text: t('delete'),
       },
     ]);
+
+
+  const modalCards = useRef<BottomSheetModal>(null);
+  const modalCardsClose = () => modalCards?.current?.forceClose();
+  const modalCardsOpen = () => modalCards?.current?.present();
 
   return (
     <>
@@ -85,12 +91,16 @@ export const ProfileDetailsScreen = ({
           />
           <SectionListItemWithArrow
             onPress={() => openChangeUserFilelds('phone')}
-            title='Добавить номер телефона'
+            title="Добавить номер телефона"
             children={
               user?.phone_by ? (
                 <Box>
                   <Text variant="p2-semibold" children={user?.phone_by} />
-                  <Text variant="p3" colorName="grey_600" children="Номер телефона" />
+                  <Text
+                    variant="p3"
+                    colorName="grey_600"
+                    children="Номер телефона"
+                  />
                 </Box>
               ) : null
             }
@@ -119,6 +129,11 @@ export const ProfileDetailsScreen = ({
           />
         </Box>
       </ScrollView>
+      <UserCardsModal
+        mode="account-deletion"
+        ref={modalCards}
+        modalClose={modalCardsClose}
+      />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
@@ -11,9 +11,11 @@ import CreditIcon from '@assets/svg/credit-card.svg';
 import BelarusIcon from '@assets/svg/flags/Belarus.svg';
 import RussiaIcon from '@assets/svg/flags/Russia.svg';
 import LogoIcon from '@assets/svg/logo.svg';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
-import { postCreateTransaction } from '@src/api';
+import { postCreateTransaction, postTopUpBalance } from '@src/api';
 import { ScreenProps } from '@src/navigation/types';
+import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input, Text } from '@src/ui';
@@ -21,18 +23,26 @@ import { AnimatedBox } from '@src/ui/Box';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
+import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 
 const TopUpAccountScreen = ({
   navigation,
   route,
 }: ScreenProps<'top-up-account'>) => {
   const { insets, colors } = useAppTheme();
+  const { cards } = useAuth();
+
   const { t } = useLocalization();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const submitPay = async () => {
+  const modalCards = useRef<BottomSheetModal>(null);
+  const modalCardsClose = () => modalCards?.current?.forceClose();
+  const modalCardsOpen = () => modalCards?.current?.present();
+
+  const proceedTransaction = async () => {
     try {
+      modalCardsClose();
       setLoading(true);
       const { url } = await postCreateTransaction({ amount: Number(amount) });
       navigation.navigate('adding-card-and-payment', { url });
@@ -40,6 +50,14 @@ const TopUpAccountScreen = ({
       handleCatchError(error, 'TopUpAccountScreen');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const submitPay = () => {
+    if (cards.length) {
+      modalCardsOpen();
+    } else {
+      proceedTransaction();
     }
   };
 
@@ -54,53 +72,74 @@ const TopUpAccountScreen = ({
     navigation.navigate('tabs');
   };
 
-  
-  return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={{
-        flex: 1,
-        paddingBottom: insets.bottom + 35,
-        paddingHorizontal: 16,
-        paddingTop: 47,
-      }}
-      keyboardShouldPersistTaps="handled"
-    >
-      <Box gap={24} alignItems="center" flex={1}>
-        <LogoIcon />
-        <CurrencySwitcher initialCurr={route.params?.currency} />
-        <Box flex={1} w="full" gap={24}>
-          <Input
-            value={amount}
-            onChangeText={(val) => setAmount(val.replaceAll(',', ''))}
-            placeholder="Сумма"
-            autoCorrect={false}
-            inputMode='numeric'
-            keyboardType='numeric'
-            returnKeyType="done"
-          />
-          <Box row gap={9} mb={12}>
-            <AddSumButton sum="5" onPress={() => pressAddSum(5)} />
-            <AddSumButton sum="10" onPress={() => pressAddSum(10)} />
-            <AddSumButton sum="20" onPress={() => pressAddSum(20)} />
-            <AddSumButton sum="50" onPress={() => pressAddSum(50)} />
-          </Box>
+  const handlePayViaExistCard = async (data: { card: string }) => {
+    try {
+      setLoading(true);
+      await postTopUpBalance({ amount: Number(amount), card: cards[0] });
+    } catch (error) {
+      handleCatchError(error, 'TopUpAccountScreen');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-          <Button
-            disabled={!Number(amount) || loading}
-            loading={loading}
-            children={t('pay-by-card')}
-            onPress={submitPay}
-            icon={<CreditIcon color={colors.background} />}
-          />
+  return (
+    <>
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          flex: 1,
+          paddingBottom: insets.bottom + 35,
+          paddingHorizontal: 16,
+          paddingTop: 47,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Box gap={24} alignItems="center" flex={1}>
+          <LogoIcon />
+          <CurrencySwitcher initialCurr={route.params?.currency} />
+          <Box flex={1} w="full" gap={24}>
+            <Input
+              value={amount}
+              onChangeText={(val) => setAmount(val.replaceAll(',', ''))}
+              placeholder="Сумма"
+              autoCorrect={false}
+              inputMode="numeric"
+              keyboardType="numeric"
+              returnKeyType="done"
+            />
+            <Box row gap={9} mb={12}>
+              <AddSumButton sum="5" onPress={() => pressAddSum(5)} />
+              <AddSumButton sum="10" onPress={() => pressAddSum(10)} />
+              <AddSumButton sum="20" onPress={() => pressAddSum(20)} />
+              <AddSumButton sum="50" onPress={() => pressAddSum(50)} />
+            </Box>
+
+            <Button
+              disabled={!Number(amount) || loading}
+              loading={loading}
+              children={t('pay-by-card')}
+              onPress={() => submitPay()}
+              icon={<CreditIcon color={colors.background} />}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box gap={24}>
-        <Box maxHeight={38}>
-          <BepaidIcon width="100%" height="100%" />
+        <Box gap={24}>
+          <Box maxHeight={38}>
+            <BepaidIcon width="100%" height="100%" />
+          </Box>
+          {!route.params?.currency ? (
+            <Button type="clear" children={t('skip')} onPress={handleSkip} />
+          ) : null}
         </Box>
-        {!route.params?.currency ? <Button type="clear" children={t('skip')} onPress={handleSkip} /> : null}
-      </Box>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+      <UserCardsModal
+        mode="card-selection"
+        ref={modalCards}
+        modalClose={modalCardsClose}
+        onCardSelect={handlePayViaExistCard}
+        onAddCard={proceedTransaction}
+      />
+    </>
   );
 };
 
@@ -176,6 +215,7 @@ const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
         zIndex={2}
         borderRadius={4}
         onPress={() => handleTapCurrency('RU')}
+        disabled
         effect="none"
         gap={6}
         justifyContent="center"
@@ -184,6 +224,7 @@ const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
         <Text
           children="RU Кошелёк"
           variant="p3"
+          disabled
           fontWeight={selectedCurrency === 'RU' ? '600' : 'normal'}
         />
       </Box>

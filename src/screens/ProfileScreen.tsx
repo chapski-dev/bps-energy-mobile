@@ -34,35 +34,43 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
   const modalCardsClose = () => modalCards?.current?.forceClose();
   const modalCardsOpen = () => modalCards?.current?.present();
 
-  const { user, balance, getUserBalance, } = useAuth();
+  const { user, balance, getUserBalance } = useAuth();
 
   const onRefresh = async () => {
     try {
-      setRefreshing(true)
-      await getUserBalance()
+      setRefreshing(true);
+      await getUserBalance();
     } catch (error) {
-      handleCatchError(error)
+      handleCatchError(error);
     } finally {
-      setRefreshing(false)
+      setRefreshing(false);
     }
-  }
+  };
 
   const testRefreshToken = async () => {
     try {
-      const refresh_token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN);
-      const { access_token, refresh_token: new_refresh_token } = await postRefreshToken({ refresh_token });
-  
+      const refresh_token = await AsyncStorage.getItem(
+        ASYNC_STORAGE_KEYS.REFRESH_TOKEN,
+      );
+      const { access_token, refresh_token: new_refresh_token } =
+        await postRefreshToken({ refresh_token });
+
       await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token);
-      await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN, new_refresh_token);
+      await AsyncStorage.setItem(
+        ASYNC_STORAGE_KEYS.REFRESH_TOKEN,
+        new_refresh_token,
+      );
     } catch (error) {
-      handleCatchError(error)
+      handleCatchError(error);
     }
-  }
+  };
 
   return (
     <>
       <ScrollView
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         contentContainerStyle={{
           paddingBottom: insets.bottom || 15,
           paddingHorizontal: 16,
@@ -81,7 +89,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
 
         <Box gap={8}>
           <UserBalance currency="BYN" value={balance.value_by} />
-          <UserBalance currency="RUB" value={balance.value_ru} />
+          <UserBalance disabled currency="RUB" value={balance.value_ru} />
         </Box>
 
         <SectionListItemWithArrow
@@ -115,7 +123,11 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         />
       </ScrollView>
       <SelectLanguageModal ref={modal} modalClose={modalClose} />
-      <UserCardsModal ref={modalCards} modalClose={modalCardsClose} />
+      <UserCardsModal
+        mode="saved-cards"
+        ref={modalCards}
+        modalClose={modalCardsClose}
+      />
     </>
-  )
+  );
 };
