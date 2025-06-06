@@ -29,21 +29,21 @@ function App(): React.JSX.Element {
 
   return (
     <AuthProvider>
-      <GestureHandlerRootView>
+      <NavigationContainer
+        onReady={navigationLift}
+        theme={theme}
+        ref={navigationRef}
+      >
         <SafeAreaProvider >
-          <NavigationContainer
-            onReady={navigationLift}
-            theme={theme}
-            ref={navigationRef}
-          >
+          <GestureHandlerRootView>
             <BottomSheetModalProvider>
-              <RootStack /> 
+              <RootStack />
               <Toasts />
               <ModalLayout />
             </BottomSheetModalProvider>
-          </NavigationContainer>
+          </GestureHandlerRootView>
         </SafeAreaProvider>
-      </GestureHandlerRootView>
+      </NavigationContainer>
     </AuthProvider>
   );
 }

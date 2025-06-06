@@ -4,13 +4,13 @@ import i18n, { TFunction } from 'i18next';
 
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
-import enTranslation from './en-US.json';
+import enTranslation from './en.json';
 import RNLanguageDetector from './LanguageDetector';
-import ruTranslation from './ru-RU.json';
+import ruTranslation from './ru.json';
 
 export enum AppLangEnum {
-  RU = 'ru-RU',
-  EN = 'en-US',
+  RU = 'ru',
+  EN = 'en',
 }
 
 export const resources = {
