@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { FlatList, Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import {
   interpolate,
   runOnJS,
@@ -22,10 +23,15 @@ import { Box, Text } from '@src/ui';
 import { AnimatedBox } from '@src/ui/Box';
 import { ImageProgress } from '@src/ui/ImageProgress';
 import { windowHeight, windowWidth } from '@src/utils';
+import { vibrate } from '@src/utils/vibrate';
 
 interface GalleryProps {
   images: string[];
 }
+
+const triggerVibrate = () => {
+  vibrate(HapticFeedbackTypes.clockTick);
+};
 
 export const Gallery: React.FC<GalleryProps> = ({ images }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -203,6 +209,7 @@ const FullScreenImageViewer: React.FC<FullScreenImageViewerProps> = ({
                     index: idx,
                     viewOffset: 0,
                   });
+                  triggerVibrate()
                 }
               }}
             />
@@ -242,25 +249,27 @@ interface ZoomableImageProps {
 const ZoomableImage: React.FC<ZoomableImageProps> = ({ uri, scaleRef, fadeOpacity }) => {
   const scale = scaleRef;
   const savedScale = useSharedValue<number>(1);
-
+  const lastUpdateTime = useSharedValue<number>(0); // Для debounce
+  const isPinching = useSharedValue<boolean>(false);
+  
   const singleTapGesture = Gesture.Tap()
     .numberOfTaps(1)
     .maxDelay(200)
     .onEnd((_event, success) => {
-      if (success) {
+      if (success && !isPinching.value) {
         fadeOpacity.value = withTiming(fadeOpacity.value === 1 ? 0 : 1, { duration: 200 });
       }
     });
 
-  const doubleTapGesture = Gesture.Tap()
+    const doubleTapGesture = Gesture.Tap()
     .numberOfTaps(2)
     .onEnd((_event, success) => {
-      if (success) {
+      if (success && !isPinching.value) {
         if (scaleRef.value > 1) {
-          scaleRef.value = withTiming(1, { duration: 300 });
+          scaleRef.value = withTiming(1, { duration: 400 });
           savedScale.value = 1;
         } else {
-          scaleRef.value = withTiming(2, { duration: 300 });
+          scaleRef.value = withTiming(2, { duration: 400 });
           savedScale.value = 2;
         }
       }
@@ -270,25 +279,35 @@ const ZoomableImage: React.FC<ZoomableImageProps> = ({ uri, scaleRef, fadeOpacit
     .onStart(() => {
       // При старте жеста pinch нужно «зафиксировать» текущее значение scaleRef
       // в savedScale, чтобы event.scale был отсчитан от правильной «точки отсчёта».
+      isPinching.value = true;
       savedScale.value = scaleRef.value;
     })
     .onUpdate((event) => {
-      scaleRef.value = savedScale.value * event.scale;
+      const currentTime = Date.now();
+      // Debounce: обновляем масштаб только если прошло >= 16ms (примерно 60fps)
+      if (currentTime - lastUpdateTime.value >= 16) {
+        const newScale = savedScale.value * event.scale;
+        scaleRef.value = Math.max(0.9, Math.min(newScale, 3.7));
+        lastUpdateTime.value = currentTime;
+      }
     })
     .onEnd(() => {
       if (scaleRef.value < 1) {
-        scaleRef.value = withTiming(1, { duration: 300 });
+        scaleRef.value = withTiming(1, { duration: 400 });
         savedScale.value = 1;
+        runOnJS(triggerVibrate)()
       } else if (scaleRef.value > 3) {
-        scaleRef.value = withTiming(3, { duration: 300 });
+        scaleRef.value = withTiming(3, { duration: 400 });
+        runOnJS(triggerVibrate)()
         savedScale.value = 3;
       } else {
         savedScale.value = scaleRef.value;
       }
+      isPinching.value = false;
     });
 
-  const tapExclusive = Gesture.Exclusive(doubleTapGesture, singleTapGesture);
-  const composedGesture = Gesture.Simultaneous(pinchGesture, tapExclusive);
+  const tapExclusive = Gesture.Simultaneous(doubleTapGesture, singleTapGesture);
+  const composedGesture = Gesture.Exclusive(pinchGesture, tapExclusive);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -305,7 +324,7 @@ const ZoomableImage: React.FC<ZoomableImageProps> = ({ uri, scaleRef, fadeOpacit
     >
       <GestureDetector gesture={composedGesture}>
         <ImageProgress
-          uri={ uri }
+          uri={uri}
           style={[styles.fullScreenImage, animatedStyle]}
           resizeMode="contain"
           animated
@@ -323,12 +342,12 @@ interface ThumbnailItemProps {
 }
 
 const ThumbnailItem: React.FC<ThumbnailItemProps> = ({ uri, index, currentIndex, onPress }) => {
-  const opacityVal = useSharedValue<number>(0.4);
+  const opacityVal = useSharedValue<number>(0.6);
 
   useAnimatedReaction(
     () => index === currentIndex,
     (isActive) => {
-      opacityVal.value = withTiming(isActive ? 1 : 0.4, { duration: 500 });
+      opacityVal.value = withTiming(isActive ? 1 : 0.6, { duration: 500 });
     }
   );
 
@@ -338,7 +357,7 @@ const ThumbnailItem: React.FC<ThumbnailItemProps> = ({ uri, index, currentIndex,
 
   return (
     <TouchableOpacity onPress={() => onPress(index)}>
-      <ImageProgress uri={ uri } style={[styles.thumbnail, animatedStyle]} animated />
+      <ImageProgress uri={uri} style={[styles.thumbnail, animatedStyle]} animated />
     </TouchableOpacity>
   );
 };
