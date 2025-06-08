@@ -13,7 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useImmerReducer } from 'use-immer';
 
 import * as api from '@src/api';
-import { ChangeUserFieldsReq, Profile, SignInReq, UserBalance } from '@src/api/types';
+import { Profile, SignInReq } from '@src/api/types';
 import { AppServiceStatus } from '@src/events';
 import { navigationRef } from '@src/navigation/navigationRef';
 import {
@@ -48,22 +48,16 @@ export enum AuthState {
 export interface IAuthProvider {
   authState: AuthState;
   user: null | Profile;
-  balance: UserBalance;
-  cards: string[];
   onSignIn: (data: { email: string; password: string }) => Promise<void>;
   onLogout: () => void;
-  updateUser: (data: ChangeUserFieldsReq) => Promise<void>;
-  getUserBalance: () => Promise<void>;
+  getUserData: () => Promise<void>;
 }
 
 export const AuthContext = createContext<IAuthProvider>({
   authState: AuthState.checking,
-  balance: { value_by: 0, value_ru: 0 },
-  cards: [],
-  getUserBalance: () => Promise.resolve(),
+  getUserData: () => Promise.resolve(),
   onLogout: () => null,
   onSignIn: () => Promise.resolve(),
-  updateUser: () => Promise.resolve(),
   user: null,
 });
 
@@ -78,25 +72,10 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   );
 
   const [user, setUser] = useState<Profile | null>(null);
-  const [cards, setCards] = useState<string[]>([]);
-  const [balance, setBalance] = useState<UserBalance>({
-    value_by: 0,
-    value_ru: 0,
-  });
-
-  const getUserBalance = useCallback(async () => {
-    const balance_res = await api.getUserBalance();
-    setBalance(balance_res);
-  }, []);
 
   const getUserData = useCallback(async () => {
     const userData = await api.getProfileData();
     setUser(userData);
-  }, []);
-
-  const getUserCards = useCallback(async () => {
-    const res = await api.getUserCards();
-    setCards(res.cards);
   }, []);
 
   const checkAuthState = useCallback(async () => {
@@ -110,8 +89,6 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         return;
       }
       await getUserData();
-      await getUserBalance();
-      await getUserCards();
 
       authDispatch({ type: AuthActionType.setReady });
       app.isFirebaseAuthorized = AppServiceStatus.on;
@@ -119,7 +96,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       app.logout()
       handleCatchError(error, 'checkAuthState');
     }
-  }, [authDispatch, getUserBalance, getUserCards, getUserData]);
+  }, [authDispatch, getUserData]);
 
   useEffect(() => {
     checkAuthState();
@@ -136,9 +113,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
           [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
         ]);
         await getUserData();
-        await getUserBalance();
-        await getUserCards();
-        
+
         authDispatch({ type: AuthActionType.setReady });
         app.isFirebaseAuthorized = AppServiceStatus.on;
       } catch (error) {
@@ -146,14 +121,12 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
         throw error;
       }
     },
-    [authDispatch, getUserBalance, getUserCards, getUserData],
+    [authDispatch, getUserData],
   );
 
   const onLogout = useCallback(() => {
     app.logout();
     setUser(null);
-    setBalance({ value_by: 0, value_ru: 0 })
-    setCards([]);
     if (navigationRef.getCurrentRoute()?.name !== 'login') {
       vibrate(HapticFeedbackTypes.notificationSuccess);
       navigationRef.reset({
@@ -162,16 +135,6 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       });
     }
   }, []);
-
-  const updateUser = useCallback(async (updatedData: ChangeUserFieldsReq) => {
-    try {
-      await api.updateUserProfile(updatedData);
-      await getUserData()
-    } catch (error) {
-      console.error('Ошибка обновления данных пользователя:', error);
-      throw error;
-    }
-  }, [getUserData]);
 
   useEffect(() => {
     if (authState === AuthState.ready) {
@@ -197,12 +160,9 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     <AuthContext.Provider
       value={{
         authState,
-        balance,
-        cards,
-        getUserBalance,
+        getUserData,
         onLogout,
         onSignIn,
-        updateUser,
         user,
       }}
     >

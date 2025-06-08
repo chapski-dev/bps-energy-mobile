@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
 import VisaIcon from '@assets/svg/brand/visa.svg';
 import CaretRightIcon from '@assets/svg/caret-right.svg';
@@ -20,7 +20,10 @@ import { modal } from '@src/ui/Layouts/ModalLayout';
 
 import { DeleteAccountModal } from './DeleteAccountModal';
 
-export type CardModalMode = 'account-deletion' | 'card-selection' | 'saved-cards';
+export type CardModalMode =
+  | 'account-deletion'
+  | 'card-selection'
+  | 'saved-cards';
 
 type Card = {
   id: number;
@@ -37,18 +40,14 @@ type UserCardsModalProps = Omit<BottomSheetModalProps, 'children'> & {
 };
 
 const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
-  ({
-    mode,
-    modalClose,
-    onCardSelect,
-    onAddCard,
-    selectedCardId,
-    ...props
-  }, ref) => {
+  (
+    { mode, modalClose, onCardSelect, onAddCard, selectedCardId, ...props },
+    ref,
+  ) => {
     const { colors, insets } = useAppTheme();
-    const { cards, balance } = useAuth();
+    const { user } = useAuth();
     const { t } = useLocalization();
-    
+
     // Модальные тексты для разных режимов
     const getModalConfig = () => {
       switch (mode) {
@@ -56,78 +55,106 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           return {
             continueButtonText: 'Продолжить',
             hasAddCard: false,
+            otherMethodsReplenishment: false,
             showContinueButton: true,
-            subtitle: `На какую карту выполнить возврат ${balance.value_by} BYN с текущего баланса?`,
-            title: 'Удаление аккаунта'
+            subtitle: (
+              <>
+                <Text
+                  colorName="grey_700"
+                  variant="p2"
+                  children="На какую карту выполнить возврат "
+                />
+                <Text
+                  colorName="grey_800"
+                  variant='p2-semibold'
+                  children={`${user?.wallets[0].value} BYN`}
+                />
+                <Text
+                  colorName="grey_700"
+                  variant="p2"
+                  children=" с текущего баланса?"
+                />
+              </>
+            ),
+            title: 'Удаление аккаунта',
           };
         case 'card-selection':
           return {
             continueButtonText: null,
             hasAddCard: true,
+            otherMethodsReplenishment: true,
             showContinueButton: false,
             subtitle: null,
-            title: 'Выберите карту'
+            title: 'Выберите метод оплаты',
           };
         case 'saved-cards':
           return {
             continueButtonText: null,
             hasAddCard: false,
+            otherMethodsReplenishment: false,
             showContinueButton: false,
             subtitle: null,
-            title: 'Сохранённые карты'
+            title: 'Сохранённые карты',
           };
         default:
           return {
             continueButtonText: null,
             hasAddCard: false,
+            otherMethodsReplenishment: false,
             showContinueButton: false,
             subtitle: null,
-            title: ''
+            title: '',
           };
       }
     };
 
     const config = getModalConfig();
 
-    const handleCardPress = useCallback((card: Card) => {
-      switch (mode) {
-        case 'account-deletion':
-          // В режиме удаления аккаунта - просто выделяем карту
-          if (onCardSelect) {
-            onCardSelect(card);
-          }
-          break;
-        case 'card-selection':
-          // В режиме выбора карты - выбираем и закрываем модалку
-          if (onCardSelect) {
-            onCardSelect(card);
-          }
-          modalClose();
-          break;
-        case 'saved-cards':
-          // В режиме сохраненных карт - карты не выбираются
-          break;
-      }
-    }, [mode, onCardSelect, modalClose]);
+    const handleCardPress = useCallback(
+      (card: Card) => {
+        switch (mode) {
+          case 'account-deletion':
+            // В режиме удаления аккаунта - просто выделяем карту
+            if (onCardSelect) {
+              onCardSelect(card);
+            }
+            break;
+          case 'card-selection':
+            // В режиме выбора карты - выбираем и закрываем модалку
+            if (onCardSelect) {
+              onCardSelect(card);
+            }
+            modalClose();
+            break;
+          case 'saved-cards':
+            // В режиме сохраненных карт - карты не выбираются
+            break;
+        }
+      },
+      [mode, onCardSelect, modalClose],
+    );
 
-    const handleDeleteCard = useCallback((cardId: number) => {
-      Alert.alert(
-        'Вы точно хотите удалить карту?',
-        'Карта будет удалена из вашего аккаунта. Это действие нельзя отменить.',
-        [
-          {
-            onPress: () => null,
-            text: t('cancel'),
-          },
-          {
-            // TODO: добавить колбек на удаление карты
-            onPress: () => null, // будут добавлены запросы на удаление карты и на получение данных юзера с целью обновить стейт.
-            style: 'destructive',
-            text: t('delete'),
-          },
-        ],
-      );
-    }, [t]);
+    const handleDeleteCard = useCallback(
+      (cardId: number) => {
+        Alert.alert(
+          'Вы точно хотите удалить карту?',
+          'Карта будет удалена из вашего аккаунта. Это действие нельзя отменить.',
+          [
+            {
+              onPress: () => null,
+              text: t('cancel'),
+            },
+            {
+              // TODO: добавить колбек на удаление карты
+              onPress: () => null, // будут добавлены запросы на удаление карты и на получение данных юзера с целью обновить стейт.
+              style: 'destructive',
+              text: t('delete'),
+            },
+          ],
+        );
+      },
+      [t],
+    );
 
     const handleAddCard = useCallback(() => {
       if (onAddCard) {
@@ -148,12 +175,11 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       // Логика продолжения для удаления аккаунта
       if (mode === 'account-deletion') {
         modalClose();
-        onFinalyDeleteAccountPress()
+        onFinalyDeleteAccountPress();
       }
     }, [mode, modalClose, onFinalyDeleteAccountPress]);
 
     const renderCardItem = ({ item: card }: { item: Card }) => {
-      
       const isSelected = selectedCardId === card.id;
       const showSelection = mode === 'account-deletion';
       const showDelete = mode === 'saved-cards';
@@ -186,9 +212,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
               />
             </Box>
 
-            {showSelection && isSelected && (
-              <CheckIcon color={colors.main} />
-            )}
+            {showSelection && isSelected && <CheckIcon color={colors.main} />}
 
             {showDelete && (
               <TouchableOpacity onPress={() => handleDeleteCard(card.id)}>
@@ -204,7 +228,9 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       );
     };
 
-    const renderAddCardItem = () => (
+    const renderAdditionalCardItem = (
+      variant: 'other-methods' | 'add-card',
+    ) => (
       <Box
         borderColor={colors.grey_100}
         borderBottomWidth={1}
@@ -234,7 +260,21 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       </Box>
     );
 
-    const listData = config.hasAddCard ? [...cards, { id: 'add-card', isAddCard: true }] : cards;
+    const listData = useMemo(() => {
+      const cards = [...user?.cards];
+
+      switch (true) {
+        case config.hasAddCard:
+          cards.push({ id: 'add-card', isAddCard: true });
+          break;
+        case config.otherMethodsReplenishment:
+          cards.push({ id: 'other-methods', isOtherMethods: true });
+          break;
+        default:
+          break;
+      }
+      return cards;
+    }, [config.hasAddCard, config.otherMethodsReplenishment, user?.cards]);
 
     return (
       <BottomSlideModal
@@ -250,7 +290,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
             flex: 1,
             gap: 32,
             maxHeight: 350,
-            paddingBottom: insets.bottom + 15
+            paddingBottom: insets.bottom + 15,
           }}
         >
           {/* Header */}
@@ -259,10 +299,8 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
             {config.subtitle && (
               <Text
                 children={config.subtitle}
-                variant="p2"
                 center
                 px={30}
-                color={colors.grey_600}
                 mt={8}
               />
             )}
@@ -274,8 +312,8 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
             data={listData}
             keyExtractor={(_, i) => i.toString()}
             renderItem={({ item }) => {
-              if (item.isAddCard) {
-                return renderAddCardItem();
+              if (item.isAddCard || item.isOtherMethods) {
+                return renderAdditionalCardItem(item.id);
               }
               return renderCardItem({ item });
             }}

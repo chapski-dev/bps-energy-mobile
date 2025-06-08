@@ -9,13 +9,13 @@ function AddingCardAndPaymentScreen({
   navigation,
   route,
 }: ScreenProps<'adding-card-and-payment'>) {
-  const { getUserBalance, } = useAuth();
+  const { getUserData, } = useAuth();
   const { toastError, toastSuccess } = useThemedToasts();
 
   const handleNavigationChange = async (navState: any) => {
     const { url } = navState;
     if (url.startsWith('https://api.test-bpsenergy.net.by/bepaid/success')) {
-      await getUserBalance()
+      await getUserData()
       toastSuccess('Баланс пополнен!')
       navigation.popToTop();
     } else if (url.startsWith('https://api.test-bpsenergy.net.by/bepaid/failed')) {

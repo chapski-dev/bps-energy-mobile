@@ -7,7 +7,12 @@ export type SignInResponse = {
   refresh_expires_in: number;
 };
 
-export type RegistrationReq = { email: string; password: string; phone?: string; agree: boolean };
+export type RegistrationReq = {
+  email: string;
+  password: string;
+  phone?: string;
+  agree: boolean;
+};
 
 export type RegistrationResponse = {
   access_token: string;
@@ -15,7 +20,6 @@ export type RegistrationResponse = {
   refresh_token: string;
   refresh_expires_in: number;
 };
-
 
 export type NotificationSettings = {
   settings: {
@@ -36,20 +40,27 @@ export type NotificationDetails = {
 
 //* Profile
 export type Profile = {
-  email: string,
-  id: number,
-  name: string,
-  phone_by: string,
-  phone_ru: string,
-  registration_date: string
-}
+  cards: Card[];
+  email: string;
+  id: number;
+  name: string;
+  phone: string;
+  registration_date: string;
+  wallets: Wallet[];
+};
 
-export type UserBalance = {
-  value_by: number;
-  value_ru: number ;
-}
+export type Wallet = {
+  currency: 'BYN' | 'RUB';
+  value: number;
+};
+
+export type Card = {
+  id: number;
+  type: 'visa' | 'mastercard' | 'belcard' | 'maestro' | 'mir';
+  mask: string; // последние 4 цифры
+};
 
 export type ChangeUserFieldsReq = {
-  field: 'Name' | 'PhoneBY' | 'PhoneRU';
-  value: string;
-}
+  name: string;
+  phone: string;
+};

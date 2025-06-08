@@ -6,7 +6,7 @@
   "add": "Добавить",
   "map": "Карта",
   "user_agreement_checkbox": "<agree><0>Ознакомлен и согласен с </0></agree><user_agreement><0>Пользовательским соглашением</0></user_agreement> и <privacy_policy><0>Политикой конфеденциальности</0></privacy_policy>",
-  "pay-by-card": "Оплатить картой",
+  "to-pay": "Оплатить",
   "charging-session": "Сессия зарядки",
   "forgot-password": "Забыли пароль",
   "continue_in_language": "Продолжить на {{language}}",

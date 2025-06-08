@@ -84,7 +84,7 @@ export const postCreateTransaction = (body: { amount: number }) =>
  * Проведение платежа с карты пользователя
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%BE%D0%BC/post_mobile_make_payment
  */
-export const postTopUpBalance = (body: { amount: number; card: string }) =>
+export const postTopUpBalance = (body: { amount: number; card_id: number }) =>
   api
     .post<{ url: string }>('/mobile/make-payment', body)
     .then((res) => res.data);
@@ -101,30 +101,14 @@ export const postResendOtp = (body: { email: string }) =>
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/get_mobile_user_data
  */
 export const getProfileData = () =>
-  api.get<Profile>('/mobile/user-data').then((res) => res.data);
-
-/**
- * Получение баланса пользователя в разных валютах
- * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%BE%D0%BC/get_mobile_user_wallet
- */
-export const getUserBalance = () =>
-  api
-    .get<{ value_by: 0; value_ru: 0 }>('/mobile/user-wallet')
-    .then((res) => res.data);
-
-/**
- * Получение списка привязанных карт пользователя
- * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%BE%D0%BC/get_mobile_user_cards
- */
-export const getUserCards = () =>
-  api.get<{ cards: [string] }>('/mobile/user-cards').then((res) => res.data);
+  api.get<Profile>('/mobile/user').then((res) => res.data);
 
 /**
  * Изменение одного из полей пользователя для мобильного клиента
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_change_field
  */
 export const updateUserProfile = (data: ChangeUserFieldsReq) =>
-  api.post<object>('/mobile/change-field', data).then((res) => res.data);
+  api.patch<object>('/mobile/change-field', data).then((res) => res.data);
 
 /**
  * Retrieves the current notification settings for the authenticated user

@@ -7,13 +7,14 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import BepaidIcon from '@assets/svg/brand/bepaid.svg';
-import CreditIcon from '@assets/svg/credit-card.svg';
 import BelarusIcon from '@assets/svg/flags/Belarus.svg';
 import RussiaIcon from '@assets/svg/flags/Russia.svg';
 import LogoIcon from '@assets/svg/logo.svg';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { postCreateTransaction, postTopUpBalance } from '@src/api';
+import { Card } from '@src/api/types';
+import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -29,9 +30,9 @@ const TopUpAccountScreen = ({
   navigation,
   route,
 }: ScreenProps<'top-up-account'>) => {
-  const { insets, colors } = useAppTheme();
-  const { cards } = useAuth();
-
+  const { insets } = useAppTheme();
+  const { user, getUserData } = useAuth();
+  const { toastSuccess } = useThemedToasts();
   const { t } = useLocalization();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
@@ -54,7 +55,7 @@ const TopUpAccountScreen = ({
   };
 
   const submitPay = () => {
-    if (cards.length) {
+    if (user?.cards.length) {
       modalCardsOpen();
     } else {
       proceedTransaction();
@@ -72,10 +73,14 @@ const TopUpAccountScreen = ({
     navigation.navigate('tabs');
   };
 
-  const handlePayViaExistCard = async (data: { card: string }) => {
+  const handlePayViaExistCard = async (card: Card) => {
     try {
       setLoading(true);
-      await postTopUpBalance({ amount: Number(amount), card: cards[0] });
+      await postTopUpBalance({ amount: Number(amount), card_id: card.id });
+      await getUserData()
+      navigation.goBack();
+      setAmount('');
+      toastSuccess('Баланс пополнен!')
     } catch (error) {
       handleCatchError(error, 'TopUpAccountScreen');
     } finally {
@@ -117,9 +122,8 @@ const TopUpAccountScreen = ({
             <Button
               disabled={!Number(amount) || loading}
               loading={loading}
-              children={t('pay-by-card')}
+              children={t('to-pay')}
               onPress={() => submitPay()}
-              icon={<CreditIcon color={colors.background} />}
             />
           </Box>
         </Box>
