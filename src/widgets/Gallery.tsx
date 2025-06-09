@@ -3,7 +3,6 @@ import {
   Modal,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
 import { FlatList, Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
@@ -50,15 +49,15 @@ export const Gallery: React.FC<GalleryProps> = ({ images }) => {
       {images.length > 1 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageGallery}>
           {images.map((image, index) => (
-            <TouchableOpacity key={index} onPress={() => openFullScreenImage(index)}>
+            <Box key={index} onPress={() => openFullScreenImage(index)}>
               <ImageProgress uri={image} style={styles.image} resizeMode="cover" />
-            </TouchableOpacity>
+            </Box>
           ))}
         </ScrollView>
       ) : (
-        <TouchableOpacity onPress={() => openFullScreenImage(0)}>
+        <Box onPress={() => openFullScreenImage(0)}>
           <ImageProgress uri={images[0]} style={{ ...styles.image, width: '100%' }} resizeMode="cover" />
-        </TouchableOpacity>
+        </Box>
       )}
       <Modal animationType="fade" transparent visible={modalVisible} onRequestClose={closeModal}>
         <FullScreenImageViewer
@@ -356,9 +355,9 @@ const ThumbnailItem: React.FC<ThumbnailItemProps> = ({ uri, index, currentIndex,
   }));
 
   return (
-    <TouchableOpacity onPress={() => onPress(index)}>
+    <Box onPress={() => onPress(index)}>
       <ImageProgress uri={uri} style={[styles.thumbnail, animatedStyle]} animated />
-    </TouchableOpacity>
+    </Box>
   );
 };
 
