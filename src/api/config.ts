@@ -68,6 +68,7 @@ instance.interceptors.request.use(async (config) => {
   if (token && !config.headers.Authorization) {
     config.headers.Authorization = `${token}`;
   }
+  console.log(`[Request Logger] ${config.method?.toUpperCase()} request to ${config.url}`);
   return config;
 });
 
