@@ -97,7 +97,7 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
           }}
         />
       </ScrollView>
-      <Box px={16} pb={insets.bottom || 20} gap={12}>
+      <Box px={16} pb={insets.bottom + 35} gap={12}>
         <Button children="Дать обратную связь" type="outline" />
         <Button children="3.7 км, ~14 мин" />
       </Box>

@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
+import { Card } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -55,6 +56,10 @@ export const ProfileDetailsScreen = ({
   const modalCardsClose = () => modalCards?.current?.forceClose();
   const modalCardsOpen = () => modalCards?.current?.present();
 
+  const [cardId, setCardId] = useState<number>()
+  const onCardSelect = (val: Card) => {
+    setCardId(val.id)
+  }
   return (
     <>
       <ScrollView
@@ -93,9 +98,9 @@ export const ProfileDetailsScreen = ({
             onPress={() => openChangeUserFilelds('phone')}
             title="Добавить номер телефона"
             children={
-              user?.phone_by ? (
+              user?.phone ? (
                 <Box>
-                  <Text variant="p2-semibold" children={user?.phone_by} />
+                  <Text variant="p2-semibold" children={user?.phone} />
                   <Text
                     variant="p3"
                     colorName="grey_600"
@@ -133,6 +138,8 @@ export const ProfileDetailsScreen = ({
         mode="account-deletion"
         ref={modalCards}
         modalClose={modalCardsClose}
+        onCardSelect={onCardSelect}
+        selectedCardId={cardId}
       />
     </>
   );

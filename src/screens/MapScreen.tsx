@@ -106,7 +106,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 
 const UserBalance = () => {
   const { insets, colors } = useAppTheme();
-  const { authState, balance } = useAuth();
+  const { authState, user } = useAuth();
   const navigation = useNavigation()
 
   return authState === AuthState.ready ? (
@@ -127,7 +127,7 @@ const UserBalance = () => {
       <>
         <Text children="Текущий баланс" fontSize={13} colorName="grey_600" />
         <Box row gap={4} alignItems="center" justifyContent="center">
-          <Text children={`${balance.value_by} BYN`} fontWeight="600" fontSize={20} />
+          <Text children={`${user?.wallets[0].value} BYN`} fontWeight="600" fontSize={20} />
           <PlusCircleFillIcon color={colors.main} width={20} height={20} />
         </Box>
       </>

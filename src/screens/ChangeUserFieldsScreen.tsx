@@ -3,6 +3,7 @@ import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { Alert, Keyboard } from 'react-native';
 import UserIcon from '@assets/svg/user.svg';
 
+import { updateUserProfile } from '@src/api';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -27,26 +28,24 @@ function ChangeUserFieldsScreen({
   const { insets, colors } = useAppTheme();
   const { t } = useLocalization();
   const { toastSuccess } = useThemedToasts();
-  const { updateUser } = useAuth();
+  const { getUserData } = useAuth();
 
   const isNameField = route.params.filed === 'name';
 
   const form = useForm<FormValues>({
-    defaultValues: { name: user?.name, phone: user?.phone_by },
+    defaultValues: { name: user?.name, phone: user?.phone },
     mode: 'all',
   });
 
-  const { control, handleSubmit, formState, setValue } = form;
+  const { control, handleSubmit, formState } = form;
 
   const [loading, setLoading] = useState(false);
 
   const handleUpdateData = async (data: FormValues) => {
     try {
       setLoading(true);
-      await updateUser({
-        field: route.params.filed,
-        value: data.value,
-      });
+      await updateUserProfile(data)
+      await getUserData()
       toastSuccess(isNameField ? 'Имя обновлено!' : 'Телефон обновлен!');
       navigation.goBack();
     } catch (error) {
@@ -109,7 +108,7 @@ function ChangeUserFieldsScreen({
             ) : (
               <Box gap={56}>
                 <PhoneInput />
-                {user?.phone_by && (
+                {user?.phone && (
                   <Button
                     type="clear"
                     children="Удалить номер"

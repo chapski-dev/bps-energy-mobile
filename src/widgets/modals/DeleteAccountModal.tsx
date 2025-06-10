@@ -22,23 +22,23 @@ export const DeleteAccountModal = () => {
     <Box borderRadius={16} backgroundColor={colors.background} p={16} gap={16}>
       <Box gap={8}>
         <Text variant="p1-semibold" children="Удалить аккаунт?" mb={2} />
+        <Text children="Последствия:" variant="p4-semibold" />
         <Text
           variant="p4"
-          children="После удалении аккаунта вы не сможете запускать зарядные сессии и все ваши пользовательские данные будут удалены."
+          children="- Вы не сможете запускать зарядные сессии.
+- Все ваши пользовательские данные будут удалены.
+- История зарядок и пополнений пропадет.
+- Привязанные карты открепяться.
+- Средства с текущего баланса будут возвращены на выбранную карту в течении пяти банковских дней."
           colorName="grey_700"
         />
-        <Text
-          colorName="grey_700"
-          variant="p4"
-          children="Ваши средства будут возвращены на выбранную карту в течении пяти банковских дней."
-        />
-        <Text children="Это действие нельзя отменить." variant="p4" />
+        <Text children="Это действие нельзя отменить." variant="p4-semibold" />
       </Box>
       <Button
-        type="outline"
         onPress={handleRemoveAccount}
         children={'Удалить аккаунт'}
         textColor="red_500"
+        backgroundColor="red_500_15"
       />
       <Button onPress={closeModal} children={t('cancel')} />
     </Box>
