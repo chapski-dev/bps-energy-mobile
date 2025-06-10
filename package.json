@@ -38,6 +38,7 @@
     "react-hook-form": "^7.56.3",
     "react-i18next": "^15.5.1",
     "react-native": "0.75.5",
+    "react-native-awesome-gallery": "^0.4.3",
     "react-native-awesome-slider": "^2.9.0",
     "react-native-bootsplash": "^6.3.8",
     "react-native-config": "^1.5.5",
