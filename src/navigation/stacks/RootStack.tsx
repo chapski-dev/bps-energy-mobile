@@ -6,12 +6,14 @@ import { AuthState, useAuth } from '@src/providers/auth';
 import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
 import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
 import ChangeUserFieldsScreen from '@src/screens/ChangeUserFieldsScreen';
+import ChargingHistoryScreen from '@src/screens/ChargingHistoryScreen';
 import CharginStationScreen from '@src/screens/CharginStationScreen';
 import FiltersOfStations from '@src/screens/FiltersOfStations';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
 import LoginScreen from '@src/screens/LoginScreen';
 import OtpVerifyScreen from '@src/screens/OtpVerifyScreen';
 import { ProfileDetailsScreen } from '@src/screens/ProfileDetailsScreen';
+import RechargeHistoryScreen from '@src/screens/RechargeHistory';
 import RegistrationScreen from '@src/screens/RegistrationScreen';
 import SetNewPasswordScreen from '@src/screens/SetNewPasswordScreen';
 import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
@@ -106,6 +108,16 @@ export const RootStack = () => {
             options={{ title: 'Изменить пароль' }}
             name='change-password'
             component={ChangePasswordScreen}
+          />
+          <Stack.Screen
+            options={{ title: 'История зарядок' }}
+            name='charging-history'
+            component={ChargingHistoryScreen}
+          />
+          <Stack.Screen
+            options={{ title: 'История пополнений' }}
+            name='recharge-history'
+            component={RechargeHistoryScreen}
           />
 
         </Stack.Group>

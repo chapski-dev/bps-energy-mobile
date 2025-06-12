@@ -19,6 +19,9 @@ export type RootStackParamList = {
   'set-new-password': { email: string; otp: string };
   'change-password': undefined;
   'change-user-fields': { filed: 'name' | 'phone' };
+  'charging-history': undefined;
+  'charging-details': undefined;
+  'recharge-history': undefined;
 };
 
 export type TabsParamList = {

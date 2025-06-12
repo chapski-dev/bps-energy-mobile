@@ -79,12 +79,12 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
 
         <SectionListItemWithArrow
           title={'История зарядок'}
-          onPress={() => null}
+          onPress={() => navigation.navigate('charging-history')}
         />
 
         <SectionListItemWithArrow
           title={'История пополнений'}
-          onPress={() => null}
+          onPress={() => navigation.navigate('recharge-history')}
         />
 
         <SectionListItemWithArrow
