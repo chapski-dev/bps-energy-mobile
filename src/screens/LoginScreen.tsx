@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Vibration } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
@@ -11,7 +12,6 @@ import { SignInReq } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input, Text } from '@src/ui';
 import { InputProps } from '@src/ui/Input';
 import { wait } from '@src/utils';
@@ -21,7 +21,7 @@ import { validator } from '@src/utils/validations';
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
   const { insets, colors } = useAppTheme();
-  const { t } = useLocalization()
+  const { t } = useTranslation()
   const { onSignIn } = useAuth();
   const { control, handleSubmit } = useForm<SignInReq>({
     defaultValues: {
@@ -128,7 +128,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
           </Box>
 
           <Button
-            children={t('enter')}
+            children={t('to-login')}
             onPress={handleSubmit(handleLogIn)}
             loading={loading}
             disabled={loading}
@@ -142,7 +142,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
 
         <Button
           type="clear"
-          children={t('skip')}
+          children={t('to-skip')}
           onPress={handleSkip}
         />
       </Box>

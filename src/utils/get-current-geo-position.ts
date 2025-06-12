@@ -1,7 +1,7 @@
 import { Point } from 'react-native-yamap';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 
-import i18n from '@src/translations/i18n';
+import i18n from '@src/i18n/config';
 
 
 
@@ -24,7 +24,7 @@ export const getHighAccuracyPosition = async (
     Geolocation.getCurrentPosition(
       (position: GeolocationResponse) => {
         if (position.coords.accuracy > 100) {
-          reject(new Error(i18n.t('errors.low_location_accuracy')));
+          reject(new Error(i18n.t('errors:low-location-accuracy')));
           return;
         }
 

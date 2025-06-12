@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Keyboard } from 'react-native';
 import LockIcon from '@assets/svg/lock.svg';
 
@@ -8,7 +9,6 @@ import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input } from '@src/ui';
 import { InputProps } from '@src/ui/Input';
 import { FakeView } from '@src/ui/Layouts/FakeView';
@@ -21,7 +21,7 @@ function ChangePasswordScreen({
   route,
 }: ScreenProps<'change-password'>) {
   const { insets, colors } = useAppTheme();
-  const { t } = useLocalization();
+  const { t } = useTranslation();
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { new_password: '', old_password: '' },
     mode: 'all',
@@ -136,7 +136,7 @@ function ChangePasswordScreen({
       </Box>
 
       <Button
-        children={t('save')}
+        children={t('to-save')}
         onPress={handleSubmit(handleUpdatePassword)}
         disabled={loading || !formState.isValid}
         loading={loading}

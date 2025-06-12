@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react'
+import { useTranslation } from 'react-i18next';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -6,13 +7,12 @@ import {
   BottomSheetView
 } from '@gorhom/bottom-sheet';
 
-import { useAppTheme } from '@src/theme/theme';
 import {
   AppLangEnum,
   LANGUAGE_LIST,
   saveLanguageAsyncStorage,
-  useLocalization
-} from '@src/translations/i18n';
+} from '@src/i18n/config';
+import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 
 type SelectLanguageModalProps = Omit<BottomSheetModalProps, 'children'> & {
@@ -24,7 +24,7 @@ const SelectLanguageModal = forwardRef<BottomSheetModal, SelectLanguageModalProp
   { modalClose }
   , ref) => {
   const { colors, insets } = useAppTheme();
-  const { t, i18n } = useLocalization();
+  const { t, i18n } = useTranslation();
 
   const handleChangeLanguage = (value: AppLangEnum) => async () => {
     await i18n.changeLanguage(value);

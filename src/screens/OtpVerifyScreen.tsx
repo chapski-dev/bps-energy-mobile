@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, AppState, AppStateStatus, Keyboard, Vibration } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
@@ -8,7 +9,6 @@ import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
 import { handleCatchError } from '@src/utils/handleCatchError';
@@ -19,7 +19,7 @@ const COUNTDOWN_SECONDS = 60;
 
 const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
   const { colors, insets } = useAppTheme();
-  const { t } = useLocalization();
+  const { t } = useTranslation('common');
   const { toastSuccess } = useThemedToasts();
 
   const otpInput = useRef<OtpInputRef>(null);
@@ -150,11 +150,11 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
         gap={56}
       >
         <Box gap={8} alignItems="center">
-          <Text variant="h4" children={t('confirm_the_email')} />
+          <Text variant="h4" children={t('confirm-the-email')} />
           <Box row flexWrap="wrap" justifyContent="center">
-            <Text variant="p2" children={t('we_sent_it_to_a_number')} colorName='grey_600' />
+            <Text variant="p2" children={t('we-sent-it-to-a-number')} colorName='grey_600' />
             <Text variant="p2" children={route.params?.email} />
-            <Text variant="p2" children={t('confirmation_code_enter_it_below')} colorName='grey_600' />
+            <Text variant="p2" children={t('confirmation-code-enter-it-below')} colorName='grey_600' />
           </Box>
         </Box>
         {loading ? (

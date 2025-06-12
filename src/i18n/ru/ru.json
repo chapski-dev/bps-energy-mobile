@@ -1,0 +1,12 @@
+{
+  "confirm-the-email": "Подтвердите E-mail",
+  "we-sent-it-to-a-number": "Мы отправили на номер ",
+  "confirmation-code-enter-it-below": " код для подтверждения. Введите его ниже",
+  "do-you-want-to-delete-your-account?": "Желаете удалить аккаунт?",
+  "do-you-want-to-logout?": "Желаете выйти?",
+  "charging-session": "Сессия зарядки",
+  "forgot-password": "Забыли пароль",
+  "apps-language": "Язык приложения",
+  "the-session-has-timed-out-please-log-in": "Время сессии истекло. Пожалуйста авторизуйтесь.",
+  "user-agreement-checkbox": "<agree><0>Ознакомлен и согласен с </0></agree><user_agreement><0>Пользовательским соглашением</0></user_agreement> и <privacy_policy><0>Политикой конфеденциальности</0></privacy_policy>"
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Keyboard } from 'react-native';
 import LockIcon from '@assets/svg/lock.svg';
 
@@ -8,7 +9,6 @@ import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
 import { Gap } from '@src/ui/Layouts/Gap';
@@ -18,7 +18,7 @@ import { validator } from '@src/utils/validations';
 
 const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-password'>) => {
   const { insets, colors } = useAppTheme();
-  const { t } = useLocalization()
+  const { t } = useTranslation()
   const { onSignIn } = useAuth();
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { password: '' },
@@ -75,7 +75,7 @@ const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-passwo
       </Box>
 
       <Button
-        children={t('save')}
+        children={t('to-save')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
         disabled={loading || !formState.isValid}
         loading={loading}

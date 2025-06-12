@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
@@ -6,7 +7,6 @@ import { Card } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import UserCardsModal from '@src/widgets/modals/UserCardsModal';
@@ -18,7 +18,7 @@ export enum NotifictationOption {
 export const ProfileDetailsScreen = ({
   navigation,
 }: ScreenProps<'profile-details'>) => {
-  const { t } = useLocalization();
+  const { t } = useTranslation();
   const { onLogout, user } = useAuth();
   const { insets } = useAppTheme();
 
@@ -29,12 +29,12 @@ export const ProfileDetailsScreen = ({
     Alert.alert(t('do-you-want-to-logout?'), undefined, [
       {
         onPress: () => null,
-        text: t('cancel'),
+        text: t('to-cancel'),
       },
       {
         onPress: onLogout,
         style: 'destructive',
-        text: t('exit'),
+        text: t('to-log-out'),
       },
     ]);
 
@@ -42,12 +42,12 @@ export const ProfileDetailsScreen = ({
     Alert.alert(t('do-you-want-to-delete-your-account?'), undefined, [
       {
         onPress: () => null,
-        text: t('cancel'),
+        text: t('to-cancel'),
       },
       {
         onPress: modalCardsOpen,
         style: 'destructive',
-        text: t('delete'),
+        text: t('to-delete'),
       },
     ]);
 
@@ -129,7 +129,7 @@ export const ProfileDetailsScreen = ({
           <Button
             type="clear"
             textColor="red_500"
-            children={t('delete-account')}
+            children={t('to-delete-account')}
             onPress={onDeleteAccountPress}
           />
         </Box>

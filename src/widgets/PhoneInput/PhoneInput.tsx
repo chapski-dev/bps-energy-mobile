@@ -1,5 +1,6 @@
 import React, { FC, memo, useCallback, useRef, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { FlatList, Keyboard, LayoutAnimation } from 'react-native'
 import SearchIcon from '@assets/svg/phone.svg'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -8,7 +9,6 @@ import examples from 'libphonenumber-js/examples.mobile.json'
 import { AsYouType, parsePhoneNumberWithError } from 'libphonenumber-js/max'
 
 import { useAppTheme } from '@src/theme/theme'
-import { useLocalization } from '@src/translations/i18n'
 import { BottomSlideModal, Box, Input, Text } from '@src/ui'
 import { InputProps } from '@src/ui/Input'
 import { animate } from '@src/utils/animate'
@@ -155,7 +155,8 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
 const CountryItem = memo(
   ({ item, handleSelectCountry }: { item: CountryCode; handleSelectCountry: (country: CountryCode) => () => void }) => {
     const { colors } = useAppTheme()
-    const { t } = useLocalization();
+    const { t } = useTranslation('countries');
+
 
     return countryName(item) && (
       <Box alignItems='center' row gap={15} key={item} onPress={handleSelectCountry(item)}>
@@ -164,7 +165,7 @@ const CountryItem = memo(
         </Box>
         <Box gap={5} row w='full' flex={1}>
           <Text children={`(+${countryCallingCode(item)})`} />
-          <Text style={{ flexShrink: 1 }} children={t(`countries.${countryName(item)}`)} />
+          <Text style={{ flexShrink: 1 }} children={t(countryName(item))} />
         </Box>
       </Box>
     )

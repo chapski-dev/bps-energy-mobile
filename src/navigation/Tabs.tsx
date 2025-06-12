@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { GestureResponderEvent, Pressable } from 'react-native';
 import BPSIcon from '@assets/svg/BPS.svg';
 import MapPinIcon from '@assets/svg/map-pin.svg';
@@ -12,7 +13,6 @@ import ChargingScreen, { setCodeScanedRef } from '@src/screens/ChargingScreen';
 import MapScreen from '@src/screens/MapScreen';
 import { ProfileScreen } from '@src/screens/ProfileScreen';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box } from '@src/ui';
 
 import { withProtectedScreen } from './guards/withProtectedScreen';
@@ -21,7 +21,7 @@ import { TabsParamList } from './types';
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export const Tabs = () => {
-  const { t } = useLocalization();
+  const { t } = useTranslation();
   const { colors } = useAppTheme();
 
   return (

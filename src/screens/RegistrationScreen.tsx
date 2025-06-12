@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
@@ -13,7 +13,6 @@ import { RegistrationReq } from '@src/api/types';
 import { OFFERS, PRIVACY_POLICY } from '@src/misc/documents';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Checkbox, Input, Text } from '@src/ui';
 import { InputProps } from '@src/ui/Input';
 import { handleCatchError } from '@src/utils/handleCatchError';
@@ -22,7 +21,7 @@ import { validator } from '@src/utils/validations';
 
 const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
   const { insets, colors } = useAppTheme();
-  const { t, i18n: { language }, } = useLocalization()
+  const { t, i18n: { language }, } = useTranslation()
   const { control, handleSubmit, formState } = useForm<RegistrationReq>({
     defaultValues: {
       agree: false,
@@ -154,7 +153,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
             onPress={() => onChange(!value)}
             children={(
               <Trans
-                i18nKey="user_agreement_checkbox"
+                i18nKey="user-agreement-checkbox"
                 components={{
                   agree: <Text variant='p3' />,
                   privacy_policy: <Text variant='p3' onPress={openOffer} colorName='main' />,

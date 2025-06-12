@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { RootStack } from '@src/navigation/stacks/RootStack';
 import app from '@src/service/app';
 
-import '@src/translations/i18n';
+import '@src/i18n/config';
 
 import { useAppColorTheme } from './hooks/useAppColorTheme';
 import { navigationRef } from './navigation/navigationRef';

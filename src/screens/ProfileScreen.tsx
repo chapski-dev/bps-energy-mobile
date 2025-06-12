@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { handleCatchError } from '@src/utils/handleCatchError';
@@ -18,7 +18,7 @@ export enum NotifictationOption {
 }
 
 export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
-  const { t } = useLocalization();
+  const { t } = useTranslation();
 
   const openProfileData = () => navigation.navigate('profile-details');
   const [refreshing, setRefreshing] = useState(false);
@@ -103,7 +103,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         />
         <SectionListItemWithArrow title={'FAQ'} onPress={() => null} />
         <SectionListItemWithArrow
-          title={t('apps_language')}
+          title={t('apps-language')}
           onPress={modalOpen}
         />
       </ScrollView>

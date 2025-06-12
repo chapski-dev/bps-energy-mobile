@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { AuthState, useAuth } from '@src/providers/auth';
@@ -15,7 +16,6 @@ import RegistrationScreen from '@src/screens/RegistrationScreen';
 import SetNewPasswordScreen from '@src/screens/SetNewPasswordScreen';
 import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 
 import { Tabs } from '../Tabs';
 import { RootStackParamList } from '../types';
@@ -23,7 +23,7 @@ import { RootStackParamList } from '../types';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootStack = () => {
-  const { t } = useLocalization();
+  const { t } = useTranslation();
   const { colors } = useAppTheme();
   const { authState } = useAuth();
 

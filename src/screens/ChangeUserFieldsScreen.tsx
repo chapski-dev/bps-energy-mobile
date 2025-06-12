@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Alert, Keyboard } from 'react-native';
 import UserIcon from '@assets/svg/user.svg';
 
@@ -8,7 +9,6 @@ import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
 import { Gap } from '@src/ui/Layouts/Gap';
@@ -26,7 +26,7 @@ function ChangeUserFieldsScreen({
 }: ScreenProps<'change-user-fields'>) {
   const { user } = useAuth();
   const { insets, colors } = useAppTheme();
-  const { t } = useLocalization();
+  const { t } = useTranslation();
   const { toastSuccess } = useThemedToasts();
   const { getUserData } = useAuth();
 
@@ -59,7 +59,7 @@ function ChangeUserFieldsScreen({
     Alert.alert(t('do-you-want-to-logout?'), undefined, [
       {
         onPress: () => null,
-        text: t('cancel'),
+        text: t('to-cancel'),
       },
       {
         onPress: () => {
@@ -67,7 +67,7 @@ function ChangeUserFieldsScreen({
           handleUpdateData()
         },
         style: 'destructive',
-        text: t('exit'),
+        text: t('to-log-out'),
       },
     ]);
   };
@@ -121,7 +121,7 @@ function ChangeUserFieldsScreen({
           </Box>
         </Box>
         <Button
-          children={t('save')}
+          children={t('to-save')}
           onPress={handleSubmit(handleUpdateData)}
           disabled={loading || !formState.isValid}
           loading={loading}

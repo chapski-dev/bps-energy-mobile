@@ -1,4 +1,4 @@
-import { AppLangEnum } from '@src/translations/i18n';
+import { AppLangEnum } from '@src/i18n/config';
 
 export const OFFERS = {
   [AppLangEnum.EN]: 'https://www.google.pl/?hl=pl',

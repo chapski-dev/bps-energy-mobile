@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Keyboard } from 'react-native';
 
 import { postForgotPassword } from '@src/api';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
 import { Gap } from '@src/ui/Layouts/Gap';
@@ -15,7 +15,7 @@ import { validator } from '@src/utils/validations';
 
 const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) => {
   const { insets } = useAppTheme();
-  const { t } = useLocalization()
+  const { t } = useTranslation()
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { email: '' },
     mode: 'all',
@@ -69,7 +69,7 @@ const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) =>
       </Box>
 
       <Button
-        children={t('confirm')}
+        children={t('to-confirm')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
         loading={loading}
         disabled={loading || !formState.isValid }

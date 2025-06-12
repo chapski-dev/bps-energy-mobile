@@ -1,15 +1,14 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 
 export const DeleteAccountModal = () => {
   const { colors } = useAppTheme();
-  const { t } = useLocalization();
-
+  const { t } = useTranslation();
   const { onLogout } = useAuth();
 
   const handleRemoveAccount = () => {
@@ -21,7 +20,7 @@ export const DeleteAccountModal = () => {
   return (
     <Box borderRadius={16} backgroundColor={colors.background} p={16} gap={16}>
       <Box gap={8}>
-        <Text variant="p1-semibold" children="Удалить аккаунт?" mb={2} />
+        <Text variant="p1-semibold" children={t('to-delete-account') +'?'} mb={2} />
         <Text children="Последствия:" variant="p4-semibold" />
         <Text
           variant="p4"
@@ -36,11 +35,11 @@ export const DeleteAccountModal = () => {
       </Box>
       <Button
         onPress={handleRemoveAccount}
-        children={'Удалить аккаунт'}
+        children={t('to-delete-account')}
         textColor="red_500"
         backgroundColor="red_500_15"
       />
-      <Button onPress={closeModal} children={t('cancel')} />
+      <Button onPress={closeModal} children={t('to-cancel')} />
     </Box>
   );
 };

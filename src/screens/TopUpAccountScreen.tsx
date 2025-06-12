@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
@@ -18,7 +19,6 @@ import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { Box, Button, Input, Text } from '@src/ui';
 import { AnimatedBox } from '@src/ui/Box';
 import { wait } from '@src/utils';
@@ -33,7 +33,7 @@ const TopUpAccountScreen = ({
   const { insets } = useAppTheme();
   const { user, getUserData } = useAuth();
   const { toastSuccess } = useThemedToasts();
-  const { t } = useLocalization();
+  const { t } = useTranslation();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -132,7 +132,7 @@ const TopUpAccountScreen = ({
             <BepaidIcon width="100%" height="100%" />
           </Box>
           {!route.params?.currency ? (
-            <Button type="clear" children={t('skip')} onPress={handleSkip} />
+            <Button type="clear" children={t('to-skip')} onPress={handleSkip} />
           ) : null}
         </Box>
       </KeyboardAwareScrollView>

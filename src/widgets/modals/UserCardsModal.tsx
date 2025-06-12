@@ -1,4 +1,5 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
 import VisaIcon from '@assets/svg/brand/visa.svg';
 import CaretRightIcon from '@assets/svg/caret-right.svg';
@@ -14,7 +15,6 @@ import {
 
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { useLocalization } from '@src/translations/i18n';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 
@@ -46,7 +46,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
   ) => {
     const { colors, insets } = useAppTheme();
     const { user } = useAuth();
-    const { t } = useLocalization();
+    const { t } = useTranslation();
 
     // Модальные тексты для разных режимов
     const getModalConfig = () => {
@@ -142,13 +142,13 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           [
             {
               onPress: () => null,
-              text: t('cancel'),
+              text: t('to-cancel'),
             },
             {
               // TODO: добавить колбек на удаление карты
               onPress: () => null, // будут добавлены запросы на удаление карты и на получение данных юзера с целью обновить стейт.
               style: 'destructive',
-              text: t('delete'),
+              text: t('to-delete'),
             },
           ],
         );
