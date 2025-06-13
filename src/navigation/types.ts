@@ -22,6 +22,9 @@ export type RootStackParamList = {
   'charging-history': undefined;
   'charging-details': undefined;
   'recharge-history': undefined;
+  'recharge-transaction-detail': { transaction: any };
+  'notifications-settings': undefined;
+  'support-service': undefined;
 };
 
 export type TabsParamList = {

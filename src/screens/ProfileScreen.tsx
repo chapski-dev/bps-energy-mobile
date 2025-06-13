@@ -92,10 +92,13 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
           onPress={modalCardsOpen}
         />
 
-        <SectionListItemWithArrow title={'Уведомления'} onPress={() => null} />
+        <SectionListItemWithArrow
+          title={'Уведомления'}
+          onPress={() => navigation.navigate('notifications-settings')}
+        />
         <SectionListItemWithArrow
           title={'Служба поддержки'}
-          onPress={() => null}
+          onPress={() => navigation.navigate('support-service')}
         />
         <SectionListItemWithArrow
           title={'Правила зарядки'}
@@ -106,6 +109,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
           title={t('apps-language')}
           onPress={modalOpen}
         />
+        <Text variant='p4' colorName='grey_400' my={24} children="Версия 1.74.0" />
       </ScrollView>
       <SelectLanguageModal ref={modal} modalClose={modalClose} />
       <UserCardsModal

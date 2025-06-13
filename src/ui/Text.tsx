@@ -46,6 +46,7 @@ type TextProps = RNTextProps &
     pr?: Spacing;
     pb?: Spacing;
     pl?: Spacing;
+    flex?: number
   };
 
 const Text: FC<TextProps> = ({
@@ -75,6 +76,7 @@ const Text: FC<TextProps> = ({
   pr,
   pb,
   pl,
+  flex,
   disabled,
   ...rest
 }) => {
@@ -86,10 +88,10 @@ const Text: FC<TextProps> = ({
     const textTransform = uppercase
       ? 'uppercase'
       : lowercase
-      ? 'lowercase'
-      : capitalize
-      ? 'capitalize'
-      : undefined;
+        ? 'lowercase'
+        : capitalize
+          ? 'capitalize'
+          : undefined;
 
     return [
       styles[variant ? variant : 'p1'],
@@ -97,6 +99,7 @@ const Text: FC<TextProps> = ({
         color: theme.colors[key],
         ...removeUndefinedOnes({
           color,
+          flex: flex,
           fontSize,
           fontWeight,
           margin: m,
@@ -114,7 +117,7 @@ const Text: FC<TextProps> = ({
           paddingTop: pt,
           paddingVertical: py,
           textAlign,
-          textTransform
+          textTransform,
         })
       },
       style
@@ -141,6 +144,7 @@ const Text: FC<TextProps> = ({
     pr,
     pt,
     px,
+    flex,
     py,
     right,
     style,

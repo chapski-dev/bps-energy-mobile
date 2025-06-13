@@ -22,7 +22,7 @@ export const LANGUAGE_LIST: {
   flag: string;
 }[] = [
   {
-    flag: '🇰🇿',
+    flag: '🇬🇧',
     lang: AppLangEnum.EN,
     title: 'english',
   },

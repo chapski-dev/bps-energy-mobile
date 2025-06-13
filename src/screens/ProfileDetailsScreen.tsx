@@ -71,7 +71,7 @@ export const ProfileDetailsScreen = ({
         }}
       >
         <Box>
-          <SectionListItemWithArrow onPress={() => null}>
+          <SectionListItemWithArrow disabled onPress={() => null}>
             <Box gap={3}>
               <Text variant="p3-semibold" children={user?.email} />
               <Text colorName="grey_600" children={'E-mail'} />

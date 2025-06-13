@@ -18,6 +18,7 @@ const rechargeData = [
       {
         amount: '10',
         currency: 'BYN',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇧🇾',
         id: 1,
         paymentMethod: 'Visa • 5123',
@@ -26,6 +27,7 @@ const rechargeData = [
       {
         amount: '1500',
         currency: 'RUB',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇷🇺',
         id: 2,
         paymentMethod: 'Visa • 5141',
@@ -39,6 +41,7 @@ const rechargeData = [
       {
         amount: '15',
         currency: 'BYN',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇧🇾',
         id: 3,
         paymentMethod: 'Apple Pay',
@@ -52,6 +55,7 @@ const rechargeData = [
       {
         amount: '5',
         currency: 'BYN',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇧🇾',
         id: 4,
         paymentMethod: 'Visa • 5123',
@@ -60,6 +64,7 @@ const rechargeData = [
       {
         amount: '700',
         currency: 'RUB',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇷🇺',
         id: 5,
         paymentMethod: 'Apple Pay',
@@ -73,6 +78,7 @@ const rechargeData = [
       {
         amount: '20',
         currency: 'BYN',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇧🇾',
         id: 6,
         paymentMethod: 'Visa • 5123',
@@ -81,6 +87,7 @@ const rechargeData = [
       {
         amount: '20',
         currency: 'BYN',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇧🇾',
         id: 88,
         paymentMethod: 'Visa • 5123',
@@ -89,6 +96,7 @@ const rechargeData = [
       {
         amount: '20',
         currency: 'BYN',
+        date: '7 июня 2025, 14:21:53',
         flag: '🇧🇾',
         id: 99,
         paymentMethod: 'Visa • 5123',
@@ -156,6 +164,7 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
         row
         p={16}
         gap={11}
+        onPress={() => navigation.navigate('recharge-transaction-detail', { transaction: item } )}
       >
 
         {item.currency === 'BYN' ? <ByFlagIcon width={24} height={24} /> : <RuFlagIcon width={24} height={24} />}
@@ -214,6 +223,7 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
               {
                 amount: '100',
                 currency: 'BYN',
+                date: '7 июня 2025, 14:21:53',
                 flag: '🇧🇾',
                 id: 7,
                 paymentMethod: 'Visa • 5123',

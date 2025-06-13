@@ -11,16 +11,19 @@ import CharginStationScreen from '@src/screens/CharginStationScreen';
 import FiltersOfStations from '@src/screens/FiltersOfStations';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
 import LoginScreen from '@src/screens/LoginScreen';
+import NotificationsSettingsScreen from '@src/screens/NotificationsSettingsScreen';
 import OtpVerifyScreen from '@src/screens/OtpVerifyScreen';
 import { ProfileDetailsScreen } from '@src/screens/ProfileDetailsScreen';
-import RechargeHistoryScreen from '@src/screens/RechargeHistory';
+import RechargeHistoryScreen from '@src/screens/RechargeHistoryScreen';
+import RechargeTransactionDetailScreen from '@src/screens/RechargeTransactionDetailScreen';
 import RegistrationScreen from '@src/screens/RegistrationScreen';
 import SetNewPasswordScreen from '@src/screens/SetNewPasswordScreen';
+import SupportService from '@src/screens/SupportServiceScreen';
 import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
 import { useAppTheme } from '@src/theme/theme';
 
-import { Tabs } from '../Tabs';
-import { RootStackParamList } from '../types';
+import { Tabs } from './Tabs';
+import { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -88,7 +91,10 @@ export const RootStack = () => {
         component={SetNewPasswordScreen}
       />
       <Stack.Screen
-        options={({ route }) => ({ title: route.params.verify === 'registration' ? '' : 'Восстановление пароля' })}
+        options={({ route }) => ({
+          title: route.params.verify === 'registration' ?
+            '' : 'Восстановление пароля'
+        })}
         name='otp-verify'
         component={OtpVerifyScreen}
       />
@@ -100,7 +106,10 @@ export const RootStack = () => {
             component={ProfileDetailsScreen}
           />
           <Stack.Screen
-            options={({ route }) => ({ title: route.params.filed === 'name' ? 'Как к вам обращаться?' : 'Номер телефона' })}
+            options={({ route }) => ({
+              title: route.params.filed === 'name' ?
+                'Как к вам обращаться?' : 'Номер телефона'
+            })}
             name='change-user-fields'
             component={ChangeUserFieldsScreen}
           />
@@ -119,7 +128,21 @@ export const RootStack = () => {
             name='recharge-history'
             component={RechargeHistoryScreen}
           />
-
+          <Stack.Screen
+            options={({ route }) => ({ title: route.params.transaction.date })}
+            name='recharge-transaction-detail'
+            component={RechargeTransactionDetailScreen}
+          />
+          <Stack.Screen
+            options={{ title: 'Уведомления' }}
+            name='notifications-settings'
+            component={NotificationsSettingsScreen}
+          />
+          <Stack.Screen
+            options={{ title: 'Служба поддержки' }}
+            name='support-service'
+            component={SupportService}
+          />
         </Stack.Group>
       )}
     </Stack.Navigator>

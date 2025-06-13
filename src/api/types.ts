@@ -24,6 +24,10 @@ export type RegistrationResponse = {
 export type NotificationSettings = {
   settings: {
     push_notifications: boolean;
+    start_and_end_of_charging: boolean;
+    balance_replenished: boolean;
+    balance_less_than_3_byn: boolean;
+    special_offers: boolean;
   };
 };
 

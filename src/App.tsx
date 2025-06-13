@@ -6,7 +6,7 @@ import { Toasts } from '@backpackapp-io/react-native-toast';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
 
-import { RootStack } from '@src/navigation/stacks/RootStack';
+import { RootStack } from '@src/navigation/RootStack';
 import app from '@src/service/app';
 
 import '@src/i18n/config';
