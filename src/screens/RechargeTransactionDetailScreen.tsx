@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet } from 'react-native';
 import FilePdfIcon from '@assets/svg/file-pdf.svg'
 import ByFlagIcon from '@assets/svg/flags/Belarus.svg'
@@ -12,19 +13,9 @@ export default function RechargeTransactionDetailScreen({
   route
 }: ScreenProps<'recharge-transaction-detail'>) {
   const { colors, insets } = useAppTheme();
+  const { t } = useTranslation();
 
-  const transactionData = route?.params?.transaction || {
-    amount: '10',
-    balanceAfter: '12,40',
-    balanceBefore: '2,40',
-    currency: 'BYN',
-    date: '7 июня 2025, 14:21:53',
-    flag: '🇧🇾',
-    id: 1,
-    paymentMethod: 'Visa • 5123',
-    status: 'Исполнена',
-    walletName: 'BY Кошелёк'
-  };
+  const transactionData = route?.params?.transaction;
 
   const DetailRow = ({ label, value, isLast = false }:
     { label: string; value: string; isLast?: boolean }) => (
@@ -49,7 +40,7 @@ export default function RechargeTransactionDetailScreen({
         justifyContent="center"
         alignItems="center"
       >
-        {transactionData.currency === 'BYN' ?
+        {'BYN' === 'BYN' ?
           <ByFlagIcon width={80} height={80} /> :
           <RuFlagIcon width={80} height={80} />}
       </Box>
@@ -72,26 +63,26 @@ export default function RechargeTransactionDetailScreen({
         />
 
         <Text variant="h1" center>
-          + {transactionData.amount} <Text variant="h5" children={transactionData.currency} />
+          + {transactionData.amount} <Text variant="h5" children={'BYN'} />
         </Text>
       </Box>
 
       <Box flex={1} >
         <DetailRow
           label="Статус операции"
-          value={transactionData.status}
+          value={transactionData.state ? 'Исполнена' : 'qwe'}
         />
         <DetailRow
           label="Метод оплаты"
-          value={transactionData.paymentMethod}
+          value={`${transactionData.card_type} · ${transactionData.card_mask}`}
         />
         <DetailRow
           label="Баланс до пополнения"
-          value={`${transactionData.balanceBefore || '???'} ${transactionData.currency}`}
+          value={`${transactionData.rest_before || '???'} ${'BYN'}`}
         />
         <DetailRow
           label="Баланс после пополнения"
-          value={`${transactionData.balanceAfter || '???'} ${transactionData.currency}`}
+          value={`${transactionData.rest_after || '???'} ${'BYN'}`}
           isLast
         />
       </Box>
@@ -99,7 +90,7 @@ export default function RechargeTransactionDetailScreen({
       <Button
         type="outline"
         icon={<FilePdfIcon />}
-        children="Скачать чек"
+        children={t('shared.to-download-check')}
       />
     </ScrollView>
   );

@@ -68,3 +68,20 @@ export type ChangeUserFieldsReq = {
   name: string;
   phone: string;
 };
+
+
+export type Transaction = {
+  amount: number,
+  card_mask: string,
+  card_type: string,
+  date: string,
+  id: number,
+  rest_after: number,
+  rest_before: number,
+  state: string,
+  wallet_type: string
+}
+
+export type TransactionsRes = {
+  transactions: Transaction[]
+}

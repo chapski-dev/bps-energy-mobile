@@ -104,22 +104,17 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const onSignIn = useCallback(
     async (data: SignInReq) => {
-      try {
-        authDispatch({ type: AuthActionType.setConnecting });
-        const { access_token, refresh_token } = await api.postSignIn(data);
-        await AsyncStorage.multiSet([
-          [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
-          [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
-          [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
-        ]);
-        await getUserData();
+      authDispatch({ type: AuthActionType.setConnecting });
+      const { access_token, refresh_token } = await api.postSignIn(data);
+      await AsyncStorage.multiSet([
+        [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
+        [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
+        [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
+      ]);
+      await getUserData();
 
-        authDispatch({ type: AuthActionType.setReady });
-        app.isFirebaseAuthorized = AppServiceStatus.on;
-      } catch (error) {
-        app.logout()
-        throw error;
-      }
+      authDispatch({ type: AuthActionType.setReady });
+      app.isFirebaseAuthorized = AppServiceStatus.on;
     },
     [authDispatch, getUserData],
   );

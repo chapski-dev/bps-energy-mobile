@@ -7,6 +7,7 @@ import {
   RegistrationResponse,
   SignInReq,
   SignInResponse,
+  TransactionsRes,
 } from './types';
 
 // Authentication API
@@ -71,6 +72,16 @@ export const postChangePassword = (body: {
   old_password: string;
 }) => api.post<object>('/mobile/change-password', body).then((res) => res.data);
 
+
+/**
+ * Удаляет карту пользователя по её идентификатору
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%BE%D0%B9/post_mobile_delete_card
+ */
+export const postDeleteCard = (body: { card_id: number }) =>
+  api
+    .post<{ url: string }>('/mobile/delete-card', body)
+    .then((res) => res.data);
+
 /**
  * Создание транзакции для пополнения баланса
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%BE%D0%BC/post_mobile_create_transaction
@@ -88,6 +99,20 @@ export const postTopUpBalance = (body: { amount: number; card_id: number }) =>
   api
     .post<{ url: string }>('/mobile/make-payment', body)
     .then((res) => res.data);
+
+/**
+* Возвращает список транзакций пользователя с фильтрацией по датам и пагинацией
+* @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%BE%D0%B9/get_mobile_transactions
+*/
+export const getTransactionsHistory = (params?: Partial<{
+  date_begin: string,
+  date_end: string,
+  page: string,
+  limit: string
+}>) =>
+  api.get<TransactionsRes>('/mobile/transactions', {
+    params
+  }).then((res) => res.data);
 
 /**
  * Повторная отправка кода верификации на email
@@ -108,7 +133,7 @@ export const getProfileData = () =>
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/mobile/post_mobile_change_field
  */
 export const updateUserProfile = (data: ChangeUserFieldsReq) =>
-  api.patch<object>('/mobile/change-field', data).then((res) => res.data);
+  api.patch<object>('/mobile/user', data).then((res) => res.data);
 
 /**
  * Retrieves the current notification settings for the authenticated user
@@ -132,3 +157,5 @@ export const setNotificationSettings = (data: NotificationSettings) =>
  */
 export const registerFCMToken = (token: string) =>
   api.post('/api/v1/notifications/register', { token }).then((res) => res.data);
+
+

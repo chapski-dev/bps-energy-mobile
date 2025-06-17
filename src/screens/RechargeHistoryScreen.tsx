@@ -1,250 +1,257 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, SectionList, StyleSheet } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { SectionList } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 import Skeleton from 'react-native-reanimated-skeleton';
 import ByFlagIcon from '@assets/svg/flags/Belarus.svg'
 import RuFlagIcon from '@assets/svg/flags/Russia.svg'
+import MagnifyingIcon from '@assets/svg/magnifying-glass-cross.svg'
 
+import { getTransactionsHistory } from '@src/api';
 import { isIOS } from '@src/misc/platform';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
-import { Box, Text } from '@src/ui';
-import { wait } from '@src/utils';
+import { Box, Button, Text } from '@src/ui';
+import { dateFormat } from '@src/utils/date-format';
 import { rechargingsSkeletonLayout } from '@src/utils/vars/skeletons';
+import { DatePeriodSelect, initialDates } from '@src/widgets/DatePeriodSelect';
 
-const rechargeData = [
+type Transaction = {
+  amount: number,
+  card_mask: string,
+  card_type: string,
+  date: string,
+  id: number,
+  rest_after: number,
+  rest_before: number,
+  state: string,
+  wallet_type: string
+}
+
+type SectionData = {
+  title: string;
+  data: Transaction[];
+}
+
+// Утилита для группировки транзакций по датам
+const groupTransactionsByDate = (transactions: Transaction[]): SectionData[] => {
+  const grouped = transactions.reduce((acc, transaction) => {
+    // Конвертируем дату в читаемый формат (предполагаем что date в ISO формате)
+    const date = new Date(transaction.date);
+    const dateKey = date.toLocaleDateString('ru-RU', {
+      day: 'numeric',
+      month: 'long',
+      weekday: 'long'
+    });
+
+    if (!acc[dateKey]) {
+      acc[dateKey] = [];
+    }
+    acc[dateKey].push(transaction);
+    return acc;
+  }, {} as Record<string, Transaction[]>);
+
+  return Object.entries(grouped).map(([title, data]) => ({
+    data,
+    title
+  }));
+};
+
+// Утилита для получения валюты из wallet_type
+const getCurrencyFromWalletType = (walletType: string): string => {
+  if (walletType.toLowerCase().includes('by') || walletType.toLowerCase().includes('byn')) {
+    return 'BYN';
+  }
+  if (walletType.toLowerCase().includes('ru') || walletType.toLowerCase().includes('rub')) {
+    return 'RUB';
+  }
+  return 'BYN'; // По умолчанию
+};
+
+// Утилита для получения названия кошелька
+const getWalletName = (walletType: string): string => {
+  const currency = getCurrencyFromWalletType(walletType);
+  return currency === 'BYN' ? 'BY Кошелёк' : 'RU Кошелёк';
+};
+
+// Утилита для форматирования способа оплаты
+const formatPaymentMethod = (cardType: string, cardMask: string): string => {
+  if (cardMask && cardMask.length >= 4) {
+    const lastFour = cardMask.slice(-4);
+    return `${cardType} • ${lastFour}`;
+  }
+  return cardType || 'Неизвестно';
+};
+
+// Моковые данные для скелетонов загрузки
+const mockTransactions: Transaction[] = [
   {
-    data: [
-      {
-        amount: '10',
-        currency: 'BYN',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇧🇾',
-        id: 1,
-        paymentMethod: 'Visa • 5123',
-        walletName: 'BY Кошелёк',
-      },
-      {
-        amount: '1500',
-        currency: 'RUB',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇷🇺',
-        id: 2,
-        paymentMethod: 'Visa • 5141',
-        walletName: 'RU Кошелёк',
-      },
-    ],
-    title: '7 июня, суббота',
+    amount: 10,
+    card_mask: '5123',
+    card_type: 'Visa',
+    date: '2025-06-07T14:21:53Z',
+    id: 1,
+    rest_after: 100,
+    rest_before: 90,
+    state: 'completed',
+    wallet_type: 'BY_WALLET'
   },
   {
-    data: [
-      {
-        amount: '15',
-        currency: 'BYN',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇧🇾',
-        id: 3,
-        paymentMethod: 'Apple Pay',
-        walletName: 'BY Кошелёк',
-      },
-    ],
-    title: '3 июня, вторник',
+    amount: 1500,
+    card_mask: '5141',
+    card_type: 'Visa',
+    date: '2025-06-07T14:21:53Z',
+    id: 2,
+    rest_after: 2500,
+    rest_before: 1000,
+    state: 'completed',
+    wallet_type: 'RU_WALLET'
   },
   {
-    data: [
-      {
-        amount: '5',
-        currency: 'BYN',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇧🇾',
-        id: 4,
-        paymentMethod: 'Visa • 5123',
-        walletName: 'BY Кошелёк',
-      },
-      {
-        amount: '700',
-        currency: 'RUB',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇷🇺',
-        id: 5,
-        paymentMethod: 'Apple Pay',
-        walletName: 'RU Кошелёк',
-      },
-    ],
-    title: '2 июня, понедельник',
-  },
-  {
-    data: [
-      {
-        amount: '20',
-        currency: 'BYN',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇧🇾',
-        id: 6,
-        paymentMethod: 'Visa • 5123',
-        walletName: 'BY Кошелёк',
-      },
-      {
-        amount: '20',
-        currency: 'BYN',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇧🇾',
-        id: 88,
-        paymentMethod: 'Visa • 5123',
-        walletName: 'BY Кошелёк',
-      },
-      {
-        amount: '20',
-        currency: 'BYN',
-        date: '7 июня 2025, 14:21:53',
-        flag: '🇧🇾',
-        id: 99,
-        paymentMethod: 'Visa • 5123',
-        walletName: 'BY Кошелёк',
-      },
-    ],
-    title: '1 июня, воскресенье',
-  },
+    amount: 15,
+    card_mask: '',
+    card_type: 'Apple Pay',
+    date: '2025-06-03T14:21:53Z',
+    id: 3,
+    rest_after: 115,
+    rest_before: 100,
+    state: 'completed',
+    wallet_type: 'BY_WALLET'
+  }
 ];
 
 export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recharge-history'>) {
-  const [selectedFilter, setSelectedFilter] = useState('Все');
   const { colors } = useAppTheme();
-  const filters = ['Все', 'BYN', 'RUB'];
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [filterDates, setFilterDates] = useState(initialDates)
 
-  const onRefresh = async (): Promise<void> => {
+  const [sectionsData, setSectionsData] = useState<SectionData[]>(groupTransactionsByDate(mockTransactions));
+
+  const onRefresh = useCallback(async (): Promise<void> => {
     try {
+      console.log('onRefresh');
+      
       setRefreshing(true);
-      await wait(500);
+
+      // Показываем моковые данные во время загрузки для скелетонов
+      setSectionsData(groupTransactionsByDate(mockTransactions));
+
+      const res = await getTransactionsHistory({
+        date_begin: dateFormat('yyyy-MM-DD', filterDates.start),
+        date_end: dateFormat('yyyy-MM-DD', filterDates.end)
+      });
+      // setTransactions(res.transactions);
+      console.log(res.transactions.reduce((acc, el) => acc + el.amount, 0));
+
+      setSectionsData(groupTransactionsByDate(res.transactions));
+    } catch (error) {
+      // В случае ошибки показываем моковые данные
+      console.error('Error fetching transactions:', error);
+      // setSectionsData(groupTransactionsByDate(mockTransactions));
     } finally {
       setRefreshing(false);
     }
-  };
-  console.log(rechargeData.length);
-  
-  useEffect(() => {
-    onRefresh();
-  }, []);
+  }, [filterDates.start, filterDates.end]);
 
-  const filteredData = selectedFilter === 'Все'
-    ? rechargeData
-    : rechargeData.map(section => ({
-      ...section,
-      data: section.data.filter(item => item.currency === selectedFilter),
-    })).filter(section => section.data.length > 0);
+  // useEffect(() => {
+  //   onRefresh();
+  // }, [onRefresh]);
 
-  const renderFilterItem = (filter) => (
-    <Box
-      key={filter}
-      backgroundColor={selectedFilter === filter ? colors.grey_800 : colors.grey_50}
-      borderRadius={50}
-      px={20}
-      py={12}
-      onPress={() => setSelectedFilter(filter)}
-    >
-      <Text
-        colorName={selectedFilter === filter ? 'white' : 'grey_800'}
-        children={filter}
-        variant='p3-semibold'
-      />
-    </Box>
-  );
+  const renderRechargeItem = ({ item }: { item: Transaction }) => {
+    const currency = getCurrencyFromWalletType(item.wallet_type);
+    const walletName = getWalletName(item.wallet_type);
+    const paymentMethod = formatPaymentMethod(item.card_type, item.card_mask);
 
-  const renderRechargeItem = ({ item }) => (
-    <Skeleton
-      containerStyle={{ backgroundColor: colors.grey_50, borderRadius: 12 }}
-      isLoading={refreshing}
-      animationType={isIOS ? 'pulse' : 'none'}
-      layout={rechargingsSkeletonLayout}
-    >
-      <Box
-        backgroundColor={colors.grey_50}
-        borderRadius={12}
-        row
-        p={16}
-        gap={11}
-        onPress={() => navigation.navigate('recharge-transaction-detail', { transaction: item } )}
+    return (
+      <Skeleton
+        containerStyle={{ backgroundColor: colors.grey_50, borderRadius: 12 }}
+        isLoading={refreshing}
+        animationType={isIOS ? 'pulse' : 'none'}
+        layout={rechargingsSkeletonLayout}
       >
+        <Box
+          backgroundColor={colors.grey_50}
+          borderRadius={12}
+          row
+          p={16}
+          gap={11}
+          onPress={() => navigation.navigate('recharge-transaction-detail', { transaction: item })}
+        >
+          {currency === 'BYN' ? <ByFlagIcon width={24} height={24} /> : <RuFlagIcon width={24} height={24} />}
+          <Box row flex={1} alignItems='center'>
+            <Box flex={1} gap={4}>
+              <Text variant='h5' children={walletName} mb={4} />
+              <Text variant='p3' colorName='grey_700' children={paymentMethod} />
+            </Box>
 
-        {item.currency === 'BYN' ? <ByFlagIcon width={24} height={24} /> : <RuFlagIcon width={24} height={24} />}
-        <Box row flex={1} alignItems='center'>
-          <Box flex={1} gap={4}>
-            <Text variant='h5' children={item.walletName} mb={4} />
-            <Text variant='p3' colorName='grey_700' children={item.paymentMethod} />
-          </Box>
-
-          <Box alignItems="flex-end">
-            <Text variant='h4'>
-              + {item.amount} <Text variant='h5' children={item.currency} />
-            </Text>
+            <Box alignItems="flex-end">
+              <Text variant='h4'>
+                + {item.amount} <Text variant='h5' children={currency} />
+              </Text>
+            </Box>
           </Box>
         </Box>
+      </Skeleton>
+    );
+  };
+
+  const renderSectionHeader = ({ section: { title } }: { section: { title: string } }) => (
+    <Skeleton
+      containerStyle={{ borderRadius: 12 }}
+      isLoading={refreshing}
+      animationType={isIOS ? 'pulse' : 'none'}
+      layout={[{ height: 25, width: 150 }]}
+    >
+      <Box py={12} px={16}>
+        <Text colorName='grey_600' variant='p3' children={title} />
       </Box>
     </Skeleton>
   );
 
-  const renderSectionHeader = ({ section: { title } }) => (
-    <Box py={12} px={16}>
-      <Text colorName='grey_600' variant='p3' children={title} />
-    </Box>
-  );
-
-  return (
-    <Box flex={1}>
-      <Box>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.filtersContainer}
-          contentContainerStyle={styles.filtersContent}
-        >
-          {filters.map(renderFilterItem)}
-        </ScrollView>
+  const renderEmptyComponent = useCallback(() => (
+    <Box flex={1} justifyContent='center' alignItems='center' gap={24} >
+      <MagnifyingIcon />
+      <Box gap={8}>
+        <Text center children="Пополнений не найдено" variant='h5' colorName='grey_600' mb={8} />
+        <Text
+          children="За выбранный период вы не пополняли внутренний баланс"
+          variant='p3'
+          colorName='grey_600'
+          center
+        />
       </Box>
-
-      <SectionList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        stickySectionHeadersEnabled={false}
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 30, paddingHorizontal: 16 }}
-        sections={filteredData}
-        ItemSeparatorComponent={() => <Box h={8} />}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderRechargeItem}
-        renderSectionHeader={renderSectionHeader}
-        showsVerticalScrollIndicator={false}
-        SectionSeparatorComponent={() => <Box h={8} />}
-        onEndReached={() => {
-          if (rechargeData.length > 8) return
-          console.log('onEndReached');
-          
-          rechargeData.push({
-            data: [
-              {
-                amount: '100',
-                currency: 'BYN',
-                date: '7 июня 2025, 14:21:53',
-                flag: '🇧🇾',
-                id: 7,
-                paymentMethod: 'Visa • 5123',
-                walletName: 'BY Кошелёк',
-              },
-            ],
-            title: '1 июня, воскресенье',
-          },)
-          // onRefresh()
-        }}
+      <Button
+        children="Сбросить фильтр"
+        type='clear'
+        onPress={() => setFilterDates(initialDates)}
       />
     </Box>
+  ), [])
+
+  return (
+    <>
+      <Box flex={1}>
+        <Box p={16} >
+          <DatePeriodSelect
+            filterDates={filterDates}
+            onSubmit={setFilterDates}
+          />
+        </Box>
+
+        <SectionList
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          stickySectionHeadersEnabled={false}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 30, paddingHorizontal: 16 }}
+          sections={sectionsData}
+          ItemSeparatorComponent={() => <Box h={8} />}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderRechargeItem}
+          renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          SectionSeparatorComponent={() => <Box h={8} />}
+          ListEmptyComponent={renderEmptyComponent}
+          onEndReached={() => console.log('onEndReached')}
+        />
+      </Box>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  filtersContainer: {
-    paddingVertical: 16,
-  },
-  filtersContent: {
-    gap: 12,
-    paddingHorizontal: 16,
-  },
-});
