@@ -44,7 +44,7 @@ function ChangeUserFieldsScreen({
   const handleUpdateData = async (data: FormValues) => {
     try {
       setLoading(true);
-      await updateUserProfile(data)
+      await updateUserProfile({...data, name: data.name.trim() })
       await getUserData()
       toastSuccess(isNameField ? 'Имя обновлено!' : 'Телефон обновлен!');
       navigation.goBack();
@@ -56,18 +56,17 @@ function ChangeUserFieldsScreen({
   };
 
   const openConfirmationDeletePhone = () => {
-    Alert.alert(t('do-you-want-to-logout?'), undefined, [
+    Alert.alert(t('shared.to-delete')+'?', undefined, [
       {
         onPress: () => null,
-        text: t('to-cancel'),
+        text: t('shared.to-cancel'),
       },
       {
         onPress: () => {
-          // TODO: доработать удаление номера телефона.
-          handleUpdateData()
+          handleUpdateData({...form.getValues(), phone: ''})
         },
         style: 'destructive',
-        text: t('to-log-out'),
+        text: t('shared.to-delete'),
       },
     ]);
   };
@@ -94,7 +93,7 @@ function ChangeUserFieldsScreen({
                 }) => (
                   <Input
                     value={value}
-                    onChangeText={onChange}
+                    onChangeText={(v) => onChange( v.length === 1 ? v.trimStart() : v.replaceAll('  ', ' '))}
                     onBlur={onBlur}
                     placeholder="Имя"
                     error={invalid}
@@ -121,7 +120,7 @@ function ChangeUserFieldsScreen({
           </Box>
         </Box>
         <Button
-          children={t('to-save')}
+          children={t('shared.to-save')}
           onPress={handleSubmit(handleUpdateData)}
           disabled={loading || !formState.isValid}
           loading={loading}
