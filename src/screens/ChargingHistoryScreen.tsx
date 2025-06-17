@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView, SectionList, StyleSheet } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { SectionList, StyleSheet } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler';
 import Skeleton from 'react-native-reanimated-skeleton'
+import MagnifyingIcon from '@assets/svg/magnifying-glass-cross.svg'
 
 import { isIOS } from '@src/misc/platform';
 import { ScreenProps } from '@src/navigation/types'
 import { useAppTheme } from '@src/theme/theme';
-import { Box, Text } from '@src/ui'
+import { Box, Button, Text } from '@src/ui'
 import { ImageProgress } from '@src/ui/ImageProgress';
 import { wait } from '@src/utils';
 import { chargingsSkeletonLayout } from '@src/utils/vars/skeletons';
+import { DatePeriodSelect, initialDates } from '@src/widgets/DatePeriodSelect';
 
 
 const chargingData = [
@@ -63,10 +65,9 @@ const chargingData = [
 ];
 
 export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charging-history'>) {
-  const [selectedFilter, setSelectedFilter] = useState('Все');
   const { colors } = useAppTheme();
+  const [filterDates, setFilterDates] = useState(initialDates)
 
-  const filters = ['Все', 'BPS Energy', 'Butterfly', 'Malanka'];
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async (): Promise<void> => {
     try {
@@ -82,24 +83,6 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
   }, [])
 
 
-  const filteredData = selectedFilter === 'Все'
-    ? chargingData
-    : chargingData.map(section => ({
-      ...section,
-      data: section.data.filter(item => item.name === selectedFilter)
-    })).filter(section => section.data.length > 0);
-
-  const renderFilterItem = (filter) => (
-    <Box
-      key={filter}
-      backgroundColor={selectedFilter === filter ? colors.grey_800 : colors.grey_50}
-      borderRadius={50}
-      p={15.5}
-      onPress={() => setSelectedFilter(filter)}
-    >
-      <Text colorName={selectedFilter === filter ? 'white' : 'grey_800'} children={filter} variant='p3-semibold' />
-    </Box>
-  );
 
   const renderChargingItem = ({ item }) => (
     <Skeleton
@@ -144,27 +127,43 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
   );
 
   const renderSectionHeader = ({ section: { title } }) => (
-    <Box py={8}>
-      <Text
-        colorName='grey_600'
-        variant='p3'
-        children={title}
-      />
-    </Box>
+    <Skeleton
+      containerStyle={{ alignItems: 'baseline' }}
+      isLoading={refreshing}
+      animationType={isIOS ? 'pulse' : 'none'}
+      layout={[{ height: 25, width: 120 }]}
+    >
+      <Box py={8}>
+        <Text
+          colorName='grey_600'
+          variant='p3'
+          children={title}
+        />
+      </Box>
+    </Skeleton>
   );
+
+  const renderEmptyComponent = useCallback(() => (
+    <Box flex={1} justifyContent='center' alignItems='center' gap={24} >
+      <MagnifyingIcon />
+      <Box gap={8}>
+        <Text center children="Зарядок не найдено" variant='h5' colorName='grey_600' mb={8} />
+        <Text
+          children="За выбранный период вы не заряжались через наше приложение"
+          variant='p3'
+          colorName='grey_600'
+          center
+        />
+      </Box>
+      <Button children="Сбросить фильтр" type='clear' />
+    </Box>
+  ), [])
 
 
   return (
-    <Box flex={1}>
-      <Box>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.filtersContainer}
-          contentContainerStyle={styles.filtersContent}
-        >
-          {filters.map(renderFilterItem)}
-        </ScrollView>
+    <>
+      <Box p={16} >
+        <DatePeriodSelect filterDates={filterDates} onSubmit={setFilterDates} />
       </Box>
 
       <SectionList
@@ -172,15 +171,17 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         stickySectionHeadersEnabled={false}
-        contentContainerStyle={{ gap: 8, paddingBottom: 30, paddingHorizontal: 16, }}
-        sections={filteredData}
+        contentContainerStyle={{ flexGrow: 1, gap: 8, paddingBottom: 30, paddingHorizontal: 16 }}
+        sections={chargingData}
+        // sections={[]}
         ItemSeparatorComponent={() => <Box h={5} />}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderChargingItem}
         renderSectionHeader={renderSectionHeader}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={renderEmptyComponent}
       />
-    </Box>
+    </>
   )
 }
 
