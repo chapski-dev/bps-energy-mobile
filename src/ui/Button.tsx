@@ -86,9 +86,8 @@ export const Button: FC<PropsType> = ({
   const overlayOpacity = useRef(new Animated.Value(0)).current;
 
   const handlePressIn = () => {
-    if (disabled) return;
     Animated.parallel([
-      Animated.spring(scaleValue, { toValue: 0.99, useNativeDriver: true }),
+      Animated.spring(scaleValue, { speed: 30, toValue: 0.98, useNativeDriver: true }),
       Animated.timing(overlayOpacity, {
         duration: 20,
         toValue: 0.25,
@@ -98,7 +97,6 @@ export const Button: FC<PropsType> = ({
   };
 
   const handlePressOut = () => {
-    if (disabled) return;
     Animated.parallel([
       Animated.spring(scaleValue, { toValue: 1, useNativeDriver: true }),
       Animated.timing(overlayOpacity, {
@@ -168,17 +166,15 @@ export const Button: FC<PropsType> = ({
     ],
   );
 
-  const buttonContent = loading ? (
-    <ActivityIndicator color={colors.background} />
-  ) : (
+  const buttonContent = useMemo(() => (
     <>
-      <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
+      {loading ? <ActivityIndicator color={colors.background} /> : <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
         <Text
           style={[{ color: _textColor, fontSize: 16, fontWeight: '600' }, textStyle]}
           children={children}
         />
         {icon}
-      </View>
+      </View>}
       {type === 'filled' && (
         <Animated.View
           style={{
@@ -193,7 +189,7 @@ export const Button: FC<PropsType> = ({
         />
       )}
     </>
-  );
+  ), [_textColor, children, colors.background, colors.black, icon, loading, overlayOpacity, textStyle, type])
 
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
