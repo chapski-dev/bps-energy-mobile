@@ -92,8 +92,8 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
             onPress={() => onStationPress(info.point)}
             key={index}
             point={info.point}
-            source={require('@assets/png/dot-default.png')}
-            scale={3}
+            source={require('@assets/png/bps-logo-label-default.png')}
+            scale={0.5}
           />
         )}
       />
@@ -126,7 +126,7 @@ const UserBalance = () => {
     >
       <>
         <Text children="Текущий баланс" fontSize={13} colorName="grey_600" />
-        <Box row gap={4} alignItems="center" justifyContent="center">
+        <Box row gap={4} alignItems="center" justifyContent='flex-start'>
           <Text children={`${user?.wallets[0].value} BYN`} fontWeight="600" fontSize={20} />
           <PlusCircleFillIcon color={colors.main} width={20} height={20} />
         </Box>
