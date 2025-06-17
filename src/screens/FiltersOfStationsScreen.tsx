@@ -8,8 +8,10 @@ import React, {
 import { Control, Controller, FormProvider, useForm } from 'react-hook-form';
 import { ScrollView, Switch, SwitchProps } from 'react-native';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
+import GBTACIcon from '@assets/svg/connector/GBT AC.svg';
 import GBTIcon from '@assets/svg/connector/GBT.svg';
-import Type2Icon from '@assets/svg/connector/Type 2.svg';
+import Type2PlugIcon from '@assets/svg/connector/Type 2 (Plug).svg'
+import Type2SocketIcon from '@assets/svg/connector/Type 2 (Socket).svg';
 import DotBusy from '@assets/svg/dot-busy.svg';
 import DotError from '@assets/svg/dot-error.svg';
 import lodash from 'lodash';
@@ -28,10 +30,10 @@ import { handleCatchError } from '@src/utils/handleCatchError';
 import { BinanceSlider } from '../widgets/ChargingStationPowerSlider';
 
 
-export default function FiltersOfStations({
+export default function FiltersOfStationsScreen({
   navigation,
 }: ScreenProps<'filters-of-stations'>) {
-  const { insets, colors } = useAppTheme();
+  const { insets } = useAppTheme();
   const { persisted, applyFilters, resetAll } = useFilterStore();
 
   const [loading, setLoading] = useState(false);
@@ -107,17 +109,17 @@ export default function FiltersOfStations({
                 'connectors',
                 'gbt_ac',
                 'GB/T AC',
-                { icon: <GBTIcon height={28} width={28} /> }, control)}
+                { icon: <GBTACIcon height={28} width={28} /> }, control)}
               {renderSwitch(
                 'connectors',
                 'type_2_socket',
                 'Type 2 (Socket)',
-                { icon: <Type2Icon height={28} width={28} /> }, control)}
+                { icon: <Type2SocketIcon height={28} width={28} /> }, control)}
               {renderSwitch(
                 'connectors',
                 'type_2_plug',
                 'Type 2 (Plug)',
-                { icon: <Type2Icon height={28} width={28} /> }, control)}
+                { icon: <Type2PlugIcon height={28} width={28} /> }, control)}
             </Box>
             <Controller
               control={control}
