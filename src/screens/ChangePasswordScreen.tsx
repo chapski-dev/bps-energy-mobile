@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Keyboard } from 'react-native';
+import { Keyboard, TextInput } from 'react-native';
 import LockIcon from '@assets/svg/lock.svg';
 
 import { postChangePassword, postForgotPassword } from '@src/api';
@@ -10,7 +10,6 @@ import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input } from '@src/ui';
-import { InputProps } from '@src/ui/Input';
 import { FakeView } from '@src/ui/Layouts/FakeView';
 import { Gap } from '@src/ui/Layouts/Gap';
 import { handleCatchError } from '@src/utils/handleCatchError';
@@ -62,7 +61,7 @@ function ChangePasswordScreen({
     }
   };
 
-  const secInputRef = useRef<InputProps>(null);
+  const secInputRef = useRef<TextInput>(null);
 
   return (
     <Box
@@ -136,7 +135,7 @@ function ChangePasswordScreen({
       </Box>
 
       <Button
-        children={t('to-save')}
+        children={t('shared.to-save')}
         onPress={handleSubmit(handleUpdatePassword)}
         disabled={loading || !formState.isValid}
         loading={loading}

@@ -5,6 +5,7 @@ import VisaIcon from '@assets/svg/brand/visa.svg';
 import CaretRightIcon from '@assets/svg/caret-right.svg';
 import CheckIcon from '@assets/svg/check-circle-fill.svg';
 import CreditCardIcon from '@assets/svg/credit-card-outline.svg';
+import EmptyBoxIcon from '@assets/svg/empty-box.svg';
 import PlusIcon from '@assets/svg/plus.svg';
 import TrashIcon from '@assets/svg/trash.svg';
 import {
@@ -13,10 +14,12 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 
+import { postDeleteCard } from '@src/api';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
+import { handleCatchError } from '@src/utils/handleCatchError';
 
 import { DeleteAccountModal } from './DeleteAccountModal';
 
@@ -45,7 +48,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     ref,
   ) => {
     const { colors, insets } = useAppTheme();
-    const { user } = useAuth();
+    const { user, getUserData } = useAuth();
     const { t } = useTranslation();
 
     // Модальные тексты для разных режимов
@@ -134,7 +137,17 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       [mode, onCardSelect, modalClose],
     );
 
-    const handleDeleteCard = useCallback(
+    const handleDeleteCard = useCallback(async (cardId: number) => {
+      try {
+        modalClose()
+        await postDeleteCard({ card_id: cardId })
+        await getUserData()
+      } catch (error) {
+        handleCatchError(error, 'handleDeleteCard')
+      }
+    }, [getUserData, modalClose]);
+    
+    const handleDeleteCardAlert = useCallback(
       (cardId: number) => {
         Alert.alert(
           'Вы точно хотите удалить карту?',
@@ -142,18 +155,17 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           [
             {
               onPress: () => null,
-              text: t('to-cancel'),
+              text: t('shared.to-cancel'),
             },
             {
-              // TODO: добавить колбек на удаление карты
-              onPress: () => null, // будут добавлены запросы на удаление карты и на получение данных юзера с целью обновить стейт.
+              onPress: () => handleDeleteCard(cardId),
               style: 'destructive',
-              text: t('to-delete'),
+              text: t('shared.to-delete'),
             },
           ],
         );
       },
-      [t],
+      [handleDeleteCard, t],
     );
 
     const handleAddCard = useCallback(() => {
@@ -215,7 +227,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
             {showSelection && isSelected && <CheckIcon color={colors.main} />}
 
             {showDelete && (
-              <TouchableOpacity onPress={() => handleDeleteCard(card.id)}>
+              <TouchableOpacity onPress={() => handleDeleteCardAlert(card.id)}>
                 <TrashIcon color={colors.grey_600} />
               </TouchableOpacity>
             )}
@@ -228,9 +240,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       );
     };
 
-    const renderAdditionalCardItem = (
-      variant: 'other-methods' | 'add-card',
-    ) => (
+    const renderAdditionalCardItem = () => (
       <Box
         borderColor={colors.grey_100}
         borderBottomWidth={1}
@@ -251,7 +261,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           </Box>
           <Text
             variant="p1-semibold"
-            children="Добавить карту"
+            children="Другие методы"
             color={colors.text}
           />
           <Box flex={1} />
@@ -260,8 +270,16 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       </Box>
     );
 
+    const renderLestEmptyComponent = useCallback(() => (
+      <Box justifyContent='center' alignItems='center'>
+        <EmptyBoxIcon color={colors.grey_400} width={50} height={50} />
+        <Text children="У вас пока нет сохраненных карт." />
+      </Box>
+    ), [colors.grey_400])
+
     const listData = useMemo(() => {
-      const cards = [...user?.cards];
+
+      const cards = user?.cards ? [...user.cards] : [];
 
       switch (true) {
         case config.hasAddCard:
@@ -279,20 +297,11 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     return (
       <BottomSlideModal
         ref={ref}
-        animateOnMount
-        maxDynamicContentSize={350}
-        snapPoints={[350]}
+        enableDynamicSizing
         backgroundStyle={{ backgroundColor: colors.background }}
         {...props}
       >
-        <BottomSheetView
-          style={{
-            flex: 1,
-            gap: 32,
-            maxHeight: 350,
-            paddingBottom: insets.bottom + 15,
-          }}
-        >
+        <BottomSheetView style={{ gap: 32, paddingBottom: insets.bottom + 15 }} >
           {/* Header */}
           <Box px={24}>
             <Text children={config.title} variant="p1-semibold" center />
@@ -318,6 +327,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
               return renderCardItem({ item });
             }}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={renderLestEmptyComponent}
           />
 
           {/* Continue Button for Account Deletion */}

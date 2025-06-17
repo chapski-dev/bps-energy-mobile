@@ -20,7 +20,7 @@ export const DeleteAccountModal = () => {
   return (
     <Box borderRadius={16} backgroundColor={colors.background} p={16} gap={16}>
       <Box gap={8}>
-        <Text variant="p1-semibold" children={t('to-delete-account') +'?'} mb={2} />
+        <Text variant="p1-semibold" children={t('shared.to-delete-account') +'?'} mb={2} />
         <Text children="Последствия:" variant="p4-semibold" />
         <Text
           variant="p4"
@@ -35,11 +35,11 @@ export const DeleteAccountModal = () => {
       </Box>
       <Button
         onPress={handleRemoveAccount}
-        children={t('to-delete-account')}
+        children={t('shared.to-delete-account')}
         textColor="red_500"
         backgroundColor="red_500_15"
       />
-      <Button onPress={closeModal} children={t('to-cancel')} />
+      <Button onPress={closeModal} children={t('shared.to-cancel')} />
     </Box>
   );
 };

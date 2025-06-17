@@ -29,12 +29,12 @@ export const ProfileDetailsScreen = ({
     Alert.alert(t('do-you-want-to-logout?'), undefined, [
       {
         onPress: () => null,
-        text: t('to-cancel'),
+        text: t('shared.to-cancel'),
       },
       {
         onPress: onLogout,
         style: 'destructive',
-        text: t('to-log-out'),
+        text: t('shared.to-log-out'),
       },
     ]);
 
@@ -42,12 +42,12 @@ export const ProfileDetailsScreen = ({
     Alert.alert(t('do-you-want-to-delete-your-account?'), undefined, [
       {
         onPress: () => null,
-        text: t('to-cancel'),
+        text: t('shared.to-cancel'),
       },
       {
         onPress: modalCardsOpen,
         style: 'destructive',
-        text: t('to-delete'),
+        text: t('shared.to-delete'),
       },
     ]);
 
@@ -129,7 +129,7 @@ export const ProfileDetailsScreen = ({
           <Button
             type="clear"
             textColor="red_500"
-            children={t('to-delete-account')}
+            children={t('shared.to-delete-account')}
             onPress={onDeleteAccountPress}
           />
         </Box>

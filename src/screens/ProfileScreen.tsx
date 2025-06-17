@@ -61,7 +61,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
           borderBottom={false}
         >
           <Box gap={3}>
-            <Text variant="p2" children={t('profile')} />
+            <Text variant="p2" children={t('shared.profile')} />
             <Text colorName="grey_600" children={user?.email} />
           </Box>
         </SectionListItemWithArrow>

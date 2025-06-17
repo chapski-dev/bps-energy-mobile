@@ -69,7 +69,7 @@ const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) =>
       </Box>
 
       <Button
-        children={t('to-confirm')}
+        children={t('shared.to-confirm')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
         loading={loading}
         disabled={loading || !formState.isValid }

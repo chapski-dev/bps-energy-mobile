@@ -13,14 +13,14 @@ import sharedRu from '../ru/shared.json';
 export const resources = {
   [AppLangEnum.EN]: {
     common: commonEn,
-    countries: countriesEn,
-    errors: errorsEn,
-    shared: sharedEn,
+    countries: countriesEn.countries,
+    errors: errorsEn.errors,
+    shared: sharedEn.shared,
   },
   [AppLangEnum.RU]: {
     common: commonRu,
-    countries: countriesRu,
-    errors: errorsRu,
-    shared: sharedRu,
+    countries: countriesRu.countries,
+    errors: errorsRu.errors,
+    shared: sharedRu.shared,
   },
 }

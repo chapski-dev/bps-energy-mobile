@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Vibration } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
 import LockIcon from '@assets/svg/lock.svg';
@@ -13,7 +14,6 @@ import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input, Text } from '@src/ui';
-import { InputProps } from '@src/ui/Input';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { validator } from '@src/utils/validations';
@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
       setLoading(false)
     }
   }
-  const secInputRef = useRef<InputProps>(null);
+  const secInputRef = useRef<TextInput>(null);
 
   return (
     <KeyboardAwareScrollView
@@ -106,7 +106,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
                   value={value}
                   onChangeText={(v) => onChange(v.trim())}
                   onBlur={onBlur}
-                  placeholder={t('password')}
+                  placeholder={t('shared.password')}
                   error={invalid}
                   returnKeyType="done"
                   ref={secInputRef}
@@ -128,7 +128,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
           </Box>
 
           <Button
-            children={t('to-login')}
+            children={t('shared.to-login')}
             onPress={handleSubmit(handleLogIn)}
             loading={loading}
             disabled={loading}
@@ -142,7 +142,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
 
         <Button
           type="clear"
-          children={t('to-skip')}
+          children={t('shared.to-skip')}
           onPress={handleSkip}
         />
       </Box>

@@ -59,7 +59,7 @@ const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-passwo
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              placeholder={t('password')}
+              placeholder={t('shared.password')}
               error={invalid}
               returnKeyType="done"
               importantForAutofill="yes"
@@ -75,7 +75,7 @@ const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-passwo
       </Box>
 
       <Button
-        children={t('to-save')}
+        children={t('shared.to-save')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
         disabled={loading || !formState.isValid}
         loading={loading}

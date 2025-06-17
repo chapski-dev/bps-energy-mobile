@@ -122,7 +122,7 @@ const TopUpAccountScreen = ({
             <Button
               disabled={!Number(amount) || loading}
               loading={loading}
-              children={t('to-pay')}
+              children={t('shared.to-pay')}
               onPress={() => submitPay()}
             />
           </Box>
@@ -132,7 +132,7 @@ const TopUpAccountScreen = ({
             <BepaidIcon width="100%" height="100%" />
           </Box>
           {!route.params?.currency ? (
-            <Button type="clear" children={t('to-skip')} onPress={handleSkip} />
+            <Button type="clear" children={t('shared.to-skip')} onPress={handleSkip} />
           ) : null}
         </Box>
       </KeyboardAwareScrollView>

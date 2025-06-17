@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
 import LockIcon from '@assets/svg/lock.svg';
@@ -14,7 +15,6 @@ import { OFFERS, PRIVACY_POLICY } from '@src/misc/documents';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Checkbox, Input, Text } from '@src/ui';
-import { InputProps } from '@src/ui/Input';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { validator } from '@src/utils/validations';
 
@@ -32,7 +32,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
     mode: 'all',
   });
 
-  const secInputRef = useRef<InputProps>(null);
+  const secInputRef = useRef<TextInput>(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -108,7 +108,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
               value={value}
               onChangeText={(v) => onChange(v.trim())}
               onBlur={onBlur}
-              placeholder={t('password')}
+              placeholder={t('shared.password')}
               error={invalid}
               errorText={error?.message}
               returnKeyType='next'
@@ -173,7 +173,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
       <Button
         disabled={loading || !formState.isValid}
         loading={loading}
-        children={t('next')}
+        children={t('shared.next')}
         onPress={handleSubmit(submitRegistatrion)}
       />
     </KeyboardAwareScrollView>
