@@ -43,6 +43,14 @@
     "to-skip": "Пропустить",
     "to-upload": "Загрузить",
     "to-upload-photo": "Загрузить фото",
-    "to-download-check": "Скачать чек"
+    "to-download-check": "Скачать чек",
+    "to-top-up": "Пополнить",
+    "top-up-balance": "Пополнить баланс",
+    "address-copied":"Адрес скопирован",
+    "current-balance": "Текущий баланс",
+    "support-service": "Служба поддержки",
+    "change-password": "Изменить пароль",
+    "to-logout-from-account": "Выйти из аккаунта",
+    "the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support": "Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки"
   }
 }
