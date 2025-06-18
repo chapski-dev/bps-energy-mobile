@@ -1,7 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+import type { Transaction } from '@src/api/types';
+
 export type RootStackParamList = {
-  tabs: undefined
+  tabs: undefined;
   login: undefined
   registration: undefined
   'forgot-password': undefined
@@ -22,14 +24,14 @@ export type RootStackParamList = {
   'charging-history': undefined;
   'charging-details': undefined;
   'recharge-history': undefined;
-  'recharge-transaction-detail': { transaction: any };
+  'recharge-transaction-detail': { transaction: Transaction };
   'notifications-settings': undefined;
   'support-service': undefined;
 };
 
 export type TabsParamList = {
   map: undefined;
-  charging: undefined;
+  'charging-session': undefined;
   profile: undefined;
 };
 

@@ -8,7 +8,7 @@ import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
 import ChangeUserFieldsScreen from '@src/screens/ChangeUserFieldsScreen';
 import ChargingHistoryScreen from '@src/screens/ChargingHistoryScreen';
 import CharginStationScreen from '@src/screens/CharginStationScreen';
-import FiltersOfStations from '@src/screens/FiltersOfStations';
+import FiltersOfStationsScreen from '@src/screens/FiltersOfStationsScreen';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
 import LoginScreen from '@src/screens/LoginScreen';
 import NotificationsSettingsScreen from '@src/screens/NotificationsSettingsScreen';
@@ -48,7 +48,7 @@ export const RootStack = () => {
             component={LoginScreen}
           />
           <Stack.Screen
-            options={{ title: t('registration') }}
+            options={{ title: t('shared.registration') }}
             name="registration"
             component={RegistrationScreen}
           />
@@ -66,19 +66,19 @@ export const RootStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        options={{ title: 'Пополнить баланс' }}
+        options={{ title: t('shared.top-up-balance') }}
         name="top-up-account"
         component={TopUpAccountScreen}
       />
       <Stack.Screen
-        options={{ title: 'Пополнить баланс' }}
+        options={{ title: t('shared.top-up-balance') }}
         name="adding-card-and-payment"
         component={AddingCardAndPayment}
       />
       <Stack.Screen
-        options={{ title: t('filters') }}
+        options={{ title: t('shared.filters') }}
         name='filters-of-stations'
-        component={FiltersOfStations}
+        component={FiltersOfStationsScreen}
       />
       <Stack.Screen
         options={{ title: '' }}
@@ -101,7 +101,7 @@ export const RootStack = () => {
       {authState === AuthState.ready && (
         <Stack.Group navigationKey="authorized">
           <Stack.Screen
-            options={{ title: t('profile') }}
+            options={{ title: t('shared.profile') }}
             name="profile-details"
             component={ProfileDetailsScreen}
           />
@@ -114,7 +114,7 @@ export const RootStack = () => {
             component={ChangeUserFieldsScreen}
           />
           <Stack.Screen
-            options={{ title: 'Изменить пароль' }}
+            options={{ title: t('shared.change-password') }}
             name='change-password'
             component={ChangePasswordScreen}
           />
@@ -134,12 +134,12 @@ export const RootStack = () => {
             component={RechargeTransactionDetailScreen}
           />
           <Stack.Screen
-            options={{ title: 'Уведомления' }}
+            options={{ title: t('shared.notification') }}
             name='notifications-settings'
             component={NotificationsSettingsScreen}
           />
           <Stack.Screen
-            options={{ title: 'Служба поддержки' }}
+            options={{ title: t('shared.support-service') }}
             name='support-service'
             component={SupportService}
           />
