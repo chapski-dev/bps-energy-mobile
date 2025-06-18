@@ -14,6 +14,7 @@ import '@src/i18n/config';
 import { useAppColorTheme } from './hooks/useAppColorTheme';
 import { navigationRef } from './navigation/navigationRef';
 import { AuthProvider } from './providers/auth';
+import { CameraProvider } from './providers/camera';
 import { ModalLayout } from './ui/Layouts/ModalLayout';
 import { AppServiceStatus } from './events';
 
@@ -35,13 +36,15 @@ function App(): React.JSX.Element {
         ref={navigationRef}
       >
         <SafeAreaProvider >
-          <GestureHandlerRootView>
-            <BottomSheetModalProvider>
-              <RootStack />
-              <Toasts />
-              <ModalLayout />
-            </BottomSheetModalProvider>
-          </GestureHandlerRootView>
+          <CameraProvider>
+            <GestureHandlerRootView>
+              <BottomSheetModalProvider>
+                <RootStack />
+                <Toasts />
+                <ModalLayout />
+              </BottomSheetModalProvider>
+            </GestureHandlerRootView>
+          </CameraProvider>
         </SafeAreaProvider>
       </NavigationContainer>
     </AuthProvider>
