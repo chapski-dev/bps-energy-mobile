@@ -33,6 +33,7 @@ interface PropsType extends ViewProps {
   textColor?: ThemeColors;
   borderColor?: ThemeColors;
   icon?: ReactNode;
+  width?: 'full' | 'auto'
 }
 
 const commonStytle = StyleSheet.create({
@@ -42,6 +43,7 @@ const commonStytle = StyleSheet.create({
     height: 48,
     justifyContent: 'center',
     overflow: 'hidden',
+    paddingHorizontal: 16,
     width: '100%',
   },
   wrapper: {
@@ -77,6 +79,7 @@ export const Button: FC<PropsType> = ({
   children,
   type = 'filled',
   backgroundColor,
+  width = 'full',
   textColor,
   borderColor,
   icon,
@@ -165,6 +168,16 @@ export const Button: FC<PropsType> = ({
       styles.button,
     ],
   );
+  const buttonWidth = useMemo(() => {
+    switch (width) {
+      case 'full':
+        return '100%'
+      case 'auto':
+        return 'auto'
+      default:
+        return '100%'
+    }
+  }, [width])
 
   const buttonContent = useMemo(() => (
     <>
@@ -193,7 +206,7 @@ export const Button: FC<PropsType> = ({
 
   return (
     <View style={[styles.wrapper, wrapperStyle]}>
-      <Animated.View style={{ transform: [{ scale: scaleValue }], width: '100%' }}>
+      <Animated.View style={{ transform: [{ scale: scaleValue }], width: buttonWidth }}>
         {type === 'filled' ? (
           <Pressable
             style={buttonStyles}
