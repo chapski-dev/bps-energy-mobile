@@ -137,7 +137,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType='phone-pad'
-              prompting='Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки'
+              prompting={t('shared.the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
               icon={<PhoneIcon color={colors.grey_400} />}
             />
           )}

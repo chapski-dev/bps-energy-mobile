@@ -93,7 +93,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         />
 
         <SectionListItemWithArrow
-          title={'Уведомления'}
+          title={t('shared.notification')}
           onPress={() => navigation.navigate('notifications-settings')}
         />
         <SectionListItemWithArrow

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   RefreshControl,
   ScrollView,
 } from 'react-native';
 import WalletIcon from '@assets/svg/wallet.svg';
+import { useNavigation } from '@react-navigation/native';
 
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { ScreenProps } from '@src/navigation/types';
+import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { wait } from '@src/utils';
@@ -39,7 +42,8 @@ const stationData: StationData = {
   ],
 };
 const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navigation, route }) => {
-  const { colors, insets } = useAppTheme();
+  const { insets } = useAppTheme();
+  const { t } = useTranslation();
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async (): Promise<void> => {
@@ -56,26 +60,17 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         contentContainerStyle={{
-          paddingBottom: insets.bottom || 25,
+          paddingBottom: insets.bottom + 15,
           paddingHorizontal: 16,
           paddingTop: 22
         }}
       >
-        <Box backgroundColor={colors.grey_50} row px={16} py={12} gap={16} borderRadius={8} mb={24}>
-          <Box flex={1} gap={4}>
-            <Text children="Для начала зарядки требуется пополнение баланса." />
-            <Box onPress={() => null}>
-              <Text children="Пополнить" colorName="main" />
-            </Box>
-          </Box>
-          <WalletIcon />
-        </Box>
-
+        <NeedTopUpBalanceBanner />
         <Box mb={16}>
           <Text variant="h1" children="BPS Energy" />
           <Box row gap={6}>
             <Text children="Аранская улица, 11, Минск" />
-            <CopyToClipboard value={'Аранская улица, 11, Минск'} message="Адрес скопирован!" />
+            <CopyToClipboard value={'Аранская улица, 11, Минск'} message={t('shared.address-copied') + '!'} />
           </Box>
         </Box>
 
@@ -97,12 +92,33 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
           }}
         />
       </ScrollView>
-      <Box px={16} pb={insets.bottom + 35} gap={12}>
-        <Button children="Дать обратную связь" type="outline" />
+      <Box px={16} pb={insets.bottom + 15} gap={12}>
+        <Button children={t('give-feedback')} type="outline" />
         <Button children="3.7 км, ~14 мин" />
       </Box>
     </>
   );
 };
+
+const NeedTopUpBalanceBanner = () => {
+  const { user } = useAuth()
+  const { colors } = useAppTheme()
+  const navigation = useNavigation();
+  const { t } = useTranslation();
+
+  if (!user?.wallets[0].value) {
+    return (
+      <Box backgroundColor={colors.grey_50} row px={16} py={12} gap={16} borderRadius={8} mb={24}>
+        <Box flex={1} gap={4}>
+          <Text children="Для начала зарядки требуется пополнение баланса." />
+          <Box onPress={() => navigation.navigate('top-up-account')}>
+            <Text children={t('shared.to-top-up')} colorName="main" />
+          </Box>
+        </Box>
+        <WalletIcon />
+      </Box>
+    )
+  }
+}
 
 export default CharginStationScreen;

@@ -79,7 +79,7 @@ export const ProfileDetailsScreen = ({
           </SectionListItemWithArrow>
 
           <SectionListItemWithArrow
-            title={'Изменить пароль'}
+            title={t('shared.change-password')}
             onPress={() => navigation.navigate('change-password')}
           />
           <SectionListItemWithArrow
@@ -115,7 +115,7 @@ export const ProfileDetailsScreen = ({
             mt={16}
             variant="p3"
             colorName="grey_600"
-            children="Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки"
+            children={t('shared.the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
           />
         </Box>
 
@@ -123,7 +123,7 @@ export const ProfileDetailsScreen = ({
           <Button
             backgroundColor="white"
             textColor="grey_600"
-            children={'Выйти из аккаунта'}
+            children={t('shared.to-logout-from-account')}
             onPress={onLogoutPress}
           />
           <Button

@@ -1,4 +1,5 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NativeSyntheticEvent } from 'react-native';
 import {
   ClusteredYamap,
@@ -23,6 +24,7 @@ import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
+  const { t } = useTranslation();
   const [markers, setMarkers] = useState<Point[]>([]);
   const { insets } = useAppTheme();
 
@@ -59,10 +61,10 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 
     } catch (error) {
       handleCatchError(
-        'Не удалось определить ваше местоположение. Убедитесь что включили доступ в настройках вашего устройства.',
+        t('errors.your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings'),
         'MapScreen - getCurrentPosition')
     }
-  }, [])
+  }, [t])
 
 
   useLayoutEffect(() => {
@@ -108,6 +110,7 @@ const UserBalance = () => {
   const { insets, colors } = useAppTheme();
   const { authState, user } = useAuth();
   const navigation = useNavigation()
+  const { t } = useTranslation();
 
   return authState === AuthState.ready ? (
     <Box
@@ -125,7 +128,7 @@ const UserBalance = () => {
       onPress={() => navigation.navigate('top-up-account', { currency: 'BYN' })}
     >
       <>
-        <Text children="Текущий баланс" fontSize={13} colorName="grey_600" />
+        <Text children={t('shared.current-balance')} fontSize={13} colorName="grey_600" />
         <Box row gap={4} alignItems="center" justifyContent='flex-start'>
           <Text children={`${user?.wallets[0].value} BYN`} fontWeight="600" fontSize={20} />
           <PlusCircleFillIcon color={colors.main} width={20} height={20} />

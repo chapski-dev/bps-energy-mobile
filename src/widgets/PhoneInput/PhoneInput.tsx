@@ -1,7 +1,7 @@
 import React, { FC, memo, useCallback, useRef, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { FlatList, Keyboard, LayoutAnimation } from 'react-native'
+import { FlatList, Keyboard, LayoutAnimation, TextInput } from 'react-native'
 import SearchIcon from '@assets/svg/phone.svg'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { CountryCode, getCountries, getExampleNumber } from 'libphonenumber-js'
@@ -10,7 +10,6 @@ import { AsYouType, parsePhoneNumberWithError } from 'libphonenumber-js/max'
 
 import { useAppTheme } from '@src/theme/theme'
 import { BottomSlideModal, Box, Input, Text } from '@src/ui'
-import { InputProps } from '@src/ui/Input'
 import { animate } from '@src/utils/animate'
 
 import { countryCallingCode, countryCodeEmoji, countryName, validatePhone } from './utils'
@@ -26,9 +25,10 @@ const allCountries = getCountries().slice(1)
 
 export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
   const { colors, insets } = useAppTheme()
+  const { t } = useTranslation()
   const { setValue, control, getValues, resetField } = useFormContext<EnterPhoneT>()
   const modal = useRef<BottomSheetModal>(null)
-  const phoneInput = useRef<InputProps>(null)
+  const phoneInput = useRef<TextInput>(null)
 
   const modalClose = () => modal?.current?.forceClose()
 
@@ -128,7 +128,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
               autoComplete="off"
               importantForAutofill="no"
               autoFocus
-              prompting='Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки'
+              prompting={t('shared.the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
             />
           )
         }}
