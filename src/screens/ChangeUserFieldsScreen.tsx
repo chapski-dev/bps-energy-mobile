@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Alert, Keyboard } from 'react-native';
 import UserIcon from '@assets/svg/user.svg';
 
 import { updateUserProfile } from '@src/api';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -26,7 +26,7 @@ function ChangeUserFieldsScreen({
 }: ScreenProps<'change-user-fields'>) {
   const { user } = useAuth();
   const { insets, colors } = useAppTheme();
-  const { t } = useTranslation();
+  const { t } = useLocalization();
   const { toastSuccess } = useThemedToasts();
   const { getUserData } = useAuth();
 
@@ -56,17 +56,17 @@ function ChangeUserFieldsScreen({
   };
 
   const openConfirmationDeletePhone = () => {
-    Alert.alert(t('shared.to-delete')+'?', undefined, [
+    Alert.alert(t('actions:to-delete')+'?', undefined, [
       {
         onPress: () => null,
-        text: t('shared.to-cancel'),
+        text: t('actions:to-cancel'),
       },
       {
         onPress: () => {
           handleUpdateData({...form.getValues(), phone: ''})
         },
         style: 'destructive',
-        text: t('shared.to-delete'),
+        text: t('actions:to-delete'),
       },
     ]);
   };
@@ -120,7 +120,7 @@ function ChangeUserFieldsScreen({
           </Box>
         </Box>
         <Button
-          children={t('shared.to-save')}
+          children={t('actions:to-save')}
           onPress={handleSubmit(handleUpdateData)}
           disabled={loading || !formState.isValid}
           loading={loading}

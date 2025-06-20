@@ -1,5 +1,4 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { NativeSyntheticEvent } from 'react-native';
 import {
   ClusteredYamap,
@@ -12,6 +11,7 @@ import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
 import { useNavigation } from '@react-navigation/native';
 import lodash from 'lodash';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { AuthState, useAuth } from '@src/providers/auth';
 import { defaultState, useFilterStore } from '@src/store/useFilterOfStationsStore';
@@ -24,7 +24,7 @@ import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
-  const { t } = useTranslation();
+  const { t } = useLocalization();
   const [markers, setMarkers] = useState<Point[]>([]);
   const { insets } = useAppTheme();
 
@@ -61,7 +61,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 
     } catch (error) {
       handleCatchError(
-        t('errors.your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings'),
+        t('errors:your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings'),
         'MapScreen - getCurrentPosition')
     }
   }, [t])
@@ -110,7 +110,7 @@ const UserBalance = () => {
   const { insets, colors } = useAppTheme();
   const { authState, user } = useAuth();
   const navigation = useNavigation()
-  const { t } = useTranslation();
+  const { t } = useLocalization();
 
   return authState === AuthState.ready ? (
     <Box
@@ -128,7 +128,7 @@ const UserBalance = () => {
       onPress={() => navigation.navigate('top-up-account', { currency: 'BYN' })}
     >
       <>
-        <Text children={t('shared.current-balance')} fontSize={13} colorName="grey_600" />
+        <Text children={t('current-balance')} fontSize={13} colorName="grey_600" />
         <Box row gap={4} alignItems="center" justifyContent='flex-start'>
           <Text children={`${user?.wallets[0].value} BYN`} fontWeight="600" fontSize={20} />
           <PlusCircleFillIcon color={colors.main} width={20} height={20} />

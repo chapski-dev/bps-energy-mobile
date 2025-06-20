@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
@@ -8,7 +8,7 @@ import { modal } from '@src/ui/Layouts/ModalLayout';
 
 export const DeleteAccountModal = () => {
   const { colors } = useAppTheme();
-  const { t } = useTranslation();
+  const { t } = useLocalization();
   const { onLogout } = useAuth();
 
   const handleRemoveAccount = () => {
@@ -20,7 +20,7 @@ export const DeleteAccountModal = () => {
   return (
     <Box borderRadius={16} backgroundColor={colors.background} p={16} gap={16}>
       <Box gap={8}>
-        <Text variant="p1-semibold" children={t('shared.to-delete-account') +'?'} mb={2} />
+        <Text variant="p1-semibold" children={t('actions:to-delete-account') +'?'} mb={2} />
         <Text children="Последствия:" variant="p4-semibold" />
         <Text
           variant="p4"
@@ -35,11 +35,11 @@ export const DeleteAccountModal = () => {
       </Box>
       <Button
         onPress={handleRemoveAccount}
-        children={t('shared.to-delete-account')}
+        children={t('actions:to-delete-account')}
         textColor="red_500"
         backgroundColor="red_500_15"
       />
-      <Button onPress={closeModal} children={t('shared.to-cancel')} />
+      <Button onPress={closeModal} children={t('actions:to-cancel')} />
     </Box>
   );
 };

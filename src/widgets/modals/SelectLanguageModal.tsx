@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react'
-import { useTranslation } from 'react-i18next';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -7,6 +6,7 @@ import {
   BottomSheetView
 } from '@gorhom/bottom-sheet';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import {
   AppLangEnum,
   LANGUAGE_LIST,
@@ -24,7 +24,7 @@ const SelectLanguageModal = forwardRef<BottomSheetModal, SelectLanguageModalProp
   { modalClose }
   , ref) => {
   const { colors, insets } = useAppTheme();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useLocalization();
 
   const handleChangeLanguage = (value: AppLangEnum) => async () => {
     await i18n.changeLanguage(value);

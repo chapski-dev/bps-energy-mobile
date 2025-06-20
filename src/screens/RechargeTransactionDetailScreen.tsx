@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet } from 'react-native';
 import FilePdfIcon from '@assets/svg/file-pdf.svg'
 import ByFlagIcon from '@assets/svg/flags/Belarus.svg'
 import RuFlagIcon from '@assets/svg/flags/Russia.svg'
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
@@ -13,7 +13,7 @@ export default function RechargeTransactionDetailScreen({
   route
 }: ScreenProps<'recharge-transaction-detail'>) {
   const { colors, insets } = useAppTheme();
-  const { t } = useTranslation();
+  const { t } = useLocalization();
 
   const transactionData = route?.params?.transaction;
 
@@ -90,7 +90,7 @@ export default function RechargeTransactionDetailScreen({
       <Button
         type="outline"
         icon={<FilePdfIcon />}
-        children={t('shared.to-download-check')}
+        children={t('actions:to-download-check')}
       />
     </ScrollView>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { AuthState, useAuth } from '@src/providers/auth';
 import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
 import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
@@ -28,7 +28,7 @@ import { RootStackParamList } from './types';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootStack = () => {
-  const { t } = useTranslation();
+  const { t } = useLocalization();
   const { colors } = useAppTheme();
   const { authState } = useAuth();
 
@@ -48,12 +48,12 @@ export const RootStack = () => {
             component={LoginScreen}
           />
           <Stack.Screen
-            options={{ title: t('shared.registration') }}
+            options={{ title: t('registration') }}
             name="registration"
             component={RegistrationScreen}
           />
           <Stack.Screen
-            options={{ title: t('forgot-password') }}
+            options={{ title: t('common:forgot-password') }}
             name="forgot-password"
             component={ForgotPasswordScreen}
           />
@@ -66,17 +66,17 @@ export const RootStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        options={{ title: t('shared.top-up-balance') }}
+        options={{ title: t('top-up-balance') }}
         name="top-up-account"
         component={TopUpAccountScreen}
       />
       <Stack.Screen
-        options={{ title: t('shared.top-up-balance') }}
+        options={{ title: t('top-up-balance') }}
         name="adding-card-and-payment"
         component={AddingCardAndPayment}
       />
       <Stack.Screen
-        options={{ title: t('shared.filters') }}
+        options={{ title: t('filters') }}
         name='filters-of-stations'
         component={FiltersOfStationsScreen}
       />
@@ -86,7 +86,7 @@ export const RootStack = () => {
         component={CharginStationScreen}
       />
       <Stack.Screen
-        options={{ title: 'Новый пароль' }}
+        options={{ title: t('screens:set-new-password-screen.title') }}
         name='set-new-password'
         component={SetNewPasswordScreen}
       />
@@ -101,20 +101,21 @@ export const RootStack = () => {
       {authState === AuthState.ready && (
         <Stack.Group navigationKey="authorized">
           <Stack.Screen
-            options={{ title: t('shared.profile') }}
+            options={{ title: t('screens:profile-details-screen.title') }}
             name="profile-details"
             component={ProfileDetailsScreen}
           />
           <Stack.Screen
             options={({ route }) => ({
               title: route.params.filed === 'name' ?
-                'Как к вам обращаться?' : 'Номер телефона'
+                t('screens:profile-details-screen.how-to-address-you') :
+                t('screens:profile-details-screen.phone-number')
             })}
             name='change-user-fields'
             component={ChangeUserFieldsScreen}
           />
           <Stack.Screen
-            options={{ title: t('shared.change-password') }}
+            options={{ title: t('screens:change-password-screen.title') }}
             name='change-password'
             component={ChangePasswordScreen}
           />
@@ -134,12 +135,12 @@ export const RootStack = () => {
             component={RechargeTransactionDetailScreen}
           />
           <Stack.Screen
-            options={{ title: t('shared.notification') }}
+            options={{ title: t('screens:notifications-settings-screen.title') }}
             name='notifications-settings'
             component={NotificationsSettingsScreen}
           />
           <Stack.Screen
-            options={{ title: t('shared.support-service') }}
+            options={{ title: t('support-service') }}
             name='support-service'
             component={SupportService}
           />

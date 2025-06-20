@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { Card } from '@src/api/types';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -18,7 +18,7 @@ export enum NotifictationOption {
 export const ProfileDetailsScreen = ({
   navigation,
 }: ScreenProps<'profile-details'>) => {
-  const { t } = useTranslation();
+  const { t } = useLocalization(['screens', 'common', 'actions', 'shared'], { keyPrefix: 'profile-details-screen' });
   const { onLogout, user } = useAuth();
   const { insets } = useAppTheme();
 
@@ -26,28 +26,28 @@ export const ProfileDetailsScreen = ({
     navigation.push('change-user-fields', { filed });
 
   const onLogoutPress = () =>
-    Alert.alert(t('do-you-want-to-logout?'), undefined, [
+    Alert.alert(t('common:do-you-want-to-logout?'), undefined, [
       {
         onPress: () => null,
-        text: t('shared.to-cancel'),
+        text: t('actions:to-cancel'),
       },
       {
         onPress: onLogout,
         style: 'destructive',
-        text: t('shared.to-log-out'),
+        text: t('actions:to-log-out'),
       },
     ]);
 
   const onDeleteAccountPress = () =>
-    Alert.alert(t('do-you-want-to-delete-your-account?'), undefined, [
+    Alert.alert(t('common:do-you-want-to-delete-your-account?'), undefined, [
       {
         onPress: () => null,
-        text: t('shared.to-cancel'),
+        text: t('actions:to-cancel'),
       },
       {
         onPress: modalCardsOpen,
         style: 'destructive',
-        text: t('shared.to-delete'),
+        text: t('actions:to-delete'),
       },
     ]);
 
@@ -74,12 +74,12 @@ export const ProfileDetailsScreen = ({
           <SectionListItemWithArrow disabled onPress={() => null}>
             <Box gap={3}>
               <Text variant="p3-semibold" children={user?.email} />
-              <Text colorName="grey_600" children={'E-mail'} />
+              <Text colorName="grey_600" children="E-mail" />
             </Box>
           </SectionListItemWithArrow>
 
           <SectionListItemWithArrow
-            title={t('shared.change-password')}
+            title={t('actions:to-change')}
             onPress={() => navigation.navigate('change-password')}
           />
           <SectionListItemWithArrow
@@ -91,12 +91,12 @@ export const ProfileDetailsScreen = ({
                 </Box>
               ) : null
             }
-            title="Как к вам обращаться?"
+            title={t('how-to-address-you')}
             onPress={() => openChangeUserFilelds('name')}
           />
           <SectionListItemWithArrow
             onPress={() => openChangeUserFilelds('phone')}
-            title="Добавить номер телефона"
+            title={t('add-phone-number')}
             children={
               user?.phone ? (
                 <Box>
@@ -104,7 +104,7 @@ export const ProfileDetailsScreen = ({
                   <Text
                     variant="p3"
                     colorName="grey_600"
-                    children="Номер телефона"
+                    children={t('phone-number')}
                   />
                 </Box>
               ) : null
@@ -115,7 +115,7 @@ export const ProfileDetailsScreen = ({
             mt={16}
             variant="p3"
             colorName="grey_600"
-            children={t('shared.the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
+            children={t('shared:the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
           />
         </Box>
 
@@ -123,13 +123,13 @@ export const ProfileDetailsScreen = ({
           <Button
             backgroundColor="white"
             textColor="grey_600"
-            children={t('shared.to-logout-from-account')}
+            children={t('actions:to-logout-from-account')}
             onPress={onLogoutPress}
           />
           <Button
             type="clear"
             textColor="red_500"
-            children={t('shared.to-delete-account')}
+            children={t('actions:to-delete-account')}
             onPress={onDeleteAccountPress}
           />
         </Box>

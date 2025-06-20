@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { RefreshControl, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -18,7 +18,7 @@ export enum NotifictationOption {
 }
 
 export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
-  const { t } = useTranslation();
+  const { t } = useLocalization();
 
   const openProfileData = () => navigation.navigate('profile-details');
   const [refreshing, setRefreshing] = useState(false);
@@ -61,7 +61,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
           borderBottom={false}
         >
           <Box gap={3}>
-            <Text variant="p2" children={t('shared.profile')} />
+            <Text variant="p2" children={t('profile')} />
             <Text colorName="grey_600" children={user?.email} />
           </Box>
         </SectionListItemWithArrow>
@@ -93,7 +93,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         />
 
         <SectionListItemWithArrow
-          title={t('shared.notification')}
+          title={t('notification')}
           onPress={() => navigation.navigate('notifications-settings')}
         />
         <SectionListItemWithArrow
@@ -106,7 +106,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         />
         <SectionListItemWithArrow title={'FAQ'} onPress={() => null} />
         <SectionListItemWithArrow
-          title={t('apps-language')}
+          title={t('common:apps-language')}
           onPress={modalOpen}
         />
         <Text variant='p4' colorName='grey_400' my={24} children="Версия 1.74.0" />

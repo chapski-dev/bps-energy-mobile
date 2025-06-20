@@ -7,6 +7,7 @@ import RuFlagIcon from '@assets/svg/flags/Russia.svg'
 import MagnifyingIcon from '@assets/svg/magnifying-glass-cross.svg'
 
 import { getTransactionsHistory } from '@src/api';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { isIOS } from '@src/misc/platform';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
@@ -123,13 +124,11 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
   const { colors } = useAppTheme();
   const [refreshing, setRefreshing] = useState(false);
   const [filterDates, setFilterDates] = useState(initialDates)
-
+  const { t } = useLocalization();
   const [sectionsData, setSectionsData] = useState<SectionData[]>(groupTransactionsByDate(mockTransactions));
 
   const onRefresh = useCallback(async (): Promise<void> => {
     try {
-      console.log('onRefresh');
-      
       setRefreshing(true);
 
       // Показываем моковые данные во время загрузки для скелетонов
@@ -220,12 +219,12 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
         />
       </Box>
       <Button
-        children="Сбросить фильтр"
+        children={t('actions:to-reset-filter')}
         type='clear'
         onPress={() => setFilterDates(initialDates)}
       />
     </Box>
-  ), [])
+  ), [t])
 
   return (
     <>

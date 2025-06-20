@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Keyboard } from 'react-native';
 import LockIcon from '@assets/svg/lock.svg';
 
 import { postChangePasswordViaOtp } from '@src/api';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -18,7 +18,7 @@ import { validator } from '@src/utils/validations';
 
 const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-password'>) => {
   const { insets, colors } = useAppTheme();
-  const { t } = useTranslation()
+  const { t } = useLocalization()
   const { onSignIn } = useAuth();
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { password: '' },
@@ -38,7 +38,7 @@ const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-passwo
       })
 
       await onSignIn({ email: route.params?.email, password: data.password })
-      toastSuccess('Пароль успешно изменен!')
+      toastSuccess(t('screens:set-new-password-screen.password-changed-success'))
       navigation.replace('tabs')
     } catch (error) {
       handleCatchError(error)
@@ -59,7 +59,7 @@ const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-passwo
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              placeholder={t('shared.password')}
+              placeholder={t('password')}
               error={invalid}
               returnKeyType="done"
               importantForAutofill="yes"
@@ -75,7 +75,7 @@ const SetNewPasswordScreen = ({ navigation, route }: ScreenProps<'set-new-passwo
       </Box>
 
       <Button
-        children={t('shared.to-save')}
+        children={t('actions:to-save')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
         disabled={loading || !formState.isValid}
         loading={loading}

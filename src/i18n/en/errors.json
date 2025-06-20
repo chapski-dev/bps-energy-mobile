@@ -1,6 +1,6 @@
 {
-  "errors": {
-    "low-location-accuracy": "Точность геопозиции недостаточна. Включите GPS и попробуйте снова",
-    "unknown-error": "Неизвестная ошибка"
-  }
+  "low-location-accuracy": "Точность геопозиции недостаточна. Включите GPS и попробуйте снова",
+  "unknown-error": "Неизвестная ошибка",
+  "your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings": "Не удалось определить ваше местоположение. Убедитесь что включили доступ в настройках вашего устройства.",
+  "payment-error": "There was a problem making your payment. Please try again."
 }

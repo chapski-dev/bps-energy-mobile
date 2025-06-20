@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, AppState, AppStateStatus, Keyboard, Vibration } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
 
 import { postConfirmEmail, postResendOtp } from '@src/api';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -19,7 +19,7 @@ const COUNTDOWN_SECONDS = 60;
 
 const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
   const { colors, insets } = useAppTheme();
-  const { t } = useTranslation('common');
+  const { t } = useLocalization('common');
   const { toastSuccess } = useThemedToasts();
 
   const otpInput = useRef<OtpInputRef>(null);

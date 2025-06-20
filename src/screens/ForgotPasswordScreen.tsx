@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Keyboard } from 'react-native';
 
 import { postForgotPassword } from '@src/api';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input } from '@src/ui';
@@ -15,7 +15,7 @@ import { validator } from '@src/utils/validations';
 
 const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) => {
   const { insets } = useAppTheme();
-  const { t } = useTranslation()
+  const { t } = useLocalization()
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { email: '' },
     mode: 'all',
@@ -69,7 +69,7 @@ const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) =>
       </Box>
 
       <Button
-        children={t('shared.to-confirm')}
+        children={t('actions:to-confirm')}
         onPress={handleSubmit(handleSendOtpToResetPassword)}
         loading={loading}
         disabled={loading || !formState.isValid }

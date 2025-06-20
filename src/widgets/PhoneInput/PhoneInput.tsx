@@ -1,6 +1,5 @@
 import React, { FC, memo, useCallback, useRef, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 import { FlatList, Keyboard, LayoutAnimation, TextInput } from 'react-native'
 import SearchIcon from '@assets/svg/phone.svg'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -8,6 +7,7 @@ import { CountryCode, getCountries, getExampleNumber } from 'libphonenumber-js'
 import examples from 'libphonenumber-js/examples.mobile.json'
 import { AsYouType, parsePhoneNumberWithError } from 'libphonenumber-js/max'
 
+import { useLocalization } from '@src/hooks/useLocalization'
 import { useAppTheme } from '@src/theme/theme'
 import { BottomSlideModal, Box, Input, Text } from '@src/ui'
 import { animate } from '@src/utils/animate'
@@ -25,7 +25,7 @@ const allCountries = getCountries().slice(1)
 
 export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
   const { colors, insets } = useAppTheme()
-  const { t } = useTranslation()
+  const { t } = useLocalization()
   const { setValue, control, getValues, resetField } = useFormContext<EnterPhoneT>()
   const modal = useRef<BottomSheetModal>(null)
   const phoneInput = useRef<TextInput>(null)
@@ -128,7 +128,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
               autoComplete="off"
               importantForAutofill="no"
               autoFocus
-              prompting={t('shared.the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
+              prompting={t('the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
             />
           )
         }}
@@ -138,7 +138,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
           <Input
             icon={<SearchIcon width={20} height={20} color={colors.grey_600} />}
             onChangeText={handleFilterCounties}
-            placeholder='Поиск'
+            placeholder={t('search')}
           />
           <FlatList
             data={filterdDefaultCountries}
@@ -155,7 +155,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
 const CountryItem = memo(
   ({ item, handleSelectCountry }: { item: CountryCode; handleSelectCountry: (country: CountryCode) => () => void }) => {
     const { colors } = useAppTheme()
-    const { t } = useTranslation('countries');
+    const { t } = useLocalization('countries');
 
 
     return countryName(item) && (
@@ -165,7 +165,7 @@ const CountryItem = memo(
         </Box>
         <Box gap={5} row w='full' flex={1}>
           <Text children={`(+${countryCallingCode(item)})`} />
-          <Text style={{ flexShrink: 1 }} children={t(countryName(item))} />
+          <Text style={{ flexShrink: 1 }} children={t(countryName(item) as const)} />
         </Box>
       </Box>
     )

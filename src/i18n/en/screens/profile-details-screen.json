@@ -1,0 +1,11 @@
+{
+  "title": "Profile",
+
+  "email-label": "E-mail",
+  "name-label": "Name",
+  "phone-number": "Phone number",
+  "how-to-address-you": "How should we address you?",
+  "add-phone-number": "Add phone number",
+  "logout-button": "Log out",
+  "delete-account-button": "Delete account"
+}

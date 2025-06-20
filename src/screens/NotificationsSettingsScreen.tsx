@@ -4,6 +4,7 @@ import { ActivityIndicator, ScrollView, StyleSheet, Switch } from 'react-native'
 
 import { NotificationSettings } from '@src/api/types';
 import { useAppStateChangeWithCallbacks } from '@src/hooks/useAppStateChangeWithCallbacks';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import messaging from '@src/service/messaging';
 import { useAppTheme } from '@src/theme/theme';
@@ -24,6 +25,7 @@ export default function NotificationsSettingsScreen({
   navigation
 }: ScreenProps<'notifications-settings'>) {
   const { colors, insets } = useAppTheme();
+  const { t } = useLocalization('screens', { keyPrefix: 'notifications-settings-screen'});
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
@@ -45,7 +47,6 @@ export default function NotificationsSettingsScreen({
       setLoading(true)
       await wait(4500)
       // Здесь будет логика сохранения настроек
-      console.log('Настройки сохранены:', { settings: values });
       setValue('settings', values)
     } catch (error) {
       handleCatchError(error)
@@ -92,28 +93,28 @@ export default function NotificationsSettingsScreen({
             borderColor={colors.grey_100}
           >
             <SettingRow
-              title="Начало и окончание зарядки"
+              title={t('options.start_and_end_of_charging')}
               onToggle={handleChangeSettings}
               name={NotifictationOption.start_and_end_of_charging}
               disabled={loading}
             />
 
             <SettingRow
-              title="Баланс пополнен"
+              title={t('options.balance_replenished')}
               onToggle={handleChangeSettings}
               name={NotifictationOption.balance_replenished}
               disabled={loading}
             />
 
             <SettingRow
-              title="Баланс меньше 3 BYN"
+              title={t('options.balance_less_than_3_byn')}
               onToggle={handleChangeSettings}
               name={NotifictationOption.balance_less_than_3_byn}
               disabled={loading}
             />
 
             <SettingRow
-              title="Спец предложения"
+              title={t('options.special_offers')}
               onToggle={handleChangeSettings}
               name={NotifictationOption.special_offers}
               disabled={loading}

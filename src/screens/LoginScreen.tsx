@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Vibration } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -10,6 +9,7 @@ import LogoIcon from '@assets/svg/logo.svg';
 import { isAxiosError } from 'axios';
 
 import { SignInReq } from '@src/api/types';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -21,7 +21,7 @@ import { validator } from '@src/utils/validations';
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
   const { insets, colors } = useAppTheme();
-  const { t } = useTranslation()
+  const { t } = useLocalization()
   const { onSignIn } = useAuth();
   const { control, handleSubmit } = useForm<SignInReq>({
     defaultValues: {
@@ -106,7 +106,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
                   value={value}
                   onChangeText={(v) => onChange(v.trim())}
                   onBlur={onBlur}
-                  placeholder={t('shared.password')}
+                  placeholder={t('password')}
                   error={invalid}
                   returnKeyType="done"
                   ref={secInputRef}
@@ -124,11 +124,11 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
             style={{ alignSelf: 'flex-end' }}
             onPress={() => navigation.navigate('forgot-password')}
           >
-            <Text color={colors.grey_600} children='Забыли пароль?' />
+            <Text color={colors.grey_600} children={t('forgot-password')} />
           </Box>
 
           <Button
-            children={t('shared.to-login')}
+            children={t('actions:to-login')}
             onPress={handleSubmit(handleLogIn)}
             loading={loading}
             disabled={loading}
@@ -142,7 +142,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
 
         <Button
           type="clear"
-          children={t('shared.to-skip')}
+          children={t('actions:to-skip')}
           onPress={handleSkip}
         />
       </Box>

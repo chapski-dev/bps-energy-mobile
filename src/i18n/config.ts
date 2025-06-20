@@ -13,14 +13,9 @@ export enum AppLangEnum {
   EN = 'en',
 }
 
-export const defaultNS = 'common';
-const ns = Object.keys(resources[AppLangEnum.RU]);
+export const defaultNS = 'shared';
 
-export const LANGUAGE_LIST: {
-  lang: AppLangEnum;
-  title: string;
-  flag: string;
-}[] = [
+export const LANGUAGE_LIST = [
   {
     flag: '🇬🇧',
     lang: AppLangEnum.EN,
@@ -31,28 +26,39 @@ export const LANGUAGE_LIST: {
     lang: AppLangEnum.RU,
     title: 'russian',
   },
-];
+] as const;
 
 export const saveLanguageAsyncStorage = async (language: AppLangEnum) => {
   await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.CURRENT_LANG, language);
 };
 
-(async () => {
-  i18n
+export const initializeI18n = async () => {
+  const ns = Object.keys(resources[AppLangEnum.RU]);
+  const lng = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.CURRENT_LANG) || AppLangEnum.RU;
+  
+  await i18n
     .use(RNLanguageDetector)
     .use(initReactI18next)
     .init({
-      debug: true,
+      debug: __DEV__,
       resources,
-      defaultNS: defaultNS,
-      ns: ns,
-      fallbackLng: AppLangEnum.RU,
-      lng: (await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.CURRENT_LANG)) || AppLangEnum.RU,
+      defaultNS,
+      ns,
+      lng,
+      fallbackLng: AppLangEnum.EN,
+      keySeparator: '.',
+      nsSeparator: ':',
+      interpolation: {
+        escapeValue: false,
+      },
       parseMissingKeyHandler: (key) => {
         console.warn(`[MISSING KEY] ${key}`);
-        return `[MISSING KEY] ${key}`
+        return `[MISSING KEY] ${key}`;
       },
     });
-})();
+};
+
+// Инициализация при загрузке
+initializeI18n().catch(console.error);
 
 export default i18n;

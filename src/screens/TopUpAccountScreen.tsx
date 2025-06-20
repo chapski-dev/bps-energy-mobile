@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
@@ -15,6 +14,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { postCreateTransaction, postTopUpBalance } from '@src/api';
 import { Card } from '@src/api/types';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -33,7 +33,7 @@ const TopUpAccountScreen = ({
   const { insets } = useAppTheme();
   const { user, getUserData } = useAuth();
   const { toastSuccess } = useThemedToasts();
-  const { t } = useTranslation();
+  const { t } = useLocalization(['screens', 'actions'], { keyPrefix: 'top-up-account-screen' });
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -80,7 +80,7 @@ const TopUpAccountScreen = ({
       await getUserData()
       navigation.goBack();
       setAmount('');
-      toastSuccess('Баланс пополнен!')
+      toastSuccess(t('balance-topped-up'))
     } catch (error) {
       handleCatchError(error, 'TopUpAccountScreen');
     } finally {
@@ -106,7 +106,7 @@ const TopUpAccountScreen = ({
             <Input
               value={amount}
               onChangeText={(val) => setAmount(val.replaceAll(',', ''))}
-              placeholder="Сумма"
+              placeholder={t('amount-placeholder')}
               autoCorrect={false}
               inputMode="numeric"
               keyboardType="numeric"
@@ -122,7 +122,7 @@ const TopUpAccountScreen = ({
             <Button
               disabled={!Number(amount) || loading}
               loading={loading}
-              children={t('shared.to-pay')}
+              children={t('actions:to-pay')}
               onPress={() => submitPay()}
             />
           </Box>
@@ -132,7 +132,7 @@ const TopUpAccountScreen = ({
             <BepaidIcon width="100%" height="100%" />
           </Box>
           {!route.params?.currency ? (
-            <Button type="clear" children={t('shared.to-skip')} onPress={handleSkip} />
+            <Button type="clear" children={t('actions:to-skip')} onPress={handleSkip} />
           ) : null}
         </Box>
       </KeyboardAwareScrollView>
@@ -151,6 +151,7 @@ export default TopUpAccountScreen;
 
 const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
   const { colors } = useAppTheme();
+  const { t } = useLocalization('screens', { keyPrefix: 'top-up-account-screen' })
   const [selectedCurrency, setSelectedCurrency] = useState<'BY' | 'RU'>(
     initialCurr === 'RUB' ? 'RU' : 'BY',
   );
@@ -207,7 +208,7 @@ const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
       >
         <BelarusIcon />
         <Text
-          children="BY Кошелёк"
+          children={t('by-wallet')}
           variant="p3"
           fontWeight={selectedCurrency === 'BY' ? '600' : 'normal'}
         />
@@ -226,7 +227,7 @@ const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
       >
         <RussiaIcon />
         <Text
-          children="RU Кошелёк"
+          children={t('ru-wallet')}
           variant="p3"
           disabled
           fontWeight={selectedCurrency === 'RU' ? '600' : 'normal'}

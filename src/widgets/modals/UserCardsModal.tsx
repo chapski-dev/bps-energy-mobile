@@ -1,5 +1,4 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
 import VisaIcon from '@assets/svg/brand/visa.svg';
 import CaretRightIcon from '@assets/svg/caret-right.svg';
@@ -15,6 +14,7 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import { postDeleteCard } from '@src/api';
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
@@ -49,7 +49,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
   ) => {
     const { colors, insets } = useAppTheme();
     const { user, getUserData } = useAuth();
-    const { t } = useTranslation();
+    const { t } = useLocalization();
 
     // Модальные тексты для разных режимов
     const getModalConfig = () => {
@@ -155,12 +155,12 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           [
             {
               onPress: () => null,
-              text: t('shared.to-cancel'),
+              text: t('actions:to-cancel'),
             },
             {
               onPress: () => handleDeleteCard(cardId),
               style: 'destructive',
-              text: t('shared.to-delete'),
+              text: t('actions:to-delete'),
             },
           ],
         );

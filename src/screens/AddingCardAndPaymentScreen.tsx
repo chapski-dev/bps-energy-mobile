@@ -1,6 +1,7 @@
 import React from 'react';
 import WebView from 'react-native-webview';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -10,16 +11,17 @@ function AddingCardAndPaymentScreen({
   route,
 }: ScreenProps<'adding-card-and-payment'>) {
   const { getUserData, } = useAuth();
+  const { t } = useLocalization();
   const { toastError, toastSuccess } = useThemedToasts();
 
   const handleNavigationChange = async (navState: any) => {
     const { url } = navState;
     if (url.startsWith('https://api.test-bpsenergy.net.by/bepaid/success')) {
       await getUserData()
-      toastSuccess('Баланс пополнен!')
+      toastSuccess(t('balance-topped-up'))
       navigation.popToTop();
     } else if (url.startsWith('https://api.test-bpsenergy.net.by/bepaid/failed')) {
-      toastError('При произведении оплаты возникли неполадки. Попробуйте снова.')
+      toastError(t('errors:payment-error'))
       navigation.goBack();
     }
   };

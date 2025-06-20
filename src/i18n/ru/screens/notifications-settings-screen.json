@@ -1,0 +1,16 @@
+{
+  "title": "Настройки уведомлений",
+  "options": {
+    "start_and_end_of_charging": "Начало и окончание зарядки",
+    "balance_replenished": "Баланс пополнен",
+    "balance_less_than_3_byn": "Баланс меньше 3 BYN",
+    "special_offers": "Спецпредложения",
+    "push_notifications": "Push-уведомления"
+  },
+  "status": {
+    "saving": "Сохранение настроек...",
+    "saved": "Настройки сохранены",
+    "error": "Ошибка сохранения настроек"
+  },
+  "permission_warning": "Включите уведомления в настройках устройства для получения оповещений"
+}

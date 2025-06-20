@@ -1,0 +1,16 @@
+{
+  "title": "Notification Settings",
+  "options": {
+    "start_and_end_of_charging": "Charging start/end",
+    "balance_replenished": "Balance replenished",
+    "balance_less_than_3_byn": "Balance below 3 BYN",
+    "special_offers": "Special offers",
+    "push_notifications": "Push notifications"
+  },
+  "status": {
+    "saving": "Saving settings...",
+    "saved": "Settings saved",
+    "error": "Failed to save settings"
+  },
+  "permission_warning": "Please enable notifications in device settings to receive alerts"
+}

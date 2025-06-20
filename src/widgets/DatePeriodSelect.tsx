@@ -1,9 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-native-date-picker';
 import CaretDownIcon from '@assets/svg/caret-down-bold.svg';
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 
+import { useLocalization } from '@src/hooks/useLocalization';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
 import { dateFormat } from '@src/utils/date-format';
@@ -24,7 +24,7 @@ interface IDatePeriodSelect {
 }
 
 export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) => {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useLocalization()
   const { colors, insets } = useAppTheme();
   const [startDate, setStartDate] = useState<Date>(initialStartDate);
   const [endDate, setEndDate] = useState<Date>(new Date());
@@ -98,7 +98,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
           <Box row justifyContent='space-between' mb={24}>
             <Text children="Выберите период" variant='p1-semibold' />
             <Box onPress={resetDates}>
-              <Text children={t('shared.to-reset')} variant='p2' colorName='grey_700' />
+              <Text children={t('actions:to-reset')} variant='p2' colorName='grey_700' />
             </Box>
           </Box>
 
@@ -126,14 +126,14 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
               <Text children={formatDate(endDate)} variant='p2-semibold' />
             </Box>
           </Box>
-          <Button children="Применить" onPress={handleSumbmit} />
+          <Button children={t('actions:to-apply')} onPress={handleSumbmit} />
         </BottomSheetView>
       </BottomSlideModal>
 
       <DatePicker
         locale={i18n.language}
         modal
-        confirmText={t('shared.to-confirm')}
+        confirmText={t('actions:to-confirm')}
         title={currentDateType === 'start' ? 'Начало' : 'Конец'}
         open={open}
         date={currentDateType === 'start' ? startDate : endDate}
