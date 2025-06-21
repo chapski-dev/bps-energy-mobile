@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Keyboard } from 'react-native';
 
 import { postForgotPassword } from '@src/api';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input } from '@src/ui';
@@ -15,7 +15,7 @@ import { validator } from '@src/utils/validations';
 
 const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) => {
   const { insets } = useAppTheme();
-  const { t } = useLocalization()
+  const { t } = useTranslation(['screens', 'actions'])
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { email: '' },
     mode: 'all',
@@ -61,7 +61,7 @@ const ForgotPasswordScreen = ({ navigation }: ScreenProps<'forgot-password'>) =>
               returnKeyType='done'
               importantForAutofill="yes"
               autoFocus
-              prompting='Укажите E-mail на который создавали аккаунт и мы вышлем на него ссылку для восстановления пароля'
+              prompting={t('forgot-password-screen.input-promting')}
               onSubmitEditing={handleSubmit(handleSendOtpToResetPassword)}
             />
           )}

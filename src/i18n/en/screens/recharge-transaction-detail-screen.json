@@ -1,1 +1,19 @@
-{}
+{ 
+  "title": "Пополнение BY баланса",
+  "status": {
+    "completed": "Исполнена",
+    "pending": "В обработке",
+    "failed": "Ошибка"
+  },
+  "labels": {
+    "operation-status": "Статус операции",
+    "payment-method": "Метод оплаты",
+    "balance-before": "Баланс до пополнения",
+    "balance-after": "Баланс после пополнения",
+    "download-receipt": "Скачать чек"
+  },
+  "currency": {
+    "byn": "BYN",
+    "rub": "RUB"
+  }
+}

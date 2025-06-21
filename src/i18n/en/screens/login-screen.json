@@ -1,1 +1,7 @@
-{}
+{
+  "email-placeholder": "Email",
+  "password-placeholder": "Password",
+  "forgot-password": "Forgot password?",
+  "create-account": "Create account",
+  "to-login": "Sign in"
+}

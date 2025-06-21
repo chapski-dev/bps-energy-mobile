@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -11,7 +11,6 @@ import PhoneIcon from '@assets/svg/phone.svg';
 
 import { postSignUp } from '@src/api';
 import { RegistrationReq } from '@src/api/types';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { OFFERS, PRIVACY_POLICY } from '@src/misc/documents';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
@@ -22,7 +21,7 @@ import { validator } from '@src/utils/validations';
 
 const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
   const { insets, colors } = useAppTheme();
-  const { t, i18n: { language }, } = useLocalization()
+  const { t, i18n: { language }, } = useTranslation(['screens', 'shared'])
   const { control, handleSubmit, formState } = useForm<RegistrationReq>({
     defaultValues: {
       agree: false,
@@ -109,7 +108,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
               value={value}
               onChangeText={(v) => onChange(v.trim())}
               onBlur={onBlur}
-              placeholder={t('password')}
+              placeholder={t('registration-screen.password-placeholder')}
               error={invalid}
               errorText={error?.message}
               returnKeyType='next'
@@ -131,14 +130,14 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
-              placeholder={'Телефон (опционально)'}
+              placeholder={t('registration-screen.phone-placeholder')}
               error={invalid}
               returnKeyType="done"
               importantForAutofill="yes"
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType='phone-pad'
-              prompting={t('the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
+              prompting={t('shared:the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
               icon={<PhoneIcon color={colors.grey_400} />}
             />
           )}
@@ -175,7 +174,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
       <Button
         disabled={loading || !formState.isValid}
         loading={loading}
-        children={t('next')}
+        children={t('shared:next')}
         onPress={handleSubmit(submitRegistatrion)}
       />
     </KeyboardAwareScrollView>

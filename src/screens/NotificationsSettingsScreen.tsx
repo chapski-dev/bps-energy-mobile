@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, StyleSheet, Switch } from 'react-native';
 
 import { NotificationSettings } from '@src/api/types';
 import { useAppStateChangeWithCallbacks } from '@src/hooks/useAppStateChangeWithCallbacks';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import messaging from '@src/service/messaging';
 import { useAppTheme } from '@src/theme/theme';
@@ -25,7 +25,7 @@ export default function NotificationsSettingsScreen({
   navigation
 }: ScreenProps<'notifications-settings'>) {
   const { colors, insets } = useAppTheme();
-  const { t } = useLocalization('screens', { keyPrefix: 'notifications-settings-screen'});
+  const { t } = useTranslation('screens', { keyPrefix: 'notifications-settings-screen'});
   const [loading, setLoading] = useState(false);
 
   const form = useForm({

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GestureResponderEvent, Pressable } from 'react-native';
 import BPSIcon from '@assets/svg/BPS.svg';
 import MapPinIcon from '@assets/svg/map-pin.svg';
@@ -8,7 +9,6 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 
-import { useLocalization } from '@src/hooks/useLocalization';
 import { AuthState, useAuth } from '@src/providers/auth';
 import { useCameraModal } from '@src/providers/camera';
 import ChargingSessionScreen from '@src/screens/ChargingSessionScreen';
@@ -28,7 +28,7 @@ import { TabsParamList } from './types';
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export const Tabs = () => {
-  const { t } = useLocalization();
+  const { t } = useTranslation('screens');
   const { colors } = useAppTheme();
 
   return (
@@ -42,7 +42,7 @@ export const Tabs = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <MapPinIcon color={color} />,
-          title: t('map'),
+          title: t('map-screen.title'),
         }}
       />
       <Tab.Screen
@@ -52,7 +52,7 @@ export const Tabs = () => {
           headerShown: false,
           tabBarButton: props => <ChargingTabButton {...props} />,
           tabBarIcon: () => null,
-          title: t('common:charging-session'),
+          title: t('charging-session-screen.title'),
 
         }}
       />
@@ -62,7 +62,7 @@ export const Tabs = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <ProfileIcon color={color} />,
-          title: t('profile'),
+          title: t('profile-screen.title'),
         }}
       />
     </Tab.Navigator>

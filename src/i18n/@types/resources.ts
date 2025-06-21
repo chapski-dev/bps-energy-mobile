@@ -29,6 +29,7 @@ import resetPasswordScreenEn from '../en/screens/reset-password-screen.json';
 import setNewPasswordScreenEn from '../en/screens/set-new-password-screen.json';
 import supportServiceScreenEn from '../en/screens/support-service-screen.json';
 import topUpAccountScreenEn from '../en/screens/top-up-account-screen.json';
+import userBalanceWidgetsEn from '../en/widgets/user-balance.json';
 
 // Russian translations
 import actionsRu from '../ru/actions.json';
@@ -58,6 +59,8 @@ import resetPasswordScreenRu from '../ru/screens/reset-password-screen.json';
 import setNewPasswordScreenRu from '../ru/screens/set-new-password-screen.json';
 import supportServiceScreenRu from '../ru/screens/support-service-screen.json';
 import topUpAccountScreenRu from '../ru/screens/top-up-account-screen.json';
+import userBalanceWidgetsRu from '../ru/widgets/user-balance.json';
+
 
 export const resources = {
   [AppLangEnum.EN]: {
@@ -90,6 +93,9 @@ export const resources = {
       'top-up-account-screen': topUpAccountScreenEn,
     },
     shared: sharedEn,
+    widgets: {
+      'user-balance': userBalanceWidgetsEn
+    },
   },
   [AppLangEnum.RU]: {
     actions: actionsRu,
@@ -121,5 +127,8 @@ export const resources = {
       'top-up-account-screen': topUpAccountScreenRu,
     },
     shared: sharedRu,
+    widgets: {
+      'user-balance': userBalanceWidgetsRu
+    },
   },
 };

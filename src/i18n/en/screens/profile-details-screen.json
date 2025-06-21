@@ -1,11 +1,11 @@
 {
-  "title": "Profile",
+  "title": "Профиль",
 
   "email-label": "E-mail",
-  "name-label": "Name",
-  "phone-number": "Phone number",
-  "how-to-address-you": "How should we address you?",
-  "add-phone-number": "Add phone number",
-  "logout-button": "Log out",
-  "delete-account-button": "Delete account"
+  "name-label": "Имя",
+  "phone-number": "Номер телефона",
+  "how-to-address-you": "Как к вам обращаться?",
+  "add-phone-number": "Добавить номер телефона",
+  "logout-button": "Выйти из аккаунта",
+  "delete-account-button": "Удалить аккаунт"
 }

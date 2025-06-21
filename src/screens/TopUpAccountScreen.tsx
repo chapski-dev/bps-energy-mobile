@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Keyboard } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
@@ -33,7 +35,8 @@ const TopUpAccountScreen = ({
   const { insets } = useAppTheme();
   const { user, getUserData } = useAuth();
   const { toastSuccess } = useThemedToasts();
-  const { t } = useLocalization(['screens', 'actions'], { keyPrefix: 'top-up-account-screen' });
+  const { t } = useTranslation(['screens', 'actions']);
+
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -55,6 +58,7 @@ const TopUpAccountScreen = ({
   };
 
   const submitPay = () => {
+    Keyboard.dismiss()
     if (user?.cards.length) {
       modalCardsOpen();
     } else {
@@ -80,7 +84,7 @@ const TopUpAccountScreen = ({
       await getUserData()
       navigation.goBack();
       setAmount('');
-      toastSuccess(t('balance-topped-up'))
+      toastSuccess(t('top-up-account-screen.balance-topped-up'))
     } catch (error) {
       handleCatchError(error, 'TopUpAccountScreen');
     } finally {
@@ -98,6 +102,7 @@ const TopUpAccountScreen = ({
           paddingTop: 47,
         }}
         keyboardShouldPersistTaps="handled"
+
       >
         <Box gap={24} alignItems="center" flex={1}>
           <LogoIcon />
@@ -106,7 +111,7 @@ const TopUpAccountScreen = ({
             <Input
               value={amount}
               onChangeText={(val) => setAmount(val.replaceAll(',', ''))}
-              placeholder={t('amount-placeholder')}
+              placeholder={t('top-up-account-screen.amount-placeholder')}
               autoCorrect={false}
               inputMode="numeric"
               keyboardType="numeric"

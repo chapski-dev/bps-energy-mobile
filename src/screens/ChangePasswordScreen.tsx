@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Keyboard, TextInput } from 'react-native';
 import LockIcon from '@assets/svg/lock.svg';
 
 import { postChangePassword, postForgotPassword } from '@src/api';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -20,7 +20,7 @@ function ChangePasswordScreen({
   route,
 }: ScreenProps<'change-password'>) {
   const { insets, colors } = useAppTheme();
-  const { t } = useLocalization(['screens', 'actions'], { keyPrefix: 'change-password-screen' });
+  const { t } = useTranslation(['screens', 'actions']);
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { new_password: '', old_password: '' },
     mode: 'all',
@@ -52,7 +52,7 @@ function ChangePasswordScreen({
     try {
       setLoading(true);
       await postChangePassword(data);
-      toastSuccess(t('password-changed-success'));
+      toastSuccess(t('change-password-screen.password-changed-success'));
       navigation.goBack();
     } catch (error) {
       handleCatchError(error);
@@ -85,7 +85,7 @@ function ChangePasswordScreen({
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                placeholder={t('current-password-placeholder')}
+                placeholder={t('change-password-screen.current-password-placeholder')}
                 error={invalid}
                 returnKeyType="next"
                 importantForAutofill="yes"
@@ -111,7 +111,7 @@ function ChangePasswordScreen({
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
-                placeholder={t('new-password-placeholder')}
+                placeholder={t('change-password-screen.new-password-placeholder')}
                 error={invalid}
                 returnKeyType="done"
                 importantForAutofill="yes"
@@ -127,7 +127,7 @@ function ChangePasswordScreen({
         </Box>
         <Button
           disabled={loading}
-          children={t('reset-password-button')}
+          children={t('change-password-screen.reset-password-button')}
           type="clear"
           textColor="grey_600"
           onPress={handleSendOtpToResetPassword}

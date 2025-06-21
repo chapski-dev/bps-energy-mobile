@@ -1,10 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import BelarusIcon from '@assets/svg/flags/Belarus.svg';
 import RussiaIcon from '@assets/svg/flags/Russia.svg';
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
 import { useNavigation } from '@react-navigation/native';
 
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 
@@ -19,7 +19,7 @@ export default function UserBalance({
 }) {
   const { colors } = useAppTheme();
   const naigation = useNavigation();
-  const { t } = useLocalization();
+  const { t } = useTranslation('widgets', { keyPrefix: 'user-balance' });
 
   return (
     <Box
@@ -52,7 +52,7 @@ export default function UserBalance({
           disabled={disabled}
           onPress={() => naigation.navigate('top-up-account', { currency })}
         >
-          <Text disabled={disabled} children={t('actions:to-top-up')} colorName="main" />
+          <Text disabled={disabled} children={t('deposit')} colorName="main" />
           <PlusCircleFillIcon color={disabled ? colors.grey_400 : colors.main} />
         </Box>
       </Box>

@@ -1,12 +1,15 @@
 import { EventBus } from '@trutoo/event-bus'
 
-import {
-  fetchSessionStatus,
-  getActiveSessionsCount,
-  startChargingRequest} from '@src/api'
-import { EventBusEvents } from '@src/events'
+// import {
+//   fetchSessionStatus,
+//   getActiveSessionsCount,
+//   startChargingRequest} from '@src/api'
 
-type SessionData = {
+const fetchSessionStatus = () => null
+const getActiveSessionsCount = () => null
+const startChargingRequest = () => null
+
+export type SessionData = {
   sessionId: string
   stationId: string
   connectorId: string
@@ -22,6 +25,7 @@ export enum ChargingEvents {
   sessionUpdated = 'charging.sessionUpdated',
   sessionStarted = 'charging.sessionStarted',
   sessionCompleted = 'charging.sessionCompleted',
+  sessionLoading = 'charging.sessionLoading',
   activeCountChanged = 'charging.activeCountChanged',
 }
 
@@ -29,11 +33,15 @@ export class ChargingService extends EventBus {
   private sessions: Record<string, SessionData> = {}
   private pollInterval = 30_000
   private timerId: NodeJS.Timeout | null = null
+  public loading = false
 
   constructor() {
     super()
     this.register(ChargingEvents.sessionUpdated, { type: 'object' })
+    this.register(ChargingEvents.sessionStarted, { type: 'object' })
+    this.register(ChargingEvents.sessionCompleted, { type: 'object' })
     this.register(ChargingEvents.activeCountChanged, { type: 'number' })
+    this.register(ChargingEvents.sessionLoading, { type: 'boolean' })
   }
 
   startPolling() {
@@ -48,24 +56,26 @@ export class ChargingService extends EventBus {
     }
   }
 
-  async pollAll() {
+  private async pollAll() {
     const ids = Object.keys(this.sessions)
     if (!ids.length) return
 
     for (const id of ids) {
       try {
         const data = await fetchSessionStatus(id)
-        this.sessions[id] = {
-          ...this.sessions[id],
+        const session = this.sessions[id]
+        const updated: SessionData = {
+          ...session,
           batteryLevel: data.batteryLevel,
           elapsedSec: data.elapsedSec,
           power: data.power,
           receivedKwh: data.receivedKwh,
           status: data.status
         }
-        this.publish(ChargingEvents.sessionUpdated, this.sessions[id])
+        this.sessions[id] = updated
+        this.publish(ChargingEvents.sessionUpdated, updated)
         if (data.status === 'completed') {
-          this.publish(ChargingEvents.sessionCompleted, this.sessions[id])
+          this.publish(ChargingEvents.sessionCompleted, updated)
           delete this.sessions[id]
           this.emitActiveCount()
         }
@@ -80,11 +90,13 @@ export class ChargingService extends EventBus {
     this.publish(ChargingEvents.activeCountChanged, count)
   }
 
-  async startSession(
+  async start(
     stationId: string,
     connectorId: string,
     qrcode?: string
   ): Promise<SessionData> {
+    this.loading = true
+    this.publish(ChargingEvents.sessionLoading, this.loading)
     const res = await startChargingRequest({ connectorId, qrcode, stationId })
     const session: SessionData = {
       batteryLevel: res.batteryLevel,
@@ -100,22 +112,16 @@ export class ChargingService extends EventBus {
     this.emitActiveCount()
     this.publish(ChargingEvents.sessionStarted, session)
     this.startPolling()
+    this.loading = false
+    this.publish(ChargingEvents.sessionLoading, this.loading)
     return session
   }
 
-  // async subscribe(
-  //   listener: (session: SessionData) => void
-  // ): Promise<() => void> {
-  //   this.on(ChargingEvents.sessionUpdated, listener)
-  //   // return unsubscribe fn
-  //   return () => {
-  //     this.off(ChargingEvents.sessionUpdated, listener)
-  //   }
-  // }
-
-  async getActiveCount(): Promise<number> {
-    const count = await getActiveSessionsCount()
-    return count
+  /**
+   * Get current number of active sessions from API
+   */
+  async getActiveCount(): number {
+    return this.sessions.length;
   }
 }
 

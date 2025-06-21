@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SectionList } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 import Skeleton from 'react-native-reanimated-skeleton';
@@ -139,21 +139,19 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
         date_end: dateFormat('yyyy-MM-DD', filterDates.end)
       });
       // setTransactions(res.transactions);
-      console.log(res.transactions.reduce((acc, el) => acc + el.amount, 0));
 
       setSectionsData(groupTransactionsByDate(res.transactions));
     } catch (error) {
-      // В случае ошибки показываем моковые данные
       console.error('Error fetching transactions:', error);
-      // setSectionsData(groupTransactionsByDate(mockTransactions));
+      setSectionsData([]);
     } finally {
       setRefreshing(false);
     }
   }, [filterDates.start, filterDates.end]);
 
-  // useEffect(() => {
-  //   onRefresh();
-  // }, [onRefresh]);
+  useEffect(() => {
+    onRefresh();
+  }, [onRefresh]);
 
   const renderRechargeItem = ({ item }: { item: Transaction }) => {
     const currency = getCurrencyFromWalletType(item.wallet_type);

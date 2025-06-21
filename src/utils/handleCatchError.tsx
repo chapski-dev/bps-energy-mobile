@@ -1,5 +1,24 @@
+import React from 'react';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
+import WarningCircleIcon from '@assets/svg/warning-circle.svg';
 import { toast, ToastPosition } from '@backpackapp-io/react-native-toast';
 import { AxiosError } from 'axios';
+
+import { AppLightTheme } from '@src/theme/theme';
+
+import { vibrate } from './vibrate';
+
+
+const toastError = (message: string) => {
+  vibrate(HapticFeedbackTypes.notificationError)
+  toast(message, {
+    icon: <WarningCircleIcon color={AppLightTheme.colors.red_500} />,
+    position: ToastPosition.TOP,
+    styles: {
+      pressable: { backgroundColor: AppLightTheme.colors.background },
+    },
+  })
+};
 
 export const handleCatchError = (e: AxiosError | unknown | Error | string, where: string = '') => {
   const serverError =
@@ -19,12 +38,10 @@ export const handleCatchError = (e: AxiosError | unknown | Error | string, where
       break;
   }
   if (!errorText.includes('Network')) {
-    errorText && toast.error(errorText, { position: ToastPosition.TOP });
+    errorText && toastError(errorText);
   }
   if (errorText.includes('Network')) {
-    toast.error('Неполадки сети интернет. Попробуйте пожалуйста позже.', {
-      position: ToastPosition.TOP
-    });
+    toastError('Неполадки сети интернет. Попробуйте пожалуйста позже.');
   }
   console.error(`${where} - ${e}`);
   console.error(errorText);

@@ -72,6 +72,7 @@ const Mark = ({ slideOver, index }: { slideOver?: boolean, index?: number }) => 
         <Text
           colorName='grey_600'
           center
+          variant='p3'
           style={{
             position: 'absolute',
             textAlign: 'center',
@@ -100,7 +101,7 @@ const Thumb = () => {
   );
 };
 
-export const BinanceSlider = memo(() => {
+export const ChargingStationPowerSlider = memo(() => {
   const { colors } = useAppTheme();
 
   const { getValues, control, formState } = useFormContext<FilterState>();

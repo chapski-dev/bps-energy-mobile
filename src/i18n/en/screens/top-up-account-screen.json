@@ -1,8 +1,8 @@
 {
-  "title": "Top Up Account",
-  "amount-placeholder": "Amount",
-  "by-wallet": "BY Wallet",
-  "ru-wallet": "RU Wallet",
-  "balance-topped-up": "Balance topped up!",
+  "title": "Пополнение счета",
+  "amount-placeholder": "Сумма",
+  "by-wallet": "BY Кошелёк",
+  "ru-wallet": "RU Кошелёк",
+  "balance-topped-up": "Баланс пополнен!",
   "add-sum": "+{sum}"
 }

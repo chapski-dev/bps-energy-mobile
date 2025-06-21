@@ -1,4 +1,5 @@
 import React from 'react';
+import Config from 'react-native-config';
 import WebView from 'react-native-webview';
 
 import { useLocalization } from '@src/hooks/useLocalization';
@@ -16,11 +17,11 @@ function AddingCardAndPaymentScreen({
 
   const handleNavigationChange = async (navState: any) => {
     const { url } = navState;
-    if (url.startsWith('https://api.test-bpsenergy.net.by/bepaid/success')) {
+    if (url.startsWith(`${Config.API_HOST}/bepaid/success`)) {
       await getUserData()
       toastSuccess(t('balance-topped-up'))
       navigation.popToTop();
-    } else if (url.startsWith('https://api.test-bpsenergy.net.by/bepaid/failed')) {
+    } else if (url.startsWith(`${Config.API_HOST}/bepaid/failed`)) {
       toastError(t('errors:payment-error'))
       navigation.goBack();
     }
@@ -28,7 +29,7 @@ function AddingCardAndPaymentScreen({
 
   return (
     <WebView
-      originWhitelist={['https://checkout.bepaid.by', 'https://api.test-bpsenergy.net.by']}
+      originWhitelist={['https://checkout.bepaid.by', Config.API_HOST]}
       source={{ uri: route.params.url }}
       style={{ flex: 1 }}
       onNavigationStateChange={handleNavigationChange}

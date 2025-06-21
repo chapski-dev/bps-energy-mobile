@@ -6,7 +6,9 @@ import React, {
   useState,
 } from 'react';
 import { Control, Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, Switch, SwitchProps } from 'react-native';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
 import GBTACIcon from '@assets/svg/connector/GBT AC.svg';
 import GBTIcon from '@assets/svg/connector/GBT.svg';
@@ -26,14 +28,16 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Checkbox, Chip, Text } from '@src/ui';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
+import { vibrate } from '@src/utils/vibrate';
 
-import { BinanceSlider } from '../widgets/ChargingStationPowerSlider';
+import { ChargingStationPowerSlider } from '../widgets/ChargingStationPowerSlider';
 
 
 export default function FiltersOfStationsScreen({
   navigation,
 }: ScreenProps<'filters-of-stations'>) {
   const { insets } = useAppTheme();
+  const { t } = useTranslation('screens', { keyPrefix: 'filters-of-stations-screen' });
   const { persisted, applyFilters, resetAll } = useFilterStore();
 
   const [loading, setLoading] = useState(false);
@@ -44,11 +48,14 @@ export default function FiltersOfStationsScreen({
 
   const { reset, control, formState, handleSubmit } = form;
 
+  const isEqual = useMemo(() => lodash.isEqual(defaultState, persisted), [persisted])
+
   const onSubmit = async (data: FilterState) => {
     try {
       setLoading(true)
       await wait(1000);
       applyFilters(data);
+      vibrate(HapticFeedbackTypes.impactMedium)
     } catch (error) {
       handleCatchError(error, 'FiltersOfStations onSubmit')
     } finally {
@@ -58,9 +65,14 @@ export default function FiltersOfStationsScreen({
 
   const resetFilters = async () => {
     try {
-      setLoading(true)
-      await wait(1000);
-      resetAll()
+      if(formState.isDirty && isEqual) {
+        reset()
+      } else {
+        setLoading(true)
+        await wait(1000);
+        resetAll()
+      }
+      vibrate(HapticFeedbackTypes.impactMedium)
     } catch (error) {
       handleCatchError(error, 'FiltersOfStations resetFilters')
     } finally {
@@ -72,7 +84,6 @@ export default function FiltersOfStationsScreen({
     reset(persisted);
   }, [persisted, reset]);
 
-  const isEqual = useMemo(() => lodash.isEqual(defaultState, persisted), [persisted])
 
   return (
     <Box pb={insets.bottom || 19} flex={1}>
@@ -85,40 +96,40 @@ export default function FiltersOfStationsScreen({
             paddingTop: 8,
           }}>
           <Box gap={4}>
-            <Text fontSize={17} fontWeight="600" children="Тип коннектора" />
+            <Text fontSize={17} fontWeight="600" children={t('connector-type')} />
             <Box>
               {renderSwitch(
                 'connectors',
                 'ccs',
-                'CCS',
+                t('connectors.ccs'),
                 {
-                  chip: <Chip children="Быстрая" />,
+                  chip: <Chip children={t('fast')} />,
                   icon: <CCSIcon height={28} width={28} />
                 }, control)
               }
               {renderSwitch(
                 'connectors',
                 'gbt',
-                'GB/T',
+                t('connectors.gbt'),
                 {
-                  chip: <Chip children="Быстрая" />,
+                  chip: <Chip children={t('fast')} />,
                   icon: <GBTIcon height={28} width={28} />
                 },
                 control)}
               {renderSwitch(
                 'connectors',
                 'gbt_ac',
-                'GB/T AC',
+                t('connectors.gbt-ac'),
                 { icon: <GBTACIcon height={28} width={28} /> }, control)}
               {renderSwitch(
                 'connectors',
                 'type_2_socket',
-                'Type 2 (Socket)',
+                t('connectors.type-2-socket'),
                 { icon: <Type2SocketIcon height={28} width={28} /> }, control)}
               {renderSwitch(
                 'connectors',
                 'type_2_plug',
-                'Type 2 (Plug)',
+                t('connectors.type-2-plug'),
                 { icon: <Type2PlugIcon height={28} width={28} /> }, control)}
             </Box>
             <Controller
@@ -127,7 +138,7 @@ export default function FiltersOfStationsScreen({
               render={({ field: { value, onChange } }) => (
                 <Checkbox
                   checked={value}
-                  children='Скрывать выключенные коннекторы из описания станций'
+                  children={t('hide-disabled')}
                   onPress={() => onChange(!value)}
                   wrapperStyle={{ paddingVertical: 18 }}
                 />
@@ -136,29 +147,29 @@ export default function FiltersOfStationsScreen({
 
           </Box>
 
-          <BinanceSlider />
+          <ChargingStationPowerSlider />
           <Box gap={4}>
-            <Text fontWeight="600" fontSize={17} children="Другие сети" />
+            <Text fontWeight="600" fontSize={17} children={t('other-networks')} />
             {renderSwitch('networks', 'malanka', 'Malanka', {}, control)}
             {renderSwitch('networks', 'batteryFly', 'BatteryFly', {}, control)}
           </Box>
           <Box gap={4}>
-            <Text fontWeight="600" fontSize={17} children="Другое" />
+            <Text fontWeight="600" fontSize={17} children={t('other')} />
             {renderSwitch('other',
               'busy',
-              'Занятые',
+              t('busy'),
               { icon: <DotBusy height={28} width={28} style={shadowStyle} /> },
               control)}
             {renderSwitch('other',
               'broken',
-              'Неисправные',
+              t('broken'),
               { icon: <DotError height={28} width={28} style={shadowStyle} /> },
               control)}
           </Box>
 
           <Button
             type="clear"
-            children="Сбросить по умолчанию"
+            children={t('reset-default')}
             onPress={resetFilters}
             disabled={isEqual && !formState.isDirty || loading}
           />
@@ -166,7 +177,7 @@ export default function FiltersOfStationsScreen({
       </FormProvider>
       <Button
         wrapperStyle={{ paddingHorizontal: 24 }}
-        children="Применить фильтры"
+        children={t('apply-filters')}
         onPress={handleSubmit(onSubmit)}
         loading={loading}
         disabled={!formState.isDirty || loading}

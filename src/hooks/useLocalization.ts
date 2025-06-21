@@ -1,6 +1,6 @@
 import { 
   FallbackNs,
-  useTranslation as useI18nTranslation, 
+  useTranslation, 
   UseTranslationOptions,
   UseTranslationResponse
 } from 'react-i18next';
@@ -17,34 +17,14 @@ type NestedKeyOf<Obj extends object> = {
       : Key;
 }[keyof Obj & string];
 
-// Базовые типы
-type AllNamespaces = keyof (typeof resources)['ru'];
+export type LocalizationKeys = NestedKeyOf<
+  (typeof resources)[AppLangEnum.RU]['translation']
+>;
 
-// Все ключи из defaultNS с полной вложенностью
-type DefaultNSKeys = NestedKeyOf<(typeof resources)['ru']['shared']>;
+type TFunctionOptions = Parameters<TFunction>[1];
 
-// Ключи с namespace и полной вложенностью
-type KeysWithNamespace<T extends AllNamespaces> = T extends string 
-  ? `${T}:${NestedKeyOf<(typeof resources)['ru'][T]>}`
-  : never;
-
-type AllPossibleKeys = 
-  | DefaultNSKeys
-  | KeysWithNamespace<Exclude<AllNamespaces, 'shared'>>;
-
-// Элегантное решение с type casting (как в их примере)
-export const useLocalization = useI18nTranslation as {
-  // Без параметров - расширенный автокомплит
-  (): Omit<UseTranslationResponse<'shared', undefined>, 't'> & {
-    t: (key: AllPossibleKeys, options?: Parameters<TFunction>[1]) => string;
-  };
-  
-  // С параметрами - стандартное поведение useTranslation
-  <
-    Ns extends FlatNamespace | $Tuple<FlatNamespace> | undefined = undefined,
-    KPrefix extends KeyPrefix<FallbackNs<Ns>> = undefined,
-  >(
-    ns?: Ns,
-    options?: UseTranslationOptions<KPrefix>,
-  ): UseTranslationResponse<FallbackNs<Ns>, KPrefix>;
+export const useLocalization = useTranslation as (
+  ...p: Parameters<typeof useTranslation>
+) => Omit<ReturnType<typeof useTranslation>, 't'> & {
+  t: (k: LocalizationKeys, opts?: TFunctionOptions) => string;
 };

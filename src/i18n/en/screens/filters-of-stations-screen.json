@@ -1,1 +1,23 @@
-{}
+{
+  "title": "Filters",
+  "connector-type": "Connector type",
+  "fast": "Fast",
+  "hide-disabled": "Hide disabled connectors from station descriptions",
+  "other-networks": "Other networks",
+  "other": "Other",
+  "busy": "Busy",
+  "broken": "Broken",
+  "reset-default": "Reset to default",
+  "apply-filters": "Apply filters",
+  "connectors": {
+    "ccs": "CCS",
+    "gbt": "GB/T",
+    "gbt-ac": "GB/T AC",
+    "type-2-socket": "Type 2 (Socket)",
+    "type-2-plug": "Type 2 (Plug)"
+  },
+  "networks": {
+    "malanka": "Malanka",
+    "battery-fly": "BatteryFly"
+  }
+}

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Alert, Keyboard } from 'react-native';
 import UserIcon from '@assets/svg/user.svg';
 
 import { updateUserProfile } from '@src/api';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -26,7 +26,7 @@ function ChangeUserFieldsScreen({
 }: ScreenProps<'change-user-fields'>) {
   const { user } = useAuth();
   const { insets, colors } = useAppTheme();
-  const { t } = useLocalization();
+  const { t } = useTranslation(['actions']);
   const { toastSuccess } = useThemedToasts();
   const { getUserData } = useAuth();
 

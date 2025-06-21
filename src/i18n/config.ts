@@ -28,6 +28,17 @@ export const LANGUAGE_LIST = [
   },
 ] as const;
 
+export const returnCountryFlag = (lang: AppLangEnum) => {
+  switch (lang) {
+    case AppLangEnum.RU:
+      return '🇷🇺'
+    case AppLangEnum.EN:
+      return '🇬🇧'
+    default:
+      return '';
+  }
+}
+
 export const saveLanguageAsyncStorage = async (language: AppLangEnum) => {
   await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.CURRENT_LANG, language);
 };
@@ -35,7 +46,7 @@ export const saveLanguageAsyncStorage = async (language: AppLangEnum) => {
 export const initializeI18n = async () => {
   const ns = Object.keys(resources[AppLangEnum.RU]);
   const lng = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.CURRENT_LANG) || AppLangEnum.RU;
-  
+
   await i18n
     .use(RNLanguageDetector)
     .use(initReactI18next)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback,useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet } from 'react-native';
 import BatteryChargingIcon from '@assets/svg/battery-charging.svg';
 import CheckCircleIcon from '@assets/svg/check-circle.svg';
@@ -11,252 +11,161 @@ import WalletIcon from '@assets/svg/wallet.svg';
 
 import { ScreenProps } from '@src/navigation/types';
 import { useCameraModal } from '@src/providers/camera';
+import chargingService, { ChargingEvents, SessionData } from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 
-export default function ChargingSessionScreen({
-  navigation
-}: ScreenProps<'charging-session'>) {
+export default function ChargingSessionScreen({ navigation }: ScreenProps<'charging-session'>) {
   const { colors, insets } = useAppTheme();
   const { openCamera } = useCameraModal();
-  const [loading, setLoading] = useState(false);
-  const [chargingStatus, setChargingStatus] = useState<'in-progress' | 'completed'>('in-progress');
-  const [sessionData, setSessionData] = useState({
-    availableStations: ['0041', '0045', '0061'],
-    battery: '51',
-    batteryFrom: '14',
-    chargingTime: '00:07:18',
-    power: '49.95',
-    received: '1.85',
-    selectedStation: '0041',
-    time: '2',
-    totalCost: '3.28'
-  });
+  const [sessions, setSessions] = useState<SessionData[]>([]);
+  const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
-  const [timeCounter, setTimeCounter] = useState(2);
-
-  // Эмуляция обновления данных сессии
+  // Подписываемся на обновления сессий
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeCounter(prev => prev + 1);
-      setSessionData(prev => ({
-        ...prev,
-        battery: Math.min(100, parseInt(prev.battery) + 1).toString(),
-        received: (parseFloat(prev.received) + 0.15).toFixed(2),
-        time: (timeCounter + 1).toString()
-      }));
+    // Обновление статуса
+    const unsubscribeUpdate = chargingService.subscribe('',(session) => {
+      setSessions((prev) => 
+        prev.map((s) => (s.sessionId === session.sessionId ? session : s))
+      );
+      setLoadingIds((ids) => {
+        const newSet = new Set(ids);
+        newSet.delete(session.sessionId);
+        return newSet;
+      });
+    });
 
-      // Симуляция завершения зарядки при достижении 100%
-      if (parseInt(sessionData.battery) >= 100) {
-        setChargingStatus('completed');
-        clearInterval(interval);
-      }
-    }, 60000); // Обновление каждую минуту
+    // Событие нового подключения
+    const onStarted = (session: SessionData) => {
+      setSessions((prev) => [session, ...prev].slice(0, 3));
+      setLoadingIds((ids) => new Set(ids).add(session.sessionId));
+    };
+    chargingService.s(ChargingEvents.sessionStarted, onStarted);
 
-    return () => clearInterval(interval);
-  }, [timeCounter, sessionData.battery]);
+    // Завершение сессии
+    const onCompleted = (session: SessionData) => {
+      Alert.alert('Зарядка завершена', `Сессия ${session.sessionId} завершена`);
+      setSessions((prev) => prev.filter((s) => s.sessionId !== session.sessionId));
+    };
+    chargingService.on(ChargingEvents.sessionCompleted, onCompleted);
 
-  const handleWriteToSupport = async () => {
-    console.log('Написать в поддержку');
-  };
+    return () => {
+      unsubscribeUpdate();
+      chargingService.off(ChargingEvents.sessionStarted, onStarted);
+      chargingService.off(ChargingEvents.sessionCompleted, onCompleted);
+    };
+  }, []);
 
-  const handleEndSession = async () => {
-    console.log('Завершить сессию');
-    setChargingStatus('completed');
-  };
-
-  const handleDone = () => {
-    setChargingStatus('in-progress')
-    // navigation.navigate('map'); // или 'home'
-  };
-
-  const handleViewHistory = () => {
-    navigation.navigate('charging-history');
-  };
+  // Начать зарядку по QR
   const handleOpenCamera = () => {
     openCamera({
-      onQrCodeScan: (code) => {
-        Alert.alert('QR код:' + code.value, 'Сканирование завершено');
+      onQrCodeScan: async (code) => {
+        try {
+          const session = await chargingService.startSession('', '', code.value);
+          console.log('Зарядка начата', session);
+        } catch (e) {
+          Alert.alert('Ошибка', 'Не удалось начать сессию');
+        }
       }
-    })
-  }
+    });
+  };
 
-  const StationSelector = () => (
-    <Box row gap={12} mb={24} p={4} borderRadius={8} backgroundColor={colors.grey_50}>
-      {sessionData.availableStations.map((station) => (
-        <Box
-          key={station}
-          flex={1}
-          backgroundColor={station === sessionData.selectedStation ? colors.white : undefined}
-          px={10}
-          py={7}
-          alignItems='center'
-          borderRadius={4}
-          style={shadowStyle}
-          onPress={() => setSessionData(prev => ({ ...prev, selectedStation: station }))}
-        >
-          <Text
-            variant={station === sessionData.selectedStation ? 'p3-semibold' : 'p3'}
-            children={`№ ${station}`}
-          />
-        </Box>
-      ))}
-    </Box>
-  );
+  // Начать зарядку по выбору станции
+  const handleStartSession = async (stationId: string, connectorId: string) => {
+    try {
+      const session = await chargingService.startSession(stationId, connectorId);
+      console.log('Зарядка начата', session);
+    } catch (e) {
+      Alert.alert('Ошибка', 'Не удалось начать сессию');
+    }
+  };
 
-  // Экран процесса зарядки
-  const renderInProgressView = () => (
-    <>
-      <Box alignItems='flex-end' mb={44} onPress={handleOpenCamera}>
-        <QrCodeIcon />
-      </Box>
-      <Box alignItems="center" mb={64}>
-        <LogoIcon />
-      </Box>
+  const renderSession = (session: SessionData) => {
+    const loading = loadingIds.has(session.sessionId);
+    const battery = session.batteryLevel.toString();
+    const received = session.receivedKwh.toFixed(2);
+    const timeMin = Math.floor(session.elapsedSec / 60).toString();
+    const power = session.power.toFixed(2);
 
-      <Text
-        variant="h4"
-        center
-        mb={32}
-        children="Сессии зарядки"
-      />
-
-      <StationSelector />
-
-      <Box gap={12} mb={24}>
-        <Box row gap={12}>
+    return (
+      <Box key={session.sessionId} mb={32}>
+        <Text variant="h5" mb={12} children={`Сессия ${session.stationId}-${session.connectorId}`} />
+        <Box row gap={12} mb={24}>
           <InfoCard
             title="Мощность"
-            value={sessionData.power}
+            value={power}
             unit="кВт"
             icon={<LightningIcon color={colors.green} />}
             loading={loading}
           />
           <InfoCard
             title="Батарея"
-            value={sessionData.battery}
+            value={battery}
             unit="%"
             icon={<BatteryChargingIcon color={colors.green} />}
             loading={loading}
           />
         </Box>
-
-        <Box row gap={12}>
+        <Box row gap={12} mb={24}>
           <InfoCard
             title="Получено"
-            value={sessionData.received}
+            value={received}
             unit="кВт·ч"
             icon={<CheckCircleIcon color={colors.green} />}
             loading={loading}
           />
           <InfoCard
             title="Время"
-            value={sessionData.time}
+            value={timeMin}
             unit="мин"
             icon={<ClockIcon color={colors.green} />}
             loading={loading}
           />
         </Box>
+        {session.status !== 'completed' && (
+          <Button
+            backgroundColor="green"
+            children="Завершить сессию"
+            onPress={() => chargingService.publish(ChargingEvents.sessionCompleted, session)}
+          />
+        )}
       </Box>
-
-      <Box gap={12}>
-        <Button
-          onPress={handleWriteToSupport}
-          children="Написать в поддержку"
-          icon={<TelegramLogoIcon />}
-          type='outline'
-        />
-
-        <Button
-          onPress={handleEndSession}
-          backgroundColor='green'
-          children="Завершить сессию"
-        />
-      </Box>
-    </>
-  );
-
-  // Экран завершенной зарядки
-  const renderCompletedView = () => (
-    <>
-      <Box alignItems="center" mt={24+44} mb={48}>
-        <LogoIcon />
-      </Box>
-
-      <Text
-        variant="h3"
-        center
-        mb={8}
-        children="Зарядка завершена!"
-      />
-      <Text
-        variant="p2"
-        center
-        colorName="grey_600"
-        mb={32}
-        children="Спасибо что выбираете BPS Energy"
-      />
-
-      <Box gap={8} mb={24}>
-        <SummaryCard
-          title="Получено"
-          value={`${sessionData.received} кВт·ч`}
-          icon={<CheckCircleIcon color={colors.green} />}
-        />
-
-        <SummaryCard
-          title="Батарея"
-          value={`${sessionData.battery}%`}
-          icon={<BatteryChargingIcon color={colors.green} />}
-          from={`${sessionData.batteryFrom}% → `}
-        />
-
-        <SummaryCard
-          title="Время зарядки"
-          value={sessionData.chargingTime}
-          icon={<ClockIcon color={colors.green} />}
-        />
-
-        <SummaryCard
-          title="Потрачено"
-          value={`${sessionData.totalCost} BYN`}
-          icon={<WalletIcon color={colors.green} />}
-        />
-      </Box>
-
-      <Box gap={12}>
-        <Button
-          onPress={handleDone}
-          backgroundColor="green"
-          children="Готово"
-        />
-
-        <Button
-          onPress={handleViewHistory}
-          type="outline"
-          children="Посмотреть историю"
-        />
-      </Box>
-    </>
-  );
+    );
+  };
 
   return (
     <ScrollView
       contentContainerStyle={{ ...styles.container, paddingTop: insets.top + 12 }}
       showsVerticalScrollIndicator={false}
     >
-      {chargingStatus === 'in-progress' ? renderInProgressView() : renderCompletedView()}
+      <Box alignItems='flex-end' mb={24} onPress={handleOpenCamera}>
+        <QrCodeIcon />
+      </Box>
+
+      <Text variant="h4" center mb={32} children="Мои сессии зарядки" />
+
+      {/* Кнопки станций для примера (можно вынести в отдельный компонент) */}
+      <Box row gap={12} mb={24}>
+        {sessions.map((station) => (
+          <Button
+            key={station.stationId}
+            onPress={() => handleStartSession(station.stationId, 'A')}
+            children={`№ ${station}`}
+            type='outline'
+          />
+        ))}
+      </Box>
+
+      {sessions.length === 0 && (
+        <Text center colorName="grey_600" children="Нет активных сессий" />
+      )}
+
+      {sessions.map(renderSession)}
     </ScrollView>
   );
 }
 
-const InfoCard = ({
-  title,
-  value,
-  unit,
-  icon,
-  loading,
-}: {
+const InfoCard = ({ title, value, unit, icon, loading }: {
   title: string;
   value: string;
   unit?: string;
@@ -281,41 +190,6 @@ const InfoCard = ({
   );
 };
 
-const SummaryCard = ({
-  title,
-  value,
-  icon,
-  from,
-}: {
-  title: string;
-  value: string;
-  icon: React.ReactNode;
-  from?: string
-}) => {
-  const { colors } = useAppTheme();
-
-  return (
-    <Box
-      backgroundColor={colors.grey_50}
-      borderRadius={8}
-      px={12}
-      py={16}
-      row
-      alignItems="center"
-      justifyContent="space-between"
-    >
-      <Box row alignItems="center" gap={8}>
-        {icon}
-        <Text variant="p2" colorName="grey_700" children={title} />
-      </Box>
-      <Text>
-        <Text variant="p2-semibold" colorName="grey_600" children={from} />
-        <Text variant="p2-semibold" colorName="grey_800" children={value} />
-      </Text>
-    </Box>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -323,14 +197,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
 });
-
-const shadowStyle = {
-  elevation: 8,
-  shadowColor: '#000',
-  shadowOffset: {
-    height: 4,
-    width: 0,
-  },
-  shadowOpacity: 0.3,
-  shadowRadius: 4.65,
-};

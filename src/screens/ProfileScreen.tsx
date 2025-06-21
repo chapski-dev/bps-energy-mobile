@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
-import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -18,8 +18,7 @@ export enum NotifictationOption {
 }
 
 export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
-  const { t } = useLocalization();
-
+  const { t } = useTranslation('screens', { keyPrefix: 'profile-screen' })
   const openProfileData = () => navigation.navigate('profile-details');
   const [refreshing, setRefreshing] = useState(false);
   const { insets } = useAppTheme();
@@ -78,38 +77,43 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         </Box>
 
         <SectionListItemWithArrow
-          title={'История зарядок'}
+          title={t('charging-history')}
           onPress={() => navigation.navigate('charging-history')}
         />
 
         <SectionListItemWithArrow
-          title={'История пополнений'}
+          title={t('recharge-history')}
           onPress={() => navigation.navigate('recharge-history')}
         />
 
         <SectionListItemWithArrow
-          title={'Сохранённые карты'}
+          title={t('saved-cards')}
           onPress={modalCardsOpen}
         />
 
         <SectionListItemWithArrow
-          title={t('notification')}
+          title={t('notifications')}
           onPress={() => navigation.navigate('notifications-settings')}
         />
         <SectionListItemWithArrow
-          title={'Служба поддержки'}
+          title={t('support-service')}
           onPress={() => navigation.navigate('support-service')}
         />
         <SectionListItemWithArrow
-          title={'Правила зарядки'}
+          title={t('charging-rules')}
           onPress={() => null}
         />
         <SectionListItemWithArrow title={'FAQ'} onPress={() => null} />
         <SectionListItemWithArrow
-          title={t('common:apps-language')}
+          title={t('app-language')}
           onPress={modalOpen}
         />
-        <Text variant='p4' colorName='grey_400' my={24} children="Версия 1.74.0" />
+        <Text
+          variant='p4'
+          colorName='grey_400'
+          my={24}
+          children={t('app-version', { version: '1.74.0' })}
+        />
       </ScrollView>
       <SelectLanguageModal ref={modal} modalClose={modalClose} />
       <UserCardsModal

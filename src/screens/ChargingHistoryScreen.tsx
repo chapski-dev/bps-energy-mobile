@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next';
 import { SectionList, StyleSheet } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler';
 import Skeleton from 'react-native-reanimated-skeleton'
@@ -67,7 +68,7 @@ const chargingData = [
 export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charging-history'>) {
   const { colors } = useAppTheme();
   const [filterDates, setFilterDates] = useState(initialDates)
-
+  const { t } = useTranslation('screens', { keyPrefix: 'charging-history-screen' });
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const onRefresh = async (): Promise<void> => {
     try {
@@ -108,14 +109,14 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
 
           <Box row justifyContent='space-between'>
             <Box flex={1} gap={4}>
-              <Text variant='p3' colorName='grey_700' children="Получено" />
+              <Text variant='p3' colorName='grey_700' children={t('received')} />
               <Text variant='h4'>
-                {item.received} <Text variant='p4-semibold'>кВт·ч</Text>
+                {item.received} <Text variant='p4-semibold'>{t('kilowatt-hour')}</Text>
               </Text>
             </Box>
 
             <Box flex={1} gap={4}>
-              <Text variant='p3' colorName='grey_700' children="Потрачено" />
+              <Text variant='p3' colorName='grey_700' children={t('spent')} />
               <Text variant='h4'>
                 {item.spent} <Text variant='p4-semibold'>BYN</Text>
               </Text>
@@ -147,17 +148,17 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
     <Box flex={1} justifyContent='center' alignItems='center' gap={24} >
       <MagnifyingIcon />
       <Box gap={8}>
-        <Text center children="Зарядок не найдено" variant='h5' colorName='grey_600' mb={8} />
+        <Text center children={t('no-chargings-found')} variant='h5' colorName='grey_600' mb={8} />
         <Text
-          children="За выбранный период вы не заряжались через наше приложение"
+          children={t('no-chargings-description')}
           variant='p3'
           colorName='grey_600'
           center
         />
       </Box>
-      <Button children="Сбросить фильтр" type='clear' />
+      <Button children={t('reset-filters')} type='clear' />
     </Box>
-  ), [])
+  ), [t])
 
 
   return (

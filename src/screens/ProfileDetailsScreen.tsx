@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView } from 'react-native';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { Card } from '@src/api/types';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -18,7 +18,7 @@ export enum NotifictationOption {
 export const ProfileDetailsScreen = ({
   navigation,
 }: ScreenProps<'profile-details'>) => {
-  const { t } = useLocalization(['screens', 'common', 'actions', 'shared'], { keyPrefix: 'profile-details-screen' });
+  const { t } = useTranslation(['screens', 'common', 'actions', 'shared']);
   const { onLogout, user } = useAuth();
   const { insets } = useAppTheme();
 
@@ -91,12 +91,12 @@ export const ProfileDetailsScreen = ({
                 </Box>
               ) : null
             }
-            title={t('how-to-address-you')}
+            title={t('profile-details-screen.how-to-address-you')}
             onPress={() => openChangeUserFilelds('name')}
           />
           <SectionListItemWithArrow
             onPress={() => openChangeUserFilelds('phone')}
-            title={t('add-phone-number')}
+            title={t('profile-details-screen.add-phone-number')}
             children={
               user?.phone ? (
                 <Box>
@@ -104,7 +104,7 @@ export const ProfileDetailsScreen = ({
                   <Text
                     variant="p3"
                     colorName="grey_600"
-                    children={t('phone-number')}
+                    children={t('profile-details-screen.phone-number')}
                   />
                 </Box>
               ) : null

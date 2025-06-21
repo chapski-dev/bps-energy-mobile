@@ -1,1 +1,14 @@
-{}
+{
+  "title": "Profile",
+
+  "profile": "Profile",
+  "charging-history": "Charging history",
+  "recharge-history": "Top-up history",
+  "saved-cards": "Saved cards",
+  "notifications": "Notifications",
+  "support-service": "Support service",
+  "charging-rules": "Charging rules",
+  "faq": "FAQ",
+  "app-language": "App language",
+  "app-version": "Version {{version}}"
+}

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, AppState, AppStateStatus, Keyboard, Vibration } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import { OtpInput, OtpInputProps, OtpInputRef } from 'react-native-otp-entry';
 
 import { postConfirmEmail, postResendOtp } from '@src/api';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -19,7 +19,7 @@ const COUNTDOWN_SECONDS = 60;
 
 const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
   const { colors, insets } = useAppTheme();
-  const { t } = useLocalization('common');
+  const { t } = useTranslation('screens', { keyPrefix: 'otp-verify-screen' });
   const { toastSuccess } = useThemedToasts();
 
   const otpInput = useRef<OtpInputRef>(null);
@@ -60,8 +60,8 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
   const retrySend = useCallback(async () => {
     try {
       setRetryLoading(true);
-      await postResendOtp({ email: route.params?.email,})
-      toastSuccess('Мы повторно выслали код. Проверьте почту!');
+      await postResendOtp({ email: route.params?.email })
+      toastSuccess(t('resend-success'));
       countdownStartedAt.current = Date.now();
       updateCountdown();
     } catch (error) {
@@ -69,7 +69,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
     } finally {
       setRetryLoading(false);
     }
-  }, [route.params?.email, toastSuccess, updateCountdown]);
+  }, [route.params?.email, toastSuccess, updateCountdown, t]);
 
   const handleInputChanges = useCallback(async (code: string) => {
     if (code.length !== OTP_PASSWORD_LENGTH) return;
@@ -77,7 +77,10 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
       setDisabled(true);
       setLoading(true);
       if (route.params.verify === 'reset-password') {
-        navigation.navigate('set-new-password', { email: route.params?.email, otp: code })
+        navigation.navigate('set-new-password', { 
+          email: route.params?.email, 
+          otp: code 
+        })
       }
       if (route.params.verify === 'registration') {
         await postConfirmEmail({
@@ -130,10 +133,21 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
         maxWidth: 59,
         minWidth: 39,
       },
-      pinCodeTextStyle: { color: colors.grey_800, fontSize: 28, fontWeight: '800' }
+      pinCodeTextStyle: { 
+        color: colors.grey_800, 
+        fontSize: 28, 
+        fontWeight: '800' 
+      }
     }),
     [colors, notMatch]
   );
+
+  // Форматирование времени для разных языков
+  const timerText = useMemo(() => {
+    return seconds > 0 
+      ? t('timer-format', { seconds: seconds.toString().padStart(2, '0') })
+      : '';
+  }, [seconds, t]);
 
   return (
     <Box
@@ -146,15 +160,13 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
       effect="none"
       flex={1}
     >
-      <Box flex={1}
-        gap={56}
-      >
+      <Box flex={1} gap={56}>
         <Box gap={8} alignItems="center">
           <Text variant="h4" children={t('confirm-the-email')} />
           <Box row flexWrap="wrap" justifyContent="center">
-            <Text variant="p2" children={t('we-sent-it-to-a-number')} colorName='grey_600' />
+            <Text variant="p2" children={t('sent-code')} colorName='grey_600' />
             <Text variant="p2" children={route.params?.email} />
-            <Text variant="p2" children={t('confirmation-code-enter-it-below')} colorName='grey_600' />
+            <Text variant="p2" children={t('enter-below')} colorName='grey_600' />
           </Box>
         </Box>
         {loading ? (
@@ -178,7 +190,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
         type="clear"
         onPress={retrySend}
       >
-        Выслать код повторно {seconds !== 0 ? `(0:${seconds})` : ''}
+        {t('resend-code')} {timerText}
       </Button>
       <FakeView additionalOffset={-insets.bottom - 20} />
     </Box>

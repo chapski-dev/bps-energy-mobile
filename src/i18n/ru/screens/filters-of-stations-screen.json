@@ -1,1 +1,23 @@
-{}
+{
+  "title": "Фильтры",
+  "connector-type": "Тип коннектора",
+  "fast": "Быстрая",
+  "hide-disabled": "Скрывать выключенные коннекторы из описания станций",
+  "other-networks": "Другие сети",
+  "other": "Другое",
+  "busy": "Занятые",
+  "broken": "Неисправные",
+  "reset-default": "Сбросить по умолчанию",
+  "apply-filters": "Применить фильтры",
+  "connectors": {
+    "ccs": "CCS",
+    "gbt": "GB/T",
+    "gbt-ac": "GB/T AC",
+    "type-2-socket": "Type 2 (Socket)",
+    "type-2-plug": "Type 2 (Plug)"
+  },
+  "networks": {
+    "malanka": "Malanka",
+    "battery-fly": "BatteryFly"
+  }
+}

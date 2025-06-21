@@ -1,1 +1,14 @@
-{}
+{
+  "title": "Профиль",
+
+  "profile": "Профиль",
+  "charging-history": "История зарядок",
+  "recharge-history": "История пополнений",
+  "saved-cards": "Сохранённые карты",
+  "notifications": "Уведомления",
+  "support-service": "Служба поддержки",
+  "charging-rules": "Правила зарядки",
+  "faq": "FAQ",
+  "app-language": "Язык приложения",
+  "app-version": "Версия {{version}}"
+}
