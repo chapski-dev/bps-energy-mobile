@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GestureResponderEvent, Pressable } from 'react-native';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import BPSIcon from '@assets/svg/BPS.svg';
 import MapPinIcon from '@assets/svg/map-pin.svg';
 import ProfileIcon from '@assets/svg/user-fill.svg';
@@ -19,6 +20,7 @@ import { Box } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
+import { vibrate } from '@src/utils/vibrate';
 
 import { withProtectedScreen } from './guards/withProtectedScreen';
 import { navigationRef } from './navigationRef';
@@ -91,6 +93,7 @@ const ChargingTabButton = ({
     }
 
     if (!isCharging) {
+      vibrate(HapticFeedbackTypes.impactLight)
       openCamera({
         onQrCodeScan: async (code) => {
           // Здесь можно обработать QR код
