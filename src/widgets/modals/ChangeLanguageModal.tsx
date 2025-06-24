@@ -5,7 +5,6 @@ import ChinaFlagIcon from '@assets/svg/flags/China.svg';
 import RussiaFlagIcon from '@assets/svg/flags/Russia.svg';
 import UKFlagIcon from '@assets/svg/flags/UK.svg';
 import {
-  BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetModalProps,
   BottomSheetView
