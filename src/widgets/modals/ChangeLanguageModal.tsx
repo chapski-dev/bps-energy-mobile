@@ -17,7 +17,7 @@ import {
 } from '@src/i18n/config';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Text } from '@src/ui';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 type ChangeLanguageModalProps = Omit<BottomSheetModalProps, 'children'> & {
   modalClose: () => void;

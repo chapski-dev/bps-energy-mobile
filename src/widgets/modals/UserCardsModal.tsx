@@ -13,11 +13,11 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 
-import { postDeleteCard } from '@src/api';
+import { deleteCreditCard } from '@src/api';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Text } from '@src/ui';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 export type CardModalMode = 'card-selection' | 'saved-cards';
 
@@ -90,7 +90,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     const handleDeleteCard = useCallback(async (cardId: number) => {
       try {
         modalClose()
-        await postDeleteCard({ card_id: cardId })
+        await deleteCreditCard({ card_id: cardId })
         await getUserData()
       } catch (error) {
         handleCatchError(error, 'handleDeleteCard')
