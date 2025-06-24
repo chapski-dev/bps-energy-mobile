@@ -5,13 +5,13 @@ import { Vibration } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
+import GlobIcon from '@assets/svg/globe.svg';
 import LockIcon from '@assets/svg/lock.svg';
 import LogoIcon from '@assets/svg/logo.svg';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { isAxiosError } from 'axios';
 
 import { SignInReq } from '@src/api/types';
-import { returnCountryFlag } from '@src/i18n/config';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -19,12 +19,12 @@ import { Box, Button, Input, Text } from '@src/ui';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/handleCatchError';
 import { validator } from '@src/utils/validations';
-import SelectLanguageModal from '@src/widgets/modals/SelectLanguageModal';
+import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
 
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
   const { insets, colors } = useAppTheme();
-  const { t, i18n } = useTranslation(['screens', 'actions'])
+  const { t } = useTranslation(['screens', 'actions'])
   const { onSignIn } = useAuth();
   const { control, handleSubmit } = useForm<SignInReq>({
     defaultValues: {
@@ -73,13 +73,11 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
           onPress={modalOpen}
           mt={insets.top + 22}
           mx={24}
-          backgroundColor={colors.grey_50}
-          py={4}
-          px={8}
-          borderRadius={4}
+          w={25}
+          h={25}
           alignSelf='flex-end'
         >
-          <Text children={`${i18n.language} ${returnCountryFlag(i18n.language)}`} right uppercase />
+          <GlobIcon />
         </Box>
         <Box
           px={16}
@@ -139,7 +137,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
               />
             </Box>
             <Box
-              style={{ alignSelf: 'flex-end' }}
+              alignSelf='flex-end'
               onPress={() => navigation.navigate('forgot-password')}
             >
               <Text color={colors.grey_600} children={t('login-screen.forgot-password')} />
@@ -160,12 +158,12 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
 
           <Button
             type="clear"
-            children={t('actions:to-skip')}
+            children={t('login-screen.to-skip')}
             onPress={handleSkip}
           />
         </Box>
       </KeyboardAwareScrollView>
-      <SelectLanguageModal ref={modal} modalClose={modalClose} />
+      <ChangeLanguageModal ref={modal} modalClose={modalClose} />
     </>
   );
 };

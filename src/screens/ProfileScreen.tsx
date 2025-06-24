@@ -9,7 +9,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { handleCatchError } from '@src/utils/handleCatchError';
-import SelectLanguageModal from '@src/widgets/modals/SelectLanguageModal';
+import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
 import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 import UserBalance from '@src/widgets/UserBalance';
 
@@ -115,7 +115,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
           children={t('app-version', { version: '1.74.0' })}
         />
       </ScrollView>
-      <SelectLanguageModal ref={modal} modalClose={modalClose} />
+      <ChangeLanguageModal ref={modal} modalClose={modalClose} />
       <UserCardsModal
         mode="saved-cards"
         ref={modalCards}
