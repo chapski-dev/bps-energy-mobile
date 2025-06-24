@@ -144,6 +144,8 @@ export const Button: FC<PropsType> = ({
     switch (true) {
       case type === 'outline' && disabled:
         return colors.grey_100;
+      case type === 'outline' && !borderColor:
+        return colors.grey_200;
       case !!borderColor:
         return colors[borderColor];
       default:
