@@ -11,7 +11,7 @@ import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
 const OTP_PASSWORD_LENGTH = 4;

@@ -22,7 +22,7 @@ import {
   authReducer,
 } from '@src/providers/reducers/authReducer';
 import app from '@src/service/app';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 import { vibrate } from '@src/utils/vibrate';
 
@@ -47,18 +47,28 @@ export enum AuthState {
 
 export interface IAuthProvider {
   authState: AuthState;
-  user: null | Profile;
+  user: Profile;
   onSignIn: (data: { email: string; password: string }) => Promise<void>;
   onLogout: () => void;
   getUserData: () => Promise<void>;
 }
+
+const initialUser: Profile = {
+  cards: [],
+  email: '',
+  id: 0,
+  name: '',
+  phone: '',
+  registration_date: '',
+  wallets: [{ currency: 'BYN', value: 0 }],
+};
 
 export const AuthContext = createContext<IAuthProvider>({
   authState: AuthState.checking,
   getUserData: () => Promise.resolve(),
   onLogout: () => null,
   onSignIn: () => Promise.resolve(),
-  user: null,
+  user: initialUser,
 });
 
 export let dispatchAuth: Dispatch<ReducerAction<typeof authReducer>> | null =
@@ -71,7 +81,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     AuthState.checking,
   );
 
-  const [user, setUser] = useState<Profile | null>(null);
+  const [user, setUser] = useState<Profile>(initialUser);
 
   const getUserData = useCallback(async () => {
     const userData = await api.getProfileData();
@@ -121,7 +131,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const onLogout = useCallback(() => {
     app.logout();
-    setUser(null);
+    setUser(initialUser);
     if (navigationRef.getCurrentRoute()?.name !== 'login') {
       vibrate(HapticFeedbackTypes.notificationSuccess);
       navigationRef.reset({

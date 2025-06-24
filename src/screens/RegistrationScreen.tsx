@@ -15,7 +15,7 @@ import { OFFERS, PRIVACY_POLICY } from '@src/misc/documents';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Checkbox, Input, Text } from '@src/ui';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { validator } from '@src/utils/validations';
 
 

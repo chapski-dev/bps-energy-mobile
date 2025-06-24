@@ -8,7 +8,7 @@ import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
 import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 import UserBalance from '@src/widgets/UserBalance';

@@ -17,7 +17,7 @@ import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input, Text } from '@src/ui';
 import { wait } from '@src/utils';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { validator } from '@src/utils/validations';
 import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
 

@@ -10,7 +10,7 @@ import messaging from '@src/service/messaging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { wait } from '@src/utils';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 
 export enum NotifictationOption {

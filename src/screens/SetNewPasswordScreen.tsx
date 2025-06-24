@@ -12,7 +12,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input } from '@src/ui';
 import { FakeView } from '@src/ui/Layouts/FakeView';
 import { Gap } from '@src/ui/Layouts/Gap';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { validator } from '@src/utils/validations';
 
 

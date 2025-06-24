@@ -3,7 +3,7 @@ import CopySuccessIcon from '@assets/svg/check-circle-fill.svg'
 import CopyIcon from '@assets/svg/copy.svg';
 
 import { useAppTheme } from '@src/theme/theme';
-import { copyToClipboard } from '@src/utils/copyToClipboard';
+import { copyToClipboard } from '@src/utils/helpers/copyToClipboard';
 
 export const CopyToClipboard = ({ onPress, value, message }:
   { onPress?: () => void; value: string, message: string }) => {

@@ -24,7 +24,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input, Text } from '@src/ui';
 import { AnimatedBox } from '@src/ui/Box';
 import { wait } from '@src/utils';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 
