@@ -1,0 +1,12 @@
+{
+  "to-cancel": "Cancel",
+  "to-delete": "Delete",
+  "title-card-selection": "Choose payment method",
+  "title-saved-cards": "Saved cards",
+  "other-payment-methods": "Other methods",
+  "no-saved-cards": "You don't have any saved cards yet.",
+  "delete-card-title": "Are you sure you want to delete the card?",
+  "delete-card-message": "The card will be removed from your account. This action cannot be undone.",
+  "visa-card": "Visa",
+  "mastercard": "Mastercard"
+}

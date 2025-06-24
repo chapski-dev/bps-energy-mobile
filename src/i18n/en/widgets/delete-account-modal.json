@@ -1,0 +1,12 @@
+{
+  "delete-account": "Delete account",
+  "consequences": "Consequences:",
+  "consequences-list": "· You will not be able to start charging sessions.\n· All your user data will be deleted.\n· Charging and payment history will be lost.\n· Linked cards will be unlinked.\n· Funds from your current balance will be returned to the selected card within five business days.",
+  "action-irreversible": "This action cannot be undone.",
+  "cancel": "Cancel",
+  "alert": {
+    "title": "Delete account?",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}

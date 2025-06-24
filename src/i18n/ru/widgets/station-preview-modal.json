@@ -1,0 +1,9 @@
+{
+  "address-copied": "Адрес скопирован!",
+  "station-unavailable-title": "Станция временно недоступна",
+  "station-unavailable-description": "Мы уже работаем над устранением неисправности.",
+  "more-details": "Подробнее",
+  "route": "Маршрут",
+  "available": "Доступно {{available}}/{{from}}",
+  "power-unit": "кВт"
+}

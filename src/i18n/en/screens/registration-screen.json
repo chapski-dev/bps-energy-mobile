@@ -1,6 +1,6 @@
 {
-  "title": "Регистрация",
-  "phone-placeholder": "Телефон (опционально)",
-  "password-placeholder": "Пароль",
-  "user-agreement-checkbox": "<agree><0>Ознакомлен и согласен с </0></agree><user_agreement><0>Пользовательским соглашением</0></user_agreement> и <privacy_policy><0>Политикой конфеденциальности</0></privacy_policy>"
+  "title": "Registration",
+  "phone-placeholder": "Phone (optional)",
+  "password-placeholder": "Password",
+  "user-agreement-checkbox": "<agree><0>I have read and agree to the </0></agree><user_agreement><0>Terms of Service</0></user_agreement> and <privacy_policy><0>Privacy Policy</0></privacy_policy>"
 }

@@ -11,33 +11,25 @@ import RNLanguageDetector from './LanguageDetector';
 export enum AppLangEnum {
   RU = 'ru',
   EN = 'en',
+  ZH = 'zh',
 }
 
 export const defaultNS = 'shared';
 
 export const LANGUAGE_LIST = [
   {
-    flag: '🇬🇧',
+    lang: AppLangEnum.RU,
+    title: 'russian',
+  },
+  {
     lang: AppLangEnum.EN,
     title: 'english',
   },
   {
-    flag: '🇷🇺',
-    lang: AppLangEnum.RU,
-    title: 'russian',
+    lang: AppLangEnum.ZH,
+    title: 'china',
   },
 ] as const;
-
-export const returnCountryFlag = (lang: AppLangEnum) => {
-  switch (lang) {
-    case AppLangEnum.RU:
-      return '🇷🇺'
-    case AppLangEnum.EN:
-      return '🇬🇧'
-    default:
-      return '';
-  }
-}
 
 export const saveLanguageAsyncStorage = async (language: AppLangEnum) => {
   await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.CURRENT_LANG, language);

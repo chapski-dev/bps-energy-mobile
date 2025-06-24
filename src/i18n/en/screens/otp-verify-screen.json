@@ -1,9 +1,9 @@
 {
-  "title": "Восстановление пароля",
-  "confirm-the-email": "Подтвердите E-mail",
-  "sent-code": "Мы отправили код подтверждения на ",
-  "enter-below": "Введите его ниже",
-  "resend-code": "Выслать код повторно",
-  "resend-success": "Мы повторно выслали код. Проверьте почту!",
+  "title": "Password Recovery",
+  "confirm-the-email": "Confirm Email",
+  "sent-code": "We've sent a verification code to ",
+  "enter-below": "Enter it below",
+  "resend-code": "Resend Code",
+  "resend-success": "We've resent the code. Check your email!",
   "timer-format": "(0:{seconds})"
 }

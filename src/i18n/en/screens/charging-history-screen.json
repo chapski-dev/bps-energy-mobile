@@ -1,8 +1,9 @@
 {
-  "title": "История зарядок",
-  "reset-filters": "Сбросить фильтры",
-  "received": "Получено",
-  "spent": "Потрачено",
-  "no-chargings-found": "Зарядок не найдено",
-  "no-chargings-description": "За выбранный период вы не заряжались через наше приложение"
+  "title": "Charging History",
+  "reset-filters": "Reset Filters",
+  "received": "Received",
+  "spent": "Spent",
+  "no-chargings-found": "No Charging Sessions Found",
+  "no-chargings-description": "You haven't used our app for charging during the selected period",
+  "kilowatt-hour": "kW·h"
 }

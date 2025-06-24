@@ -3,5 +3,6 @@
   "password-placeholder": "Password",
   "forgot-password": "Forgot password?",
   "create-account": "Create account",
-  "to-login": "Sign in"
+  "to-login": "Sign in",
+  "to-skip": "Skip"
 }

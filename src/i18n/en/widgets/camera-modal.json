@@ -1,0 +1,19 @@
+{
+  "error": {
+    "camera-permission": "Camera permission required",
+    "camera-access": "Camera not available"
+  },
+  "permission": {
+    "request-message": "Grant camera access to continue",
+    "request-button": "Grant access",
+    "denied-message": "Camera access was denied"
+  },
+  "instructions": {
+    "scan-message": "Scan QR code to start charging"
+  },
+  "controls": {
+    "close": "Close",
+    "torch-on": "Turn on",
+    "torch-off": "Turn off"
+  }
+}

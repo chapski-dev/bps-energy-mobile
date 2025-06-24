@@ -1,3 +1,16 @@
 {
-  "title": "История пополнений"
+  "title": "Recharge History",
+  "no-transactions": "No recharges found",
+  "no-transactions-description": "You haven't recharged your internal balance during the selected period",
+  "reset-filters": "Reset filters",
+  "wallet-names": {
+    "by": "BY Wallet",
+    "ru": "RU Wallet"
+  },
+  "payment-method": {
+    "unknown": "Unknown"
+  },
+  "transaction-states": {
+    "completed": "Completed"
+  }
 }

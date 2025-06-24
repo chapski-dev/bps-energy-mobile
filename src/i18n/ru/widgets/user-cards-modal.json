@@ -1,0 +1,12 @@
+{
+  "to-cancel": "Отменить",
+  "to-delete": "Удалить",
+  "title-card-selection": "Выберите метод оплаты",
+  "title-saved-cards": "Сохранённые карты",
+  "other-payment-methods": "Другие методы",
+  "no-saved-cards": "У вас пока нет сохраненных карт.",
+  "delete-card-title": "Вы точно хотите удалить карту?",
+  "delete-card-message": "Карта будет удалена из вашего аккаунта. Это действие нельзя отменить.",
+  "visa-card": "Visa",
+  "mastercard": "Mastercard"
+}

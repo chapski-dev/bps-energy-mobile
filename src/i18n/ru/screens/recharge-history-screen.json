@@ -1,4 +1,16 @@
 {
   "title": "История пополнений",
-  "reset-filters": "Сбросить фильтры"
+  "reset-filters": "Сбросить фильтры",
+  "no-transactions": "Пополнений не найдено",
+ "no-transactions-description": "За выбранный период вы не пополняли внутренний баланс",
+  "wallet-names": {
+    "by": "BY Кошелёк",
+    "ru": "RU Кошелёк"
+  },
+  "payment-method": {
+    "unknown": "Неизвестно"
+  },
+  "transaction-states": {
+    "completed": "Исполнена"
+  }
 }

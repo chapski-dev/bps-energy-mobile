@@ -1,0 +1,9 @@
+{
+  "address-copied": "Address copied!",
+  "station-unavailable-title": "Station temporarily unavailable",
+  "station-unavailable-description": "We are already working on fixing the issue.",
+  "more-details": "More details",
+  "route": "Route",
+  "available": "Available {{available}}/{{from}}",
+  "power-unit": "kW"
+}

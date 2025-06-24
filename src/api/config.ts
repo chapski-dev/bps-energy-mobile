@@ -58,7 +58,7 @@ const refreshTokenAndRetry = async (
     return instance(originalRequest);
   } catch (error) {
     dispatchLogout?.();
-    throw new Error(t('the-session-has-timed-out-please-log-in'));
+    throw new Error(t('errors:the-session-has-timed-out-please-log-in'));
   }
 };
 

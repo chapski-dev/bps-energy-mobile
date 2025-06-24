@@ -1,6 +1,7 @@
 {
-  "low-location-accuracy": "Точность геопозиции недостаточна. Включите GPS и попробуйте снова",
-  "unknown-error": "Неизвестная ошибка",
-  "your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings": "Не удалось определить ваше местоположение. Убедитесь что включили доступ в настройках вашего устройства.",
-  "payment-error": "При произведении оплаты возникли неполадки. Попробуйте снова."
+  "low-location-accuracy": "Location accuracy is insufficient. Please enable GPS and try again",
+  "unknown-error": "Unknown error",
+  "your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings": "Your location could not be determined. Please make sure you have enabled access in your device settings.",
+  "payment-error": "An error occurred during payment. Please try again.",
+  "the-session-has-timed-out-please-log-in": "Your session has timed out. Please log in."
 }

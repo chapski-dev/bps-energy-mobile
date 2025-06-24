@@ -1,16 +1,16 @@
 {
-  "title": "Настройки уведомлений",
+  "title": "Notification Settings",
   "options": {
-    "start_and_end_of_charging": "Начало и окончание зарядки",
-    "balance_replenished": "Баланс пополнен",
-    "balance_less_than_3_byn": "Баланс меньше 3 BYN",
-    "special_offers": "Спецпредложения",
-    "push_notifications": "Push-уведомления"
+    "start_and_end_of_charging": "Charging start and end",
+    "balance_replenished": "Balance replenished",
+    "balance_less_than_3_byn": "Balance below 3 BYN",
+    "special_offers": "Special offers",
+    "push_notifications": "Push notifications"
   },
   "status": {
-    "saving": "Сохранение настроек...",
-    "saved": "Настройки сохранены",
-    "error": "Ошибка сохранения настроек"
+    "saving": "Saving settings...",
+    "saved": "Settings saved",
+    "error": "Error saving settings"
   },
-  "permission_warning": "Включите уведомления в настройках устройства для получения оповещений"
+  "permission_warning": "Enable notifications in your device settings to receive alerts"
 }

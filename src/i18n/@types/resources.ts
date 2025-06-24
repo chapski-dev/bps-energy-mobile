@@ -25,11 +25,19 @@ import profileScreenEn from '../en/screens/profile-screen.json';
 import rechargeHistoryScreenEn from '../en/screens/recharge-history-screen.json';
 import rechargeTransactionDetailScreenEn from '../en/screens/recharge-transaction-detail-screen.json';
 import registrationScreenEn from '../en/screens/registration-screen.json';
-import resetPasswordScreenEn from '../en/screens/reset-password-screen.json';
 import setNewPasswordScreenEn from '../en/screens/set-new-password-screen.json';
 import supportServiceScreenEn from '../en/screens/support-service-screen.json';
 import topUpAccountScreenEn from '../en/screens/top-up-account-screen.json';
 import userBalanceWidgetsEn from '../en/widgets/user-balance.json';
+import сhangeLanguageModalWidgetsEn from '../en/widgets/change-language-modal.json';
+import chargingStationPowerSliderWidgetsEn from '../en/widgets/charging-station-power-slider.json'
+import datePeriodSelectWidgetsEn from '../en/widgets/date-period-select.json';
+import contectorNotInsertedModalWidgetsEn from '../en/widgets/contector-not-inserted-modal.json';
+import cameraModalWidgetEn from '../en/widgets/camera-modal.json';
+import deleteAccountModalWidgetEn from '../en/widgets/delete-account-modal.json';
+import userCardsModalWidgetEn from '../en/widgets/user-cards-modal.json';
+import stationPreviewModalWidgetEn from '../en/widgets/station-preview-modal.json';
+
 
 // Russian translations
 import actionsRu from '../ru/actions.json';
@@ -55,11 +63,20 @@ import profileScreenRu from '../ru/screens/profile-screen.json';
 import rechargeHistoryScreenRu from '../ru/screens/recharge-history-screen.json';
 import rechargeTransactionDetailScreenRu from '../ru/screens/recharge-transaction-detail-screen.json';
 import registrationScreenRu from '../ru/screens/registration-screen.json';
-import resetPasswordScreenRu from '../ru/screens/reset-password-screen.json';
 import setNewPasswordScreenRu from '../ru/screens/set-new-password-screen.json';
 import supportServiceScreenRu from '../ru/screens/support-service-screen.json';
 import topUpAccountScreenRu from '../ru/screens/top-up-account-screen.json';
 import userBalanceWidgetsRu from '../ru/widgets/user-balance.json';
+import сhangeLanguageModalWidgetsRu from '../ru/widgets/change-language-modal.json';
+import chargingStationPowerSliderWidgetsRu from '../ru/widgets/charging-station-power-slider.json';
+import datePeriodSelectWidgetsRu from '../ru/widgets/date-period-select.json';
+import contectorNotInsertedModalWidgetRu from '../ru/widgets/contector-not-inserted-modal.json';
+import cameraModalWidgetRu from '../ru/widgets/camera-modal.json';
+import deleteAccountModalWidgetRu from '../ru/widgets/delete-account-modal.json';
+import userCardsModalWidgetRu from '../ru/widgets/user-cards-modal.json';
+import stationPreviewModalWidgetRu from '../ru/widgets/station-preview-modal.json';
+
+
 
 
 export const resources = {
@@ -87,14 +104,21 @@ export const resources = {
       'recharge-history-screen': rechargeHistoryScreenEn,
       'recharge-transaction-detail-screen': rechargeTransactionDetailScreenEn,
       'registration-screen': registrationScreenEn,
-      'reset-password-screen': resetPasswordScreenEn,
       'set-new-password-screen': setNewPasswordScreenEn,
       'support-service-screen': supportServiceScreenEn,
       'top-up-account-screen': topUpAccountScreenEn,
     },
     shared: sharedEn,
     widgets: {
-      'user-balance': userBalanceWidgetsEn
+      'camera-modal': cameraModalWidgetEn,
+      'change-language-modal': сhangeLanguageModalWidgetsEn,
+      'charging-station-power-slider': chargingStationPowerSliderWidgetsEn,
+      'contector-not-inserted-modal': contectorNotInsertedModalWidgetsEn,
+      'date-period-select': datePeriodSelectWidgetsEn,
+      'delete-account-modal': deleteAccountModalWidgetEn,
+      'station-preview-modal': stationPreviewModalWidgetEn,
+      'user-balance': userBalanceWidgetsEn,
+      'user-cards-modal': userCardsModalWidgetEn
     },
   },
   [AppLangEnum.RU]: {
@@ -121,14 +145,22 @@ export const resources = {
       'recharge-history-screen': rechargeHistoryScreenRu,
       'recharge-transaction-detail-screen': rechargeTransactionDetailScreenRu,
       'registration-screen': registrationScreenRu,
-      'reset-password-screen': resetPasswordScreenRu,
       'set-new-password-screen': setNewPasswordScreenRu,
       'support-service-screen': supportServiceScreenRu,
       'top-up-account-screen': topUpAccountScreenRu,
     },
     shared: sharedRu,
     widgets: {
-      'user-balance': userBalanceWidgetsRu
+      'camera-modal': cameraModalWidgetRu,
+      'change-language-modal': сhangeLanguageModalWidgetsRu,
+      'charging-station-power-slider': chargingStationPowerSliderWidgetsRu,
+      'contector-not-inserted-modal': contectorNotInsertedModalWidgetRu,
+      'date-period-select': datePeriodSelectWidgetsRu,
+      'delete-account-modal': deleteAccountModalWidgetRu,
+      'station-preview-modal': stationPreviewModalWidgetRu,
+      'user-balance': userBalanceWidgetsRu,
+      'user-cards-modal': userCardsModalWidgetRu,
+
     },
   },
 };

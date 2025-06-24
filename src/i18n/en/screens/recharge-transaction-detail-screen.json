@@ -1,16 +1,16 @@
-{ 
-  "title": "Пополнение BY баланса",
+{
+  "title": "BY Balance Top-up",
   "status": {
-    "completed": "Исполнена",
-    "pending": "В обработке",
-    "failed": "Ошибка"
+    "completed": "Completed",
+    "pending": "Processing",
+    "failed": "Failed"
   },
   "labels": {
-    "operation-status": "Статус операции",
-    "payment-method": "Метод оплаты",
-    "balance-before": "Баланс до пополнения",
-    "balance-after": "Баланс после пополнения",
-    "download-receipt": "Скачать чек"
+    "operation-status": "Transaction Status",
+    "payment-method": "Payment Method",
+    "balance-before": "Balance Before Top-up",
+    "balance-after": "Balance After Top-up",
+    "download-receipt": "Download Receipt"
   },
   "currency": {
     "byn": "BYN",
