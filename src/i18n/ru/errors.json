@@ -3,5 +3,16 @@
   "unknown-error": "Неизвестная ошибка",
   "your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings": "Не удалось определить ваше местоположение. Убедитесь что включили доступ в настройках вашего устройства.",
   "payment-error": "При произведении оплаты возникли неполадки. Попробуйте снова.",
-  "the-session-has-timed-out-please-log-in": "Время сессии истекло. Пожалуйста авторизуйтесь."
+  "the-session-has-timed-out-please-log-in": "Время сессии истекло. Пожалуйста авторизуйтесь.",
+  "network-connection-lost": "Неполадки сети интернет. Попробуйте пожалуйста позже.",
+  "api": {
+    "server-error": "Неполадки на сервере. Попробуйте пожалуйста позже.",
+    "bad-request": "Неверный запрос",
+    "unauthorized": "Необходима авторизация",
+    "forbidden": "Доступ запрещен",
+    "not-found": "Не найдено",
+    "request-timeout": "Время ожидания истекло",
+    "too-many-requests": "Слишком много запросов",
+    "client-error": "Ошибка клиента"
+  }
 }
