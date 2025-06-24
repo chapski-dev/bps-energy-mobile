@@ -1,8 +1,8 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, FlatList, TouchableOpacity } from 'react-native';
 import VisaIcon from '@assets/svg/brand/visa.svg';
 import CaretRightIcon from '@assets/svg/caret-right.svg';
-import CheckIcon from '@assets/svg/check-circle-fill.svg';
 import CreditCardIcon from '@assets/svg/credit-card-outline.svg';
 import EmptyBoxIcon from '@assets/svg/empty-box.svg';
 import PlusIcon from '@assets/svg/plus.svg';
@@ -14,19 +14,12 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import { postDeleteCard } from '@src/api';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { BottomSlideModal, Box, Button, Text } from '@src/ui';
-import { modal } from '@src/ui/Layouts/ModalLayout';
+import { BottomSlideModal, Box, Text } from '@src/ui';
 import { handleCatchError } from '@src/utils/handleCatchError';
 
-import { DeleteAccountModal } from './DeleteAccountModal';
-
-export type CardModalMode =
-  | 'account-deletion'
-  | 'card-selection'
-  | 'saved-cards';
+export type CardModalMode = 'card-selection' | 'saved-cards';
 
 type Card = {
   id: number;
@@ -39,73 +32,36 @@ type UserCardsModalProps = Omit<BottomSheetModalProps, 'children'> & {
   modalClose: () => void;
   onCardSelect?: (card: Card) => void;
   onAddCard?: () => void;
-  selectedCardId?: number;
 };
 
 const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
   (
-    { mode, modalClose, onCardSelect, onAddCard, selectedCardId, ...props },
+    { mode, modalClose, onCardSelect, onAddCard, ...props },
     ref,
   ) => {
     const { colors, insets } = useAppTheme();
     const { user, getUserData } = useAuth();
-    const { t } = useLocalization();
+    const { t } = useTranslation('widgets', { keyPrefix: 'user-cards-modal' });
 
     // Модальные тексты для разных режимов
     const getModalConfig = () => {
       switch (mode) {
-        case 'account-deletion':
-          return {
-            continueButtonText: 'Продолжить',
-            hasAddCard: false,
-            otherMethodsReplenishment: false,
-            showContinueButton: true,
-            subtitle: (
-              <>
-                <Text
-                  colorName="grey_700"
-                  variant="p2"
-                  children="На какую карту выполнить возврат "
-                />
-                <Text
-                  colorName="grey_800"
-                  variant='p2-semibold'
-                  children={`${user?.wallets[0].value} BYN`}
-                />
-                <Text
-                  colorName="grey_700"
-                  variant="p2"
-                  children=" с текущего баланса?"
-                />
-              </>
-            ),
-            title: 'Удаление аккаунта',
-          };
         case 'card-selection':
           return {
-            continueButtonText: null,
             hasAddCard: true,
             otherMethodsReplenishment: true,
-            showContinueButton: false,
-            subtitle: null,
-            title: 'Выберите метод оплаты',
+            title: t('title-card-selection'),
           };
         case 'saved-cards':
           return {
-            continueButtonText: null,
             hasAddCard: false,
             otherMethodsReplenishment: false,
-            showContinueButton: false,
-            subtitle: null,
-            title: 'Сохранённые карты',
+            title: t('title-saved-cards'),
           };
         default:
           return {
-            continueButtonText: null,
             hasAddCard: false,
             otherMethodsReplenishment: false,
-            showContinueButton: false,
-            subtitle: null,
             title: '',
           };
       }
@@ -116,12 +72,6 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     const handleCardPress = useCallback(
       (card: Card) => {
         switch (mode) {
-          case 'account-deletion':
-            // В режиме удаления аккаунта - просто выделяем карту
-            if (onCardSelect) {
-              onCardSelect(card);
-            }
-            break;
           case 'card-selection':
             // В режиме выбора карты - выбираем и закрываем модалку
             if (onCardSelect) {
@@ -150,17 +100,17 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     const handleDeleteCardAlert = useCallback(
       (cardId: number) => {
         Alert.alert(
-          'Вы точно хотите удалить карту?',
-          'Карта будет удалена из вашего аккаунта. Это действие нельзя отменить.',
+          t('delete-card-title'),
+          t('delete-card-message'),
           [
             {
               onPress: () => null,
-              text: t('actions:to-cancel'),
+              text: t('to-cancel'),
             },
             {
               onPress: () => handleDeleteCard(cardId),
               style: 'destructive',
-              text: t('actions:to-delete'),
+              text: t('to-delete'),
             },
           ],
         );
@@ -175,25 +125,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       modalClose();
     }, [onAddCard, modalClose]);
 
-    const onFinalyDeleteAccountPress = useCallback(() => {
-      modal().setupModal?.({
-        element: <DeleteAccountModal />,
-        justifyContent: 'center',
-        marginHorizontal: 48,
-      });
-    }, []);
-
-    const handleContinue = useCallback(() => {
-      // Логика продолжения для удаления аккаунта
-      if (mode === 'account-deletion') {
-        modalClose();
-        onFinalyDeleteAccountPress();
-      }
-    }, [mode, modalClose, onFinalyDeleteAccountPress]);
-
     const renderCardItem = ({ item: card }: { item: Card }) => {
-      const isSelected = selectedCardId === card.id;
-      const showSelection = mode === 'account-deletion';
       const showDelete = mode === 'saved-cards';
       const isSelectable = mode !== 'saved-cards';
 
@@ -223,8 +155,6 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
                 children={`${card.type} · ${card.mask}`}
               />
             </Box>
-
-            {showSelection && isSelected && <CheckIcon color={colors.main} />}
 
             {showDelete && (
               <TouchableOpacity onPress={() => handleDeleteCardAlert(card.id)}>
@@ -261,7 +191,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           </Box>
           <Text
             variant="p1-semibold"
-            children="Другие методы"
+            children={t('other-payment-methods')}
             color={colors.text}
           />
           <Box flex={1} />
@@ -273,12 +203,11 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     const renderLestEmptyComponent = useCallback(() => (
       <Box justifyContent='center' alignItems='center'>
         <EmptyBoxIcon color={colors.grey_400} width={50} height={50} />
-        <Text children="У вас пока нет сохраненных карт." />
+        <Text children={t('no-saved-cards')} />
       </Box>
-    ), [colors.grey_400])
+    ), [colors.grey_400, t])
 
     const listData = useMemo(() => {
-
       const cards = user?.cards ? [...user.cards] : [];
 
       switch (true) {
@@ -305,14 +234,6 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
           {/* Header */}
           <Box px={24}>
             <Text children={config.title} variant="p1-semibold" center />
-            {config.subtitle && (
-              <Text
-                children={config.subtitle}
-                center
-                px={30}
-                mt={8}
-              />
-            )}
           </Box>
 
           {/* Cards List */}
@@ -329,17 +250,6 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={renderLestEmptyComponent}
           />
-
-          {/* Continue Button for Account Deletion */}
-          {config.showContinueButton && (
-            <Box px={24}>
-              <Button
-                children={config.continueButtonText}
-                onPress={handleContinue}
-                disabled={mode === 'account-deletion' && !selectedCardId}
-              />
-            </Box>
-          )}
         </BottomSheetView>
       </BottomSlideModal>
     );

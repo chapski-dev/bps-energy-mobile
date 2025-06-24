@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SectionList } from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 import Skeleton from 'react-native-reanimated-skeleton';
@@ -7,7 +8,7 @@ import RuFlagIcon from '@assets/svg/flags/Russia.svg'
 import MagnifyingIcon from '@assets/svg/magnifying-glass-cross.svg'
 
 import { getTransactionsHistory } from '@src/api';
-import { useLocalization } from '@src/hooks/useLocalization';
+import i18n from '@src/i18n/config';
 import { isIOS } from '@src/misc/platform';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
@@ -38,10 +39,11 @@ const groupTransactionsByDate = (transactions: Transaction[]): SectionData[] => 
   const grouped = transactions.reduce((acc, transaction) => {
     // Конвертируем дату в читаемый формат (предполагаем что date в ISO формате)
     const date = new Date(transaction.date);
-    const dateKey = date.toLocaleDateString('ru-RU', {
+    const dateKey = date.toLocaleDateString(i18n.language, {
       day: 'numeric',
       month: 'long',
-      weekday: 'long'
+      weekday: 'long',
+      year: 'numeric',
     });
 
     if (!acc[dateKey]) {
@@ -71,7 +73,9 @@ const getCurrencyFromWalletType = (walletType: string): string => {
 // Утилита для получения названия кошелька
 const getWalletName = (walletType: string): string => {
   const currency = getCurrencyFromWalletType(walletType);
-  return currency === 'BYN' ? 'BY Кошелёк' : 'RU Кошелёк';
+  return currency === 'BYN' ?
+    i18n.t('screens:recharge-history-screen.wallet-names.by') :
+    i18n.t('screens:recharge-history-screen.wallet-names.ru');
 };
 
 // Утилита для форматирования способа оплаты
@@ -80,7 +84,7 @@ const formatPaymentMethod = (cardType: string, cardMask: string): string => {
     const lastFour = cardMask.slice(-4);
     return `${cardType} • ${lastFour}`;
   }
-  return cardType || 'Неизвестно';
+  return cardType || i18n.t('screens:recharge-history-screen.payment-method.unknown');
 };
 
 // Моковые данные для скелетонов загрузки
@@ -124,7 +128,7 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
   const { colors } = useAppTheme();
   const [refreshing, setRefreshing] = useState(false);
   const [filterDates, setFilterDates] = useState(initialDates)
-  const { t } = useLocalization();
+  const { t } = useTranslation('screens', { keyPrefix: 'recharge-history-screen' });
   const [sectionsData, setSectionsData] = useState<SectionData[]>(groupTransactionsByDate(mockTransactions));
 
   const onRefresh = useCallback(async (): Promise<void> => {
@@ -208,16 +212,16 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
     <Box flex={1} justifyContent='center' alignItems='center' gap={24} >
       <MagnifyingIcon />
       <Box gap={8}>
-        <Text center children="Пополнений не найдено" variant='h5' colorName='grey_600' mb={8} />
+        <Text center children={t('no-transactions')} variant='h5' colorName='grey_600' mb={8} />
         <Text
-          children="За выбранный период вы не пополняли внутренний баланс"
+          children={t('no-transactions-description')}
           variant='p3'
           colorName='grey_600'
           center
         />
       </Box>
       <Button
-        children={t('actions:to-reset-filter')}
+        children={t('reset-filters')}
         type='clear'
         onPress={() => setFilterDates(initialDates)}
       />

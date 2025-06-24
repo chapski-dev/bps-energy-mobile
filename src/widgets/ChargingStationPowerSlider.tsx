@@ -1,6 +1,7 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 import React, { memo, useCallback } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 import { Slider } from 'react-native-awesome-slider';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
@@ -103,7 +104,7 @@ const Thumb = () => {
 
 export const ChargingStationPowerSlider = memo(() => {
   const { colors } = useAppTheme();
-
+  const { t } = useTranslation('widgets', { keyPrefix: 'charging-station-power-slider' })
   const { getValues, control, formState } = useFormContext<FilterState>();
 
   const min_power = getValues('min_power')
@@ -159,8 +160,8 @@ export const ChargingStationPowerSlider = memo(() => {
           return (
             <>
               <Box row justifyContent='space-between' alignItems='center' >
-                <Text fontWeight='600' fontSize={17} children="Минимальная мощность" />
-                <Text children={`${value} кВТ`} />
+                <Text fontWeight='600' fontSize={17} children={t('min-power')} />
+                <Text children={`${value} ${t('kilowatt')}`} />
               </Box>
               <Slider
                 steps={step}

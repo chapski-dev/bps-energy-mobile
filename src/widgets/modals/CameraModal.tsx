@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -67,7 +68,7 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
   const [loading, setLoading] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const { colors, insets } = useAppTheme();
-
+  const { t } = useTranslation('widgets', { keyPrefix: 'camera-modal' })
   const { hasPermission, requestPermission } = useCameraPermission();
   const device = useCameraDevice('back', {
     physicalDevices: ['wide-angle-camera'],
@@ -77,12 +78,12 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
     if (visible && !hasPermission) {
       requestPermission().then(granted => {
         if (!granted) {
-          Alert.alert('Ошибка', 'Нужно разрешение камеры');
+          Alert.alert(t('error.camera-access'), t('error.camera-permission'));
           onClose();
         }
       });
     }
-  }, [visible, hasPermission]);
+  }, [visible, t, hasPermission, requestPermission, onClose]);
 
   // Активация камеры при открытии/закрытии
   useEffect(() => {
@@ -132,7 +133,7 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
     vibrate(HapticFeedbackTypes.impactMedium)
     const isAgreed = await requestPermission();
     if (!isAgreed) {
-      Alert.alert('Не предоставлен доступ к камере.');
+      Alert.alert(t('permission.denied-message'));
     }
   }
 
@@ -154,9 +155,9 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
           gap={30}
           backgroundColor={colors.black}
         >
-          <Text colorName='white' center children="Предоставьте доступ к камере чтобы продолжить" />
+          <Text colorName='white' center children={t('permission.request-message')} />
           <Button
-            children="Предоставить"
+            children={t('permission.request-button')}
             onPress={requestCamera}
             backgroundColor='white'
             textColor='grey_800'
@@ -175,9 +176,9 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
           alignItems='center'
           backgroundColor={colors.grey_800}
           gap={24}>
-          <Text children="Камера недоступна" colorName='white' variant='h4' />
+          <Text children={t('error.camera-access')}colorName='white' variant='h4' />
           <Button
-            children="Закрыть"
+            children={t('controls.close')}
             onPress={_handleClose}
             type='clear'
             width='auto'
@@ -212,7 +213,7 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
               <Text
                 center
                 colorName='white'
-                children={'Отсканируй QR код что-бы начать зарядку'}
+                children={t('instructions.scan-message')}
               />
             </Box>
           </Overlay>
@@ -238,7 +239,7 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
             {(!device?.hasFlash || device?.hasTorch) && (
               <>
                 <Button
-                  children={torch ? 'Выключить' : 'Включить'}
+                  children={torch ? t('controls.torch-off') : t('controls.torch-on')}
                   icon={<FlashlightIcon
                     width={20}
                     height={20}

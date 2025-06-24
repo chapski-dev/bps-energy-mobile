@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next';
 import { Point } from 'react-native-yamap';
 import ShareIcon from '@assets/svg/arrow-square-out.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
@@ -20,6 +21,7 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
   const closeModal = () => modal()?.closeModal?.();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const { t } = useTranslation('widgets', { keyPrefix: 'station-preview-modal' })
 
   const handleMoreDetails = () => {
     closeModal();
@@ -50,14 +52,14 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
         <Text fontWeight='700' fontSize={22} children="BPS Energy" mb={2} />
         <Box row gap={8} >
           <Text children="Аранская улица, 11" colorName='grey_400' />
-          <CopyToClipboard value={'Аранская улица, 11, Минск'} message='Адрес скопирован!' />
+          <CopyToClipboard value={'Аранская улица, 11, Минск'} message={t('address-copied')} />
         </Box>
       </Box>
 
       <StatusBanner
         status="error"
-        title="Станция временно недоступна"
-        description="Мы уже работаем над устранением неисправности."
+        title={t('station-unavailable-title')}
+        description={t('station-unavailable-description')}
       />
 
       <Box mb={12} >
@@ -69,7 +71,7 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
         <Button
           wrapperStyle={{ flex: 1 }}
           type='outline'
-          children="Подробнее"
+          children={t('more-details')}
           borderColor='grey_200'
           onPress={handleMoreDetails}
         />
@@ -77,7 +79,7 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
         <Button
           wrapperStyle={{ flex: 1 }}
           onPress={openRoute}
-          children="Маршрут"
+          children={t('route')}
           icon={<ShareIcon width={20} height={20} color={colors.white} />}
           loading={loading}
           disabled={loading}
@@ -90,7 +92,7 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
 
 const Chargers = () => {
   const { colors } = useAppTheme();
-
+  const { t } = useTranslation('widgets', { keyPrefix: 'station-preview-modal' })
   return (
     <Box
       h={52}
@@ -104,11 +106,15 @@ const Chargers = () => {
         {renderChargerIcon('CCS')}
         <Box row gap={4} alignItems='center'>
           <Text children="CCS" fontSize={17} fontWeight='800' />
-          <Text children="· 50 кВт" />
+          <Text children={`· ${50} ${t('power-unit')}`} />
         </Box>
       </Box>
-      <Text children="Доступно 1/2" fontSize={16} fontWeight='600' colorName='green' />
-
+      <Text
+        children={t('available', { available: 1, from: 2 })}
+        fontSize={16}
+        fontWeight='600'
+        colorName='green'
+      />
     </Box>
   )
 }

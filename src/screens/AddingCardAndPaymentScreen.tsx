@@ -1,8 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Config from 'react-native-config';
 import WebView from 'react-native-webview';
 
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -12,7 +12,7 @@ function AddingCardAndPaymentScreen({
   route,
 }: ScreenProps<'adding-card-and-payment'>) {
   const { getUserData, } = useAuth();
-  const { t } = useLocalization();
+  const { t } = useTranslation(['shared', 'errors']);
   const { toastError, toastSuccess } = useThemedToasts();
 
   const handleNavigationChange = async (navState: any) => {

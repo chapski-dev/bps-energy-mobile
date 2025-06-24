@@ -128,7 +128,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
               autoComplete="off"
               importantForAutofill="no"
               autoFocus
-              prompting={t('the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
+              prompting={t('phone-number-support-promting')}
             />
           )
         }}

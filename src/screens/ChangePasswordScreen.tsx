@@ -93,6 +93,8 @@ function ChangePasswordScreen({
                 autoCorrect={false}
                 autoComplete="password"
                 type="password"
+                textContentType='password'
+                spellCheck={false}
                 icon={<LockIcon color={colors.grey_400} />}
                 autoFocus
                 onSubmitEditing={() => secInputRef?.current?.focus()}
@@ -119,6 +121,8 @@ function ChangePasswordScreen({
                 autoCorrect={false}
                 autoComplete="password"
                 type="password"
+                textContentType='newPassword'
+                spellCheck={false}
                 icon={<LockIcon color={colors.grey_400} />}
                 ref={secInputRef}
               />

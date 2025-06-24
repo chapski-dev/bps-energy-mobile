@@ -1,9 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-native-date-picker';
 import CaretDownIcon from '@assets/svg/caret-down-bold.svg';
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
 import { dateFormat } from '@src/utils/date-format';
@@ -24,7 +24,7 @@ interface IDatePeriodSelect {
 }
 
 export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) => {
-  const { t, i18n } = useLocalization()
+  const { t, i18n } = useTranslation('widgets', { keyPrefix: 'date-period-select' })
   const { colors, insets } = useAppTheme();
   const [startDate, setStartDate] = useState<Date>(initialStartDate);
   const [endDate, setEndDate] = useState<Date>(new Date());
@@ -46,7 +46,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
   };
 
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('ru-RU');
+    return date.toLocaleDateString(i18n.language);
   };
 
   const isCustomPeriod = useMemo(() => {
@@ -62,7 +62,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
 
   const buttonText = isCustomPeriod
     ? `${dateFormat('DD.MM.yyyy', filterDates.start)} - ${dateFormat('DD.MM.yyyy', filterDates.end)}`
-    : 'Выбрать период';
+    : t('select-period');
 
   const handleSumbmit = () => {
     modalRefClose()
@@ -96,9 +96,9 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
       >
         <BottomSheetView style={{ maxHeight: 334, padding: 24, paddingBottom: insets.bottom + 15 }}>
           <Box row justifyContent='space-between' mb={24}>
-            <Text children="Выберите период" variant='p1-semibold' />
+            <Text children={t('select-period')} variant='p1-semibold' />
             <Box onPress={resetDates}>
-              <Text children={t('actions:to-reset')} variant='p2' colorName='grey_700' />
+              <Text children={t('to-reset')} variant='p2' colorName='grey_700' />
             </Box>
           </Box>
 
@@ -112,7 +112,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
               borderColor={colors.grey_100}
               onPress={() => handleDatePress('start')}
             >
-              <Text children="Начало" />
+              <Text children={t('start')} />
               <Text children={formatDate(startDate)} variant='p2-semibold' />
             </Box>
             <Box
@@ -122,19 +122,19 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
               alignItems='center'
               onPress={() => handleDatePress('end')}
             >
-              <Text children="Конец" />
+              <Text children={t('end')} />
               <Text children={formatDate(endDate)} variant='p2-semibold' />
             </Box>
           </Box>
-          <Button children={t('actions:to-apply')} onPress={handleSumbmit} />
+          <Button children={t('to-apply')} onPress={handleSumbmit} />
         </BottomSheetView>
       </BottomSlideModal>
 
       <DatePicker
         locale={i18n.language}
         modal
-        confirmText={t('actions:to-confirm')}
-        title={currentDateType === 'start' ? 'Начало' : 'Конец'}
+        confirmText={t('to-confirm')}
+        title={currentDateType === 'start' ? t('start') : t('end')}
         open={open}
         date={currentDateType === 'start' ? startDate : endDate}
         minimumDate={currentDateType === 'end' ? startDate : undefined}
@@ -146,9 +146,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
           setOpen(false);
           if (currentDateType === 'start') {
             setStartDate(val);
-            // onSubmit((state) => ({ ...state, start: val }))
           } else {
-            // onSubmit((state) => ({ ...state, end: val }))
             setEndDate(val);
           }
         }}
