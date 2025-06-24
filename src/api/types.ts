@@ -1,3 +1,5 @@
+import { Point } from 'react-native-yamap';
+
 export type SignInReq = { email: string; password: string };
 
 export type SignInResponse = {
@@ -95,37 +97,49 @@ export type SessionsRes = {
   sessions: Session[]
 }
 
-export type Location = {
+// Базовый тип с обязательными полями
+export type BaseLocation = {
   city: string
+  connector_group: ConnectorGroup[]
   country: string
   id: number
-  latitude: number
-  longitude: number
-  stations: Station[]
+  owner: string
+  point: Point
   street: string
 }
 
-export interface Station {
-  charge_box_firmware: string
-  charge_box_id: string
-  charge_box_model: string
-  charge_box_serial: string
-  charge_box_vendor: string
-  connectors: Connector[]
-  id: number
-  state: string
+// Тип для списка локаций (краткая информация)
+export type LocationSummary = BaseLocation
+
+// Тип для детальной информации о локации (расширенная информация)
+export type LocationDetails = BaseLocation & {
+  images: string[] // теперь обязательное поле в деталях
 }
 
-export interface Connector {
-  connector_type: string
-  id: number
-  location_id: number
-  ocpp_id: number
-  power: number
-  state: string
-  station_id: number
+
+export type ConnectorType = 'CCS' | 'GBT' | 'Type2' | 'GBTAC'
+export interface ConnectorGroup {
+  available_count: number
+  max_power: number
+  min_power: number
+  connectors: Connector[]
+  price_max: number
+  price_min: number
+  total_count: number
+  type: ConnectorType
 }
 
 export type LocationsRes = {
-  locations: Location[];
+  locations: LocationSummary[];
+}
+
+export type LocationDetailsRes = {
+  locations: LocationDetails;
+}
+
+export interface Connector {
+  id: number
+  power: number
+  price: number
+  state: string
 }

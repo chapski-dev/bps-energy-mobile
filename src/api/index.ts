@@ -1,6 +1,7 @@
 import api from './config';
 import {
   ChangeUserFieldsReq,
+  LocationDetailsRes,
   LocationsRes,
   NotificationSettings,
   Profile,
@@ -160,8 +161,19 @@ export const postStopChargingSession = (data: { session_id: number }) =>
   api.post<object>('/mobile/stop-session', data).then((res) => res.data);
 
 
+/**
+ * Возвращает список локаций с агрегированной информацией по коннекторам
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%9B%D0%BE%D0%BA%D0%B0%D1%86%D0%B8%D0%B8/get_mobile_locations
+ */
 export const getLocations = () =>
-  api.get<LocationsRes>('/web/locations').then((res) => res.data);
+  api.get<LocationsRes>('/mobile/locations').then((res) => res.data);
+
+/**
+ * Возвращает подробную информацию о локации по её идентификатору
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%9B%D0%BE%D0%BA%D0%B0%D1%86%D0%B8%D0%B8/get_mobile_locations__id_
+ */
+export const getLocationDetails = (id: number) =>
+  api.get<LocationDetailsRes>(`/mobile/locations/${id}`).then((res) => res.data);
 
 
 /**
