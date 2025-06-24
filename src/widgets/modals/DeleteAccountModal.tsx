@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Alert } from 'react-native';
 
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
@@ -8,7 +9,7 @@ import { modal } from '@src/ui/Layouts/ModalLayout';
 
 export const DeleteAccountModal = () => {
   const { colors } = useAppTheme();
-  const { t } = useLocalization();
+  const { t } = useTranslation('widgets', { keyPrefix: 'delete-account-modal' });
   const { onLogout } = useAuth();
 
   const handleRemoveAccount = () => {
@@ -20,26 +21,56 @@ export const DeleteAccountModal = () => {
   return (
     <Box borderRadius={16} backgroundColor={colors.background} p={16} gap={16}>
       <Box gap={8}>
-        <Text variant="p1-semibold" children={t('actions:to-delete-account') +'?'} mb={2} />
-        <Text children="Последствия:" variant="p4-semibold" />
+        <Text variant="p1-semibold" children={t('delete-account') + '?'} mb={2} />
+        <Text children={t('consequences')} variant="p4-semibold" />
         <Text
           variant="p4"
-          children="- Вы не сможете запускать зарядные сессии.
-- Все ваши пользовательские данные будут удалены.
-- История зарядок и пополнений пропадет.
-- Привязанные карты открепяться.
-- Средства с текущего баланса будут возвращены на выбранную карту в течении пяти банковских дней."
+          children={t('consequences-list')}
           colorName="grey_700"
         />
-        <Text children="Это действие нельзя отменить." variant="p4-semibold" />
+        <Text children={t('action-irreversible')} variant="p4-semibold" />
       </Box>
       <Button
         onPress={handleRemoveAccount}
-        children={t('actions:to-delete-account')}
+        children={t('delete-account')}
         textColor="red_500"
         backgroundColor="red_500_15"
       />
-      <Button onPress={closeModal} children={t('actions:to-cancel')} />
+      <Button onPress={closeModal} children={t('cancel')} />
     </Box>
   );
 };
+
+export const DeleteAccountButton = () => {
+  const { t } = useTranslation('widgets', { keyPrefix: 'delete-account-modal' });
+
+  const onDeleteAccountPress = () =>
+    Alert.alert(t('alert.title'), undefined, [
+      {
+        onPress: () => null,
+        text: t('alert.cancel'),
+      },
+      {
+        onPress: onFinalyDeleteAccountPress,
+        style: 'destructive',
+        text: t('alert.delete'),
+      },
+    ]);
+
+  const onFinalyDeleteAccountPress = useCallback(() => {
+    modal().setupModal?.({
+      element: <DeleteAccountModal />,
+      justifyContent: 'center',
+      marginHorizontal: 48,
+    });
+  }, []);
+
+  return (
+    <Button
+      type="clear"
+      textColor="red_500"
+      children={t('delete-account')}
+      onPress={onDeleteAccountPress}
+    />
+  )
+}

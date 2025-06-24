@@ -7,7 +7,6 @@ export type RootStackParamList = {
   login: undefined
   registration: undefined
   'forgot-password': undefined
-  'reset-password': undefined
   'top-up-account'?: { currency: 'RUB' | 'BYN' }
   'adding-card-and-payment': { url: string }
   'profile-details': undefined

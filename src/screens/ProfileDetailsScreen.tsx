@@ -1,15 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView } from 'react-native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
-import { Card } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
-import UserCardsModal from '@src/widgets/modals/UserCardsModal';
+import { DeleteAccountButton } from '@src/widgets/modals/DeleteAccountModal';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
@@ -18,7 +16,7 @@ export enum NotifictationOption {
 export const ProfileDetailsScreen = ({
   navigation,
 }: ScreenProps<'profile-details'>) => {
-  const { t } = useTranslation(['screens', 'common', 'actions', 'shared']);
+  const { t } = useTranslation(['screens', 'actions', 'shared']);
   const { onLogout, user } = useAuth();
   const { insets } = useAppTheme();
 
@@ -26,7 +24,7 @@ export const ProfileDetailsScreen = ({
     navigation.push('change-user-fields', { filed });
 
   const onLogoutPress = () =>
-    Alert.alert(t('common:do-you-want-to-logout?'), undefined, [
+    Alert.alert(t('shared:do-you-want-to-logout?'), undefined, [
       {
         onPress: () => null,
         text: t('actions:to-cancel'),
@@ -38,28 +36,6 @@ export const ProfileDetailsScreen = ({
       },
     ]);
 
-  const onDeleteAccountPress = () =>
-    Alert.alert(t('common:do-you-want-to-delete-your-account?'), undefined, [
-      {
-        onPress: () => null,
-        text: t('actions:to-cancel'),
-      },
-      {
-        onPress: modalCardsOpen,
-        style: 'destructive',
-        text: t('actions:to-delete'),
-      },
-    ]);
-
-
-  const modalCards = useRef<BottomSheetModal>(null);
-  const modalCardsClose = () => modalCards?.current?.forceClose();
-  const modalCardsOpen = () => modalCards?.current?.present();
-
-  const [cardId, setCardId] = useState<number>()
-  const onCardSelect = (val: Card) => {
-    setCardId(val.id)
-  }
   return (
     <>
       <ScrollView
@@ -74,12 +50,12 @@ export const ProfileDetailsScreen = ({
           <SectionListItemWithArrow disabled onPress={() => null}>
             <Box gap={3}>
               <Text variant="p3-semibold" children={user?.email} />
-              <Text colorName="grey_600" children="E-mail" />
+              <Text colorName="grey_600" children={t('profile-details-screen.email-label')} />
             </Box>
           </SectionListItemWithArrow>
 
           <SectionListItemWithArrow
-            title={t('actions:to-change')}
+            title={t('profile-details-screen.change-password')}
             onPress={() => navigation.navigate('change-password')}
           />
           <SectionListItemWithArrow
@@ -87,7 +63,11 @@ export const ProfileDetailsScreen = ({
               user?.name ? (
                 <Box>
                   <Text variant="p2-semibold" children={user?.name} />
-                  <Text variant="p3" colorName="grey_600" children="Имя" />
+                  <Text
+                    variant="p3"
+                    colorName="grey_600"
+                    children={t('profile-details-screen.name-label')}
+                  />
                 </Box>
               ) : null
             }
@@ -115,7 +95,7 @@ export const ProfileDetailsScreen = ({
             mt={16}
             variant="p3"
             colorName="grey_600"
-            children={t('shared:the-phone-number-you-provide-will-allow-us-to-help-you-more-quickly-if-you-contact-support')}
+            children={t('shared:phone-number-support-promting')}
           />
         </Box>
 
@@ -126,21 +106,9 @@ export const ProfileDetailsScreen = ({
             children={t('actions:to-logout-from-account')}
             onPress={onLogoutPress}
           />
-          <Button
-            type="clear"
-            textColor="red_500"
-            children={t('actions:to-delete-account')}
-            onPress={onDeleteAccountPress}
-          />
+          <DeleteAccountButton />
         </Box>
       </ScrollView>
-      <UserCardsModal
-        mode="account-deletion"
-        ref={modalCards}
-        modalClose={modalCardsClose}
-        onCardSelect={onCardSelect}
-        selectedCardId={cardId}
-      />
     </>
   );
 };
