@@ -6,17 +6,23 @@ import CCSIcon from '@assets/svg/connector/CCS.svg';
 import XIcon from '@assets/svg/X.svg';
 import { useNavigation } from '@react-navigation/native';
 
+import type { Location, Station } from '@src/api/types';
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
 import { modal } from '@src/ui/Layouts/ModalLayout';
 import { StatusBanner } from '@src/ui/StatusBanner';
-import { getHighAccuracyPosition } from '@src/utils/get-current-geo-position';
-import { handleCatchError } from '@src/utils/handleCatchError';
-import { openYandexMaps } from '@src/utils/yandex-maps';
+import { getHighAccuracyPosition } from '@src/utils/helpers/get-current-geo-position';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
+import { openYandexMaps } from '@src/utils/helpers/yandex-maps';
 
 
-export const StationPreviewModal = ({ point }: { point: Point }) => {
+export const StationPreviewModal = ({ station }: {
+  station: {
+    point: Point;
+    data: Location;
+  }
+}) => {
   const { colors } = useAppTheme();
   const closeModal = () => modal()?.closeModal?.();
   const [loading, setLoading] = useState(false);
@@ -33,7 +39,7 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
     try {
       setLoading(true);
       const userPoint = await getHighAccuracyPosition()
-      openYandexMaps(userPoint, point)
+      openYandexMaps(userPoint, station.point)
 
     } catch (error) {
       handleCatchError(error, 'StationPreviewModal')
@@ -51,20 +57,21 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
       <Box>
         <Text fontWeight='700' fontSize={22} children="BPS Energy" mb={2} />
         <Box row gap={8} >
-          <Text children="Аранская улица, 11" colorName='grey_400' />
-          <CopyToClipboard value={'Аранская улица, 11, Минск'} message={t('address-copied')} />
+          <Text children={station?.data?.street} colorName='grey_400' />
+          <CopyToClipboard value={station?.data?.street} message={t('address-copied')} />
         </Box>
       </Box>
 
-      <StatusBanner
-        status="error"
-        title={t('station-unavailable-title')}
-        description={t('station-unavailable-description')}
-      />
+      {station.data.stations.find((el) => el.state !== 'active') &&
+        <StatusBanner
+          status="error"
+          title={t('station-unavailable-title')}
+          description={t('station-unavailable-description')}
+        />}
 
       <Box mb={12} >
-        {[1, 2].map((el) => (
-          <Chargers key={el} />
+        {station.data.stations.map((el) => (
+          <Chargers key={el.id} data={el} />
         ))}
       </Box>
       <Box row gap={8} w='full'>
@@ -90,9 +97,10 @@ export const StationPreviewModal = ({ point }: { point: Point }) => {
   )
 }
 
-const Chargers = () => {
+const Chargers = ({ data }: { data: Station }) => {
   const { colors } = useAppTheme();
   const { t } = useTranslation('widgets', { keyPrefix: 'station-preview-modal' })
+
   return (
     <Box
       h={52}
@@ -105,7 +113,7 @@ const Chargers = () => {
       <Box gap={4} row>
         {renderChargerIcon('CCS')}
         <Box row gap={4} alignItems='center'>
-          <Text children="CCS" fontSize={17} fontWeight='800' />
+          <Text children={data.charge_box_model} fontSize={17} fontWeight='800' />
           <Text children={`· ${50} ${t('power-unit')}`} />
         </Box>
       </Box>
@@ -113,7 +121,7 @@ const Chargers = () => {
         children={t('available', { available: 1, from: 2 })}
         fontSize={16}
         fontWeight='600'
-        colorName='green'
+        colorName={data.state === 'active' ? 'green' : 'red_500'}
       />
     </Box>
   )

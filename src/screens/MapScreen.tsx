@@ -1,6 +1,5 @@
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NativeSyntheticEvent } from 'react-native';
 import {
   ClusteredYamap,
   Marker,
@@ -12,37 +11,30 @@ import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
 import { useNavigation } from '@react-navigation/native';
 import lodash from 'lodash';
 
+import { getLocations } from '@src/api';
+import { Location } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { AuthState, useAuth } from '@src/providers/auth';
 import { defaultState, useFilterStore } from '@src/store/useFilterOfStationsStore';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
-import { getHighAccuracyPosition } from '@src/utils/get-current-geo-position';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { getHighAccuracyPosition } from '@src/utils/helpers/get-current-geo-position';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const { t } = useTranslation('errors');
-  const [markers, setMarkers] = useState<Point[]>([]);
+  const [markers, setMarkers] = useState<Location[]>([]);
   const { insets } = useAppTheme();
 
-  const onMapPress = (event: NativeSyntheticEvent<Point>) => {
-    const { lat, lon } = event.nativeEvent;
-    const newPolyline = [
-      ...markers,
-      {
-        lat,
-        lon,
-      },
-    ];
-    setMarkers(newPolyline);
-  };
-
-  const onStationPress = (point: Point) => {
+  const onStationPress = (station: {
+    point: Point;
+    data: Location;
+  }) => {
     const Element = (
-      <StationPreviewModal point={point} />
+      <StationPreviewModal station={station} />
     );
 
     modal().setupModal?.({
@@ -72,6 +64,12 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   }, [getCurrentPosition])
 
 
+  useEffect(() => {
+    getLocations().then((r) => {
+      setMarkers(r.locations)
+    }).catch(handleCatchError)
+  }, [])
+
 
   return (
     <Box flex={1}>
@@ -80,18 +78,18 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
         showUserPosition
         rotateGesturesEnabled={false}
         clusteredMarkers={markers.map((marker) => ({
-          data: {
-            foo: 'Hello'
+          data: marker,
+          point: {
+            lat: marker.latitude,
+            lon: marker.longitude
           },
-          point: marker,
         }))}
         initialRegion={{ lat: 53.902284, lon: 27.561831 }}
-        onMapPress={onMapPress}
         style={{ flex: 1 }}
         ref={mapRef}
         renderMarker={(info, index) => (
           <Marker
-            onPress={() => onStationPress(info.point)}
+            onPress={() => onStationPress(info)}
             key={index}
             point={info.point}
             source={require('@assets/png/bps-logo-label-default.png')}
