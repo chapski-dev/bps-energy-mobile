@@ -73,7 +73,10 @@ instance.interceptors.request.use(async (config) => {
 });
 
 instance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(`[Response Logger] ${response.config.method?.toUpperCase()} request to ${response.config.url}`);
+    return response;
+  },
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
 

@@ -32,13 +32,6 @@ export type NotificationSettings = {
 };
 
 export type NotificationDetails = {
-  amount: string;
-  created_at: number;
-  from: string;
-  status: string;
-  to: string;
-  tx: any;
-  tx_hash: string;
   loading?: boolean;
 };
 
@@ -84,4 +77,55 @@ export type Transaction = {
 
 export type TransactionsRes = {
   transactions: Transaction[]
+}
+
+
+export type Session = {
+  charged: number,
+  duration: number,
+  id: number,
+  power: number,
+  soc: number,
+  soc_begin: number,
+  soc_end: number,
+  spent: number,
+  state: string
+}
+export type SessionsRes = {
+  sessions: Session[]
+}
+
+export type Location = {
+  city: string
+  country: string
+  id: number
+  latitude: number
+  longitude: number
+  stations: Station[]
+  street: string
+}
+
+export interface Station {
+  charge_box_firmware: string
+  charge_box_id: string
+  charge_box_model: string
+  charge_box_serial: string
+  charge_box_vendor: string
+  connectors: Connector[]
+  id: number
+  state: string
+}
+
+export interface Connector {
+  connector_type: string
+  id: number
+  location_id: number
+  ocpp_id: number
+  power: number
+  state: string
+  station_id: number
+}
+
+export type LocationsRes = {
+  locations: Location[];
 }

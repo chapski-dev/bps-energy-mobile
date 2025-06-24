@@ -1,10 +1,12 @@
 import api from './config';
 import {
   ChangeUserFieldsReq,
+  LocationsRes,
   NotificationSettings,
   Profile,
   RegistrationReq,
   RegistrationResponse,
+  SessionsRes,
   SignInReq,
   SignInResponse,
   TransactionsRes,
@@ -77,9 +79,9 @@ export const postChangePassword = (body: {
  * Удаляет карту пользователя по её идентификатору
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%BE%D0%B9/post_mobile_delete_card
  */
-export const postDeleteCard = (body: { card_id: number }) =>
+export const deleteCreditCard = (body: { card_id: number }) =>
   api
-    .post<{ url: string }>('/mobile/delete-card', body)
+    .delete<{ url: string }>('/mobile/card', { data: { body } })
     .then((res) => res.data);
 
 /**
@@ -134,6 +136,33 @@ export const getProfileData = () =>
  */
 export const updateUserProfile = (data: ChangeUserFieldsReq) =>
   api.patch<object>('/mobile/user', data).then((res) => res.data);
+
+
+/**
+ * Возвращает список текущих сессий пользователя
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8/get_mobile_current_sessions
+ */
+export const getCurrentChargingSessions = () =>
+  api.get<SessionsRes>('/mobile/current-sessions').then((res) => res.data);
+
+/**
+ * Запускает новую сессию зарядки по идентификатору коннектора
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8/post_mobile_start_session
+ */
+export const postStartChargingSession = (data: { connector_id: number }) =>
+  api.post<object>('/mobile/start-session', data).then((res) => res.data);
+
+/**
+ * Останавливает активную сессию пользователя по идентификатору сессии
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8/post_mobile_stop_session
+ */
+export const postStopChargingSession = (data: { session_id: number }) =>
+  api.post<object>('/mobile/stop-session', data).then((res) => res.data);
+
+
+export const getLocations = () =>
+  api.get<LocationsRes>('/web/locations').then((res) => res.data);
+
 
 /**
  * Retrieves the current notification settings for the authenticated user
