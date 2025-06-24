@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   ClusteredYamap,
   Marker,
-  Point,
 } from 'react-native-yamap';
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
@@ -12,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import lodash from 'lodash';
 
 import { getLocations } from '@src/api';
-import { Location } from '@src/api/types';
+import { LocationSummary } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { AuthState, useAuth } from '@src/providers/auth';
 import { defaultState, useFilterStore } from '@src/store/useFilterOfStationsStore';
@@ -26,15 +25,12 @@ import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const { t } = useTranslation('errors');
-  const [markers, setMarkers] = useState<Location[]>([]);
+  const [markers, setMarkers] = useState<LocationSummary[]>([]);
   const { insets } = useAppTheme();
 
-  const onStationPress = (station: {
-    point: Point;
-    data: Location;
-  }) => {
+  const onStationPress = (location: LocationSummary) => {
     const Element = (
-      <StationPreviewModal station={station} />
+      <StationPreviewModal location={location} />
     );
 
     modal().setupModal?.({
@@ -77,22 +73,22 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
         clusterColor={'black'}
         showUserPosition
         rotateGesturesEnabled={false}
-        clusteredMarkers={markers.map((marker) => ({
-          data: marker,
-          point: {
-            lat: marker.latitude,
-            lon: marker.longitude
-          },
+        clusteredMarkers={markers.map((location) => ({
+          data: location,
+          point: location.point,
         }))}
         initialRegion={{ lat: 53.902284, lon: 27.561831 }}
         style={{ flex: 1 }}
         ref={mapRef}
         renderMarker={(info, index) => (
           <Marker
-            onPress={() => onStationPress(info)}
+            onPress={() => onStationPress(info.data)}
             key={index}
             point={info.point}
-            source={require('@assets/png/bps-logo-label-default.png')}
+            source={info.data.owner === 'BPS Energy' ?  
+              require('@assets/png/bps-logo-label-default.png') :
+              require('@assets/png/dot-default.png')
+             }
             scale={0.5}
           />
         )}

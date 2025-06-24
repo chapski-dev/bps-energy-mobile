@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   RefreshControl,
@@ -7,54 +7,41 @@ import {
 import WalletIcon from '@assets/svg/wallet.svg';
 import { useNavigation } from '@react-navigation/native';
 
+import { getLocationDetails } from '@src/api';
+import { LocationDetails } from '@src/api/types';
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
-import { wait } from '@src/utils';
 import { CharginAccordion } from '@src/widgets/CharginAccrodion';
 import { Gallery } from '@src/widgets/Gallery';
 
-interface StationData {
-  images: string[];
-}
-
-const stationData: StationData = {
-  images: [
-    'https://thumbs.dreamstime.com/b/vertical-shot-road-magnificent-mountains-under-blue-sky-captured-california-163571053.jpg',
-    'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    'https://images.unsplash.com/photo-1434725039720-aaad6dd32dfe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1642&q=80',
-    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    'https://images.unsplash.com/34/BA1yLjNnQCI1yisIZGEi_2013-07-16_1922_IMG_9873.jpg?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80',
-    'https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1194&q=80',
-    'https://images.unsplash.com/photo-1559666126-84f389727b9a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1177&q=80',
-    'https://images.unsplash.com/photo-1527489377706-5bf97e608852?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1559&q=80',
-    'https://images.unsplash.com/photo-1464983953574-0892a716854b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
-    'https://images.unsplash.com/photo-1462400362591-9ca55235346a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1664&q=80',
-    'https://images.unsplash.com/photo-1484591974057-265bb767ef71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    'https://images.unsplash.com/photo-1508163223045-1880bc36e222?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80',
-    'https://images.unsplash.com/photo-1503424886307-b090341d25d1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80',
-    'https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-    'https://images.unsplash.com/photo-1431631927486-6603c868ce5e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-  ],
-};
 const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navigation, route }) => {
   const { insets } = useAppTheme();
   const { t } = useTranslation();
+  
+  const [location, setLocation] = useState<LocationDetails>({ ...route.params.location, images: [] })
+  const fullAdress = `${route.params.location?.street}, ${route.params.location?.city}`
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const onRefresh = async (): Promise<void> => {
+
+  const onRefresh = useCallback(async (): Promise<void> => {
     try {
       setRefreshing(true);
-      await wait(500);
+      const res = await getLocationDetails(route.params.location.id);
+      console.log('res -> ', res);
+      
+      setLocation(res.locations)
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [route.params.location.id]);
 
+  useEffect(() => {
+    onRefresh()
+  }, [onRefresh])
+  
   return (
     <>
       <ScrollView
@@ -67,30 +54,27 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
       >
         <NeedTopUpBalanceBanner />
         <Box mb={16}>
-          <Text variant="h1" children="BPS Energy" />
+          <Text variant="h1" children={route.params.location.owner} />
           <Box row gap={6}>
-            <Text children="Аранская улица, 11, Минск" />
-            <CopyToClipboard value={'Аранская улица, 11, Минск'} message={t('address-copied') + '!'} />
+            <Text children={fullAdress} />
+            <CopyToClipboard value={fullAdress} message={t('address-copied') + '!'} />
           </Box>
         </Box>
 
-        <Gallery images={stationData.images} />
-
-        <CharginAccordion
-          onStartCharging={() => console.log('Charging started!')}
-          stations={[
-            { id: '1', isAvailable: true, number: '0044' },
-            { id: '12', isAvailable: false, number: '0045' },
-            { id: '13', isAvailable: true, number: '0046' },
-          ]}
-          headerData={{
-            availableCount: 1,
-            power: '50 кВт',
-            rate: '0.85 р.',
-            totalCount: 2,
-            type: 'CCS'
-          }}
-        />
+        <Gallery images={location?.images || []} />
+        {location.connector_group.map((el, i) => (
+          <CharginAccordion
+            key={i}
+            connectors={el.connectors}
+            headerData={{
+              availableCount: 1,
+              power: el.min_power,
+              rate: el.price_min,
+              totalCount: el.total_count,
+              type: el.type
+            }}
+          />
+        ))}
       </ScrollView>
       <Box px={16} pb={insets.bottom + 15} gap={12}>
         <Button children={t('give-feedback')} type="outline" />

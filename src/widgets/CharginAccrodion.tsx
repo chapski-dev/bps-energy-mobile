@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Animated, {
   SharedValue,
@@ -9,23 +9,20 @@ import Animated, {
 } from 'react-native-reanimated';
 import ArrowIcon from '@assets/svg/caret-down.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
+import GBTIcon from '@assets/svg/connector/GBT.svg';
+import Type2Icon from '@assets/svg/connector/Type 2.svg';
 
+import type { Connector, ConnectorType } from '@src/api/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Chip, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
+import { wait } from '@src/utils';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 import { ContectorNotInsertedModal } from './modals/ContectorNotInsertedModal';
 
-type ChargerType = 'CCS' | 'CHAdeMO' | 'Type 2';
-
-interface ChargingStation {
-  id: string;
-  number: string;
-  isAvailable: boolean;
-}
-
 interface ChargerHeaderData {
-  type: ChargerType;
+  type: ConnectorType;
   power: string;
   rate: string;
   availableCount: number;
@@ -88,21 +85,25 @@ interface ChargerHeaderProps {
   data: ChargerHeaderData;
 }
 
+const renderChargerIcon = (type: ConnectorType) => {
+  switch (type) {
+    case 'CCS':
+      return (<CCSIcon width={32} height={32} />)
+    case 'GBT':
+      return (<GBTIcon width={32} height={32} />)
+    case 'Type2':
+      return (<Type2Icon width={32} height={32} />)
+    default:
+      return null
+  }
+}
+
 const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
   const { colors } = useAppTheme();
 
   const arrowStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: withTiming(isOpen.value ? '180deg' : '0deg', { duration: 200 }) }],
   }));
-
-  const getChargerIcon = (type: ChargerType) => {
-    switch (type) {
-      case 'CCS':
-        return <CCSIcon width={32} height={32} />;
-      default:
-        return null;
-    }
-  };
 
   return (
     <Box
@@ -114,7 +115,7 @@ const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
       borderColor={colors.grey_200}
     >
       <Box row gap={8} alignItems="center">
-        {getChargerIcon(data.type)}
+        {renderChargerIcon(data.type)}
         <Box gap={4}>
           <Box row gap={6} alignItems="center">
             <Text children={data.type} fontSize={17} fontWeight="600" />
@@ -145,81 +146,111 @@ const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
 
 // Компонент StationList
 interface StationListProps {
-  stations: ChargingStation[];
-  onStartCharging: (stationId: string) => void;
+  connectors: Connector[];
 }
 
-const StationList: FC<StationListProps> = ({ stations, onStartCharging }) => {
-  const { colors } = useAppTheme();
-
-  const handlePress = useCallback(
-    (stationId: string) => {
-      modal().setupModal?.({
-        element: <ContectorNotInsertedModal />,
-        justifyContent: 'center',
-        marginHorizontal: 48,
-      });
-      onStartCharging(stationId);
-    },
-    [onStartCharging]
-  );
-
-  const sortedStations = useMemo(() =>
-    [...stations].sort((a, b) => a.isAvailable === b.isAvailable ? 0 : a.isAvailable ? -1 : 1)
-    , [stations]);
+const StationList: FC<StationListProps> = ({ connectors }) => {
+  const sortedconnectors = useMemo(() =>
+    connectors.sort((a) => a.state === 'avalable' ? 0 : a.state === 'busy' ? -1 : 1)
+    , [connectors]);
+  const [disbledConnectors, setDisbledConnectors] = useState(false);
 
   return (
     <Box>
-      {sortedStations.map((station) => (
-        <Box
-          key={station.id}
-          row
-          justifyContent="space-between"
-          alignItems="center"
-          py={10}
-          borderBottomWidth={1}
-          borderColor={colors.grey_100}
-        >
-          <Box row gap={12} alignItems="center">
-            <Text children={`№ ${station.number}`} fontSize={16} fontWeight="500"
-              colorName={station.isAvailable ? 'grey_800' : 'grey_400'}
-            />
-            <Text
-              children={station.isAvailable ? 'Доступен' : 'Занят'}
-              fontSize={14}
-              colorName={station.isAvailable ? 'green' : 'grey_600'}
-            />
-          </Box>
-          {station.isAvailable && (
-            <Button
-              children="Заряжаться"
-              onPress={() => handlePress(station.id)}
-              backgroundColor='green'
-              wrapperStyle={{ width: 147 }}
-            />
-          )}
-        </Box>
+      {sortedconnectors.map((connector, i) => (
+        <ConnectorElement
+          key={i}
+          connector={connector}
+          disbledConnectors={disbledConnectors}
+          setDisbledConnectors={setDisbledConnectors}
+        />
       ))}
     </Box>
   );
 };
 
+type ConnectorElementProps = {
+  connector: Connector;
+  setDisbledConnectors: React.Dispatch<React.SetStateAction<boolean>>;
+  disbledConnectors: boolean
+}
+
+const ConnectorElement = ({
+  connector,
+  disbledConnectors,
+  setDisbledConnectors
+}: ConnectorElementProps) => {
+  const { colors } = useAppTheme();
+  const [loading, setLoading] = useState(false);
+
+  const handleStartCharging = async () => {
+    try {
+      setLoading(true);
+      setDisbledConnectors(true);
+      // connector.id
+      await wait(1500)
+      modal().setupModal?.({
+        element: <ContectorNotInsertedModal />,
+        justifyContent: 'center',
+        marginHorizontal: 48,
+      });
+
+    } catch (error) {
+      handleCatchError(error)
+    } finally {
+      setLoading(false);
+      setDisbledConnectors(false);
+    }
+  }
+
+  return (
+    <Box
+      key={connector.id}
+      row
+      justifyContent="space-between"
+      alignItems="center"
+      py={10}
+      borderBottomWidth={1}
+      borderColor={colors.grey_100}
+    >
+      <Box row gap={12} alignItems="center">
+        <Text children={`№ ${connector.id}`} fontSize={16} fontWeight="500"
+          colorName={connector.state === 'qwe' ? 'grey_800' : 'grey_400'}
+        />
+        <Text
+          children={connector.state === 'qwe' ? 'Доступен' : 'Занят'}
+          fontSize={14}
+          colorName={connector.state === 'qwe' ? 'green' : 'grey_600'}
+        />
+      </Box>
+      {connector.state === 'ready' && (
+        <Button
+          children="Заряжаться"
+          onPress={handleStartCharging}
+          backgroundColor='green'
+          wrapperStyle={{ width: 147 }}
+          loading={loading}
+          disabled={loading || disbledConnectors}
+        />
+      )}
+    </Box>
+  )
+}
+
 interface CharginAccordionProps {
-  stations: ChargingStation[];
+  connectors: Connector[];
   headerData: ChargerHeaderData;
-  onStartCharging: (stationId: string) => void;
 }
 
 export const CharginAccordion: FC<CharginAccordionProps> = ({
-  stations,
+  connectors,
   headerData,
-  onStartCharging,
 }) => {
   return (
     <Accordion
       renderHeader={(isOpen) => <ChargerHeader isOpen={isOpen} data={headerData} />}
     >
-      <StationList stations={stations} onStartCharging={onStartCharging} />
+      <StationList connectors={connectors} />
     </Accordion>
   );
 };

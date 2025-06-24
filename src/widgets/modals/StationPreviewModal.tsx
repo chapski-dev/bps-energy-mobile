@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
-import { Point } from 'react-native-yamap';
 import ShareIcon from '@assets/svg/arrow-square-out.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
+import GBTIcon from '@assets/svg/connector/GBT.svg';
+import Type2Icon from '@assets/svg/connector/Type 2.svg';
 import XIcon from '@assets/svg/X.svg';
 import { useNavigation } from '@react-navigation/native';
 
-import type { Location, Station } from '@src/api/types';
+import type { ConnectorGroup, ConnectorType, LocationSummary } from '@src/api/types';
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
@@ -17,12 +18,11 @@ import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { openYandexMaps } from '@src/utils/helpers/yandex-maps';
 
 
-export const StationPreviewModal = ({ station }: {
-  station: {
-    point: Point;
-    data: Location;
-  }
+export const StationPreviewModal = ({ location }: {
+  location: LocationSummary
 }) => {
+  console.log('location.connector_group', location.connector_group);
+
   const { colors } = useAppTheme();
   const closeModal = () => modal()?.closeModal?.();
   const [loading, setLoading] = useState(false);
@@ -31,15 +31,15 @@ export const StationPreviewModal = ({ station }: {
 
   const handleMoreDetails = () => {
     closeModal();
-    navigation.preload('charging-station')
-    navigation.navigate('charging-station')
+    navigation.preload('charging-station', { location })
+    navigation.navigate('charging-station', { location })
   }
 
   const openRoute = async () => {
     try {
       setLoading(true);
       const userPoint = await getHighAccuracyPosition()
-      openYandexMaps(userPoint, station.point)
+      openYandexMaps(userPoint, location.point)
 
     } catch (error) {
       handleCatchError(error, 'StationPreviewModal')
@@ -48,6 +48,7 @@ export const StationPreviewModal = ({ station }: {
     }
   }
 
+  const fullAdress = `${location?.street}, ${location?.city}`
 
   return (
     <Box relative borderRadius={16} backgroundColor={colors.background} p={24} gap={16} >
@@ -55,23 +56,21 @@ export const StationPreviewModal = ({ station }: {
         <XIcon color={colors.grey_400} />
       </Box>
       <Box>
-        <Text fontWeight='700' fontSize={22} children="BPS Energy" mb={2} />
-        <Box row gap={8} >
-          <Text children={station?.data?.street} colorName='grey_400' />
-          <CopyToClipboard value={station?.data?.street} message={t('address-copied')} />
+        <Text fontWeight='700' fontSize={22} children={location.owner} mb={2} />
+        <Box row gap={8} alignItems='center' >
+          <Text children={fullAdress} colorName='grey_400' />
+          <CopyToClipboard value={fullAdress} message={t('address-copied')} />
         </Box>
       </Box>
-
-      {station.data.stations.find((el) => el.state !== 'active') &&
-        <StatusBanner
-          status="error"
-          title={t('station-unavailable-title')}
-          description={t('station-unavailable-description')}
-        />}
+      <StatusBanner
+        status="error"
+        title={t('station-unavailable-title')}
+        description={t('station-unavailable-description')}
+      />
 
       <Box mb={12} >
-        {station.data.stations.map((el) => (
-          <Chargers key={el.id} data={el} />
+        {location.connector_group.map((el, i) => (
+          <Chargers key={i} data={el} />
         ))}
       </Box>
       <Box row gap={8} w='full'>
@@ -97,7 +96,7 @@ export const StationPreviewModal = ({ station }: {
   )
 }
 
-const Chargers = ({ data }: { data: Station }) => {
+const Chargers = ({ data }: { data: ConnectorGroup }) => {
   const { colors } = useAppTheme();
   const { t } = useTranslation('widgets', { keyPrefix: 'station-preview-modal' })
 
@@ -111,27 +110,32 @@ const Chargers = ({ data }: { data: Station }) => {
       justifyContent='space-between'
     >
       <Box gap={4} row>
-        {renderChargerIcon('CCS')}
+        <Box w={29}>
+          {renderChargerIcon(data.type)}
+        </Box>
         <Box row gap={4} alignItems='center'>
-          <Text children={data.charge_box_model} fontSize={17} fontWeight='800' />
+          <Text children={data.type} fontSize={17} fontWeight='800' />
           <Text children={`· ${50} ${t('power-unit')}`} />
         </Box>
       </Box>
       <Text
-        children={t('available', { available: 1, from: 2 })}
+        children={t('available', { available: data.available_count, from: data.total_count })}
         fontSize={16}
         fontWeight='600'
-        colorName={data.state === 'active' ? 'green' : 'red_500'}
+        colorName={data.available_count > 0 ? 'green' : 'red_500'}
       />
     </Box>
   )
 }
 
-const renderChargerIcon = (type: 'CCS') => {
+const renderChargerIcon = (type: ConnectorType) => {
   switch (type) {
     case 'CCS':
       return (<CCSIcon width={28} height={28} />)
-
+    case 'GBT':
+      return (<GBTIcon width={28} height={28} />)
+    case 'Type2':
+      return (<Type2Icon width={28} height={28} />)
     default:
       return null
   }
