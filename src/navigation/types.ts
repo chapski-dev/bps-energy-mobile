@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import type { Transaction } from '@src/api/types';
+import type { LocationSummary, Transaction } from '@src/api/types';
 
 export type RootStackParamList = {
   tabs: undefined;
@@ -11,7 +11,7 @@ export type RootStackParamList = {
   'adding-card-and-payment': { url: string }
   'profile-details': undefined
   'filters-of-stations': undefined
-  'charging-station': undefined
+  'charging-station': { location: LocationSummary }
   'otp-verify': {
     verify: 'registration' | 'reset-password'
     email: string

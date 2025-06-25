@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GestureResponderEvent, Pressable } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
@@ -15,11 +15,11 @@ import { useCameraModal } from '@src/providers/camera';
 import ChargingSessionScreen from '@src/screens/ChargingSessionScreen';
 import MapScreen from '@src/screens/MapScreen';
 import { ProfileScreen } from '@src/screens/ProfileScreen';
+import { useChargingSessions } from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
-import { wait } from '@src/utils';
-import { handleCatchError } from '@src/utils/handleCatchError';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
 import { withProtectedScreen } from './guards/withProtectedScreen';
@@ -37,7 +37,8 @@ export const Tabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.grey_800,
-      }}>
+      }}
+    >
       <Tab.Screen
         name="map"
         component={MapScreen}
@@ -55,7 +56,6 @@ export const Tabs = () => {
           tabBarButton: props => <ChargingTabButton {...props} />,
           tabBarIcon: () => null,
           title: t('charging-session-screen.title'),
-
         }}
       />
       <Tab.Screen
@@ -77,13 +77,13 @@ const ChargingTabButton = ({
   children,
 }: BottomTabBarButtonProps) => {
   const { colors } = useAppTheme();
-  const isCharging = false;
   const { openCamera } = useCameraModal();
-  const [loading, setLoading] = useState(false);
   const { authState } = useAuth();
+  const { loading, sessions, startSession } = useChargingSessions();
 
   const handlePress = (event: GestureResponderEvent) => {
     event.preventDefault();
+
     if (authState !== AuthState.ready) {
       navigationRef.reset({
         index: 0,
@@ -91,55 +91,49 @@ const ChargingTabButton = ({
       })
       return;
     }
-
-    if (!isCharging) {
+    if (sessions.length) {
+      onPress && onPress(event);
+    } else if (!loading) {
       vibrate(HapticFeedbackTypes.impactLight)
       openCamera({
         onQrCodeScan: async (code) => {
-          // Здесь можно обработать QR код
           try {
-            setLoading(true)
+            startSession(Math.random().toString())
+            navigationRef.preload('charging-session')
             navigationRef.navigate('charging-session')
-            await wait(5000)
           } catch (error) {
             handleCatchError(error)
-          } finally {
-            setLoading(false)
           }
         },
       });
-    } else {
-      onPress && onPress(event);
     }
   };
 
 
   return (
-    <>
-      <Pressable onPress={handlePress} style={[style, { position: 'relative' }]}>
+    <Pressable onPress={handlePress} style={[style, { position: 'relative' }]}>
+      <Box
+        w={72}
+        h={72}
+        backgroundColor={colors.background}
+        justifyContent="center"
+        borderRadius={50}
+        alignItems="center"
+        absolute
+        bottom={10}>
         <Box
-          w={72}
-          h={72}
-          backgroundColor={colors.background}
+          w={52}
+          h={52}
+          backgroundColor={(sessions.length || loading) ? colors.green : colors.main}
           justifyContent="center"
           borderRadius={50}
-          alignItems="center"
-          absolute
-          bottom={10}>
-          <Box
-            w={52}
-            h={52}
-            backgroundColor={loading ? colors.green : colors.main}
-            justifyContent="center"
-            borderRadius={50}
-            alignItems="center">
-            {loading ?
-              <ActivityIndicator color={colors.white} /> :
-              <BPSIcon width={38} height={38} />}
-          </Box>
+          alignItems="center">
+          {loading ?
+            <ActivityIndicator color={colors.white} /> :
+            <BPSIcon width={38} height={38} />}
         </Box>
-        {children}
-      </Pressable>
-    </>
+      </Box>
+      {children}
+    </Pressable>
   );
 };
