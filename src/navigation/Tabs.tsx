@@ -19,6 +19,8 @@ import { useChargingSessions } from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
+import { AppErrorBoundary } from '@src/utils/helpers/errors/AppErrorBoundary';
+import TestErrorScreen from '@src/utils/helpers/errors/TestErrorScreen';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
@@ -38,6 +40,13 @@ export const Tabs = () => {
       screenOptions={{
         tabBarActiveTintColor: colors.grey_800,
       }}
+      screenLayout={({ children }) => (
+        <AppErrorBoundary>
+          <React.Suspense>
+            {children}
+          </React.Suspense>
+        </AppErrorBoundary>
+      )}
     >
       <Tab.Screen
         name="map"
@@ -67,6 +76,13 @@ export const Tabs = () => {
           title: t('profile-screen.title'),
         }}
       />
+      {__DEV__ && (
+        <Tab.Screen
+          name="error-tests"
+          component={TestErrorScreen}
+          options={{ title: 'Error Tests' }}
+        />
+      )}
     </Tab.Navigator>
   );
 };

@@ -32,6 +32,7 @@ export type TabsParamList = {
   map: undefined;
   'charging-session': undefined;
   profile: undefined;
+  'error-tests': undefined;
 };
 
 export type AllStackParamList = RootStackParamList & TabsParamList;

@@ -14,5 +14,19 @@
     "request-timeout": "Время ожидания истекло",
     "too-many-requests": "Слишком много запросов",
     "client-error": "Ошибка клиента"
+  },
+  "critical": {
+    "critical-error-title": "Критическая ошибка",
+    "critical-error-occurred": "Приложение столкнулось с критической ошибкой и требует перезапуска",
+    "send-report": "Отправить отчет",
+    "restart-app": "Перезапустить",
+    "close-app": "Закрыть приложение",
+    "close-app-title": "Закройте приложение вручную",
+    "close-app-ios-instruction": "Дважды нажмите кнопку Home и смахните приложение вверх для закрытия",
+    "manual-report-title": "Не удалось отправить отчет",
+    "manual-report-message": "Пожалуйста, отправьте отчет об ошибке на:",
+    "error-boundary-title": "Упс! Что-то пошло не так",
+    "error-boundary-message": "Мы зафиксировали эту ошибку и работаем над её исправлением",
+    "try-again": "Попробовать снова"
   }
 }

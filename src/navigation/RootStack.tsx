@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { AuthState, useAuth } from '@src/providers/auth';
-import AddingCardAndPayment from '@src/screens/AddingCardAndPaymentScreen';
+import AddingCardAndPaymentScreen from '@src/screens/AddingCardAndPaymentScreen';
 import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
 import ChangeUserFieldsScreen from '@src/screens/ChangeUserFieldsScreen';
 import ChargingHistoryScreen from '@src/screens/ChargingHistoryScreen';
@@ -22,6 +22,7 @@ import SupportService from '@src/screens/SupportServiceScreen';
 import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
 import { useAppTheme } from '@src/theme/theme';
 import { dateFormat } from '@src/utils/date-format';
+import { AppErrorBoundary } from '@src/utils/helpers/errors/AppErrorBoundary';
 
 import { Tabs } from './Tabs';
 import { RootStackParamList } from './types';
@@ -42,7 +43,16 @@ export const RootStack = () => {
       }}
     >
       {authState !== AuthState.ready && (
-        <Stack.Group navigationKey="unauthorized">
+        <Stack.Group
+          screenLayout={({ children }) => (
+            <AppErrorBoundary>
+              <React.Suspense>
+                {children}
+              </React.Suspense>
+            </AppErrorBoundary>
+          )}
+          navigationKey="unauthorized"
+        >
           <Stack.Screen
             options={{ headerShown: false }}
             name="login"
@@ -66,41 +76,72 @@ export const RootStack = () => {
         component={Tabs}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        options={{ title: t('top-up-account-screen.title') }}
-        name="top-up-account"
-        component={TopUpAccountScreen}
-      />
-      <Stack.Screen
-        options={{ title: t('adding-card-and-payment-screen.title') }}
-        name="adding-card-and-payment"
-        component={AddingCardAndPayment}
-      />
-      <Stack.Screen
-        options={{ title: t('filters-of-stations-screen.title') }}
-        name='filters-of-stations'
-        component={FiltersOfStationsScreen}
-      />
-      <Stack.Screen
-        options={{ title: '' }}
-        name='charging-station'
-        component={CharginStationScreen}
-      />
-      <Stack.Screen
-        options={{ title: t('set-new-password-screen.title') }}
-        name='set-new-password'
-        component={SetNewPasswordScreen}
-      />
-      <Stack.Screen
-        options={({ route }) => ({
-          title: route.params.verify === 'registration' ?
-            '' : t('otp-verify-screen.title')
-        })}
-        name='otp-verify'
-        component={OtpVerifyScreen}
-      />
+
+      <Stack.Group
+        navigationKey="common"
+        screenLayout={({ children }) => (
+          <AppErrorBoundary>
+            <React.Suspense>
+              {children}
+            </React.Suspense>
+          </AppErrorBoundary>
+        )}
+      >
+        <Stack.Screen
+          options={{ title: t('top-up-account-screen.title') }}
+          layout={({ children }) => (
+            <AppErrorBoundary>
+              <React.Suspense>
+                {children}
+              </React.Suspense>
+            </AppErrorBoundary>
+          )}
+          name="top-up-account"
+          component={TopUpAccountScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerBackButtonDisplayMode: 'minimal',
+            title: t('adding-card-and-payment-screen.title')
+          }}
+          name="adding-card-and-payment"
+          component={AddingCardAndPaymentScreen}
+        />
+        <Stack.Screen
+          options={{ title: t('filters-of-stations-screen.title') }}
+          name='filters-of-stations'
+          component={FiltersOfStationsScreen}
+        />
+        <Stack.Screen
+          options={{ title: '' }}
+          name='charging-station'
+          component={CharginStationScreen}
+        />
+        <Stack.Screen
+          options={{ title: t('set-new-password-screen.title') }}
+          name='set-new-password'
+          component={SetNewPasswordScreen}
+        />
+        <Stack.Screen
+          options={({ route }) => ({
+            title: route.params.verify === 'registration' ?
+              '' : t('otp-verify-screen.title')
+          })}
+          name='otp-verify'
+          component={OtpVerifyScreen}
+        />
+      </Stack.Group>
       {authState === AuthState.ready && (
-        <Stack.Group navigationKey="authorized">
+        <Stack.Group
+          navigationKey="authorized"
+          screenLayout={({ children }) => (
+            <AppErrorBoundary>
+              <React.Suspense>
+                {children}
+              </React.Suspense>
+            </AppErrorBoundary>
+          )}
+        >
           <Stack.Screen
             options={{ title: t('profile-details-screen.title') }}
             name="profile-details"

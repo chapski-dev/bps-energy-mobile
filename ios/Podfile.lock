@@ -6,6 +6,9 @@ PODS:
   - FBLazyVector (0.75.5)
   - Firebase/CoreOnly (11.11.0):
     - FirebaseCore (~> 11.11.0)
+  - Firebase/Crashlytics (11.11.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 11.11.0)
   - Firebase/Messaging (11.11.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.11.0)
@@ -17,6 +20,15 @@ PODS:
     - FirebaseCore (~> 11.11.0)
   - FirebaseCoreInternal (11.11.0):
     - "GoogleUtilities/NSData+zlib (~> 8.0)"
+  - FirebaseCrashlytics (11.11.0):
+    - FirebaseCore (~> 11.11.0)
+    - FirebaseInstallations (~> 11.0)
+    - FirebaseRemoteConfigInterop (~> 11.0)
+    - FirebaseSessions (~> 11.0)
+    - GoogleDataTransport (~> 10.0)
+    - GoogleUtilities/Environment (~> 8.0)
+    - nanopb (~> 3.30910.0)
+    - PromisesObjC (~> 2.4)
   - FirebaseInstallations (11.11.0):
     - FirebaseCore (~> 11.11.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -31,6 +43,16 @@ PODS:
     - GoogleUtilities/Reachability (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - nanopb (~> 3.30910.0)
+  - FirebaseRemoteConfigInterop (11.15.0)
+  - FirebaseSessions (11.11.0):
+    - FirebaseCore (~> 11.11.0)
+    - FirebaseCoreExtension (~> 11.11.0)
+    - FirebaseInstallations (~> 11.0)
+    - GoogleDataTransport (~> 10.0)
+    - GoogleUtilities/Environment (~> 8.0)
+    - GoogleUtilities/UserDefaults (~> 8.0)
+    - nanopb (~> 3.30910.0)
+    - PromisesSwift (~> 2.1)
   - fmt (9.1.0)
   - glog (0.3.5)
   - GoogleDataTransport (10.1.0):
@@ -69,6 +91,8 @@ PODS:
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
   - PromisesObjC (2.4.0)
+  - PromisesSwift (2.4.0):
+    - PromisesObjC (= 2.4.0)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1611,15 +1635,24 @@ PODS:
     - React-logger (= 0.75.5)
     - React-perflogger (= 0.75.5)
     - React-utils (= 0.75.5)
+  - ReactNativeExceptionHandler (2.10.10):
+    - React-Core
   - RNBootSplash (6.3.8):
     - React-Core
   - RNCAsyncStorage (2.2.0):
     - React-Core
   - RNCClipboard (1.16.2):
     - React-Core
+  - RNDeviceInfo (14.0.4):
+    - React-Core
   - RNFBApp (21.14.0):
     - Firebase/CoreOnly (= 11.11.0)
     - React-Core
+  - RNFBCrashlytics (22.2.1):
+    - Firebase/Crashlytics (= 11.11.0)
+    - FirebaseCoreExtension
+    - React-Core
+    - RNFBApp
   - RNFBMessaging (21.14.0):
     - Firebase/Messaging (= 11.11.0)
     - FirebaseCoreExtension
@@ -1899,10 +1932,13 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeExceptionHandler (from `../node_modules/react-native-exception-handler`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
@@ -1920,12 +1956,16 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseCrashlytics
     - FirebaseInstallations
     - FirebaseMessaging
+    - FirebaseRemoteConfigInterop
+    - FirebaseSessions
     - GoogleDataTransport
     - GoogleUtilities
     - nanopb
     - PromisesObjC
+    - PromisesSwift
     - SocketRocket
     - YandexMapsMobile
 
@@ -2067,14 +2107,20 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeExceptionHandler:
+    :path: "../node_modules/react-native-exception-handler"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBCrashlytics:
+    :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
@@ -2105,8 +2151,11 @@ SPEC CHECKSUMS:
   FirebaseCore: 2321536f9c423b1f857e047a82b8a42abc6d9e2c
   FirebaseCoreExtension: 3a64994969dd05f4bcb7e6896c654eded238e75b
   FirebaseCoreInternal: 31ee350d87b30a9349e907f84bf49ef8e6791e5a
+  FirebaseCrashlytics: 5058c465e10782f54337b394c37254e0595174e9
   FirebaseInstallations: 781e0e37aa0e1c92b44d00e739aba79ad31b2dba
   FirebaseMessaging: c7be9357fd8ba33bc45b9a6c3cdff0b466e1e2a4
+  FirebaseRemoteConfigInterop: 1c6135e8a094cc6368949f5faeeca7ee8948b8aa
+  FirebaseSessions: f5c6bfeb66a7202deaf33352017bb6365e395820
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
@@ -2114,6 +2163,7 @@ SPEC CHECKSUMS:
   hermes-engine: c9fe5870af65876125fdbbf833071b6f329db30d
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCT-Folly: 34124ae2e667a0e5f0ea378db071d27548124321
   RCTDeprecation: 3abf1129f54dbf292986302277f62ad01f7af1b2
   RCTRequired: 67f606e1be40dbb827898c23d9eaee3562b087d1
@@ -2175,10 +2225,13 @@ SPEC CHECKSUMS:
   React-utils: 8f4688a48ef6107a5cae87c882b4e6624f4059d1
   ReactCodegen: cab4b6fc4f1e049e565fefa4cbf6829e900da1ba
   ReactCommon: 2a02ad6348566d64bb1429aa952f0e4466a51a9d
+  ReactNativeExceptionHandler: a23922ca00122b050ae9412f960061791c232c47
   RNBootSplash: efd6dbf15b2579fb86bc575b8b676d1c5ac5709f
   RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNCClipboard: e1d17c9d093d8129ef50b39b63a17a0e8ccd0ade
+  RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
   RNFBApp: a448037d2df74af9d374a0b765be12ff1e844dc0
+  RNFBCrashlytics: c364728c7a92a80c7e8d59861f1f3716b4751026
   RNFBMessaging: 0f0498a95c605e3afcf13ac5f349d0b201ea65f6
   RNGestureHandler: ae56ec9557e0569b3f83c220e3bc5e1f55cb76d6
   RNNotifee: 5e3b271e8ea7456a36eec994085543c9adca9168
