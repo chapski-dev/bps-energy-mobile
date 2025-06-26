@@ -111,7 +111,7 @@ function ChangeUserFieldsScreen({
                   <Button
                     type="clear"
                     children="Удалить номер"
-                    textColor="red_500"
+                    textColor="error_500"
                     onPress={openConfirmationDeletePhone}
                   />
                 )}

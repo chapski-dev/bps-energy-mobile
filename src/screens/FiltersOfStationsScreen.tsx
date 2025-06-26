@@ -36,7 +36,7 @@ import { ChargingStationPowerSlider } from '../widgets/ChargingStationPowerSlide
 export default function FiltersOfStationsScreen({
   navigation,
 }: ScreenProps<'filters-of-stations'>) {
-  const { insets } = useAppTheme();
+  const { insets, colors } = useAppTheme();
   const { t } = useTranslation('screens', { keyPrefix: 'filters-of-stations-screen' });
   const { persisted, applyFilters, resetAll } = useFilterStore();
 
@@ -104,7 +104,7 @@ export default function FiltersOfStationsScreen({
                 t('connectors.ccs'),
                 {
                   chip: <Chip children={t('fast')} />,
-                  icon: <CCSIcon height={28} width={28} />
+                  icon: <CCSIcon height={28} width={28} color={colors.text} />
                 }, control)
               }
               {renderSwitch(
@@ -113,24 +113,24 @@ export default function FiltersOfStationsScreen({
                 t('connectors.gbt'),
                 {
                   chip: <Chip children={t('fast')} />,
-                  icon: <GBTIcon height={28} width={28} />
+                  icon: <GBTIcon height={28} width={28} color={colors.text} />
                 },
                 control)}
               {renderSwitch(
                 'connectors',
                 'gbt_ac',
                 t('connectors.gbt-ac'),
-                { icon: <GBTACIcon height={28} width={28} /> }, control)}
+                { icon: <GBTACIcon height={28} width={28} color={colors.text} /> }, control)}
               {renderSwitch(
                 'connectors',
                 'type_2_socket',
                 t('connectors.type-2-socket'),
-                { icon: <Type2SocketIcon height={28} width={28} /> }, control)}
+                { icon: <Type2SocketIcon height={28} width={28} color={colors.text} /> }, control)}
               {renderSwitch(
                 'connectors',
                 'type_2_plug',
                 t('connectors.type-2-plug'),
-                { icon: <Type2PlugIcon height={28} width={28} /> }, control)}
+                { icon: <Type2PlugIcon height={28} width={28} color={colors.text} /> }, control)}
             </Box>
             <Controller
               control={control}
@@ -158,12 +158,12 @@ export default function FiltersOfStationsScreen({
             {renderSwitch('other',
               'busy',
               t('busy'),
-              { icon: <DotBusy height={28} width={28} style={shadowStyle} /> },
+              { icon: <DotBusy height={28} width={28} color={colors.text} style={shadowStyle} /> },
               control)}
             {renderSwitch('other',
               'broken',
               t('broken'),
-              { icon: <DotError height={28} width={28} style={shadowStyle} /> },
+              { icon: <DotError height={28} width={28} color={colors.text} style={shadowStyle} /> },
               control)}
           </Box>
 
@@ -253,7 +253,7 @@ const SwitchWithDescription = ({
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}
-        trackColor={{ true: colors.main }}
+        trackColor={{ true: colors.primary }}
       />
     </Box>
   );

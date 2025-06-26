@@ -60,7 +60,7 @@ const Mark = ({ slideOver, index }: { slideOver?: boolean, index?: number }) => 
   return (
     <Box
       alignItems="center"
-      backgroundColor={slideOver ? colors.grey_100 : colors.main}
+      backgroundColor={slideOver ? colors.grey_100 : colors.primary}
       borderColor={slideOver ? colors.grey_100 : colors.border}
       borderRadius={50}
       height={slideOver ? markWidth + 2 : markWidth}
@@ -76,7 +76,6 @@ const Mark = ({ slideOver, index }: { slideOver?: boolean, index?: number }) => 
           variant='p3'
           style={{
             position: 'absolute',
-            textAlign: 'center',
             top: 25,
             width: CHARGING_POWER_HASH[index as keyof typeof CHARGING_POWER_HASH].toString().length === 3 ? 26 : 22
           }}
@@ -89,7 +88,7 @@ const Thumb = () => {
   const { colors } = useAppTheme();
   return (
     <Box
-      backgroundColor={colors.main}
+      backgroundColor={colors.primary}
       borderColor={colors.background}
       borderRadius={50}
       borderWidth={1}
@@ -147,7 +146,7 @@ export const ChargingStationPowerSlider = memo(() => {
   const theme = {
     bubbleBackgroundColor: colors.grey_100,
     bubbleTextColor: colors.grey_600,
-    maximumTrackTintColor: colors.main,
+    maximumTrackTintColor: colors.primary,
     minimumTrackTintColor: colors.grey_100
   }
 

@@ -23,6 +23,7 @@ import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
 import { useAppTheme } from '@src/theme/theme';
 import { dateFormat } from '@src/utils/date-format';
 import { AppErrorBoundary } from '@src/utils/helpers/errors/AppErrorBoundary';
+import TestErrorScreen from '@src/utils/helpers/errors/TestErrorScreen';
 
 import { Tabs } from './Tabs';
 import { RootStackParamList } from './types';
@@ -37,7 +38,7 @@ export const RootStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: colors.main,
+        headerTintColor: colors.primary,
         headerTitleStyle: { color: colors.grey_800 },
         title: '',
       }}
@@ -130,6 +131,13 @@ export const RootStack = () => {
           name='otp-verify'
           component={OtpVerifyScreen}
         />
+        {__DEV__ && (
+          <Stack.Screen
+            name="error-tests"
+            component={TestErrorScreen}
+            options={{ title: 'Error Tests' }}
+          />
+        )}
       </Stack.Group>
       {authState === AuthState.ready && (
         <Stack.Group

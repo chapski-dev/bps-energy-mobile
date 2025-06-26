@@ -24,7 +24,7 @@ export const useThemedToasts = () => {
   const toastError = (message: string) => {
     vibrate(HapticFeedbackTypes.notificationError)
     toast(message, {
-      icon: <WarningCircleIcon color={colors.red_500} />,
+      icon: <WarningCircleIcon color={colors.error_500} />,
       styles: {
         pressable: { backgroundColor: colors.background },
       },
@@ -34,7 +34,7 @@ export const useThemedToasts = () => {
   const toastWarning = (message: string) => {
     vibrate(HapticFeedbackTypes.notificationWarning)
     toast(message, {
-      icon: <InfoCircleIcon color={colors.orange_500} />,
+      icon: <InfoCircleIcon color={colors.warning_500} />,
       styles: {
         pressable: { backgroundColor: colors.background },
       },

@@ -12,6 +12,7 @@ import lodash from 'lodash';
 
 import { getLocations } from '@src/api';
 import { LocationSummary } from '@src/api/types';
+import { useAppColorTheme } from '@src/hooks/useAppColorTheme';
 import { ScreenProps } from '@src/navigation/types';
 import { AuthState, useAuth } from '@src/providers/auth';
 import { defaultState, useFilterStore } from '@src/store/useFilterOfStationsStore';
@@ -25,6 +26,7 @@ import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const { t } = useTranslation('errors');
+  const { isDarkTheme } = useAppColorTheme()
   const [markers, setMarkers] = useState<LocationSummary[]>([]);
   const { insets } = useAppTheme();
 
@@ -71,6 +73,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
     <Box flex={1}>
       <ClusteredYamap
         clusterColor={'black'}
+        nightMode={isDarkTheme}
         showUserPosition
         rotateGesturesEnabled={false}
         clusteredMarkers={markers.map((location) => ({
@@ -112,7 +115,7 @@ const UserBalance = () => {
       top={insets.top + 8}
       left={12}
       borderRadius={8}
-      backgroundColor={colors.white_90}
+      backgroundColor={colors.card}
       px={12}
       py={8}
       gap={2}
@@ -125,7 +128,7 @@ const UserBalance = () => {
         <Text children={t('user-balance.current-balance')} fontSize={13} colorName="grey_600" />
         <Box row gap={4} alignItems="center" justifyContent='flex-start'>
           <Text children={`${user?.wallets[0].value} BYN`} fontWeight="600" fontSize={20} />
-          <PlusCircleFillIcon color={colors.main} width={20} height={20} />
+          <PlusCircleFillIcon color={colors.primary} width={20} height={20} />
         </Box>
       </>
     </Box>
@@ -145,7 +148,7 @@ const Filters = () => {
       bottom={12}
       left={12}
       borderRadius={8}
-      backgroundColor={colors.white_90}
+      backgroundColor={colors.card}
       px={12}
       py={8}
       w={48}
@@ -162,11 +165,11 @@ const Filters = () => {
           h={6}
           right={5}
           top={5}
-          backgroundColor={colors.main}
+          backgroundColor={colors.primary}
           borderRadius={50}
         />}
         <Box flex={1} justifyContent="center" alignItems="center">
-          <FiltersIcon />
+          <FiltersIcon color={colors.text} />
         </Box>
       </>
     </Box>
@@ -181,7 +184,7 @@ const UserLocation = ({ onPress }: { onPress: () => void }) => {
       bottom={12}
       right={12}
       borderRadius={8}
-      backgroundColor={colors.white_90}
+      backgroundColor={colors.card}
       px={12}
       py={8}
       w={48}

@@ -119,7 +119,7 @@ export const Button: FC<PropsType> = ({
       case !!backgroundColor:
         return colors[backgroundColor];
       case type === 'filled':
-        return colors.main;
+        return colors.primary;
       default:
         return colors.background;
     }
@@ -136,7 +136,7 @@ export const Button: FC<PropsType> = ({
       case type === 'filled':
         return colors.white;
       default:
-        return colors.grey_800;
+        return colors.text;
     }
   }, [colors, disabled, textColor, type]);
 
@@ -145,11 +145,11 @@ export const Button: FC<PropsType> = ({
       case type === 'outline' && disabled:
         return colors.grey_100;
       case type === 'outline' && !borderColor:
-        return colors.grey_200;
+        return colors.border;
       case !!borderColor:
         return colors[borderColor];
       default:
-        return colors.grey_200;
+        return colors.border;
     }
   }, [borderColor, colors, disabled, type]);
 
@@ -183,7 +183,7 @@ export const Button: FC<PropsType> = ({
 
   const buttonContent = useMemo(() => (
     <>
-      {loading ? <ActivityIndicator color={colors.background} /> : <View style={{ alignItems: 'center', flexDirection: 'row', gap: 10 }}>
+      {loading ? <ActivityIndicator color={colors.background} /> : <View style={{ alignItems: 'center', flexDirection: 'row', gap: 6 }}>
         <Text
           style={[{ color: _textColor, fontSize: 16, fontWeight: '600' }, textStyle]}
           children={children}

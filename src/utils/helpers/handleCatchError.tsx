@@ -18,7 +18,7 @@ interface ServerErrorResponse {
 const toastError = (message: string) => {
   vibrate(HapticFeedbackTypes.notificationError);
   toast(message, {
-    icon: <WarningCircleIcon color={AppLightTheme.colors.red_500} />,
+    icon: <WarningCircleIcon color={AppLightTheme.colors.error_500} />,
     position: ToastPosition.TOP,
     styles: {
       pressable: { backgroundColor: AppLightTheme.colors.background },

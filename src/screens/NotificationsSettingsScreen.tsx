@@ -164,7 +164,7 @@ const SettingRow = ({
           value={watch('settings')[name]}
           trackColor={{
             false: colors.grey_200,
-            true: colors.main
+            true: colors.primary
           }}
         />
       )}

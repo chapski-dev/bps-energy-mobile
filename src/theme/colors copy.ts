@@ -18,17 +18,25 @@ export const DefaultColors = {
   grey_700: '#46484A',
   /** text default */
   grey_800: '#000A0A',
-  main: '#008C92',
-  main_700_15: '#008C9226',
-  red_500: '#E73054',
-  red_500_15: '#E7303026',
-  orange_500: '#E7B930',
+  primary: '#008C92',
+  primary_700_15: '#008C9226',
+  error_500: '#E73054',
+  error_500_15: '#E7303026',
+  warning_500: '#E7B930',
   white: '#FFF',
   white_90: '#ffffffea',
 } as const;
 
 export const lightColors = {
   ...DefaultColors,
+  background: '#FFF',
+  text: '#000A0A',
+  border: '#D7DCE0',
+  label: '#8A8F93',
+  disabled: '#E6EAED',
+  success_500: '#34C759',
+  success_500_15: '#34C75926',
+  filled_button_text: '#FFF',
 } as const;
 
 export const darkColors = {

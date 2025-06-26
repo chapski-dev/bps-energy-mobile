@@ -18,7 +18,7 @@ export const BottomSlideModal = forwardRef<BottomSheetModal, TBottomSlideModalPr
       animateOnMount={!reducedMotion}
       android_keyboardInputMode="adjustResize"
       keyboardBlurBehavior="restore"
-      backgroundStyle={{ backgroundColor: colors.background }}
+      backgroundStyle={{ backgroundColor: colors.card }}
       handleIndicatorStyle={{ backgroundColor: colors.grey_800 }}
       backdropComponent={(backdropProps) => <BottomSheetBackdrop {...backdropProps} disappearsOnIndex={-1} />}
       {...props}

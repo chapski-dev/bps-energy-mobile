@@ -95,7 +95,7 @@ export default function RechargeTransactionDetailScreen({
 
       <Button
         type="outline"
-        icon={<FilePdfIcon />}
+        icon={<FilePdfIcon color={colors.text} />}
         children={t('labels.download-receipt')}
       />
     </ScrollView>

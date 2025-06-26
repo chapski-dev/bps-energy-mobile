@@ -20,7 +20,6 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { AppErrorBoundary } from '@src/utils/helpers/errors/AppErrorBoundary';
-import TestErrorScreen from '@src/utils/helpers/errors/TestErrorScreen';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 
@@ -76,13 +75,6 @@ export const Tabs = () => {
           title: t('profile-screen.title'),
         }}
       />
-      {__DEV__ && (
-        <Tab.Screen
-          name="error-tests"
-          component={TestErrorScreen}
-          options={{ title: 'Error Tests' }}
-        />
-      )}
     </Tab.Navigator>
   );
 };
@@ -131,7 +123,7 @@ const ChargingTabButton = ({
       <Box
         w={72}
         h={72}
-        backgroundColor={colors.background}
+        backgroundColor={colors.card}
         justifyContent="center"
         borderRadius={50}
         alignItems="center"
@@ -140,7 +132,7 @@ const ChargingTabButton = ({
         <Box
           w={52}
           h={52}
-          backgroundColor={(sessions.length || loading) ? colors.green : colors.main}
+          backgroundColor={(sessions.length || loading) ? colors.green : colors.primary}
           justifyContent="center"
           borderRadius={50}
           alignItems="center">

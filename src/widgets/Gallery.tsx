@@ -131,7 +131,7 @@ const GalleryFooter: React.FC<{
     return (
       <AnimatedBox
         h={insets.bottom + 12 + 40}
-        backgroundColor="rgba(0, 0, 0, 0.3)"
+        backgroundColor="#0000004c"
         bottom={0}
         absolute
         w="full"
@@ -200,7 +200,7 @@ const FullScreenImageViewer: React.FC<{
         data={images}
         onIndexChange={setCurrentImageIndex}
         onScaleEnd={triggerVibrate}
-        style={{ backgroundColor: 'transparent' }}
+        style={{ backgroundColor: colors.black }}
         ref={galleryRef}
       />
 

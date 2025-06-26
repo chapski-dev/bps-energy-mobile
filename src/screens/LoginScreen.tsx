@@ -77,7 +77,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
           h={25}
           alignSelf='flex-end'
         >
-          <GlobIcon />
+          <GlobIcon color={colors.grey_400} />
         </Box>
         <Box
           px={16}

@@ -142,7 +142,7 @@ export default function ChargingSessionScreen({
         <Button
           onPress={loading ? handleCancelSession : handleEndSession}
           type={loading ? 'outline' : 'filled'}
-          backgroundColor={loading ? 'background' : 'green'}
+          backgroundColor={loading ? 'background' : 'success_500'}
           children={loading ? 'Отменить сессию' : 'Завершить сессию'}
         />
       </Box>

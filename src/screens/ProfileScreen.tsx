@@ -1,8 +1,21 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RefreshControl, ScrollView } from 'react-native';
+import BatteryChargingIcon from '@assets/svg/battery-charging.svg'
+import BellIcon from '@assets/svg/bell.svg'
+import ChatIcon from '@assets/svg/chat-text.svg'
+import CreditCardIcon from '@assets/svg/credit-card-outline.svg'
+import GlobeIcon from '@assets/svg/globe.svg'
+import InfoIcon from '@assets/svg/info.svg'
+import MoonIcon from '@assets/svg/moon.svg'
+import QuestionMarkCircledIcon from '@assets/svg/question-mark-circled.svg'
+import SunIcon from '@assets/svg/sun.svg'
+import UserIcon from '@assets/svg/user.svg'
+import WalletIcon from '@assets/svg/wallet.svg'
+import XIcon from '@assets/svg/X.svg'
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
+import { useAppColorTheme } from '@src/hooks/useAppColorTheme';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -18,6 +31,9 @@ export enum NotifictationOption {
 }
 
 export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
+  const { colors } = useAppTheme();
+  const { onChangeTheme, isDarkTheme } = useAppColorTheme();
+
   const { t } = useTranslation('screens', { keyPrefix: 'profile-screen' })
   const openProfileData = () => navigation.navigate('profile-details');
   const [refreshing, setRefreshing] = useState(false);
@@ -49,19 +65,28 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: insets.bottom || 15,
           paddingHorizontal: 16,
           paddingTop: insets.top + 40,
         }}
       >
+        <Box onPress={onChangeTheme} alignItems='flex-end'>
+          {isDarkTheme ?
+            <SunIcon color={colors.text} width={24} height={24} /> :
+            <MoonIcon color={colors.text} width={24} height={24} />}
+        </Box>
         <SectionListItemWithArrow
           onPress={openProfileData}
           borderBottom={false}
         >
-          <Box gap={3}>
-            <Text variant="p2" children={t('profile')} />
-            <Text colorName="grey_600" children={user?.email} />
+          <Box row gap={8}>
+            <UserIcon color={colors.text} width={22} height={22} />
+            <Box gap={3}>
+              <Text variant="p2" children={t('profile')} />
+              <Text colorName="grey_600" children={user?.email} />
+            </Box>
           </Box>
         </SectionListItemWithArrow>
 
@@ -78,36 +103,55 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
 
         <SectionListItemWithArrow
           title={t('charging-history')}
+          icon={<BatteryChargingIcon color={colors.text} />}
           onPress={() => navigation.navigate('charging-history')}
         />
 
         <SectionListItemWithArrow
           title={t('recharge-history')}
+          icon={<WalletIcon color={colors.text} />}
           onPress={() => navigation.navigate('recharge-history')}
         />
 
         <SectionListItemWithArrow
           title={t('saved-cards')}
+          icon={<CreditCardIcon color={colors.text} />}
           onPress={modalCardsOpen}
         />
 
         <SectionListItemWithArrow
           title={t('notifications')}
+          icon={<BellIcon color={colors.text} />}
           onPress={() => navigation.navigate('notifications-settings')}
         />
         <SectionListItemWithArrow
           title={t('support-service')}
+          icon={<ChatIcon color={colors.text} />}
           onPress={() => navigation.navigate('support-service')}
         />
         <SectionListItemWithArrow
           title={t('charging-rules')}
+          icon={<InfoIcon color={colors.text} />}
           onPress={() => null}
         />
-        <SectionListItemWithArrow title={'FAQ'} onPress={() => null} />
         <SectionListItemWithArrow
+          title={'FAQ'}
+          icon={<QuestionMarkCircledIcon color={colors.text} />}
+          onPress={() => null}
+        />
+        <SectionListItemWithArrow
+          icon={<GlobeIcon color={colors.text} />}
           title={t('app-language')}
           onPress={modalOpen}
         />
+        {__DEV__ && (
+          <SectionListItemWithArrow
+            icon={<XIcon color={colors.error_500} />}
+            title={'Error tests'}
+            onPress={() => navigation.navigate('error-tests')}
+          />
+        )}
+
         <Text
           variant='p4'
           colorName='grey_400'

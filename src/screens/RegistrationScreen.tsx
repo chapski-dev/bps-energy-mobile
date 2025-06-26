@@ -157,11 +157,11 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
                 i18nKey="user-agreement-checkbox"
                 components={{
                   agree: <Text variant='p3' />,
-                  privacy_policy: <Text variant='p3' onPress={openOffer} colorName='main' />,
+                  privacy_policy: <Text variant='p3' onPress={openOffer} colorName='primary' />,
                   user_agreement: <Text
                     variant='p3'
                     onPress={openPrivacyPolicy}
-                    colorName='main'
+                    colorName='primary'
                   />,
                 }}
               />

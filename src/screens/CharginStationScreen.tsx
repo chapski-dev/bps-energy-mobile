@@ -44,6 +44,7 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
     <>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: insets.bottom + 15,
           paddingHorizontal: 16,
@@ -76,7 +77,7 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
       </ScrollView>
       <Box px={16} pb={insets.bottom + 15} gap={12}>
         <Button children={t('give-feedback')} type="outline" />
-        <Button children="3.7 км, ~14 мин" />
+        <Button children="Построить маршрут" />
       </Box>
     </>
   );
@@ -94,7 +95,7 @@ const NeedTopUpBalanceBanner = () => {
         <Box flex={1} gap={4}>
           <Text children="Для начала зарядки требуется пополнение баланса." />
           <Box onPress={() => navigation.navigate('top-up-account')}>
-            <Text children={t('actions:to-top-up')} colorName="main" />
+            <Text children={t('actions:to-top-up')} colorName="primary" />
           </Box>
         </Box>
         <WalletIcon />

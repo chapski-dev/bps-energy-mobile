@@ -1,12 +1,14 @@
 import React, { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import ErrorBoundary from 'react-native-error-boundary'
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import TryAgainIcon from '@assets/svg/arrow-counter-clockwise.svg';
 import EnvelopIcon from '@assets/svg/envelope.svg';
 import WarningCircleIcon from '@assets/svg/warning-circle.svg';
 
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
+import { vibrate } from '@src/utils/vibrate';
 
 import { CrashHandler } from './CrashHandler';
 
@@ -16,7 +18,7 @@ const CustomFallback = (props: { error: Error, resetError: () => void }) => {
 
   return (
     <Box flex={1} justifyContent='center' alignItems='center' px={16} gap={24}>
-      <WarningCircleIcon color={colors.main} width={72} height={72} />
+      <WarningCircleIcon color={colors.primary} width={72} height={72} />
       <Box gap={8}>
         <Text variant='h5' center children={t('critical.error-boundary-title')} />
         <Text
@@ -48,7 +50,7 @@ const CustomFallback = (props: { error: Error, resetError: () => void }) => {
 
 export const AppErrorBoundary = ({ children }: PropsWithChildren) => (
   <ErrorBoundary FallbackComponent={CustomFallback}
-    onError={() => console.log('AppErrorBoundary onError')}
+    onError={() => vibrate(HapticFeedbackTypes.notificationError)}
   >
     {children}
   </ErrorBoundary>

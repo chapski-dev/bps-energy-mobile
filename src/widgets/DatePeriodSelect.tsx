@@ -90,7 +90,6 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
       <BottomSlideModal
         ref={modalRef}
         enableDynamicSizing
-        backgroundStyle={{ backgroundColor: colors.background }}
         maxDynamicContentSize={334}
         snapPoints={[334]}
       >
@@ -141,7 +140,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
         i18nIsDynamicList
         maximumDate={currentDateType === 'start' ? endDate : new Date()}
         mode='date'
-        buttonColor={colors.main}
+        buttonColor={colors.primary}
         onConfirm={(val) => {
           setOpen(false);
           if (currentDateType === 'start') {

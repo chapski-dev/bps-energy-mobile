@@ -58,7 +58,6 @@ const ChangeLanguageModal = forwardRef<BottomSheetModal, ChangeLanguageModalProp
       ref={ref}
       snapPoints={[260]}
       enablePanDownToClose
-      backgroundStyle={{ backgroundColor: colors.background }}
       >
       <BottomSheetView style={{ paddingBottom: insets.bottom, paddingHorizontal: 24 }}>
         <Text children={t('title')} center variant='p1-semibold' mb={15} />
@@ -78,7 +77,7 @@ const ChangeLanguageModal = forwardRef<BottomSheetModal, ChangeLanguageModalProp
               {renderFlag(el.lang)}
               <Text children={t(`lang.${el.title}`)} capitalize />
             </Box>
-            {el.lang === i18n.language && <CheckboxFillIcon color={colors.main} />}
+            {el.lang === i18n.language && <CheckboxFillIcon color={colors.primary} />}
           </Box>
         ))}
       </BottomSheetView>

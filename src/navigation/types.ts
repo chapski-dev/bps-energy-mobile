@@ -27,13 +27,13 @@ export type RootStackParamList = {
   'recharge-transaction-detail': { transaction: Transaction };
   'notifications-settings': undefined;
   'support-service': undefined;
+  'error-tests': undefined;
 };
 
 export type TabsParamList = {
   map: undefined;
   'charging-session': undefined;
   profile: undefined;
-  'error-tests': undefined;
 };
 
 export type AllStackParamList = RootStackParamList & TabsParamList;

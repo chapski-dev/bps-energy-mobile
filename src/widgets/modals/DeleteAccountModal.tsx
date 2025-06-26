@@ -33,8 +33,8 @@ export const DeleteAccountModal = () => {
       <Button
         onPress={handleRemoveAccount}
         children={t('delete-account')}
-        textColor="red_500"
-        backgroundColor="red_500_15"
+        textColor="error_500"
+        backgroundColor="error_500_15"
       />
       <Button onPress={closeModal} children={t('cancel')} />
     </Box>
@@ -68,7 +68,7 @@ export const DeleteAccountButton = () => {
   return (
     <Button
       type="clear"
-      textColor="red_500"
+      textColor="error_500"
       children={t('delete-account')}
       onPress={onDeleteAccountPress}
     />

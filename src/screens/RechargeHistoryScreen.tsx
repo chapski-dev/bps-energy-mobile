@@ -88,41 +88,19 @@ const formatPaymentMethod = (cardType: string, cardMask: string): string => {
 };
 
 // Моковые данные для скелетонов загрузки
-const mockTransactions: Transaction[] = [
-  {
-    amount: 10,
-    card_mask: '5123',
-    card_type: 'Visa',
-    date: '2025-06-07T14:21:53Z',
-    id: 1,
-    rest_after: 100,
-    rest_before: 90,
-    state: 'completed',
-    wallet_type: 'BY_WALLET'
-  },
-  {
-    amount: 1500,
-    card_mask: '5141',
-    card_type: 'Visa',
-    date: '2025-06-07T14:21:53Z',
-    id: 2,
-    rest_after: 2500,
-    rest_before: 1000,
-    state: 'completed',
-    wallet_type: 'RU_WALLET'
-  },
+const mockTransactions: Transaction[] = Array.from({length: 9}).map((_, i) => (
   {
     amount: 15,
     card_mask: '',
     card_type: 'Apple Pay',
-    date: '2025-06-03T14:21:53Z',
-    id: 3,
+    date: `2025-06-0${i}T14:21:53Z`,
+    id: i,
     rest_after: 115,
     rest_before: 100,
     state: 'completed',
     wallet_type: 'BY_WALLET'
   }
-];
+))
 
 export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recharge-history'>) {
   const { colors } = useAppTheme();
@@ -166,8 +144,9 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
       <Skeleton
         containerStyle={{ backgroundColor: colors.grey_50, borderRadius: 12 }}
         isLoading={refreshing}
-        animationType={isIOS ? 'pulse' : 'none'}
+        animationType={isIOS ? 'shiver' : 'none'}
         layout={rechargingsSkeletonLayout}
+        boneColor={colors.border}
       >
         <Box
           backgroundColor={colors.grey_50}
@@ -199,8 +178,9 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
     <Skeleton
       containerStyle={{ borderRadius: 12 }}
       isLoading={refreshing}
-      animationType={isIOS ? 'pulse' : 'none'}
+      animationType={!isIOS ? 'shiver' : 'none'}
       layout={[{ height: 25, width: 150 }]}
+      boneColor={colors.grey_50}
     >
       <Box py={12} px={16}>
         <Text colorName='grey_600' variant='p3' children={title} />

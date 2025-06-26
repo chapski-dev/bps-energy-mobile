@@ -105,7 +105,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
                   <Box row gap={5} alignItems="center" justifyContent="center">
                     <Text children={countryCodeEmoji(getValues()?.countryIso)} />
                   </Box>
-                  <Box w={1} h={30} backgroundColor={colors.grey_200} />
+                  <Box w={1} h={30} backgroundColor={colors.border} />
                 </Box>
               }
               value={inputValue}

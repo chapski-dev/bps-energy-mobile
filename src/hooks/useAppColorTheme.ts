@@ -1,30 +1,46 @@
-// import { useColorScheme } from 'react-native';
+import { useCallback, useMemo } from 'react';
+import { useColorScheme } from 'react-native';
 
-import { AppLightTheme } from '@src/theme/theme';
+import { AppDarkTheme, AppLightTheme } from '@src/theme/theme';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
 import { useCustomAsyncStorage } from './useAsyncStorage';
-// TODO: return in the future to changeble theme
+
 export const useAppColorTheme = () => {
-  const [appThemeKey] = useCustomAsyncStorage(ASYNC_STORAGE_KEYS.ThemeKey);
-  // const deviceColorScheme = useColorScheme();
+  const [appThemeKey, setAppThemeKey] = useCustomAsyncStorage(ASYNC_STORAGE_KEYS.ThemeKey);
+  const deviceColorScheme = useColorScheme();
+  
+  // Вычисляем isDarkTheme на основе сохраненного значения или системной темы
+  const isDarkTheme = useMemo(() => {
+    // Если есть явно сохраненная тема - используем её
+    if (appThemeKey === 'dark') return true;
+    if (appThemeKey === 'light') return false;
+    
+    // Если тема не задана (null/undefined) - используем системную
+    return deviceColorScheme === 'dark';
+  }, [appThemeKey, deviceColorScheme]);
 
-  const theme: Omit<App.Theme, 'insets'> = AppLightTheme;
+  // Переключение темы с сохранением в AsyncStorage
+  const onChangeTheme = useCallback(() => {
+    const newTheme = isDarkTheme ? 'light' : 'dark';
+    setAppThemeKey(newTheme);
+  }, [isDarkTheme, setAppThemeKey]);
 
-  // switch (appThemeKey) {
-  //   case 'dark': {
-  //     theme = AppDarkTheme;
-  //     break;
-  //   }
-  //   case 'light': {
-  //     theme = AppLightTheme;
-  //     break;
-  //   }
-  //   default: {
-  //     theme = deviceColorScheme === 'dark' ? AppDarkTheme : AppLightTheme;
-  //     break;
-  //   }
-  // }
-
-  return { appThemeKey, theme };
+  // Сброс темы к системной (удаляет из AsyncStorage)
+  const resetToSystemTheme = useCallback(() => {
+    setAppThemeKey(null); // или undefined, зависит от вашего useCustomAsyncStorage
+  }, [setAppThemeKey]);
+  
+  // Мемоизированный объект темы для NavigationContainer
+  const theme = useMemo(() => {
+    return isDarkTheme ? AppDarkTheme : AppLightTheme;
+  }, [isDarkTheme]);
+  
+  return { 
+    appThemeKey, 
+    isDarkTheme, 
+    onChangeTheme, 
+    resetToSystemTheme,
+    theme 
+  };
 };

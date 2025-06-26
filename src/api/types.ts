@@ -118,8 +118,7 @@ export type LocationDetails = BaseLocation & {
 
 
 export type ConnectorType =
-  | 'CCS1'
-  | 'CCS2'
+  | 'CCS'
   | 'GBT'
   | 'Type2'
   | 'GBT AC'

@@ -13,12 +13,14 @@ import CCSIcon from '@assets/svg/connector/CCS.svg';
 import GBTACIcon from '@assets/svg/connector/GBT AC.svg';
 import GBTIcon from '@assets/svg/connector/GBT.svg';
 import Type2Icon from '@assets/svg/connector/Type 2.svg';
+import LightningIcon from '@assets/svg/lightning.svg';
 
 import type { Connector, ConnectorType } from '@src/api/types';
 import { useTabNavigation } from '@src/hooks/useTabNavigation';
 import chargingService from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Chip, Text } from '@src/ui';
+import { AnimatedBox } from '@src/ui/Box';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
@@ -88,24 +90,6 @@ interface ChargerHeaderProps {
   data: ChargerHeaderData;
 }
 
-const renderChargerIcon = (type: ConnectorType) => {
-  switch (type) {
-    case 'CCS1':
-    case 'CCS2':
-      return (<CCSIcon width={32} height={32} />)
-    case 'GBT':
-      return (<GBTIcon width={32} height={32} />)
-    case 'Type2':
-      return (<Type2Icon width={32} height={32} />)
-    case 'GBT AC':
-      return (<GBTACIcon width={32} height={32} />)
-    case 'CHAdeMO': 
-    return (<CHAdeMOIcon width={32} height={32} />)
-
-    default:
-      return null
-  }
-}
 
 const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
   const { colors } = useAppTheme();
@@ -114,6 +98,24 @@ const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
     transform: [{ rotate: withTiming(isOpen.value ? '180deg' : '0deg', { duration: 200 }) }],
   }));
 
+  const renderChargerIcon = useCallback((type: ConnectorType) => {
+    switch (type) {
+      case 'CCS':
+        return (<CCSIcon width={32} height={32} color={colors.text} />)
+      case 'GBT':
+        return (<GBTIcon width={32} height={32} color={colors.text} />)
+      case 'Type2':
+        return (<Type2Icon width={32} height={32} color={colors.text} />)
+      case 'GBT AC':
+        return (<GBTACIcon width={32} height={32} color={colors.text} />)
+      case 'CHAdeMO':
+        return (<CHAdeMOIcon width={32} height={32} color={colors.text} />)
+      default:
+        return null
+    }
+  }, [colors])
+
+
   return (
     <Box
       row
@@ -121,7 +123,7 @@ const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
       alignItems="center"
       py={12}
       borderBottomWidth={1}
-      borderColor={colors.grey_200}
+      borderColor={colors.border}
     >
       <Box row gap={8} alignItems="center">
         {renderChargerIcon(data.type)}
@@ -143,11 +145,14 @@ const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
           children={`Доступно ${data.availableCount}/${data.totalCount}`}
           fontSize={16}
           fontWeight="600"
-          colorName={data.availableCount > 0 ? 'green' : 'red_500'}
+          colorName={data.availableCount > 0 ? 'green' : 'grey_400'}
         />
-        <Animated.View style={arrowStyle}>
-          <ArrowIcon width={20} height={20} fill={colors.grey_600} />
-        </Animated.View>
+        <AnimatedBox style={arrowStyle}>
+          <ArrowIcon
+            width={20}
+            height={20}
+            color={data.availableCount > 0 ? colors.green : colors.grey_400} />
+        </AnimatedBox>
       </Box>
     </Box>
   );
@@ -166,7 +171,7 @@ const StationList: FC<StationListProps> = ({ connectors }) => {
   const [disbledConnectors, setDisbledConnectors] = useState(false);
 
   return (
-    <Box>
+    <>
       {connectors?.map((connector, i) => (
         <ConnectorElement
           key={i}
@@ -175,7 +180,7 @@ const StationList: FC<StationListProps> = ({ connectors }) => {
           setDisbledConnectors={setDisbledConnectors}
         />
       ))}
-    </Box>
+    </>
   );
 };
 
@@ -238,7 +243,8 @@ const ConnectorElement = ({
           children="Заряжаться"
           onPress={handleStartCharging}
           backgroundColor='green'
-          wrapperStyle={{ width: 147 }}
+          wrapperStyle={{width: 147}}
+          icon={<LightningIcon color={colors.white} />}
           loading={loading}
           disabled={loading || disbledConnectors}
         />

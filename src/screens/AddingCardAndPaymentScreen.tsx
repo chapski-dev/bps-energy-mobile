@@ -120,8 +120,8 @@ function AddingCardAndPaymentScreen({
 //                     value.length !== inputMasks.credit_card.length && !isTouched
 //                       ? colors.grey_400
 //                       : invalid
-//                         ? colors.red_500
-//                         : colors.main
+//                         ? colors.error_500
+//                         : colors.primary
 //                   }
 //                 />
 //               }

@@ -68,9 +68,9 @@ export const Input = forwardRef<TextInput, InputProps>(({
     <View style={[styles.container, wrapperStyle]}>
       <View style={[
         styles.inputWrapper,
-        { backgroundColor: colors.background, borderColor: colors.grey_200 },
-        error && { borderColor: colors.red_500 },
-        isFocused && { borderColor: colors.main },
+        { backgroundColor: colors.background, borderColor: colors.border },
+        error && { borderColor: colors.error_500 },
+        isFocused && { borderColor: colors.primary },
         disabled && { borderColor: colors.grey_50 },
       ]}>
         {icon && <View style={styles.leftIcon}>{icon}</View>}
@@ -103,7 +103,7 @@ export const Input = forwardRef<TextInput, InputProps>(({
       </View>
 
       {error && errorText && (
-        <Text colorName="red_500" variant="p4" style={styles.errorText}>
+        <Text colorName="error_500" variant="p4" style={styles.errorText}>
           {errorText}
         </Text>
       )}

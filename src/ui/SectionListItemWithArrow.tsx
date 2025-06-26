@@ -8,10 +8,11 @@ import { Text } from './Text';
 
 type SectionListItemWithArrowProps = PropsWithChildren & {
   title?: string;
-  onPress: () => void;
+  onPress?: () => void;
   disabled?: boolean;
   /** default true */
   borderBottom?: boolean;
+  icon?: React.ReactNode;
 };
 
 export const SectionListItemWithArrow = ({
@@ -19,6 +20,7 @@ export const SectionListItemWithArrow = ({
   onPress,
   disabled,
   children,
+  icon,
   borderBottom = true,
 }: SectionListItemWithArrowProps) => {
   const { colors } = useAppTheme();
@@ -35,14 +37,17 @@ export const SectionListItemWithArrow = ({
         onPress={onPress}
         disabled={disabled}
       >
-        {children || (
-          <Text
-            color={disabled ? colors.grey_100 : undefined}
-            variant='p2-semibold'
-            children={children || title}
-          />
-        )}
-        <CaretRightIcon color={disabled ? colors.grey_100 : colors.grey_400} />
+        <Box gap={6} row>
+          {icon}
+          {children || (
+            <Text
+              color={disabled ? colors.grey_100 : undefined}
+              variant='p2-semibold'
+              children={children || title}
+            />
+          )}
+        </Box>
+        {onPress && <CaretRightIcon color={disabled ? colors.grey_100 : colors.grey_400} />}
       </Box>
       {borderBottom && <Box w="full" h={1} backgroundColor={colors.grey_100} />}
     </>

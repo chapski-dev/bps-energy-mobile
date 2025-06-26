@@ -243,11 +243,11 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
                   icon={<FlashlightIcon
                     width={20}
                     height={20}
-                    color={torch ? colors.white : colors.grey_800}
+                    color={torch ? colors.white : colors.black}
                   />}
                   onPress={_handleTorch}
-                  textColor={torch ? 'white' : 'grey_800'}
-                  backgroundColor={torch ? 'grey_800' : 'white'}
+                  textColor={torch ? 'white' : 'black'}
+                  backgroundColor={torch ? 'black' : 'white'}
                   width='auto'
                   wrapperStyle={{ bottom: 150, position: 'absolute' }}
                 />

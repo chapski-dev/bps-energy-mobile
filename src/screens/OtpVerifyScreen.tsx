@@ -115,17 +115,17 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
         width: '100%'
       },
       filledPinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red_500 : colors.main,
+        borderColor: notMatch ? colors.error_500 : colors.primary,
         borderRadius: 8,
         borderWidth: 1
       },
       focusedPinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red_500 : colors.grey_200,
+        borderColor: notMatch ? colors.error_500 : colors.border,
         borderRadius: 8,
         borderWidth: 1
       },
       pinCodeContainerStyle: {
-        borderColor: notMatch ? colors.red_500 : colors.grey_200,
+        borderColor: notMatch ? colors.error_500 : colors.border,
         borderRadius: 8,
         borderWidth: 1,
         flex: 1,
@@ -134,7 +134,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
         minWidth: 39,
       },
       pinCodeTextStyle: { 
-        color: colors.grey_800, 
+        color: colors.text, 
         fontSize: 28, 
         fontWeight: '800' 
       }
@@ -170,7 +170,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
           </Box>
         </Box>
         {loading ? (
-          <ActivityIndicator color={colors.main} />
+          <ActivityIndicator color={colors.primary} />
         ) : (
           <OtpInput
             autoFocus
@@ -179,7 +179,7 @@ const OtpVerifyScreen = ({ navigation, route }: ScreenProps<'otp-verify'>) => {
             theme={theme}
             numberOfDigits={OTP_PASSWORD_LENGTH}
             onTextChange={handleInputChanges}
-            focusColor={colors.main}
+            focusColor={colors.primary}
             onFocus={() => setNotMatch(false)}
           />
         )}

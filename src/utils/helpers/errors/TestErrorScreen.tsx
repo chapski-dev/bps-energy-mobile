@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
+import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 
 import { ErrorTestingUtils } from './ErrorTestingUtils';
@@ -15,7 +16,7 @@ interface TestCase {
 
 const TestErrorScreen = () => {
   const [shouldCrash, setShouldCrash] = useState(false);
-
+  const { colors, insets } = useAppTheme();
   // Компонент, который вызовет ошибку рендера
   const CrashingComponent = () => {
     if (shouldCrash) {
@@ -138,44 +139,61 @@ const TestErrorScreen = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'high': return '#ff4444';
-      case 'medium': return '#ffaa00';
-      case 'low': return '#00aa00';
+      case 'high': return colors.error_500;
+      case 'medium': return colors.warning_500;
+      case 'low': return colors.green;
       default: return '#666666';
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Box style={styles.headerCard}>
-        <Text style={styles.title}>🧪 Error Testing</Text>
-        <Text style={styles.subtitle}>
-          Тестирование системы обработки ошибок
-        </Text>
-        <Text style={styles.warning}>
-          ⚠️ Некоторые тесты могут закрыть приложение
-        </Text>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{
+        paddingBottom: insets.bottom + 15,
+        paddingHorizontal: 16,
+        paddingTop: insets.top,
+      }}
+    >
+      <Box mb={16}>
+        <Text
+          variant='h3'
+          center
+          mb={8}
+          children="🧪 Error Testing"
+        />
+        <Text
+          style={styles.subtitle}
+          colorName='grey_600'
+          children="Тестирование системы обработки ошибок"
+        />
+        <Text
+          variant='p3-semibold'
+          center
+          colorName='error_500'
+          children="⚠️ Некоторые тесты могут закрыть приложение"
+        />
       </Box>
 
-      <Box style={styles.statusCard}>
-        <Text style={styles.statusTitle}>Статус системы:</Text>
-        <View style={styles.statusRow}>
-          <Text style={styles.statusLabel}>Platform:</Text>
-          <Text style={styles.statusValue}>{Platform.OS}</Text>
-        </View>
-        <View style={styles.statusRow}>
-          <Text style={styles.statusLabel}>Dev Mode:</Text>
-          <Text style={styles.statusValue}>{__DEV__ ? 'Yes' : 'No'}</Text>
-        </View>
-        <View style={styles.statusRow}>
-          <Text style={styles.statusLabel}>Crashlytics:</Text>
-          <Text style={styles.statusValue}>Active</Text>
-        </View>
+      <Box mb={16} borderRadius={12} backgroundColor={colors.card} px={16} py={12}>
+        <Text variant='h5' mb={8}>Статус системы:</Text>
+        <Box row justifyContent='space-between' mb={4}>
+          <Text children="Platform:" />
+          <Text fontWeight='600'>{Platform.OS}</Text>
+        </Box>
+        <Box row justifyContent='space-between' mb={4}>
+          <Text>Dev Mode:</Text>
+          <Text fontWeight='600'>{__DEV__ ? 'Yes' : 'No'}</Text>
+        </Box>
+        <Box row justifyContent='space-between' mb={4}>
+          <Text>Crashlytics:</Text>
+          <Text fontWeight='600'>Active</Text>
+        </Box>
       </Box>
 
       {/* Компонент для тестирования рендер ошибок */}
-      <Box style={styles.componentCard}>
-        <Text style={styles.componentTitle}>Render Test Component:</Text>
+      <Box mb={16} borderRadius={12} backgroundColor={colors.grey_200} px={16} py={12} >
+        <Text variant='h5' mb={8} children="Render Test Component:" />
         <CrashingComponent />
         {shouldCrash && (
           <Button
@@ -200,9 +218,11 @@ const TestErrorScreen = () => {
               </Text>
             </View>
           </View>
-          <Text style={styles.testDescription}>
-            {testCase.description}
-          </Text>
+          <Text
+            style={styles.testDescription}
+            colorName='label'
+            children={testCase.description}
+          />
           <Button
             children="Запустить тест"
             onPress={() => handleTest(testCase)}
@@ -214,9 +234,9 @@ const TestErrorScreen = () => {
         </Box>
       ))}
 
-      <Box style={styles.infoCard}>
-        <Text style={styles.infoTitle}>💡 Как тестировать:</Text>
-        <Text style={styles.infoText}>
+      <Box>
+        <Text style={styles.infoTitle} children="💡 Как тестировать:" />
+        <Text style={styles.infoText} colorName='label' >
           1. Начните с тестов низкой важности (LOW){'\n'}
           2. Проверьте логи в консоли{'\n'}
           3. Убедитесь что ошибки попадают в Crashlytics{'\n'}
@@ -229,31 +249,10 @@ const TestErrorScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  componentCard: {
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  componentTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
   container: {
-    backgroundColor: '#f5f5f5',
-    flex: 1,
     paddingHorizontal: 16,
-    paddingTop: 45,
-  },
-  headerCard: {
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  infoCard: {
-    borderRadius: 12,
-    marginBottom: 32,
   },
   infoText: {
-    color: '#666',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -263,7 +262,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   resetButton: {
-    backgroundColor: '#007AFF',
     borderRadius: 8,
     marginTop: 8,
   },
@@ -277,18 +275,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
-  statusCard: {
-    borderRadius: 12,
-    marginBottom: 16,
-  },
   statusLabel: {
-    color: '#666',
     fontSize: 14,
-  },
-  statusRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 4,
   },
   statusTitle: {
     fontSize: 18,
@@ -313,7 +301,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   testDescription: {
-    color: '#666',
     fontSize: 14,
     marginBottom: 12,
   },
@@ -327,18 +314,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  warning: {
-    color: '#ff4444',
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
   },
 });
 

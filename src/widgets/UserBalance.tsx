@@ -29,11 +29,11 @@ export default function UserBalance({
       backgroundColor={colors.grey_50}
       gap={8}
     >
-      <Box row gap={8}>
+      <Box row gap={8} alignItems='center'>
         {currency === 'BYN' ? (
           <BelarusIcon width={16} height={16} />
         ) : (
-          <RussiaIcon />
+          <RussiaIcon width={16} height={16} />
         )}
         <Text disabled={disabled} colorName="grey_600" children={t('current-balance')} />
       </Box>
@@ -52,8 +52,8 @@ export default function UserBalance({
           disabled={disabled}
           onPress={() => naigation.navigate('top-up-account', { currency })}
         >
-          <Text disabled={disabled} children={t('deposit')} colorName="main" />
-          <PlusCircleFillIcon color={disabled ? colors.grey_400 : colors.main} />
+          <Text disabled={disabled} children={t('deposit')} colorName="primary" />
+          <PlusCircleFillIcon color={disabled ? colors.grey_400 : colors.primary} />
         </Box>
       </Box>
     </Box>

@@ -1,6 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView } from 'react-native';
+import EnvelopeIcon from '@assets/svg/envelope.svg'
+import LockIcon from '@assets/svg/lock.svg'
+import PhoneIcon from '@assets/svg/phone.svg'
+import UserIcon from '@assets/svg/user.svg'
 
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
@@ -18,7 +22,7 @@ export const ProfileDetailsScreen = ({
 }: ScreenProps<'profile-details'>) => {
   const { t } = useTranslation(['screens', 'actions', 'shared']);
   const { onLogout, user } = useAuth();
-  const { insets } = useAppTheme();
+  const { insets, colors } = useAppTheme();
 
   const openChangeUserFilelds = (filed: 'phone' | 'name') =>
     navigation.push('change-user-fields', { filed });
@@ -47,7 +51,9 @@ export const ProfileDetailsScreen = ({
         }}
       >
         <Box>
-          <SectionListItemWithArrow disabled onPress={() => null}>
+          <SectionListItemWithArrow disabled
+            icon={<EnvelopeIcon color={colors.text} />}
+          >
             <Box gap={3}>
               <Text variant="p3-semibold" children={user?.email} />
               <Text colorName="grey_600" children={t('profile-details-screen.email-label')} />
@@ -55,6 +61,7 @@ export const ProfileDetailsScreen = ({
           </SectionListItemWithArrow>
 
           <SectionListItemWithArrow
+            icon={<LockIcon color={colors.text} />}
             title={t('profile-details-screen.change-password')}
             onPress={() => navigation.navigate('change-password')}
           />
@@ -71,11 +78,13 @@ export const ProfileDetailsScreen = ({
                 </Box>
               ) : null
             }
+            icon={<UserIcon color={colors.text} />}
             title={t('profile-details-screen.how-to-address-you')}
             onPress={() => openChangeUserFilelds('name')}
           />
           <SectionListItemWithArrow
             onPress={() => openChangeUserFilelds('phone')}
+            icon={<PhoneIcon color={colors.text} />}
             title={t('profile-details-screen.add-phone-number')}
             children={
               user?.phone ? (
@@ -101,9 +110,9 @@ export const ProfileDetailsScreen = ({
 
         <Box gap={48}>
           <Button
-            backgroundColor="white"
-            textColor="grey_600"
-            children={t('actions:to-logout-from-account')}
+            type='clear'
+            textColor='grey_600'
+            children={t('profile-details-screen.logout-button')}
             onPress={onLogoutPress}
           />
           <DeleteAccountButton />

@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import ShareIcon from '@assets/svg/arrow-square-out.svg';
+import CHAdeMOIcon from '@assets/svg/connector/ac.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
+import GBTACIcon from '@assets/svg/connector/GBT AC.svg';
 import GBTIcon from '@assets/svg/connector/GBT.svg';
 import Type2Icon from '@assets/svg/connector/Type 2.svg';
 import XIcon from '@assets/svg/X.svg';
@@ -49,7 +51,7 @@ export const StationPreviewModal = ({ location }: {
   const fullAdress = `${location?.street}, ${location?.city}`
 
   return (
-    <Box relative borderRadius={16} backgroundColor={colors.background} p={24} gap={16} >
+    <Box relative borderRadius={16} backgroundColor={colors.card} p={24} gap={16} >
       <Box top={12} right={12} absolute onPress={closeModal}>
         <XIcon color={colors.grey_400} />
       </Box>
@@ -77,7 +79,7 @@ export const StationPreviewModal = ({ location }: {
           wrapperStyle={{ flex: 1 }}
           type='outline'
           children={t('more-details')}
-          borderColor='grey_200'
+          borderColor='border'
           onPress={handleMoreDetails}
         />
         <Button
@@ -97,6 +99,23 @@ const Chargers = ({ data }: { data: ConnectorGroup }) => {
   const { colors } = useAppTheme();
   const { t } = useTranslation('widgets', { keyPrefix: 'station-preview-modal' })
 
+  const renderChargerIcon = useCallback((type: ConnectorType) => {
+    switch (type) {
+      case 'CCS':
+        return (<CCSIcon width={29} height={29} color={colors.text} />)
+      case 'GBT':
+        return (<GBTIcon width={29} height={29} color={colors.text} />)
+      case 'Type2':
+        return (<Type2Icon width={29} height={29} color={colors.text} />)
+      case 'GBT AC':
+        return (<GBTACIcon width={29} height={29} color={colors.text} />)
+      case 'CHAdeMO':
+        return (<CHAdeMOIcon width={29} height={29} color={colors.text} />)
+      default:
+        return null
+    }
+  }, [colors])
+
   return (
     <Box
       h={52}
@@ -107,9 +126,7 @@ const Chargers = ({ data }: { data: ConnectorGroup }) => {
       justifyContent='space-between'
     >
       <Box gap={4} row>
-        <Box w={29}>
-          {renderChargerIcon(data.type)}
-        </Box>
+        {renderChargerIcon(data.type)}
         <Box row gap={4} alignItems='center'>
           <Text children={data.type} fontSize={17} fontWeight='800' />
           <Text children={`· ${50} ${t('power-unit')}`} />
@@ -119,21 +136,8 @@ const Chargers = ({ data }: { data: ConnectorGroup }) => {
         children={t('available', { available: data.available_count, from: data.total_count })}
         fontSize={16}
         fontWeight='600'
-        colorName={data.available_count > 0 ? 'green' : 'red_500'}
+        colorName={data.available_count > 0 ? 'green' : 'error_500'}
       />
     </Box>
   )
-}
-
-const renderChargerIcon = (type: ConnectorType) => {
-  switch (type) {
-    case 'CCS':
-      return (<CCSIcon width={28} height={28} />)
-    case 'GBT':
-      return (<GBTIcon width={28} height={28} />)
-    case 'Type2':
-      return (<Type2Icon width={28} height={28} />)
-    default:
-      return null
-  }
 }

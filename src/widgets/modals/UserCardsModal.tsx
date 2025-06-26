@@ -227,7 +227,6 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
       <BottomSlideModal
         ref={ref}
         enableDynamicSizing
-        backgroundStyle={{ backgroundColor: colors.background }}
         {...props}
       >
         <BottomSheetView style={{ gap: 32, paddingBottom: insets.bottom + 15 }} >
