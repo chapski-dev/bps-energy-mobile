@@ -91,7 +91,7 @@ export type Session = {
   soc_begin: number,
   soc_end: number,
   spent: number,
-  state: string
+  state: 'begins' | 'charging' | 'finishing'
 }
 export type SessionsRes = {
   sessions: Session[]
@@ -117,7 +117,16 @@ export type LocationDetails = BaseLocation & {
 }
 
 
-export type ConnectorType = 'CCS' | 'GBT' | 'Type2' | 'GBTAC'
+export type ConnectorType =
+  | 'CCS1'
+  | 'CCS2'
+  | 'GBT'
+  | 'Type2'
+  | 'GBT AC'
+  | 'NACS'
+  | 'CHAdeMO'
+  | 'Type1'
+
 export interface ConnectorGroup {
   available_count: number
   max_power: number
@@ -134,12 +143,20 @@ export type LocationsRes = {
 }
 
 export type LocationDetailsRes = {
-  locations: LocationDetails;
+  location: LocationDetails;
 }
+
+export type ConnectorState =
+  | 'available'
+  | 'preparing'
+  | 'precharge'
+  | 'charging'
+  | 'finishing'
+  | 'unavailable'
 
 export interface Connector {
   id: number
   power: number
   price: number
-  state: string
+  state: ConnectorState
 }

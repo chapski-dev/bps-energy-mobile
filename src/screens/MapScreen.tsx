@@ -39,8 +39,8 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
       marginHorizontal: 12,
       marginVertical: insets.top + 20,
     });
-
   }
+
   const getCurrentPosition = useCallback(async () => {
     try {
       const point = await getHighAccuracyPosition()
@@ -85,11 +85,11 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
             onPress={() => onStationPress(info.data)}
             key={index}
             point={info.point}
-            source={info.data.owner === 'BPS Energy' ?  
+            source={info.data.owner === 'BPS Energy' ?
               require('@assets/png/bps-logo-label-default.png') :
               require('@assets/png/dot-default.png')
-             }
-            scale={0.5}
+            }
+            scale={0.6}
           />
         )}
       />

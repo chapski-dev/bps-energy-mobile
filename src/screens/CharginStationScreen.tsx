@@ -20,19 +20,17 @@ import { Gallery } from '@src/widgets/Gallery';
 const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navigation, route }) => {
   const { insets } = useAppTheme();
   const { t } = useTranslation();
-  
+
   const [location, setLocation] = useState<LocationDetails>({ ...route.params.location, images: [] })
   const fullAdress = `${route.params.location?.street}, ${route.params.location?.city}`
-
+  
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const onRefresh = useCallback(async (): Promise<void> => {
     try {
       setRefreshing(true);
       const res = await getLocationDetails(route.params.location.id);
-      console.log('res -> ', res);
-      
-      setLocation(res.locations)
+      setLocation(res.location)
     } finally {
       setRefreshing(false);
     }
@@ -67,7 +65,7 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
             key={i}
             connectors={el.connectors}
             headerData={{
-              availableCount: 1,
+              availableCount: el.available_count,
               power: el.min_power,
               rate: el.price_min,
               totalCount: el.total_count,

@@ -12,7 +12,7 @@ import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
 import { modal } from '@src/ui/Layouts/ModalLayout';
-import { StatusBanner } from '@src/ui/StatusBanner';
+// import { StatusBanner } from '@src/ui/StatusBanner';
 import { getHighAccuracyPosition } from '@src/utils/helpers/get-current-geo-position';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { openYandexMaps } from '@src/utils/helpers/yandex-maps';
@@ -21,8 +21,6 @@ import { openYandexMaps } from '@src/utils/helpers/yandex-maps';
 export const StationPreviewModal = ({ location }: {
   location: LocationSummary
 }) => {
-  console.log('location.connector_group', location.connector_group);
-
   const { colors } = useAppTheme();
   const closeModal = () => modal()?.closeModal?.();
   const [loading, setLoading] = useState(false);
@@ -57,16 +55,17 @@ export const StationPreviewModal = ({ location }: {
       </Box>
       <Box>
         <Text fontWeight='700' fontSize={22} children={location.owner} mb={2} />
-        <Box row gap={8} alignItems='center' >
-          <Text children={fullAdress} colorName='grey_400' />
+        <Box row gap={8} alignItems='center' flexShrink={1} >
+          <Text children={fullAdress} flexShrink={1} colorName='grey_400' />
           <CopyToClipboard value={fullAdress} message={t('address-copied')} />
         </Box>
       </Box>
-      <StatusBanner
+
+      {/* <StatusBanner
         status="error"
         title={t('station-unavailable-title')}
         description={t('station-unavailable-description')}
-      />
+      /> */}
 
       <Box mb={12} >
         {location.connector_group.map((el, i) => (
@@ -81,7 +80,6 @@ export const StationPreviewModal = ({ location }: {
           borderColor='grey_200'
           onPress={handleMoreDetails}
         />
-
         <Button
           wrapperStyle={{ flex: 1 }}
           onPress={openRoute}
@@ -90,7 +88,6 @@ export const StationPreviewModal = ({ location }: {
           loading={loading}
           disabled={loading}
         />
-
       </Box>
     </Box>
   )

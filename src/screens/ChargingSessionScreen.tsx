@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
 import BatteryChargingIcon from '@assets/svg/battery-charging.svg';
 import CheckCircleIcon from '@assets/svg/check-circle.svg';
@@ -8,12 +8,14 @@ import LogoIcon from '@assets/svg/logo.svg';
 import QrCodeIcon from '@assets/svg/qr-code.svg';
 import TelegramLogoIcon from '@assets/svg/telegram-logo.svg';
 
+import { useTabNavigation } from '@src/hooks/useTabNavigation';
 import { ScreenProps } from '@src/navigation/types';
 import { useCameraModal } from '@src/providers/camera';
 import { useChargingSessions } from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { openTelegram } from '@src/utils/support/openTelegram';
 
 
@@ -23,8 +25,10 @@ export default function ChargingSessionScreen({
   const { colors, insets } = useAppTheme();
   const { openCamera } = useCameraModal();
 
-  const { sessions, stopSession, startSession, loading } = useChargingSessions();
+  const { sessions, stopSession, loading } = useChargingSessions();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  console.log('sessions ->', sessions);
 
   const activeSession = sessions[activeIndex];
 
@@ -34,13 +38,15 @@ export default function ChargingSessionScreen({
     openTelegram(username, message)
   };
 
+  const nav = useTabNavigation();
 
-
+  useEffect(() => {
+    if(!sessions.length){
+      nav.navigateToTab('map')
+    }
+  }, [nav, sessions.length])
+  
   const handleEndSession = () => {
-    console.log('Завершить сессию');
-    const batteryStart = activeSession?.battery;
-    const startTime = Date.now();
-
     Alert.alert(
       'Завершить зарядку?',
       'Вы уверены, что хотите завершить текущую сессию?',
@@ -48,15 +54,14 @@ export default function ChargingSessionScreen({
         { style: 'cancel', text: 'Отмена' },
         {
           onPress: async () => {
-            await stopSession(activeSession.id);
-            const minutesSpent = Math.round((Date.now() - startTime) / 60000);
-            const remainingSessions = sessions.length - 1;
-            navigation.navigate('charging-session-summary', {
-              batteryStart,
-              minutesSpent,
-              remainingSessions,
-              session: activeSession,
-            });
+            try {
+              await stopSession(activeSession.id);
+              if (!sessions.length) {
+                nav.navigateToTab('map')
+              }
+            } catch (error) {
+              handleCatchError(error)
+            }
           },
           style: 'destructive',
           text: 'Завершить',
@@ -72,7 +77,7 @@ export default function ChargingSessionScreen({
   const handleOpenCamera = () => {
     openCamera({
       onQrCodeScan: (code) => {
-        startSession(Math.random().toString())
+        // startSession(Math.random().toString())
       }
     })
   }
@@ -93,9 +98,7 @@ export default function ChargingSessionScreen({
         mb={32}
         children="Сессии зарядки"
       />
-
       <StationSelector activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
-
       <Box gap={12} mb={24}>
         <Box row gap={12}>
           <InfoCard
@@ -106,7 +109,7 @@ export default function ChargingSessionScreen({
           />
           <InfoCard
             title="Батарея"
-            value={activeSession?.battery}
+            value={activeSession?.soc}
             unit="%"
             icon={<BatteryChargingIcon color={colors.green} />}
           />
@@ -115,14 +118,14 @@ export default function ChargingSessionScreen({
         <Box row gap={12}>
           <InfoCard
             title="Получено"
-            value={activeSession?.energyReceived}
+            value={parseFloat(activeSession?.charged.toFixed(2))}
             unit="кВт·ч"
             icon={<CheckCircleIcon color={colors.green} />}
           />
           <InfoCard
             title="Время"
-            value={activeSession?.timeLeft}
-            unit="мин"
+            value={new Date(activeSession?.duration).toLocaleTimeString('ru-Ru')}
+            unit=""
             icon={<ClockIcon color={colors.green} />}
           />
         </Box>
@@ -167,30 +170,32 @@ const styles = StyleSheet.create({
 const StationSelector = ({ setActiveIndex, activeIndex }) => {
   const { loading, sessions } = useChargingSessions();
   const { colors } = useAppTheme();
-
-  return (
-    <Box row gap={12} mb={24} p={4} borderRadius={8} backgroundColor={colors.grey_50}>
-      {sessions.map((station, i) => (
-        <Box
-          key={station.id}
-          flex={1}
-          backgroundColor={activeIndex === i ? colors.white : undefined}
-          px={10}
-          py={7}
-          alignItems='center'
-          borderRadius={4}
-          style={shadowStyle}
-          disabled={loading}
-          onPress={() => setActiveIndex(i)}
-        >
-          <Text
-            variant={activeIndex === i ? 'p3-semibold' : 'p3'}
-            children={`№ ${station.id}`}
-          />
-        </Box>
-      ))}
-    </Box>
-  )
+  if (sessions.length > 1) {
+    return (
+      <Box row gap={12} mb={24} p={4} borderRadius={8} backgroundColor={colors.grey_50}>
+        {sessions.map((station, i) => (
+          <Box
+            key={station.id}
+            flex={1}
+            backgroundColor={activeIndex === i ? colors.white : undefined}
+            px={10}
+            py={7}
+            alignItems='center'
+            borderRadius={4}
+            style={shadowStyle}
+            disabled={loading}
+            onPress={() => setActiveIndex(i)}
+          >
+            <Text
+              variant={activeIndex === i ? 'p3-semibold' : 'p3'}
+              children={`№ ${station.id}`}
+            />
+          </Box>
+        ))}
+      </Box>
+    )
+  } 
+  return null;
 };
 
 const InfoCard = ({
@@ -200,7 +205,7 @@ const InfoCard = ({
   icon,
 }: {
   title: string;
-  value: string;
+  value: string | number;
   unit?: string;
   icon: React.ReactNode;
 }) => {

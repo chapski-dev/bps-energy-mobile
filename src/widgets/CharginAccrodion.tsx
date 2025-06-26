@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Animated, {
   SharedValue,
@@ -8,15 +8,18 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import ArrowIcon from '@assets/svg/caret-down.svg';
+import CHAdeMOIcon from '@assets/svg/connector/ac.svg';
 import CCSIcon from '@assets/svg/connector/CCS.svg';
+import GBTACIcon from '@assets/svg/connector/GBT AC.svg';
 import GBTIcon from '@assets/svg/connector/GBT.svg';
 import Type2Icon from '@assets/svg/connector/Type 2.svg';
 
 import type { Connector, ConnectorType } from '@src/api/types';
+import { useTabNavigation } from '@src/hooks/useTabNavigation';
+import chargingService from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Chip, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
-import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 import { ContectorNotInsertedModal } from './modals/ContectorNotInsertedModal';
@@ -87,12 +90,18 @@ interface ChargerHeaderProps {
 
 const renderChargerIcon = (type: ConnectorType) => {
   switch (type) {
-    case 'CCS':
+    case 'CCS1':
+    case 'CCS2':
       return (<CCSIcon width={32} height={32} />)
     case 'GBT':
       return (<GBTIcon width={32} height={32} />)
     case 'Type2':
       return (<Type2Icon width={32} height={32} />)
+    case 'GBT AC':
+      return (<GBTACIcon width={32} height={32} />)
+    case 'CHAdeMO': 
+    return (<CHAdeMOIcon width={32} height={32} />)
+
     default:
       return null
   }
@@ -150,14 +159,15 @@ interface StationListProps {
 }
 
 const StationList: FC<StationListProps> = ({ connectors }) => {
-  const sortedconnectors = useMemo(() =>
-    connectors.sort((a) => a.state === 'avalable' ? 0 : a.state === 'busy' ? -1 : 1)
-    , [connectors]);
+
+  // const sortedconnectors = useMemo(() =>
+  //   connectors.sort((a) => a.state === 'available' ? 0 : a.state !== 'available' ? -1 : 1)
+  //   , [connectors]);
   const [disbledConnectors, setDisbledConnectors] = useState(false);
 
   return (
     <Box>
-      {sortedconnectors.map((connector, i) => (
+      {connectors?.map((connector, i) => (
         <ConnectorElement
           key={i}
           connector={connector}
@@ -182,27 +192,27 @@ const ConnectorElement = ({
 }: ConnectorElementProps) => {
   const { colors } = useAppTheme();
   const [loading, setLoading] = useState(false);
+  const nav = useTabNavigation()
 
   const handleStartCharging = async () => {
     try {
       setLoading(true);
       setDisbledConnectors(true);
-      // connector.id
-      await wait(1500)
+      await chargingService.startSession(connector.id)
+      nav.navigateToTab('charging-session')
+    } catch (error) {
       modal().setupModal?.({
         element: <ContectorNotInsertedModal />,
         justifyContent: 'center',
         marginHorizontal: 48,
       });
-
-    } catch (error) {
       handleCatchError(error)
     } finally {
       setLoading(false);
       setDisbledConnectors(false);
     }
   }
-
+  const isAvalible = connector.state === 'available' || connector.state === 'preparing';
   return (
     <Box
       key={connector.id}
@@ -215,15 +225,15 @@ const ConnectorElement = ({
     >
       <Box row gap={12} alignItems="center">
         <Text children={`№ ${connector.id}`} fontSize={16} fontWeight="500"
-          colorName={connector.state === 'qwe' ? 'grey_800' : 'grey_400'}
+          colorName={isAvalible ? 'grey_800' : 'grey_400'}
         />
         <Text
-          children={connector.state === 'qwe' ? 'Доступен' : 'Занят'}
+          children={isAvalible ? 'Доступен' : 'Занят'}
           fontSize={14}
-          colorName={connector.state === 'qwe' ? 'green' : 'grey_600'}
+          colorName={isAvalible ? 'green' : 'grey_600'}
         />
       </Box>
-      {connector.state === 'ready' && (
+      {isAvalible && (
         <Button
           children="Заряжаться"
           onPress={handleStartCharging}

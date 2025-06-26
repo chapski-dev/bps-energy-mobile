@@ -1,92 +1,55 @@
 import { useEffect, useState } from 'react';
 import { EventEmitter } from 'eventemitter3';
 
+import {
+  getCurrentChargingSessions,
+  postStartChargingSession,
+  postStopChargingSession
+} from '@src/api';
+import { Session } from '@src/api/types';
 import { wait } from '@src/utils';
 
-export type ChargingSession = {
-  id: string;
-  stationId: string;
-  battery: number;
-  power: number;
-  energyReceived: number;
-  timeLeft: number;
-  cost: number;
-  status: 'pending' | 'charging' | 'finished';
-};
-type ServiceEvents = 'sessionsUpdated' | 'sessionStarted' | 'sessionStopped' | 'sessionError' | 'loading';
-
-const mockSesstion = {
-  battery: 36,
-  cost: 29,
-  energyReceived: 12,
-  id: '0041',
-  power: 43,
-  stationId: '029',
-  status: 'charging',
-  timeLeft: 100000
-} as const;
+type ServiceEvents = 'sessionsUpdated' | 'loading';
 
 class ChargingService extends EventEmitter<ServiceEvents> {
-  private sessions: ChargingSession[] = [];
+  private sessions: Session[] = [];
   private pollInterval?: NodeJS.Timeout;
   loading = false;
 
-
-  async startSession(stationId: string) {
+  async startSession(connector_id: number) {
     try {
       this.loading = true;
       this.emit('loading', this.loading);
-      await wait(1400);
-      // const res = await axios.post('/sessions', { stationId });
-      await this.fetchSessions(stationId);
-      this.emit('sessionStarted');
-    } catch (e) {
-      this.emit('sessionError', e);
+      await postStartChargingSession({ connector_id })
+      await this.fetchSessions();
     } finally {
       this.loading = false;
       this.emit('loading', this.loading);
     }
   }
 
-  async stopSession(sessionId: string) {
+  async stopSession(session_id: number) {
     try {
       this.loading = true;
       this.emit('loading', this.loading);
-      await wait(1500);
-
-      // await axios.delete(`/sessions/${sessionId}`);
-      // await this.fetchSessions();
-      this.sessions = this.sessions.filter((el) => el.id !== sessionId);
-      this.emit('sessionsUpdated', this.sessions);
-      this.emit('sessionStopped');
-    } catch (e) {
-      this.emit('sessionError', e);
+      await postStopChargingSession({ session_id })
+      await wait(500);
+      await this.fetchSessions();
     } finally {
       this.loading = false;
       this.emit('loading', this.loading);
     }
   }
 
-  async fetchSessions(stationId: string) {
-    try {
-      this.loading = true;
-      this.emit('loading', this.loading);
-
-      // const res = await axios.get<ChargingSession[]>('/sessions');
-      // this.sessions = res.data;
-      if(stationId) {
-        this.sessions = [...this.sessions, {...mockSesstion, id:stationId }];
-      }
-      
-      this.emit('sessionsUpdated', this.sessions);
-      if (this.sessions.length) {
-        this.managePolling();
-      }
-    } catch (e) {
-      this.emit('sessionError', e);
-    } finally {
-      this.loading = false;
-      this.emit('loading', this.loading);
+  async fetchSessions() {
+    const res = await getCurrentChargingSessions()
+    this.sessions = res.sessions;
+    this.emit('sessionsUpdated', this.sessions);
+    if (this.sessions.length) {
+      this.managePolling();
+    } else if (this.sessions.length === 0 && this.pollInterval) {
+      clearInterval(this.pollInterval);
+      this.pollInterval = undefined;
     }
   }
 
@@ -108,14 +71,13 @@ const chargingService = new ChargingService();
 export default chargingService;
 
 export function useChargingSessions() {
-  const [sessions, setSessions] = useState<ChargingSession[]>(
+  const [sessions, setSessions] = useState<Session[]>(
     chargingService.getCachedSessions()
   );
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
-    const updateHandler = (data: ChargingSession[]) => setSessions(data);
+    const updateHandler = (data: Session[]) => setSessions(data);
     chargingService.on('sessionsUpdated', updateHandler);
     chargingService.on('loading', setLoading);
 
@@ -126,10 +88,10 @@ export function useChargingSessions() {
   }, []);
 
   return {
-    fetchSessions: chargingService.fetchSessions.bind(ChargingService),
+    fetchSessions: chargingService.fetchSessions.bind(chargingService),
     loading,
     sessions,
-    startSession: chargingService.startSession.bind(ChargingService),
-    stopSession: chargingService.stopSession.bind(ChargingService),
+    startSession: chargingService.startSession.bind(chargingService),
+    stopSession: chargingService.stopSession.bind(chargingService),
   };
 }

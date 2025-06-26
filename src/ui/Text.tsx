@@ -47,6 +47,7 @@ type TextProps = RNTextProps &
     pb?: Spacing;
     pl?: Spacing;
     flex?: number
+    flexShrink?: number
   };
 
 const Text: FC<TextProps> = ({
