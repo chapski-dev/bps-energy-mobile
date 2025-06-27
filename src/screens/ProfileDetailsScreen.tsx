@@ -56,7 +56,7 @@ export const ProfileDetailsScreen = ({
           >
             <Box gap={3}>
               <Text variant="p3-semibold" children={user?.email} />
-              <Text colorName="grey_600" children={t('profile-details-screen.email-label')} />
+              <Text colorName="promting" children={t('profile-details-screen.email-label')} />
             </Box>
           </SectionListItemWithArrow>
 
@@ -64,6 +64,7 @@ export const ProfileDetailsScreen = ({
             icon={<LockIcon color={colors.text} />}
             title={t('profile-details-screen.change-password')}
             onPress={() => navigation.navigate('change-password')}
+            alignItems='center'
           />
           <SectionListItemWithArrow
             children={
@@ -72,7 +73,7 @@ export const ProfileDetailsScreen = ({
                   <Text variant="p2-semibold" children={user?.name} />
                   <Text
                     variant="p3"
-                    colorName="grey_600"
+                    colorName="promting"
                     children={t('profile-details-screen.name-label')}
                   />
                 </Box>
@@ -92,7 +93,7 @@ export const ProfileDetailsScreen = ({
                   <Text variant="p2-semibold" children={user?.phone} />
                   <Text
                     variant="p3"
-                    colorName="grey_600"
+                    colorName="promting"
                     children={t('profile-details-screen.phone-number')}
                   />
                 </Box>
@@ -103,7 +104,7 @@ export const ProfileDetailsScreen = ({
           <Text
             mt={16}
             variant="p3"
-            colorName="grey_600"
+            colorName="promting"
             children={t('shared:phone-number-support-promting')}
           />
         </Box>

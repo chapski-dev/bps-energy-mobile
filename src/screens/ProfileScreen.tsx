@@ -68,96 +68,113 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: insets.bottom || 15,
-          paddingHorizontal: 16,
+          // paddingHorizontal: 16,
           paddingTop: insets.top + 40,
         }}
       >
-        <Box onPress={onChangeTheme} alignItems='flex-end'>
-          {isDarkTheme ?
-            <SunIcon color={colors.text} width={24} height={24} /> :
-            <MoonIcon color={colors.text} width={24} height={24} />}
-        </Box>
-        <SectionListItemWithArrow
-          onPress={openProfileData}
-          borderBottom={false}
-        >
-          <Box row gap={8}>
-            <UserIcon color={colors.text} width={22} height={22} />
-            <Box gap={3}>
-              <Text variant="p2" children={t('profile')} />
-              <Text colorName="grey_600" children={user?.email} />
-            </Box>
+        <Box px={16}>
+          <Box onPress={onChangeTheme} alignItems='flex-end'>
+            {isDarkTheme ?
+              <SunIcon color={colors.text} width={24} height={24} /> :
+              <MoonIcon color={colors.text} width={24} height={24} />}
           </Box>
-        </SectionListItemWithArrow>
+          <SectionListItemWithArrow
+            onPress={openProfileData}
+            borderBottom={false}
+          >
+            <Box row gap={8}>
+              <UserIcon color={colors.text} width={22} height={22} />
+              <Box gap={3}>
+                <Text variant="p2" children={t('profile')} />
+                <Text colorName="grey_600" children={user?.email} />
+              </Box>
+            </Box>
+          </SectionListItemWithArrow>
 
-        <Box gap={8}>
-          {user?.wallets.map((el) => (
-            <UserBalance
-              key={el.currency}
-              currency={el.currency}
-              value={el.value}
-              disabled={el.currency === 'RUB'}
-            />
-          ))}
+          <Box gap={8}>
+            {user?.wallets.map((el) => (
+              <UserBalance
+                key={el.currency}
+                currency={el.currency}
+                value={el.value}
+                disabled={el.currency === 'RUB'}
+              />
+            ))}
+          </Box>
+          <SectionListItemWithArrow
+            alignItems='center'
+            title={t('charging-history')}
+            icon={<BatteryChargingIcon color={colors.text} />}
+            onPress={() => navigation.navigate('charging-history')}
+          />
+          <SectionListItemWithArrow
+            alignItems="center"
+            title={t('recharge-history')}
+            icon={<WalletIcon color={colors.text} />}
+            onPress={() => navigation.navigate('recharge-history')}
+          />
+          <SectionListItemWithArrow
+            alignItems="center"
+            title={t('saved-cards')}
+            icon={<CreditCardIcon color={colors.text} />}
+            onPress={modalCardsOpen}
+          />
         </Box>
 
-        <SectionListItemWithArrow
-          title={t('charging-history')}
-          icon={<BatteryChargingIcon color={colors.text} />}
-          onPress={() => navigation.navigate('charging-history')}
-        />
+        <Box h={15} backgroundColor={colors.grey_50} />
 
-        <SectionListItemWithArrow
-          title={t('recharge-history')}
-          icon={<WalletIcon color={colors.text} />}
-          onPress={() => navigation.navigate('recharge-history')}
-        />
-
-        <SectionListItemWithArrow
-          title={t('saved-cards')}
-          icon={<CreditCardIcon color={colors.text} />}
-          onPress={modalCardsOpen}
-        />
-
-        <SectionListItemWithArrow
-          title={t('notifications')}
-          icon={<BellIcon color={colors.text} />}
-          onPress={() => navigation.navigate('notifications-settings')}
-        />
-        <SectionListItemWithArrow
-          title={t('support-service')}
-          icon={<ChatIcon color={colors.text} />}
-          onPress={() => navigation.navigate('support-service')}
-        />
-        <SectionListItemWithArrow
-          title={t('charging-rules')}
-          icon={<InfoIcon color={colors.text} />}
-          onPress={() => null}
-        />
-        <SectionListItemWithArrow
-          title={'FAQ'}
-          icon={<QuestionMarkCircledIcon color={colors.text} />}
-          onPress={() => null}
-        />
-        <SectionListItemWithArrow
-          icon={<GlobeIcon color={colors.text} />}
-          title={t('app-language')}
-          onPress={modalOpen}
-        />
-        {__DEV__ && (
+        <Box px={16}>
           <SectionListItemWithArrow
-            icon={<XIcon color={colors.error_500} />}
-            title={'Error tests'}
-            onPress={() => navigation.navigate('error-tests')}
+            alignItems="center"
+            title={t('notifications')}
+            icon={<BellIcon color={colors.text} />}
+            onPress={() => navigation.navigate('notifications-settings')}
           />
-        )}
+          <SectionListItemWithArrow
+            alignItems='center'
+            icon={<GlobeIcon color={colors.text} />}
+            title={t('app-language')}
+            onPress={modalOpen}
+          />
+        </Box>
 
-        <Text
-          variant='p4'
-          colorName='grey_400'
-          my={24}
-          children={t('app-version', { version: '1.74.0' })}
-        />
+        <Box h={15} backgroundColor={colors.grey_50} />
+
+        <Box px={16}>
+          <SectionListItemWithArrow
+            alignItems="center"
+            title={t('support-service')}
+            icon={<ChatIcon color={colors.text} />}
+            onPress={() => navigation.navigate('support-service')}
+          />
+          <SectionListItemWithArrow
+            alignItems="center"
+            title={t('charging-rules')}
+            icon={<InfoIcon color={colors.text} />}
+            onPress={() => null}
+          />
+          <SectionListItemWithArrow
+            alignItems="center"
+            title={'FAQ'}
+            icon={<QuestionMarkCircledIcon color={colors.text} />}
+            onPress={() => null}
+          />
+          {__DEV__ && (
+            <SectionListItemWithArrow
+              alignItems='center'
+              icon={<XIcon color={colors.error_500} />}
+              title={'Error tests'}
+              onPress={() => navigation.navigate('error-tests')}
+            />
+          )}
+
+          <Text
+            variant='p4'
+            colorName='promting'
+            my={24}
+            children={t('app-version', { version: '1.74.0' })}
+          />
+        </Box>
       </ScrollView>
       <ChangeLanguageModal ref={modal} modalClose={modalClose} />
       <UserCardsModal

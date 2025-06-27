@@ -32,7 +32,7 @@ const TopUpAccountScreen = ({
   navigation,
   route,
 }: ScreenProps<'top-up-account'>) => {
-  const { insets } = useAppTheme();
+  const { insets, colors } = useAppTheme();
   const { user, getUserData } = useAuth();
   const { toastSuccess } = useThemedToasts();
   const { t } = useTranslation(['screens', 'actions']);
@@ -105,7 +105,7 @@ const TopUpAccountScreen = ({
 
       >
         <Box gap={24} alignItems="center" flex={1}>
-          <LogoIcon />
+          <LogoIcon color={colors.text} />
           <CurrencySwitcher initialCurr={route.params?.currency} />
           <Box flex={1} w="full" gap={24}>
             <Input

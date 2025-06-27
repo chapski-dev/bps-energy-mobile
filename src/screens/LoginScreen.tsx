@@ -86,7 +86,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
           pb={insets.bottom + 35}
           alignItems='center'
           flex={1} >
-          <LogoIcon />
+          <LogoIcon color={colors.text} />
           <Box flex={1} w='full' gap={24}>
             <Box gap={16} w='full'>
               <Controller

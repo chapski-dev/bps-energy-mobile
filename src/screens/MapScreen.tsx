@@ -51,7 +51,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 
     } catch (error) {
       handleCatchError(
-        t('your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings'),
+        t('location-not-determined-check-settings'),
         'MapScreen - getCurrentPosition')
     }
   }, [t])

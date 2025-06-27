@@ -7,6 +7,7 @@ import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
 import { dateFormat } from '@src/utils/date-format';
+import { parseDate } from '@src/utils/parseDate';
 
 // Рассчитываем начальную дату как 31 день назад
 const initialStartDate = new Date();
@@ -50,10 +51,6 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
   };
 
   const isCustomPeriod = useMemo(() => {
-    console.log('dateFormat(\'DD.MM.yyyy\', filterDates.start)', dateFormat('DD.MM.yyyy', filterDates.start));
-    console.log('dateFormat(\'DD.MM.yyyy\', initialDates.start)', dateFormat('DD.MM.yyyy', initialDates.start));
-
-
     return (
       dateFormat('DD.MM.yyyy', filterDates.start) !== dateFormat('DD.MM.yyyy', initialDates.start) ||
       dateFormat('DD.MM.yyyy', filterDates.end) !== dateFormat('DD.MM.yyyy', initialDates.end)
@@ -61,7 +58,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
   }, [filterDates.start, filterDates.end]);
 
   const buttonText = isCustomPeriod
-    ? `${dateFormat('DD.MM.yyyy', filterDates.start)} - ${dateFormat('DD.MM.yyyy', filterDates.end)}`
+    ? `${parseDate(filterDates.start, 'dateOnlyShort')} - ${parseDate(filterDates.end, 'dateOnlyShort')}`
     : t('select-period');
 
   const handleSumbmit = () => {
@@ -81,7 +78,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
             color={isCustomPeriod ? colors.white : colors.grey_800}
             width={16}
             height={16} />}
-          backgroundColor={isCustomPeriod ? 'main' : 'grey_50'}
+          backgroundColor={isCustomPeriod ? 'primary' : 'grey_50'}
           textColor={isCustomPeriod ? 'white' : 'grey_800'}
           buttonStyle={{ borderRadius: 20, height: 40, paddingHorizontal: 16 }}
           wrapperStyle={{ width: 'auto' }}

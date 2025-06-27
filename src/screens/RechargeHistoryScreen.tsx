@@ -14,6 +14,7 @@ import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { dateFormat } from '@src/utils/date-format';
+import { parseDate } from '@src/utils/parseDate';
 import { rechargingsSkeletonLayout } from '@src/utils/vars/skeletons';
 import { DatePeriodSelect, initialDates } from '@src/widgets/DatePeriodSelect';
 
@@ -39,12 +40,8 @@ const groupTransactionsByDate = (transactions: Transaction[]): SectionData[] => 
   const grouped = transactions.reduce((acc, transaction) => {
     // Конвертируем дату в читаемый формат (предполагаем что date в ISO формате)
     const date = new Date(transaction.date);
-    const dateKey = date.toLocaleDateString(i18n.language, {
-      day: 'numeric',
-      month: 'long',
-      weekday: 'long',
-      year: 'numeric',
-    });
+
+    const dateKey = parseDate(date, 'dateOnlyLong');
 
     if (!acc[dateKey]) {
       acc[dateKey] = [];
@@ -88,7 +85,7 @@ const formatPaymentMethod = (cardType: string, cardMask: string): string => {
 };
 
 // Моковые данные для скелетонов загрузки
-const mockTransactions: Transaction[] = Array.from({length: 9}).map((_, i) => (
+const mockTransactions: Transaction[] = Array.from({ length: 9 }).map((_, i) => (
   {
     amount: 15,
     card_mask: '',
@@ -160,7 +157,7 @@ export default function RechargeHistoryScreen({ navigation }: ScreenProps<'recha
           <Box row flex={1} alignItems='center'>
             <Box flex={1} gap={4}>
               <Text variant='h5' children={walletName} mb={4} />
-              <Text variant='p3' colorName='grey_700' children={paymentMethod} />
+              <Text capitalize variant='p3' colorName='grey_700' children={paymentMethod} />
             </Box>
 
             <Box alignItems="flex-end">

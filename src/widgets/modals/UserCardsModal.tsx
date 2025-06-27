@@ -15,6 +15,7 @@ import {
 
 import { deleteCreditCard } from '@src/api';
 import { useAuth } from '@src/providers/auth';
+import { BaseColors } from '@src/theme/colors';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Text } from '@src/ui';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
@@ -145,7 +146,7 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
                 h={40}
                 w={56}
                 borderRadius={10}
-                backgroundColor={colors.grey_50}
+                backgroundColor={BaseColors.grey_50}
               >
                 {renderIcon(card.type)}
               </Box>

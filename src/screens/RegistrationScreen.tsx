@@ -73,7 +73,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
         paddingTop: 47
       }}
     >
-      <LogoIcon />
+      <LogoIcon color={colors.text} />
       <Box gap={12} w='full'>
         <Controller
           control={control}

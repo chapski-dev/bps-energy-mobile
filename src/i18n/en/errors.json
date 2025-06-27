@@ -1,9 +1,9 @@
 {
   "low-location-accuracy": "Location accuracy is insufficient. Please enable GPS and try again",
   "unknown-error": "Unknown error",
-  "your-location-could-not-be-determined-make-sure-you-have-enabled-access-in-your-device-settings": "Your location could not be determined. Please make sure you have enabled access in your device settings.",
+  "location-not-determined-check-settings": "Could not determine your location. Please make sure you have enabled access in your device settings.",
   "payment-error": "An error occurred during payment. Please try again.",
-  "the-session-has-timed-out-please-log-in": "The session has timed out. Please log in.",
+  "the-session-has-timed-out-please-log-in": "Session has timed out. Please log in.",
   "network-connection-lost": "Internet connection issues. Please try again later.",
   "api": {
     "server-error": "Server issues. Please try again later.",
@@ -14,5 +14,19 @@
     "request-timeout": "Request timeout",
     "too-many-requests": "Too many requests",
     "client-error": "Client error"
+  },
+  "critical": {
+    "critical-error-title": "Critical error",
+    "critical-error-occurred": "The application encountered a critical error and needs to be restarted",
+    "send-report": "Send report",
+    "restart-app": "Restart",
+    "close-app": "Close application",
+    "close-app-title": "Please close the application manually",
+    "close-app-ios-instruction": "Double-click the Home button and swipe the application up to close",
+    "manual-report-title": "Failed to send report",
+    "manual-report-message": "Please send the error report to:",
+    "error-boundary-title": "Oops! Something went wrong",
+    "error-boundary-message": "We've recorded this error and are working on fixing it",
+    "try-again": "Try again"
   }
 }

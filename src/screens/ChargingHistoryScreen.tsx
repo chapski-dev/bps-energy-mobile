@@ -11,11 +11,12 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
 import { ImageProgress } from '@src/ui/ImageProgress';
 import { wait } from '@src/utils';
+import { parseDate } from '@src/utils/parseDate';
 import { chargingsSkeletonLayout } from '@src/utils/vars/skeletons';
 import { DatePeriodSelect, initialDates } from '@src/widgets/DatePeriodSelect';
 
 
-const chargingData = [
+const chargingData = Array.from({ length: 3 }).map((_, i) => (
   {
     data: [
       {
@@ -35,35 +36,9 @@ const chargingData = [
         spent: '4.85',
       },
     ],
-    title: '7 июня, суббота',
-  },
-  {
-    data: [
-      {
-        address: 'ул. Сурганова, 57Б, Минск',
-        id: 3,
-        image: 'https://thumbs.dreamstime.com/b/vertical-shot-road-magnificent-mountains-under-blue-sky-captured-california-163571053.jpg',
-        name: 'BPS Energy',
-        received: '4.92',
-        spent: '2.69',
-      },
-    ],
-    title: '3 июня, вторник',
-  },
-  {
-    data: [
-      {
-        address: 'ул. Притыцкого, 156, Минск',
-        id: 4,
-        image: 'https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-        name: 'Malanka',
-        received: '5.36',
-        spent: '3.26',
-      },
-    ],
-    title: '1 июня, воскресенье',
-  },
-];
+    title: parseDate(new Date()),
+  }
+))
 
 export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charging-history'>) {
   const { colors } = useAppTheme();
@@ -89,8 +64,9 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
     <Skeleton
       containerStyle={{ backgroundColor: colors.grey_50, borderRadius: 12 }}
       isLoading={refreshing}
-      animationType={isIOS ? 'pulse' : 'none'}
+      animationType={isIOS ? 'shiver' : 'none'}
       layout={chargingsSkeletonLayout}
+      boneColor={colors.border}
     >
       <Box
         backgroundColor={colors.grey_50}
@@ -131,7 +107,8 @@ export default function ChargingHistoryScreen({ navigation }: ScreenProps<'charg
     <Skeleton
       containerStyle={{ alignItems: 'baseline' }}
       isLoading={refreshing}
-      animationType={isIOS ? 'pulse' : 'none'}
+      animationType={isIOS ? 'shiver' : 'none'}
+      boneColor={colors.grey_50}
       layout={[{ height: 25, width: 120 }]}
     >
       <Box py={8}>

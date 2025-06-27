@@ -56,7 +56,7 @@ export const initializeI18n = async () => {
       },
       parseMissingKeyHandler: (key) => {
         console.warn(`[MISSING KEY] ${key}`);
-        return `[MISSING KEY] ${key}`;
+        return `${key}`;
       },
     });
 };

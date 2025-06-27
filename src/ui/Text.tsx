@@ -82,7 +82,7 @@ const Text: FC<TextProps> = ({
   ...rest
 }) => {
   const theme = useAppTheme();
-  const key = disabled ? 'grey_400' : colorName || 'grey_800';
+  const key = disabled ? 'grey_400' : colorName || 'text';
 
   const computedStyle = useMemo(() => {
     const textAlign = left ? 'left' : right ? 'right' : center ? 'center' : undefined;

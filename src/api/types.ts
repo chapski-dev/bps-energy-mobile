@@ -73,7 +73,7 @@ export type Transaction = {
   id: number,
   rest_after: number,
   rest_before: number,
-  state: string,
+  state: 'successful' | 'failed' | 'cancel' | 'expired' | 'cancelled'
   wallet_type: string
 }
 

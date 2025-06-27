@@ -78,6 +78,7 @@ export const StationPreviewModal = ({ location }: {
         <Button
           wrapperStyle={{ flex: 1 }}
           type='outline'
+          backgroundColor='card'
           children={t('more-details')}
           borderColor='border'
           onPress={handleMoreDetails}

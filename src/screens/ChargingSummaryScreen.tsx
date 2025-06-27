@@ -42,7 +42,7 @@ export default function ChargingSummaryScreen({
       showsVerticalScrollIndicator={false}
     >
     <Box alignItems="center" mt={24 + 44} mb={48}>
-      <LogoIcon />
+      <LogoIcon color={colors.text} />
     </Box>
 
     <Text

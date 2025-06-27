@@ -18,8 +18,8 @@ export default function RechargeTransactionDetailScreen({
   const transactionData = route?.params?.transaction;
 
   const getStatusText = () => {
-    if (transactionData.state === 'completed') return t('status.completed');
-    if (transactionData.state === 'pending') return t('status.pending');
+    if (transactionData.state === 'successful') return t('status.completed');
+    if (transactionData.state === 'cancel') return t('status.pending');
     return t('status.failed');
   };
 
@@ -34,7 +34,7 @@ export default function RechargeTransactionDetailScreen({
       borderBottomWidth={isLast ? 0 : 1}
       borderColor={colors.grey_100}
     >
-      <Text variant="p2" colorName="grey_700" children={label} />
+      <Text capitalize variant="p2" colorName="grey_700" children={label} />
       <Text variant="p2-semibold" children={value} />
     </Box>
   );

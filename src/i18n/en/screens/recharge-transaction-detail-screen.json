@@ -8,8 +8,8 @@
   "labels": {
     "operation-status": "Transaction Status",
     "payment-method": "Payment Method",
-    "balance-before": "Balance Before Top-up",
-    "balance-after": "Balance After Top-up",
+    "balance-before": "Balance Before",
+    "balance-after": "Balance After",
     "download-receipt": "Download Receipt"
   },
   "currency": {

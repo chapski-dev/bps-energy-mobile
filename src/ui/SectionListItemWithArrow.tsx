@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import { FlexAlignType } from 'react-native';
 import CaretRightIcon from '@assets/svg/caret-right.svg';
 
 import { useAppTheme } from '@src/theme/theme';
@@ -13,6 +14,7 @@ type SectionListItemWithArrowProps = PropsWithChildren & {
   /** default true */
   borderBottom?: boolean;
   icon?: React.ReactNode;
+  alignItems?: FlexAlignType;
 };
 
 export const SectionListItemWithArrow = ({
@@ -22,6 +24,7 @@ export const SectionListItemWithArrow = ({
   children,
   icon,
   borderBottom = true,
+  alignItems,
 }: SectionListItemWithArrowProps) => {
   const { colors } = useAppTheme();
 
@@ -37,7 +40,7 @@ export const SectionListItemWithArrow = ({
         onPress={onPress}
         disabled={disabled}
       >
-        <Box gap={6} row>
+        <Box gap={6} row alignItems={alignItems}>
           {icon}
           {children || (
             <Text

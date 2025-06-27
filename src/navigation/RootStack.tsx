@@ -21,9 +21,9 @@ import SetNewPasswordScreen from '@src/screens/SetNewPasswordScreen';
 import SupportService from '@src/screens/SupportServiceScreen';
 import TopUpAccountScreen from '@src/screens/TopUpAccountScreen';
 import { useAppTheme } from '@src/theme/theme';
-import { dateFormat } from '@src/utils/date-format';
 import { AppErrorBoundary } from '@src/utils/helpers/errors/AppErrorBoundary';
 import TestErrorScreen from '@src/utils/helpers/errors/TestErrorScreen';
+import { parseDate } from '@src/utils/parseDate';
 
 import { Tabs } from './Tabs';
 import { RootStackParamList } from './types';
@@ -180,7 +180,7 @@ export const RootStack = () => {
             component={RechargeHistoryScreen}
           />
           <Stack.Screen
-            options={({ route }) => ({ title: dateFormat('DD.MM.yyyy, HH:mm', route.params.transaction.date) })}
+            options={({ route }) => ({ title: parseDate(route.params.transaction.date) })}
             name='recharge-transaction-detail'
             component={RechargeTransactionDetailScreen}
           />
