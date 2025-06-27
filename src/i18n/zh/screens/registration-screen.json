@@ -2,5 +2,5 @@
   "title": "注册",
   "phone-placeholder": "电话（可选）",
   "password-placeholder": "密码",
-  "user-agreement-checkbox": "<agree><0>已阅读并同意 </0></agree><user_agreement><0>用户协议</0></user_agreement> 和 <privacy_policy><0>隐私政策</0></privacy_policy>"
+  "user-agreement-checkbox": "<agree><0>已阅读并同意 </0></agree><user_agreement><0>用户协议<0><user_agreement><agree><0> 和 </0><privacy_policy><0>隐私政策</0></privacy_policy>"
 }

@@ -153,8 +153,8 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
             onPress={() => onChange(!value)}
             children={(
               <Trans
-                ns='common'
-                i18nKey="user-agreement-checkbox"
+                ns='screens'
+                i18nKey='registration-screen.user-agreement-checkbox'
                 components={{
                   agree: <Text variant='p3' />,
                   privacy_policy: <Text variant='p3' onPress={openOffer} colorName='primary' />,
