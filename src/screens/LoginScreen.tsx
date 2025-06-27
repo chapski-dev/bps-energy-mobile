@@ -8,10 +8,13 @@ import EnvelopeIcon from '@assets/svg/envelope.svg';
 import GlobIcon from '@assets/svg/globe.svg';
 import LockIcon from '@assets/svg/lock.svg';
 import LogoIcon from '@assets/svg/logo.svg';
+import MoonIcon from '@assets/svg/moon.svg'
+import SunIcon from '@assets/svg/sun.svg'
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { isAxiosError } from 'axios';
 
 import { SignInReq } from '@src/api/types';
+import { useAppColorTheme } from '@src/hooks/useAppColorTheme';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
@@ -33,6 +36,8 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
     },
     mode: 'all',
   });
+  const { onChangeTheme, isDarkTheme } = useAppColorTheme();
+
   const modal = useRef<BottomSheetModal>(null);
   const modalClose = () => modal?.current?.forceClose();
   const modalOpen = () => modal?.current?.present();
@@ -69,15 +74,19 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
         contentContainerStyle={{ flex: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <Box
-          onPress={modalOpen}
-          mt={insets.top + 22}
-          mx={24}
-          w={25}
-          h={25}
-          alignSelf='flex-end'
-        >
-          <GlobIcon color={colors.grey_400} />
+        <Box row justifyContent='space-between' mt={insets.top + 22} mx={24}>
+          <Box onPress={onChangeTheme} >
+            {isDarkTheme ?
+              <SunIcon color={colors.grey_400} width={24} height={24} /> :
+              <MoonIcon color={colors.grey_400} width={24} height={24} />}
+          </Box>
+          <Box
+            onPress={modalOpen}
+            w={25}
+            h={25}
+          >
+            <GlobIcon color={colors.grey_400} />
+          </Box>
         </Box>
         <Box
           px={16}
