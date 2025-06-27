@@ -1,0 +1,9 @@
+{
+  "address-copied": "地址已复制！",
+  "station-unavailable-title": "充电站暂时不可用",
+  "station-unavailable-description": "我们正在努力修复故障。",
+  "more-details": "更多详情",
+  "route": "路线",
+  "available": "可用 {{available}}/{{from}}",
+  "power-unit": "千瓦"
+}

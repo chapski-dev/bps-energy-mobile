@@ -1,0 +1,12 @@
+{
+  "delete-account": "删除账户",
+  "consequences": "后果：",
+  "consequences-list": "· 您将无法启动充电会话。\n· 您的所有用户数据将被删除。\n· 充电和充值历史将被清除。\n· 已绑定的银行卡将被解绑。\n· 当前余额将于五个工作日内退还至您选择的银行卡。",
+  "action-irreversible": "此操作无法撤销。",
+  "cancel": "取消",
+  "alert": {
+    "title": "您确定要删除账户吗？",
+    "cancel": "取消",
+    "delete": "删除"
+  }
+}

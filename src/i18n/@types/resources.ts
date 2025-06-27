@@ -76,7 +76,41 @@ import deleteAccountModalWidgetRu from '../ru/widgets/delete-account-modal.json'
 import userCardsModalWidgetRu from '../ru/widgets/user-cards-modal.json';
 import stationPreviewModalWidgetRu from '../ru/widgets/station-preview-modal.json';
 
-
+import actionsZh from '../zh/actions.json';
+import commonZh from '../zh/common.json';
+import countriesZh from '../zh/countries.json';
+import errorsZh from '../zh/errors.json';
+import sharedZh from '../zh/shared.json';
+import addingCardAndPaymentScreenZh from '../zh/screens/adding-card-and-payment-screen.json';
+import changePasswordScreenZh from '../zh/screens/change-password-screen.json';
+import changeUserFieldsScreenZh from '../zh/screens/change-user-fields-screen.json';
+import charginStationScreenZh from '../zh/screens/chargin-station-screen.json';
+import chargingDetailsScreenZh from '../zh/screens/charging-details-screen.json';
+import chargingHistoryScreenZh from '../zh/screens/charging-history-screen.json';
+import chargingSessionScreenZh from '../zh/screens/charging-session-screen.json';
+import filtersOfStationsScreenZh from '../zh/screens/filters-of-stations-screen.json';
+import forgotPasswordScreenZh from '../zh/screens/forgot-password-screen.json';
+import loginScreenZh from '../zh/screens/login-screen.json';
+import mapScreenZh from '../zh/screens/map-screen.json';
+import notificationsSettingsScreenZh from '../zh/screens/notifications-settings-screen.json';
+import otpVerifyScreenZh from '../zh/screens/otp-verify-screen.json';
+import profileDetailsScreenZh from '../zh/screens/profile-details-screen.json';
+import profileScreenZh from '../zh/screens/profile-screen.json';
+import rechargeHistoryScreenZh from '../zh/screens/recharge-history-screen.json';
+import rechargeTransactionDetailScreenZh from '../zh/screens/recharge-transaction-detail-screen.json';
+import registrationScreenZh from '../zh/screens/registration-screen.json';
+import setNewPasswordScreenZh from '../zh/screens/set-new-password-screen.json';
+import supportServiceScreenZh from '../zh/screens/support-service-screen.json';
+import topUpAccountScreenZh from '../zh/screens/top-up-account-screen.json';
+import userBalanceWidgetsZh from '../zh/widgets/user-balance.json';
+import сhangeLanguageModalWidgetsZh from '../zh/widgets/change-language-modal.json';
+import chargingStationPowerSliderWidgetsZh from '../zh/widgets/charging-station-power-slider.json';
+import datePeriodSelectWidgetsZh from '../zh/widgets/date-period-select.json';
+import contectorNotInsertedModalWidgetsZh from '../zh/widgets/contector-not-inserted-modal.json';
+import cameraModalWidgetZh from '../zh/widgets/camera-modal.json';
+import deleteAccountModalWidgetZh from '../zh/widgets/delete-account-modal.json';
+import userCardsModalWidgetZh from '../zh/widgets/user-cards-modal.json';
+import stationPreviewModalWidgetZh from '../zh/widgets/station-preview-modal.json';
 
 
 export const resources = {
@@ -163,4 +197,45 @@ export const resources = {
 
     },
   },
+  [AppLangEnum.ZH]: {
+    actions: actionsZh,
+    common: commonZh,
+    countries: countriesZh,
+    errors: errorsZh,
+    screens: {
+      'adding-card-and-payment-screen': addingCardAndPaymentScreenZh,
+      'change-password-screen': changePasswordScreenZh,
+      'change-user-fields-screen': changeUserFieldsScreenZh,
+      'chargin-station-screen': charginStationScreenZh,
+      'charging-details-screen': chargingDetailsScreenZh,
+      'charging-history-screen': chargingHistoryScreenZh,
+      'charging-session-screen': chargingSessionScreenZh,
+      'filters-of-stations-screen': filtersOfStationsScreenZh,
+      'forgot-password-screen': forgotPasswordScreenZh,
+      'login-screen': loginScreenZh,
+      'map-screen': mapScreenZh,
+      'notifications-settings-screen': notificationsSettingsScreenZh,
+      'otp-verify-screen': otpVerifyScreenZh,
+      'profile-details-screen': profileDetailsScreenZh,
+      'profile-screen': profileScreenZh,
+      'recharge-history-screen': rechargeHistoryScreenZh,
+      'recharge-transaction-detail-screen': rechargeTransactionDetailScreenZh,
+      'registration-screen': registrationScreenZh,
+      'set-new-password-screen': setNewPasswordScreenZh,
+      'support-service-screen': supportServiceScreenZh,
+      'top-up-account-screen': topUpAccountScreenZh,
+    },
+    shared: sharedZh,
+    widgets: {
+      'camera-modal': cameraModalWidgetZh,
+      'change-language-modal': сhangeLanguageModalWidgetsZh,
+      'charging-station-power-slider': chargingStationPowerSliderWidgetsZh,
+      'contector-not-inserted-modal': contectorNotInsertedModalWidgetsZh,
+      'date-period-select': datePeriodSelectWidgetsZh,
+      'delete-account-modal': deleteAccountModalWidgetZh,
+      'station-preview-modal': stationPreviewModalWidgetZh,
+      'user-balance': userBalanceWidgetsZh,
+      'user-cards-modal': userCardsModalWidgetZh,
+    },
+  }
 };

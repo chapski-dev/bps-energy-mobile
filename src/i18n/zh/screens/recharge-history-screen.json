@@ -1,0 +1,16 @@
+{
+  "title": "充值历史",
+  "reset-filters": "重置筛选",
+  "no-transactions": "未找到充值记录",
+  "no-transactions-description": "在所选期间，您未对内部余额进行充值",
+  "wallet-names": {
+    "by": "BY 钱包",
+    "ru": "RU 钱包"
+  },
+  "payment-method": {
+    "unknown": "未知"
+  },
+  "transaction-states": {
+    "completed": "已完成"
+  }
+}

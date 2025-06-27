@@ -1,0 +1,19 @@
+{
+  "error": {
+    "camera-permission": "需要相机权限",
+    "camera-access": "相机不可用"
+  },
+  "permission": {
+    "request-message": "请授予相机权限以继续",
+    "request-button": "授予权限",
+    "denied-message": "未授予相机权限"
+  },
+  "instructions": {
+    "scan-message": "扫描二维码以开始充电"
+  },
+  "controls": {
+    "close": "关闭",
+    "torch-on": "开启手电筒",
+    "torch-off": "关闭手电筒"
+  }
+}

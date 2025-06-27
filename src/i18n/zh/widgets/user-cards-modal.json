@@ -1,0 +1,12 @@
+{
+  "to-cancel": "取消",
+  "to-delete": "删除",
+  "title-card-selection": "选择支付方式",
+  "title-saved-cards": "已保存的卡片",
+  "other-payment-methods": "其他支付方式",
+  "no-saved-cards": "您还没有保存的卡片。",
+  "delete-card-title": "您确定要删除此卡片吗？",
+  "delete-card-message": "该卡片将从您的账户中删除，此操作无法撤销。",
+  "visa-card": "Visa",
+  "mastercard": "Mastercard"
+}

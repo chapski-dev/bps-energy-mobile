@@ -1,0 +1,23 @@
+{
+  "title": "筛选",
+  "connector-type": "接口类型",
+  "fast": "快速",
+  "hide-disabled": "在充电站描述中隐藏不可用接口",
+  "other-networks": "其他网络",
+  "other": "其他",
+  "busy": "繁忙",
+  "broken": "故障",
+  "reset-default": "恢复默认",
+  "apply-filters": "应用筛选",
+  "connectors": {
+    "ccs": "CCS",
+    "gbt": "GB/T",
+    "gbt-ac": "GB/T 交流",
+    "type-2-socket": "Type 2 (插座",
+    "type-2-plug": "Type 2 (插头)"
+  },
+  "networks": {
+    "malanka": "Malanka",
+    "battery-fly": "BatteryFly"
+  }
+}

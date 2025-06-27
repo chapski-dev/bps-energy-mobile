@@ -1,0 +1,32 @@
+{
+  "low-location-accuracy": "定位精度不足。请开启 GPS 后重试",
+  "unknown-error": "未知错误",
+  "location-not-determined-check-settings": "无法确定您的位置。请确认设备设置中已允许定位访问。",
+  "payment-error": "支付时发生问题。请重试。",
+  "the-session-has-timed-out-please-log-in": "会话已超时。请重新登录。",
+  "network-connection-lost": "网络连接出现问题。请稍后再试。",
+  "api": {
+    "server-error": "服务器故障。请稍后再试。",
+    "bad-request": "错误的请求",
+    "unauthorized": "需要授权",
+    "forbidden": "禁止访问",
+    "not-found": "未找到",
+    "request-timeout": "请求超时",
+    "too-many-requests": "请求过多",
+    "client-error": "客户端错误"
+  },
+  "critical": {
+    "critical-error-title": "严重错误",
+    "critical-error-occurred": "应用遇到严重错误，需要重启",
+    "send-report": "发送报告",
+    "restart-app": "重启应用",
+    "close-app": "关闭应用",
+    "close-app-title": "请手动关闭应用",
+    "close-app-ios-instruction": "双击Home键并向上滑动应用以关闭",
+    "manual-report-title": "报告发送失败",
+    "manual-report-message": "请将错误报告发送至：",
+    "error-boundary-title": "哎呀！出现了问题",
+    "error-boundary-message": "我们已记录此错误，正在修复中",
+    "try-again": "重试"
+  }
+}

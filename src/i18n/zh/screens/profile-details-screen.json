@@ -1,0 +1,12 @@
+{
+  "title": "个人资料",
+
+  "email-label": "电子邮箱",
+  "name-label": "姓名",
+  "phone-number": "电话号码",
+  "change-password": "修改密码",
+  "how-to-address-you": "如何称呼您？",
+  "add-phone-number": "添加电话号码",
+  "logout-button": "退出账号",
+  "delete-account-button": "删除账号"
+}

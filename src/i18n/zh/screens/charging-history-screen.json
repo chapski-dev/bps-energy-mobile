@@ -1,0 +1,9 @@
+{
+  "title": "充电历史",
+  "reset-filters": "重置筛选",
+  "received": "收到",
+  "spent": "花费",
+  "no-chargings-found": "未找到充电记录",
+  "no-chargings-description": "在所选期间，您未通过我们的应用进行充电",
+  "kilowatt-hour": "千瓦时"
+}

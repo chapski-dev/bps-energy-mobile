@@ -1,0 +1,9 @@
+{
+  "title": "重置密码",
+  "confirm-the-email": "确认邮箱",
+  "sent-code": "我们已向以下地址发送了验证码：",
+  "enter-below": "请在下方输入验证码",
+  "resend-code": "重新发送验证码",
+  "resend-success": "验证码已重新发送，请查收！",
+  "timer-format": "(0:{{seconds}})"
+}

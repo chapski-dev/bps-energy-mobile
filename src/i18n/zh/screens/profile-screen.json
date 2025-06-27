@@ -1,0 +1,14 @@
+{
+  "title": "个人资料",
+
+  "profile": "个人资料",
+  "charging-history": "充电记录",
+  "recharge-history": "充值记录",
+  "saved-cards": "已保存的卡",
+  "notifications": "通知",
+  "support-service": "支持服务",
+  "charging-rules": "充电规则",
+  "faq": "常见问题",
+  "app-language": "应用语言",
+  "app-version": "版本 {{version}}"
+}

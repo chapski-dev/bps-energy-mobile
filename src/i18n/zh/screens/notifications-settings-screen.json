@@ -1,0 +1,16 @@
+{
+  "title": "通知设置",
+  "options": {
+    "start_and_end_of_charging": "充电开始和结束",
+    "balance_replenished": "余额已充值",
+    "balance_less_than_3_byn": "余额低于 3 BYN",
+    "special_offers": "特别优惠",
+    "push_notifications": "推送通知"
+  },
+  "status": {
+    "saving": "正在保存设置…",
+    "saved": "设置已保存",
+    "error": "设置保存出错"
+  },
+  "permission_warning": "请在设备设置中启用通知以接收提醒"
+}
