@@ -10,7 +10,7 @@ import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
 import { useNavigation } from '@react-navigation/native';
 import lodash from 'lodash';
 
-import { getLocations } from '@src/api';
+import { getLocationDetails, getLocations } from '@src/api';
 import { LocationSummary } from '@src/api/types';
 import { useAppColorTheme } from '@src/hooks/useAppColorTheme';
 import { ScreenProps } from '@src/navigation/types';
@@ -30,17 +30,23 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const [markers, setMarkers] = useState<LocationSummary[]>([]);
   const { insets } = useAppTheme();
 
-  const onStationPress = (location: LocationSummary) => {
-    const Element = (
-      <StationPreviewModal location={location} />
-    );
+  const onStationPress = async (location: LocationSummary) => {
+    try {
+      const res = await getLocationDetails(location.id);
 
-    modal().setupModal?.({
-      element: Element,
-      justifyContent: 'flex-start',
-      marginHorizontal: 12,
-      marginVertical: insets.top + 20,
-    });
+      const Element = (
+        <StationPreviewModal location={res.location} />
+      );
+
+      modal().setupModal?.({
+        element: Element,
+        justifyContent: 'flex-start',
+        marginHorizontal: 12,
+        marginVertical: insets.top + 20,
+      });
+    } catch (error) {
+      handleCatchError(error)
+    }
   }
 
   const getCurrentPosition = useCallback(async () => {

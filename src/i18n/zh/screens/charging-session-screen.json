@@ -1,3 +1,17 @@
 {
-  "title": "充电会话"
+  "title": "充电会话",
+  "charging-session-title_other": "充电会话",
+  "end-session": "结束充电",
+  "write-to-support": "联系客服",
+  "session-starting": "充电即将开始，正在准备...",
+  "end-session-confirm-title": "结束充电？",
+  "end-session-confirm-message": "您确定要结束当前充电会话吗？",
+  "cancel-button": "取消",
+  "confirm-button": "结束",
+  "power-label": "功率",
+  "battery-label": "电池",
+  "charged-label": "已充电",
+  "time-label": "时间",
+  "kilowatt-hour": "千瓦时",
+  "kilowatt": "千瓦"
 }

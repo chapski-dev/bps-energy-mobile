@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   RefreshControl,
@@ -21,7 +21,7 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
   const { insets } = useAppTheme();
   const { t } = useTranslation();
 
-  const [location, setLocation] = useState<LocationDetails>({ ...route.params.location, images: [] })
+  const [location, setLocation] = useState<LocationDetails>(route.params.location)
   const fullAdress = `${route.params.location?.street}, ${route.params.location?.city}`
   
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -36,9 +36,6 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
     }
   }, [route.params.location.id]);
 
-  useEffect(() => {
-    onRefresh()
-  }, [onRefresh])
   
   return (
     <>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
 import BatteryChargingIcon from '@assets/svg/battery-charging.svg';
 import CheckCircleIcon from '@assets/svg/check-circle.svg';
@@ -16,6 +17,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
+import { parseDate } from '@src/utils/parseDate';
 import { openTelegram } from '@src/utils/support/openTelegram';
 
 
@@ -24,14 +26,14 @@ export default function ChargingSessionScreen({
 }: ScreenProps<'charging-session'>) {
   const { colors, insets } = useAppTheme();
   const { openCamera } = useCameraModal();
-
+  const { t } = useTranslation('screens', { keyPrefix: 'charging-session-screen' });
   const { sessions, stopSession, loading } = useChargingSessions();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const activeSession = sessions[activeIndex];
 
   const handleWriteToSupport = async () => {
-    const username = 'Alex_Poleshchuk'; // Без @
+    const username = 'Alex_Poleshchuk';
     const message = 'Привет! У меня проблемы со станцией. Помогите';
     openTelegram(username, message)
   };
@@ -39,21 +41,22 @@ export default function ChargingSessionScreen({
   const nav = useTabNavigation();
 
   useEffect(() => {
-    if(!sessions.length){
+    if (!sessions.length) {
       nav.navigateToTab('map')
     }
   }, [nav, sessions.length])
-  
+
   const handleEndSession = () => {
     Alert.alert(
-      'Завершить зарядку?',
-      'Вы уверены, что хотите завершить текущую сессию?',
+      t('end-session-confirm-title'),
+      t('end-session-confirm-message'),
       [
-        { style: 'cancel', text: 'Отмена' },
+        { style: 'cancel', text: t('cancel-button') },
         {
           onPress: async () => {
             try {
               await stopSession(activeSession.id);
+              setActiveIndex(0);
               if (!sessions.length) {
                 nav.navigateToTab('map')
               }
@@ -62,14 +65,10 @@ export default function ChargingSessionScreen({
             }
           },
           style: 'destructive',
-          text: 'Завершить',
+          text: t('confirm-button'),
         },
       ]
     );
-  };
-
-  const handleCancelSession = async () => {
-    console.log('Отменить сессию');
   };
 
   const handleOpenCamera = () => {
@@ -89,24 +88,34 @@ export default function ChargingSessionScreen({
       <Box alignItems="center" mb={64}>
         <LogoIcon color={colors.text} />
       </Box>
-
-      <Text
-        variant="h4"
-        center
-        mb={32}
-        children="Сессии зарядки"
-      />
+      {activeSession?.power === 0 ? (
+        <Text
+          variant="p3"
+          center
+          mb={32}
+          mx={52}
+          colorName='grey_600'
+          children={t('session-starting')}
+        />
+      ) : (
+        <Text
+          variant="h4"
+          center
+          mb={32}
+          children={t('charging-session-title', { count: sessions.length })}
+        />
+      )}
       <StationSelector activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
       <Box gap={12} mb={24}>
         <Box row gap={12}>
           <InfoCard
-            title="Мощность"
+            title={t('power-label')}
             value={activeSession?.power}
-            unit="кВт"
+            unit={t('kilowatt')}
             icon={<LightningIcon color={colors.green} />}
           />
           <InfoCard
-            title="Батарея"
+            title={t('battery-label')}
             value={activeSession?.soc}
             unit="%"
             icon={<BatteryChargingIcon color={colors.green} />}
@@ -115,14 +124,14 @@ export default function ChargingSessionScreen({
 
         <Box row gap={12}>
           <InfoCard
-            title="Получено"
+            title={t('charged-label')}
             value={parseFloat(activeSession?.charged.toFixed(2))}
-            unit="кВт·ч"
+            unit={t('kilowatt-hour')}
             icon={<CheckCircleIcon color={colors.green} />}
           />
           <InfoCard
-            title="Время"
-            value={new Date(activeSession?.duration).toLocaleTimeString('ru-Ru')}
+            title={t('time-label')}
+            value={parseDate(new Date(), 'timeOnly', true)}
             unit=""
             icon={<ClockIcon color={colors.green} />}
           />
@@ -132,16 +141,15 @@ export default function ChargingSessionScreen({
       <Box gap={12}>
         <Button
           onPress={handleWriteToSupport}
-          children="Написать в поддержку"
-          icon={<TelegramLogoIcon />}
+          children={t('write-to-support')}
+          icon={<TelegramLogoIcon color={colors.text} />}
           type='outline'
         />
-
         <Button
-          onPress={loading ? handleCancelSession : handleEndSession}
-          type={loading ? 'outline' : 'filled'}
-          backgroundColor={loading ? 'background' : 'success_500'}
-          children={loading ? 'Отменить сессию' : 'Завершить сессию'}
+          onPress={handleEndSession}
+          backgroundColor={'success_500'}
+          children={t('end-session')}
+          disabled={loading}
         />
       </Box>
     </>
@@ -187,12 +195,13 @@ const StationSelector = ({ setActiveIndex, activeIndex }) => {
             <Text
               variant={activeIndex === i ? 'p3-semibold' : 'p3'}
               children={`№ ${station.id}`}
+              colorName={activeIndex === i ? 'black' : 'text'}
             />
           </Box>
         ))}
       </Box>
     )
-  } 
+  }
   return null;
 };
 
@@ -220,7 +229,7 @@ const InfoCard = ({
     >
       <Box row alignItems="center" mb={8} justifyContent='space-between'>
         <Text variant="p3" colorName="grey_600" children={title} />
-        {loading ? <Box><ActivityIndicator size={24} /></Box> : icon}
+        {loading || Number(value) === 0 ? <Box><ActivityIndicator size={24} /></Box> : icon}
       </Box>
       {loading ?
         <Text variant="h4" colorName="grey_200" children="—" /> :

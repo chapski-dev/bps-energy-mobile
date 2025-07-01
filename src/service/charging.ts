@@ -33,7 +33,7 @@ class ChargingService extends EventEmitter<ServiceEvents> {
       this.loading = true;
       this.emit('loading', this.loading);
       await postStopChargingSession({ session_id })
-      await wait(500);
+      await wait(1500);
       await this.fetchSessions();
     } finally {
       this.loading = false;

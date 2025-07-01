@@ -1,3 +1,20 @@
 {
-  "title": "Сессия зарядки"
+  "title": "Сессия зарядки",
+  "charging-session-title_one": "Сессия зарядки",
+  "charging-session-title_few": "Сессии зарядки",
+  "charging-session-title_many": "Сессий зарядки",
+  "charging-session-title_other": "Сессии зарядки",
+  "end-session": "Завершить сессию",
+  "write-to-support": "Связаться с поддержкой",
+  "session-starting": "Сессия скоро начнется, подготовка...",
+  "end-session-confirm-title": "Завершить зарядку?",
+  "end-session-confirm-message": "Вы уверены, что хотите завершить текущую сессию?",
+  "cancel-button": "Отмена",
+  "confirm-button": "Завершить",
+  "power-label": "Мощность",
+  "battery-label": "Батарея",
+  "charged-label": "Заряжено",
+  "time-label": "Время",
+  "kilowatt-hour": "кВт·ч",
+  "kilowatt": "кВт"
 }
