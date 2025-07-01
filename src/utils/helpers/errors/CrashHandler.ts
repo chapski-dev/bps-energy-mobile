@@ -155,10 +155,6 @@ class CrashHandlerService {
           text: i18n.t('errors:critical.close-app'),
         },
       ],
-      {
-        cancelable: false,
-        onDismiss: () => this.restartApp(),
-      }
     );
   }
 
