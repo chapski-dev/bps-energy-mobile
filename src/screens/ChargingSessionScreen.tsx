@@ -28,8 +28,6 @@ export default function ChargingSessionScreen({
   const { sessions, stopSession, loading } = useChargingSessions();
   const [activeIndex, setActiveIndex] = useState(0);
 
-  console.log('sessions ->', sessions);
-
   const activeSession = sessions[activeIndex];
 
   const handleWriteToSupport = async () => {
@@ -89,7 +87,7 @@ export default function ChargingSessionScreen({
           <QrCodeIcon />
         </Box>}
       <Box alignItems="center" mb={64}>
-        <LogoIcon />
+        <LogoIcon color={colors.text} />
       </Box>
 
       <Text

@@ -13,6 +13,8 @@ const { assetExts, sourceExts } = defaultConfig.resolver;
 
 const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro-config');
 
+const { withSentryConfig } = require('@sentry/react-native/metro');
+
 const svgConfig = {
   resolver: {
     assetExts: assetExts.filter((ext) => ext !== 'svg'),
@@ -25,4 +27,4 @@ const svgConfig = {
   },
 };
 
-module.exports = wrapWithReanimatedMetroConfig(mergeConfig(defaultConfig, svgConfig));
+module.exports = withSentryConfig(wrapWithReanimatedMetroConfig(mergeConfig(defaultConfig, svgConfig)));

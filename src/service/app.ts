@@ -8,6 +8,7 @@ import { onNavigationReady } from '@src/actions/onNavigationReady'
 import { AppServiceStatus, Events, EventsParams } from '@src/events'
 import { dispatchAuth } from '@src/providers/auth'
 import { AuthActionType } from '@src/providers/reducers/authReducer'
+import { CrashHandler } from '@src/utils/helpers/errors/CrashHandler';
 
 const logger = (type: string, debugName: string, eventName?: string | symbol, eventData?: any) => {
   const delimiter = ', '
@@ -82,7 +83,7 @@ class App extends Emittery<EventsParams> {
     this.isFirebaseAuthorized = AppServiceStatus.off
     this.isAuthReady = AppServiceStatus.off
     this.isNavigationReady = AppServiceStatus.off
-
+    CrashHandler.clearErrorContext()
     dispatchAuth?.({ type: AuthActionType.setEmpty })
   }
 }

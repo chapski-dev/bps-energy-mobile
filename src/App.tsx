@@ -1,10 +1,12 @@
 import React from 'react';
+import Config from 'react-native-config';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import YaMap, { Geocoder } from 'react-native-yamap';
 import { Toasts } from '@backpackapp-io/react-native-toast';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
+import * as Sentry from '@sentry/react-native';
 
 import { RootStack } from '@src/navigation/RootStack';
 import app from '@src/service/app';
@@ -16,14 +18,17 @@ import { navigationRef } from './navigation/navigationRef';
 import { AuthProvider } from './providers/auth';
 import { CameraProvider } from './providers/camera';
 import { ModalLayout } from './ui/Layouts/ModalLayout';
+import { CrashHandler } from './utils/helpers/errors/CrashHandler';
 import { AppServiceStatus } from './events';
 
 const navigationLift = () => {
   app.isNavigationReady = AppServiceStatus.on;
 };
 
-YaMap.init('75fa36de-698d-4673-add7-359845159f49');
-Geocoder.init('e15f9e9e-9e7f-49bf-88ff-4e98db8416be');
+CrashHandler.init(Config.SENTRY_DNS)
+
+YaMap.init(Config.YA_MAP_API_KEY);
+Geocoder.init(Config.GEOCODER_API_KEY);
 
 
 function App(): React.JSX.Element {
@@ -51,4 +56,4 @@ function App(): React.JSX.Element {
   );
 }
 
-export default App;
+export default Sentry.wrap(App);

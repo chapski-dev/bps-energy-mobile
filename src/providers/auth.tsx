@@ -22,6 +22,7 @@ import {
   authReducer,
 } from '@src/providers/reducers/authReducer';
 import app from '@src/service/app';
+import { CrashHandler } from '@src/utils/helpers/errors/CrashHandler';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 import { vibrate } from '@src/utils/vibrate';
@@ -86,6 +87,7 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const getUserData = useCallback(async () => {
     const userData = await api.getProfileData();
     setUser(userData);
+    CrashHandler.setUser(userData.id, userData.email, userData.name)
   }, []);
 
   const checkAuthState = useCallback(async () => {

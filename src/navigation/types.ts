@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { LocationSummary, Transaction } from '@src/api/types';
 
 export type RootStackParamList = {
-  tabs: NavigatorScreenParams<TabsParamList>;
+  tabs?: NavigatorScreenParams<TabsParamList>;
   login: undefined
   registration: undefined
   'forgot-password': undefined

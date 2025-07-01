@@ -5,6 +5,7 @@ import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import TryAgainIcon from '@assets/svg/arrow-counter-clockwise.svg';
 import EnvelopIcon from '@assets/svg/envelope.svg';
 import WarningCircleIcon from '@assets/svg/warning-circle.svg';
+import * as Sentry from '@sentry/react-native';
 
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui'
@@ -40,7 +41,7 @@ const CustomFallback = (props: { error: Error, resetError: () => void }) => {
           type="outline"
           width='auto'
           icon={<EnvelopIcon color={colors.grey_800} />}
-          onPress={() => CrashHandler.handleFatalError(props.error, 'JavaScript')}
+          onPress={() => CrashHandler.handleFatalError(props.error, 'JS')}
           children={t('critical.send-report')}
         />
       </Box>
@@ -50,7 +51,10 @@ const CustomFallback = (props: { error: Error, resetError: () => void }) => {
 
 export const AppErrorBoundary = ({ children }: PropsWithChildren) => (
   <ErrorBoundary FallbackComponent={CustomFallback}
-    onError={() => vibrate(HapticFeedbackTypes.notificationError)}
+    onError={(error: Error) => {
+      Sentry.captureException(error);
+      vibrate(HapticFeedbackTypes.notificationError)
+    }}
   >
     {children}
   </ErrorBoundary>
