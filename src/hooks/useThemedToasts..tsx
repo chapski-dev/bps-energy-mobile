@@ -16,7 +16,7 @@ export const useThemedToasts = () => {
     toast(message, {
       icon: <CheckCircleIcon color={colors.green} />,
       styles: {
-        pressable: { backgroundColor: colors.background },
+        pressable: { backgroundColor: colors.white },
       },
     })
   };
@@ -26,7 +26,7 @@ export const useThemedToasts = () => {
     toast(message, {
       icon: <WarningCircleIcon color={colors.error_500} />,
       styles: {
-        pressable: { backgroundColor: colors.background },
+        pressable: { backgroundColor: colors.white },
       },
     })
   };
@@ -36,7 +36,7 @@ export const useThemedToasts = () => {
     toast(message, {
       icon: <InfoCircleIcon color={colors.warning_500} />,
       styles: {
-        pressable: { backgroundColor: colors.background },
+        pressable: { backgroundColor: colors.white },
       },
     })
   };

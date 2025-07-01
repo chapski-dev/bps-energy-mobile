@@ -5,11 +5,11 @@ import BatteryChargingIcon from '@assets/svg/battery-charging.svg'
 import BellIcon from '@assets/svg/bell.svg'
 import ChatIcon from '@assets/svg/chat-text.svg'
 import CreditCardIcon from '@assets/svg/credit-card-outline.svg'
-import GlobeIcon from '@assets/svg/globe.svg'
 import InfoIcon from '@assets/svg/info.svg'
 import MoonIcon from '@assets/svg/moon.svg'
 import QuestionMarkCircledIcon from '@assets/svg/question-mark-circled.svg'
 import SunIcon from '@assets/svg/sun.svg'
+import TranslateIcon from '@assets/svg/translate.svg'
 import UserIcon from '@assets/svg/user.svg'
 import WalletIcon from '@assets/svg/wallet.svg'
 import XIcon from '@assets/svg/X.svg'
@@ -34,7 +34,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
   const { colors } = useAppTheme();
   const { onChangeTheme, isDarkTheme } = useAppColorTheme();
 
-  const { t } = useTranslation('screens', { keyPrefix: 'profile-screen' })
+  const { t, i18n } = useTranslation('screens', { keyPrefix: 'profile-screen' })
   const openProfileData = () => navigation.navigate('profile-details');
   const [refreshing, setRefreshing] = useState(false);
   const { insets } = useAppTheme();
@@ -118,6 +118,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
             title={t('saved-cards')}
             icon={<CreditCardIcon color={colors.text} />}
             onPress={modalCardsOpen}
+            borderBottom={false}
           />
         </Box>
 
@@ -132,9 +133,11 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
           />
           <SectionListItemWithArrow
             alignItems='center'
-            icon={<GlobeIcon color={colors.text} />}
+            icon={<TranslateIcon color={colors.text} />}
             title={t('app-language')}
             onPress={modalOpen}
+            rightText={i18n.t(`widgets:change-language-modal.lang.${i18n.language}`)}
+            borderBottom={false}
           />
         </Box>
 

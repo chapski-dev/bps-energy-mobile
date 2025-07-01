@@ -5,11 +5,11 @@ import { Vibration } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import EnvelopeIcon from '@assets/svg/envelope.svg';
-import GlobIcon from '@assets/svg/globe.svg';
 import LockIcon from '@assets/svg/lock.svg';
 import LogoIcon from '@assets/svg/logo.svg';
 import MoonIcon from '@assets/svg/moon.svg'
 import SunIcon from '@assets/svg/sun.svg'
+import TranslateIcon from '@assets/svg/translate.svg';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { isAxiosError } from 'axios';
 
@@ -85,7 +85,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
             w={25}
             h={25}
           >
-            <GlobIcon color={colors.grey_400} />
+            <TranslateIcon color={colors.grey_400} />
           </Box>
         </Box>
         <Box

@@ -16,6 +16,8 @@ import { merge } from 'lodash';
 
 import { AppLightTheme, useAppTheme } from '@src/theme/theme';
 
+import { Box } from './Box';
+
 type ButtonType = keyof typeof typeStyle;
 
 type ThemeColors = keyof typeof AppLightTheme.colors;
@@ -183,13 +185,13 @@ export const Button: FC<PropsType> = ({
 
   const buttonContent = useMemo(() => (
     <>
-      {loading ? <ActivityIndicator color={colors.background} /> : <View style={{ alignItems: 'center', flexDirection: 'row', gap: 6 }}>
+      {loading ? <ActivityIndicator color={colors.text} /> : <Box alignItems="center" row gap={6}>
         <Text
           style={[{ color: _textColor, fontSize: 16, fontWeight: '600' }, textStyle]}
           children={children}
         />
         {icon}
-      </View>}
+      </Box>}
       {type === 'filled' && (
         <Animated.View
           style={{

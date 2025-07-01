@@ -26,7 +26,7 @@ function ChangeUserFieldsScreen({
 }: ScreenProps<'change-user-fields'>) {
   const { user } = useAuth();
   const { insets, colors } = useAppTheme();
-  const { t } = useTranslation(['actions']);
+  const { t } = useTranslation('screens', { keyPrefix: 'change-user-fields-screen' });
   const { toastSuccess } = useThemedToasts();
   const { getUserData } = useAuth();
 
@@ -44,9 +44,9 @@ function ChangeUserFieldsScreen({
   const handleUpdateData = async (data: FormValues) => {
     try {
       setLoading(true);
-      await updateUserProfile({...data, name: data.name.trim() })
+      await updateUserProfile({ ...data, name: data.name.trim() })
       await getUserData()
-      toastSuccess(isNameField ? 'Имя обновлено!' : 'Телефон обновлен!');
+      toastSuccess(isNameField ? t('actions.name-updated') : t('actions.phone-updated'));
       navigation.goBack();
     } catch (error) {
       handleCatchError(error);
@@ -56,20 +56,21 @@ function ChangeUserFieldsScreen({
   };
 
   const openConfirmationDeletePhone = () => {
-    Alert.alert(t('actions:to-delete')+'?', undefined, [
+    Alert.alert(t('actions.to-delete') + '?', undefined, [
       {
         onPress: () => null,
-        text: t('actions:to-cancel'),
+        text: t('actions.to-cancel'),
       },
       {
         onPress: () => {
-          handleUpdateData({...form.getValues(), phone: ''})
+          handleUpdateData({ ...form.getValues(), phone: '' })
         },
         style: 'destructive',
-        text: t('actions:to-delete'),
+        text: t('actions.to-delete'),
       },
     ]);
   };
+
   return (
     <FormProvider {...form}>
       <Box
@@ -93,9 +94,9 @@ function ChangeUserFieldsScreen({
                 }) => (
                   <Input
                     value={value}
-                    onChangeText={(v) => onChange( v.length === 1 ? v.trimStart() : v.replaceAll('  ', ' '))}
+                    onChangeText={(v) => onChange(v.length === 1 ? v.trimStart() : v.replaceAll('  ', ' '))}
                     onBlur={onBlur}
-                    placeholder="Имя"
+                    placeholder={t('change-user-fields.name-placeholder')}
                     error={invalid}
                     returnKeyType="done"
                     autoCorrect={false}
@@ -110,7 +111,7 @@ function ChangeUserFieldsScreen({
                 {user?.phone && (
                   <Button
                     type="clear"
-                    children="Удалить номер"
+                    children={t('change-user-fields.delete-number')}
                     textColor="error_500"
                     onPress={openConfirmationDeletePhone}
                   />
@@ -120,7 +121,7 @@ function ChangeUserFieldsScreen({
           </Box>
         </Box>
         <Button
-          children={t('actions:to-save')}
+          children={t('actions.to-save')}
           onPress={handleSubmit(handleUpdateData)}
           disabled={loading || !formState.isValid}
           loading={loading}

@@ -90,7 +90,7 @@ export const ProfileDetailsScreen = ({
             children={
               user?.phone ? (
                 <Box>
-                  <Text variant="p2-semibold" children={user?.phone} />
+                  <Text variant="p2-semibold" children={`+${user?.phone}`} />
                   <Text
                     variant="p3"
                     colorName="promting"

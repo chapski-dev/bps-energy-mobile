@@ -15,6 +15,8 @@ type SectionListItemWithArrowProps = PropsWithChildren & {
   borderBottom?: boolean;
   icon?: React.ReactNode;
   alignItems?: FlexAlignType;
+  /** Дополнительная информация рядом с кареткой (например, выбранный язык) */
+  rightText?: string;
 };
 
 export const SectionListItemWithArrow = ({
@@ -25,34 +27,66 @@ export const SectionListItemWithArrow = ({
   icon,
   borderBottom = true,
   alignItems,
+  rightText,
 }: SectionListItemWithArrowProps) => {
   const { colors } = useAppTheme();
 
   return (
-    <>
+    <Box w="full">
       <Box
         w="full"
         minHeight={56}
         py={16}
         row
-        alignItems="center"
+        alignItems={alignItems}
         justifyContent="space-between"
         onPress={onPress}
         disabled={disabled}
       >
-        <Box gap={6} row alignItems={alignItems}>
-          {icon}
-          {children || (
-            <Text
-              color={disabled ? colors.grey_100 : undefined}
-              variant='p2-semibold'
-              children={children || title}
-            />
+        {/* Левая часть с иконкой */}
+        {icon && (
+          <Box mr={12}>
+            {icon}
+          </Box>
+        )}
+        
+        {/* Основной контент с линией */}
+        <Box 
+          flex={1} 
+          row 
+          alignItems="center" 
+          justifyContent="space-between"
+          borderBottomWidth={borderBottom ? 1 : 0}
+          borderColor={colors.grey_100}
+          pb={borderBottom ? 16 : 0}
+          mb={borderBottom ? -16 : 0}
+        >
+          {/* Текст */}
+          <Box row alignItems={alignItems}>
+            {children || (
+              <Text
+                color={disabled ? colors.grey_100 : undefined}
+                variant='p2-semibold'
+                children={title}
+              />
+            )}
+          </Box>
+          
+          {/* Правая часть с доп. текстом и кареткой */}
+          {onPress && (
+            <Box row alignItems="center" gap={8}>
+              {rightText && (
+                <Text
+                  color={disabled ? colors.grey_100 : colors.grey_400}
+                  variant='p2'
+                  children={rightText}
+                />
+              )}
+              <CaretRightIcon color={disabled ? colors.grey_100 : colors.grey_400} />
+            </Box>
           )}
         </Box>
-        {onPress && <CaretRightIcon color={disabled ? colors.grey_100 : colors.grey_400} />}
       </Box>
-      {borderBottom && <Box w="full" h={1} backgroundColor={colors.grey_100} />}
-    </>
+    </Box>
   );
 };

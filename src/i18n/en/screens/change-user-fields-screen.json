@@ -1,1 +1,14 @@
-{}
+{
+  "actions": {
+    "to-delete": "Delete",
+    "to-cancel": "Cancel",
+    "to-save": "Save",
+    "name-updated": "Name updated!",
+    "phone-updated": "Phone number updated!"
+  },
+  "change-user-fields": {
+    "name-placeholder": "Name",
+    "delete-number": "Delete number",
+    "confirmation-title": "Delete?"
+  }
+}

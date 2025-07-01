@@ -1,1 +1,14 @@
-{}
+{
+  "actions": {
+    "to-delete": "刪除",
+    "to-cancel": "取消",
+    "to-save": "保存",
+    "name-updated": "姓名已更新！",
+    "phone-updated": "電話號碼已更新！"
+  },
+  "change-user-fields": {
+    "name-placeholder": "姓名",
+    "delete-number": "刪除號碼",
+    "confirmation-title": "刪除？"
+  }
+}

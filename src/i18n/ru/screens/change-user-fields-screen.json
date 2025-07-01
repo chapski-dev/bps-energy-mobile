@@ -1,1 +1,14 @@
-{}
+{
+  "actions": {
+    "to-delete": "Удалить",
+    "to-cancel": "Отмена",
+    "to-save": "Сохранить",
+    "name-updated": "Имя обновлено!",
+    "phone-updated": "Телефон обновлен!"
+  },
+  "change-user-fields": {
+    "name-placeholder": "Имя",
+    "delete-number": "Удалить номер",
+    "confirmation-title": "Удалить?"
+  }
+}

@@ -3,6 +3,9 @@
   "lang": {
     "russian": "Русский",
     "english": "English",
-    "china": "中国人"
+    "china": "中国人",
+    "ru": "Русский",
+    "en": "English",
+    "zh": "中国人"
   }
 }

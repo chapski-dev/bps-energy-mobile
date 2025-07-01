@@ -202,9 +202,9 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
     );
 
     const renderLestEmptyComponent = useCallback(() => (
-      <Box justifyContent='center' alignItems='center'>
-        <EmptyBoxIcon color={colors.grey_400} width={50} height={50} />
-        <Text children={t('no-saved-cards')} />
+      <Box justifyContent='center' alignItems='center' pt={8} pb={30}>
+        <EmptyBoxIcon color={colors.grey_400} width={72} height={72} />
+        <Text children={t('no-saved-cards')} colorName='grey_600' variant='p3' />
       </Box>
     ), [colors.grey_400, t])
 
