@@ -26,5 +26,6 @@
   "balance-topped-up": "余额已充值！",
   "next": "下一步",
   "phone-number-support-promting": "提供的电话号码将帮助我们更快地协助您联系客服",
-  "do-you-want-to-logout?": "您确定要退出登录吗？"
+  "do-you-want-to-logout?": "您确定要退出登录吗?",
+  "no-internet-connection": "無網路連接"
 }

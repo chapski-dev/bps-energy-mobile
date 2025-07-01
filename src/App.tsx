@@ -19,6 +19,7 @@ import { AuthProvider } from './providers/auth';
 import { CameraProvider } from './providers/camera';
 import { ModalLayout } from './ui/Layouts/ModalLayout';
 import { CrashHandler } from './utils/helpers/errors/CrashHandler';
+import { NetworkStatusBar } from './widgets/NetworkStatusBar';
 import { AppServiceStatus } from './events';
 
 const navigationLift = () => {
@@ -44,6 +45,7 @@ function App(): React.JSX.Element {
           <CameraProvider>
             <GestureHandlerRootView>
               <BottomSheetModalProvider>
+                <NetworkStatusBar/>
                 <RootStack />
                 <Toasts />
                 <ModalLayout />

@@ -3,7 +3,6 @@ import { AppLangEnum } from '../config';
 
 // English translations
 import actionsEn from '../en/actions.json';
-import commonEn from '../en/common.json';
 import countriesEn from '../en/countries.json';
 import errorsEn from '../en/errors.json';
 import sharedEn from '../en/shared.json';
@@ -41,7 +40,6 @@ import stationPreviewModalWidgetEn from '../en/widgets/station-preview-modal.jso
 
 // Russian translations
 import actionsRu from '../ru/actions.json';
-import commonRu from '../ru/common.json';
 import countriesRu from '../ru/countries.json';
 import errorsRu from '../ru/errors.json';
 import sharedRu from '../ru/shared.json';
@@ -77,7 +75,6 @@ import userCardsModalWidgetRu from '../ru/widgets/user-cards-modal.json';
 import stationPreviewModalWidgetRu from '../ru/widgets/station-preview-modal.json';
 
 import actionsZh from '../zh/actions.json';
-import commonZh from '../zh/common.json';
 import countriesZh from '../zh/countries.json';
 import errorsZh from '../zh/errors.json';
 import sharedZh from '../zh/shared.json';
@@ -116,7 +113,6 @@ import stationPreviewModalWidgetZh from '../zh/widgets/station-preview-modal.jso
 export const resources = {
   [AppLangEnum.EN]: {
     actions: actionsEn,
-    common: commonEn,
     countries: countriesEn,
     errors: errorsEn,
     screens: {
@@ -157,7 +153,6 @@ export const resources = {
   },
   [AppLangEnum.RU]: {
     actions: actionsRu,
-    common: commonRu,
     countries: countriesRu,
     errors: errorsRu,
     screens: {
@@ -199,7 +194,6 @@ export const resources = {
   },
   [AppLangEnum.ZH]: {
     actions: actionsZh,
-    common: commonZh,
     countries: countriesZh,
     errors: errorsZh,
     screens: {

@@ -27,5 +27,6 @@
   "phone-number-support-promting": "The phone number you provide will allow us to help you more quickly if you contact support.",
   "balance-topped-up": "Balance topped up!",
   "do-you-want-to-delete-your-account?": "Do you want to delete your account?",
-  "do-you-want-to-logout?": "Do you want to logout?"
+  "do-you-want-to-logout?": "Do you want to logout?",
+  "no-internet-connection": "No internet connection"
 }

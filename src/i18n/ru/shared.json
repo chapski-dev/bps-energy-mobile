@@ -26,5 +26,6 @@
   "balance-topped-up": "Баланс пополнен!",
   "next": "Далее",
   "phone-number-support-promting": "Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки",
-  "do-you-want-to-logout?": "Желаете выйти?"
+  "do-you-want-to-logout?": "Желаете выйти?",
+  "no-internet-connection": "Нет соединения с интернетом"
 }
