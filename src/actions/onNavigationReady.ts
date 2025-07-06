@@ -7,6 +7,8 @@ import { dispatchAuth } from '@src/providers/auth';
 import { AuthActionType } from '@src/providers/reducers/authReducer';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
+import { onCheckUpdates } from './onCheckUpdates';
+
 export const waitForNavigationReady = () => {
   return new Promise((resolve) => {
     const handler = () => {
@@ -27,5 +29,6 @@ export const onNavigationReady = async (status: AppServiceStatus) => {
     dispatchAuth?.({ type: isStorageFilled ? AuthActionType.setReady : AuthActionType.setEmpty })
     await waitForNavigationReady()
     await BootSplash.hide({ fade: true });
+    onCheckUpdates()
   }
 };

@@ -22,6 +22,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
+import { AppVersionInfo } from '@src/widgets/AppVersionInfo';
 import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
 import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 import UserBalance from '@src/widgets/UserBalance';
@@ -171,12 +172,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
             />
           )}
 
-          <Text
-            variant='p4'
-            colorName='promting'
-            my={24}
-            children={t('app-version', { version: '1.74.0' })}
-          />
+          <AppVersionInfo />
         </Box>
       </ScrollView>
       <ChangeLanguageModal ref={modal} modalClose={modalClose} />

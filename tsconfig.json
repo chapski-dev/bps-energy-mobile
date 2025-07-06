@@ -1,13 +1,30 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS",
+      "types": [
+        "node"
+      ]
+    },
+  },
   "compilerOptions": {
     "jsx": "react",
-    "types": ["react-native"],
+    "types": [
+      "react-native"
+    ],
     "baseUrl": "./",
     "paths": {
-      "@src/*": ["src/*"],
-      "@assets/*": ["assets/*"]
-    }
+      "@src/*": [
+        "src/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ]
+    },
+    "resolveJsonModule": true,
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
