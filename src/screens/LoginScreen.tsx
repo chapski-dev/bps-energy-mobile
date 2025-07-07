@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Vibration } from 'react-native';
@@ -11,6 +11,7 @@ import MoonIcon from '@assets/svg/moon.svg'
 import SunIcon from '@assets/svg/sun.svg'
 import TranslateIcon from '@assets/svg/translate.svg';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { HotUpdater } from '@hot-updater/react-native';
 import { isAxiosError } from 'axios';
 
 import { SignInReq } from '@src/api/types';
@@ -23,7 +24,6 @@ import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { validator } from '@src/utils/validations';
 import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
-
 
 const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
   const { insets, colors } = useAppTheme();
@@ -67,6 +67,13 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
     }
   }
   const secInputRef = useRef<TextInput>(null);
+
+  const [bundleId, setBundleId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const _bundleId = HotUpdater.getBundleId();
+    setBundleId(_bundleId);
+  }, []);
 
   return (
     <>
@@ -163,6 +170,14 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
               children={t('login-screen.create-account')}
               onPress={() => navigation.navigate('registration')}
             />
+            <Text
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+              children={`BundleId: ${bundleId}`}
+            />
+            <Button children="Reload" onPress={() => HotUpdater.reload()} />
           </Box>
 
           <Button

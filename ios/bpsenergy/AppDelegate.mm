@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import "RNBootSplash.h"
+#import <HotUpdater/HotUpdater.h>
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
 #import <YandexMapsMobile/YMKMapKitFactory.h>
@@ -36,7 +37,7 @@
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
 #else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  return [HotUpdater bundleURL]; 
 #endif
 }
 

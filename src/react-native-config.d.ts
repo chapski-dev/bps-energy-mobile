@@ -4,6 +4,7 @@ declare module 'react-native-config' {
     YA_MAP_API_KEY: string
     GEOCODER_API_KEY: string
     SENTRY_DNS: string
+    HOT_UPDATER_SUPABASE_URL: string
   }
 
   export const Config: NativeConfig

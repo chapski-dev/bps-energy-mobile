@@ -45,7 +45,7 @@ function App(): React.JSX.Element {
           <CameraProvider>
             <GestureHandlerRootView>
               <BottomSheetModalProvider>
-                <NetworkStatusBar/>
+                <NetworkStatusBar />
                 <RootStack />
                 <Toasts />
                 <ModalLayout />
@@ -58,4 +58,4 @@ function App(): React.JSX.Element {
   );
 }
 
-export default Sentry.wrap(App);
+export default Sentry.wrap(App)
