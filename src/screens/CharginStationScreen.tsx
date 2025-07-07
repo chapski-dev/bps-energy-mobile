@@ -11,7 +11,7 @@ import { getLocationDetails } from '@src/api';
 import { LocationDetails } from '@src/api/types';
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { ScreenProps } from '@src/navigation/types';
-import { useAuth } from '@src/providers/auth';
+import { checkAuthOrRedirect,useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { CharginAccordion } from '@src/widgets/CharginAccrodion';
@@ -81,21 +81,27 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
 };
 
 const NeedTopUpBalanceBanner = () => {
-  const { user } = useAuth()
+  const { user, authState } = useAuth()
   const { colors } = useAppTheme()
   const navigation = useNavigation();
   const { t } = useTranslation(['actions']);
+
+  const handleTopUpPress = () => {
+    if (checkAuthOrRedirect(authState, navigation)) {
+      navigation.navigate('top-up-account');
+    }
+  };
 
   if (!user?.wallets[0].value) {
     return (
       <Box backgroundColor={colors.grey_50} row px={16} py={12} gap={16} borderRadius={8} mb={24}>
         <Box flex={1} gap={4}>
           <Text children="Для начала зарядки требуется пополнение баланса." />
-          <Box onPress={() => navigation.navigate('top-up-account')}>
+          <Box onPress={handleTopUpPress}>
             <Text children={t('actions:to-top-up')} colorName="primary" />
           </Box>
         </Box>
-        <WalletIcon />
+        <WalletIcon color={colors.text} />
       </Box>
     )
   }

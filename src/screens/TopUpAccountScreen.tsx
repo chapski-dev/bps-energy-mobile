@@ -19,7 +19,7 @@ import { Card } from '@src/api/types';
 import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
-import { useAuth } from '@src/providers/auth';
+import { checkAuthOrRedirect, useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Input, Text } from '@src/ui';
 import { AnimatedBox } from '@src/ui/Box';
@@ -33,7 +33,7 @@ const TopUpAccountScreen = ({
   route,
 }: ScreenProps<'top-up-account'>) => {
   const { insets, colors } = useAppTheme();
-  const { user, getUserData } = useAuth();
+  const { user, getUserData, authState } = useAuth();
   const { toastSuccess } = useThemedToasts();
   const { t } = useTranslation(['screens', 'actions']);
 
@@ -58,6 +58,7 @@ const TopUpAccountScreen = ({
   };
 
   const submitPay = () => {
+    if (!checkAuthOrRedirect(authState, navigation)) return;
     Keyboard.dismiss()
     if (user?.cards.length) {
       modalCardsOpen();

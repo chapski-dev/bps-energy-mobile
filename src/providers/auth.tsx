@@ -10,12 +10,14 @@ import React, {
 } from 'react';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { NavigationContainerRef } from '@react-navigation/native';
 import { useImmerReducer } from 'use-immer';
 
 import * as api from '@src/api';
 import { Profile, SignInReq } from '@src/api/types';
 import { AppServiceStatus } from '@src/events';
 import { navigationRef } from '@src/navigation/navigationRef';
+import type { RootStackParamList } from '@src/navigation/types';
 import {
   AuthAction,
   AuthActionType,
@@ -179,3 +181,21 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+export const checkAuthOrRedirect = (authState: AuthState, navigation?: NavigationContainerRef<RootStackParamList>) => {
+  if (authState !== AuthState.ready) {
+    if (navigation && typeof navigation.reset === 'function') {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'login' }],
+      });
+    } else if (navigationRef.isReady()) {
+      navigationRef.reset({
+        index: 0,
+        routes: [{ name: 'login' }],
+      });
+    }
+    return false;
+  }
+  return true;
+};

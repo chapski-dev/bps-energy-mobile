@@ -17,6 +17,7 @@ import LightningIcon from '@assets/svg/lightning.svg';
 
 import type { Connector, ConnectorType } from '@src/api/types';
 import { useTabNavigation } from '@src/hooks/useTabNavigation';
+import { checkAuthOrRedirect,useAuth } from '@src/providers/auth';
 import chargingService from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Chip, Text } from '@src/ui';
@@ -197,9 +198,11 @@ const ConnectorElement = ({
 }: ConnectorElementProps) => {
   const { colors } = useAppTheme();
   const [loading, setLoading] = useState(false);
-  const nav = useTabNavigation()
+  const nav = useTabNavigation();
+  const { authState } = useAuth();
 
   const handleStartCharging = async () => {
+    if (!checkAuthOrRedirect(authState)) return;
     try {
       setLoading(true);
       setDisbledConnectors(true);
