@@ -199,3 +199,27 @@ export const checkAuthOrRedirect = (authState: AuthState, navigation?: Navigatio
   }
   return true;
 };
+
+export const handleDeepLinkWithAuth = (
+  authState: AuthState,
+  routeName: string,
+  params?: Record<string, unknown>
+) => {
+  if (authState !== AuthState.ready) {
+    if (navigationRef.isReady()) {
+      navigationRef.reset({
+        index: 0,
+        routes: [{ name: 'login' }],
+      });
+    }
+    return false;
+  }
+  
+  if (navigationRef.isReady()) {
+    // @ts-ignore - navigationRef.navigate имеет сложную типизацию
+    navigationRef.navigate(routeName, params);
+    return true;
+  }
+  
+  return false;
+};

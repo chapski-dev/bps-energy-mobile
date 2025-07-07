@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet } from 'react-native';
 import BatteryChargingIcon from '@assets/svg/battery-charging.svg';
 import CheckCircleIcon from '@assets/svg/check-circle.svg';
@@ -6,30 +7,23 @@ import ClockIcon from '@assets/svg/clock.svg';
 import LogoIcon from '@assets/svg/logo.svg';
 import WalletIcon from '@assets/svg/wallet.svg';
 
+import { ChargingDetails } from '@src/api/types';
 import { ScreenProps } from '@src/navigation/types';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
-
-import type { ChargingSession } from '../service/charging';
 
 export default function ChargingSummaryScreen({
   navigation,
   route
 }: ScreenProps<'charging-session-summary'>) {
   const { colors, insets } = useAppTheme();
+  const { t } = useTranslation('screens', { keyPrefix: 'charging-session-screen' });
 
-  const {
-    batteryStart,
-    minutesSpent,
-    remainingSessions,
-    session
-  }: ChargingSession = route.params.session;
-
-  
+  const { session, remainingSessions = 0 }: { session: ChargingDetails; remainingSessions?: number } = route.params;
 
   const handleDone = () => {
     // Навигация обратно в ChargingScreen или на MapTab
-    if (route.params.remainingSessions > 0) {
+    if (remainingSessions > 0) {
       navigation.goBack();
     } else {
       navigation.navigate('tabs'); // заменить на актуальное имя таба
@@ -49,39 +43,39 @@ export default function ChargingSummaryScreen({
       variant="h3"
       center
       mb={8}
-      children="Зарядка завершена!"
+      children={t('charging-complete')}
     />
     <Text
       variant="p2"
       center
       colorName="grey_600"
       mb={32}
-      children="Спасибо что выбираете BPS Energy"
+      children={t('thank-you-message')}
     />
 
     <Box gap={8} mb={24}>
       <SummaryCard
-        title="Получено"
-        value={`${100} кВт·ч`}
+        title={t('received')}
+        value={`${session.session.energy_received.toFixed(2)} ${t('kilowatt-hour')}`}
         icon={<CheckCircleIcon color={colors.green} />}
       />
 
       <SummaryCard
-        title="Батарея"
-        value={`${12}%`}
+        title={t('battery')}
+        value={`${session.session.soc_end}%`}
         icon={<BatteryChargingIcon color={colors.green} />}
-        from={`${10}% → `}
+        from={`${session.session.soc_start}% → `}
       />
 
       <SummaryCard
-        title="Время зарядки"
-        value={'22'}
+        title={t('charging-time')}
+        value={`${session.session.duration_minutes} мин`}
         icon={<ClockIcon color={colors.green} />}
       />
 
       <SummaryCard
-        title="Потрачено"
-        value={`${12} BYN`}
+        title={t('spent')}
+        value={`${session.session.cost} ${session.session.currency}`}
         icon={<WalletIcon color={colors.green} />}
       />
     </Box>
@@ -90,7 +84,7 @@ export default function ChargingSummaryScreen({
       <Button
         onPress={handleDone}
         backgroundColor="green"
-        children="Готово"
+        children={t('done')}
       />
     </Box>
     </ScrollView>
@@ -104,7 +98,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
 });
-
 
 const SummaryCard = ({
   title,

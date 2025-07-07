@@ -1,7 +1,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import type { LocationDetails, Transaction } from '@src/api/types';
+import type { ChargingDetails,LocationDetails, Transaction } from '@src/api/types';
 
 export type RootStackParamList = {
   tabs?: NavigatorScreenParams<TabsParamList>;
@@ -23,6 +23,7 @@ export type RootStackParamList = {
   'change-user-fields': { filed: 'name' | 'phone' };
   'charging-history': undefined;
   'charging-details': undefined;
+  'charging-session-summary': { session: ChargingDetails; remainingSessions?: number };
   'recharge-history': undefined;
   'recharge-transaction-detail': { transaction: Transaction };
   'notifications-settings': undefined;

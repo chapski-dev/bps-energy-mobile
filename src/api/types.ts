@@ -93,6 +93,33 @@ export type Session = {
   spent: number,
   state: 'begins' | 'charging' | 'finishing'
 }
+
+export type ChargingDetails = {
+  id: number;
+  location: {
+    name: string;
+    address: string;
+    image?: string;
+  };
+  session: {
+    start_time: string;
+    end_time: string;
+    duration_minutes: number;
+    soc_start: number;
+    soc_end: number;
+    soc_increase: number;
+    power_avg: number;
+    energy_received: number;
+    cost: number;
+    currency: 'BYN' | 'RUB';
+  };
+  connector: {
+    id: number;
+    type: ConnectorType;
+    power: number;
+  };
+}
+
 export type SessionsRes = {
   sessions: Session[]
 }

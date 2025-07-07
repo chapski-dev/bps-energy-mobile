@@ -77,3 +77,18 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+## Deep Linking (Диплинкинг)
+
+В проекте реализован deep linking на экран завершения зарядки с защитой авторизации.
+
+- Пример ссылки: `bpsenergy://charging-complete/123`
+- Если пользователь не авторизован, он будет перенаправлен на экран логина.
+- После авторизации пользователь попадет на нужный экран.
+
+### Настройка
+- linking-конфиг находится в `src/navigation/linking.ts`
+- обработка диплинков реализована в `App.tsx` и хуке `useDeepLinkHandler`
+- для интеграции с пуш-уведомлениями используйте функцию `handleChargingCompleteNotification(sessionId)`
+
+Подробнее см. в `src/docs/deep-linking.md`.

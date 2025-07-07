@@ -7,6 +7,7 @@ import AddingCardAndPaymentScreen from '@src/screens/AddingCardAndPaymentScreen'
 import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
 import ChangeUserFieldsScreen from '@src/screens/ChangeUserFieldsScreen';
 import ChargingHistoryScreen from '@src/screens/ChargingHistoryScreen';
+import ChargingSummaryScreen from '@src/screens/ChargingSummaryScreen';
 import CharginStationScreen from '@src/screens/CharginStationScreen';
 import FiltersOfStationsScreen from '@src/screens/FiltersOfStationsScreen';
 import ForgotPasswordScreen from '@src/screens/ForgotPasswordScreen';
@@ -173,6 +174,11 @@ export const RootStack = () => {
             options={{ title: t('charging-history-screen.title') }}
             name='charging-history'
             component={ChargingHistoryScreen}
+          />
+          <Stack.Screen
+            options={{ title: t('charging-session-screen.title') }}
+            name='charging-session-summary'
+            component={ChargingSummaryScreen}
           />
           <Stack.Screen
             options={{ title: t('recharge-history-screen.title') }}

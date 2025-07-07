@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Linking } from 'react-native';
 import Config from 'react-native-config';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -14,6 +15,7 @@ import app from '@src/service/app';
 import '@src/i18n/config';
 
 import { useAppColorTheme } from './hooks/useAppColorTheme';
+import { linking } from './navigation/linking';
 import { navigationRef } from './navigation/navigationRef';
 import { AuthProvider } from './providers/auth';
 import { CameraProvider } from './providers/camera';
@@ -31,15 +33,28 @@ CrashHandler.init(Config.SENTRY_DNS)
 YaMap.init(Config.YA_MAP_API_KEY);
 Geocoder.init(Config.GEOCODER_API_KEY);
 
-
 function App(): React.JSX.Element {
   const { theme } = useAppColorTheme();
+
+  useEffect(() => {
+    const handleDeepLink = () => {
+      // Здесь можно парсить url и вызывать handleDeepLinkWithAuth
+      // Например, bpsenergy://charging-complete/123
+      // В реальном проекте: парсить sessionId, делать API-запрос, навигировать
+    };
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <AuthProvider>
       <NavigationContainer
         onReady={navigationLift}
         theme={theme}
         ref={navigationRef}
+        linking={linking}
       >
         <SafeAreaProvider >
           <CameraProvider>

@@ -1,11 +1,13 @@
 {
-  "title": "Charging session",
+  "title": "Charging Session",
   "charging-session-title_one": "Charging Session",
+  "charging-session-title_few": "Charging Sessions",
+  "charging-session-title_many": "Charging Sessions",
   "charging-session-title_other": "Charging Sessions",
   "end-session": "End Session",
   "write-to-support": "Contact Support",
-  "session-starting": "Session is about to start, preparing...",
-  "end-session-confirm-title": "End Charging?",
+  "session-starting": "Session starting soon, preparing...",
+  "end-session-confirm-title": "End charging?",
   "end-session-confirm-message": "Are you sure you want to end the current session?",
   "cancel-button": "Cancel",
   "confirm-button": "End",
@@ -13,6 +15,13 @@
   "battery-label": "Battery",
   "charged-label": "Charged",
   "time-label": "Time",
-  "kilowatt-hour": "kW·h",
-  "kilowatt": "kW"
+  "kilowatt-hour": "kWh",
+  "kilowatt": "kW",
+  "charging-complete": "Charging Complete!",
+  "thank-you-message": "Thank you for choosing BPS Energy",
+  "received": "Received",
+  "battery": "Battery",
+  "charging-time": "Charging Time",
+  "spent": "Spent",
+  "done": "Done"
 }
