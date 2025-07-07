@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { addEventListener as addNetworkEventListener } from '@react-native-community/netinfo'
 import Emittery from 'emittery'
 
@@ -9,8 +8,9 @@ import { AppServiceStatus, Events, EventsParams } from '@src/events'
 import { dispatchAuth } from '@src/providers/auth'
 import { AuthActionType } from '@src/providers/reducers/authReducer'
 import { CrashHandler } from '@src/utils/helpers/errors/CrashHandler';
+import { mmkvStorage } from '@src/utils/mmkv';
 
-const logger = (type: string, debugName: string, eventName?: string | symbol, eventData?: any) => {
+const logger = (type: string, debugName: string, eventName?: string | symbol, eventData?: unknown) => {
   const delimiter = ', '
   let eventDataStr = ''
   if (eventData) {
@@ -79,7 +79,7 @@ class App extends Emittery<EventsParams> {
   }
 
   logout = () => {
-    AsyncStorage.clear().catch((e) => console.log('async storage clear error: ', e))
+    mmkvStorage.clear()
     this.isFirebaseAuthorized = AppServiceStatus.off
     this.isAuthReady = AppServiceStatus.off
     this.isNavigationReady = AppServiceStatus.off

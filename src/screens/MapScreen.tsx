@@ -26,7 +26,7 @@ import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const { t } = useTranslation('errors');
-  const { isDarkTheme } = useAppColorTheme()
+  const { currentTheme } = useAppColorTheme()
   const [markers, setMarkers] = useState<LocationSummary[]>([]);
   const { insets } = useAppTheme();
 
@@ -79,7 +79,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
     <Box flex={1}>
       <ClusteredYamap
         clusterColor={'black'}
-        nightMode={isDarkTheme}
+        nightMode={currentTheme === 'dark'}
         showUserPosition
         rotateGesturesEnabled={false}
         clusteredMarkers={markers.map((location) => ({

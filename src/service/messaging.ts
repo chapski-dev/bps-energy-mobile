@@ -2,7 +2,6 @@ import { AppState, PermissionsAndroid, Platform } from 'react-native';
 import { NativeEventSubscription } from 'react-native/Libraries/EventEmitter/RCTNativeAppEventEmitter';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types.ts';
 import notifee, { AndroidImportance } from '@notifee/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
@@ -10,8 +9,9 @@ import messaging, {
 import { registerFCMToken } from '@src/api'
 import { isIOS } from '@src/misc/platform';
 import notifications from '@src/service/notifications';
+import { mmkvStorage } from '@src/utils/mmkv';
 import { AppStatus, getAppStatus } from '@src/utils/system';
-import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { STORAGE_KEYS } from '@src/utils/vars/storage_keys';
 import { vibrate } from '@src/utils/vibrate';
 
 
@@ -71,8 +71,8 @@ const messagingService = () => {
 
       await notifee.setBadgeCount(0);
 
-      const previousToken = await AsyncStorage.getItem(
-        ASYNC_STORAGE_KEYS.FCM_TOKEN_KEY,
+      const previousToken = mmkvStorage.get(
+        STORAGE_KEYS.FCM_TOKEN_KEY,
       );
 
       const token = await getFCMToken();
@@ -122,7 +122,7 @@ const messagingService = () => {
 
   const saveToken = async (token: string) => {
     await registerFCMToken(token)
-    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.FCM_TOKEN_KEY, token);
+    mmkvStorage.set(STORAGE_KEYS.FCM_TOKEN_KEY, token);
   };
 
   const togglePushNotifications = async (enable: boolean) => {
@@ -135,7 +135,7 @@ const messagingService = () => {
         }
       } else {
         await quitMessaging();
-        await AsyncStorage.removeItem(ASYNC_STORAGE_KEYS.FCM_TOKEN_KEY);
+        mmkvStorage.delete(STORAGE_KEYS.FCM_TOKEN_KEY);
       }
       _enabled = enable;
     } catch (error) {

@@ -1,11 +1,11 @@
 import Config from 'react-native-config';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { t } from 'i18next';
 
 import { dispatchLogout } from '@src/providers/auth';
-import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { mmkvStorage } from '@src/utils/mmkv';
+import { STORAGE_KEYS } from '@src/utils/vars/storage_keys';
 
 import { postRefreshToken } from './index';
 
@@ -24,7 +24,7 @@ axiosRetry(instance, {
 });
 
 const getStoredAccessToken = async () => {
-  const token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN);
+  const token = mmkvStorage.get(STORAGE_KEYS.ACCESS_TOKEN);
   return token ? token : undefined;
 };
 
@@ -45,16 +45,22 @@ const refreshTokenAndRetry = async (
   originalRequest: CustomAxiosRequestConfig
 ): Promise<AxiosResponse> => {
   try {
-    const refresh_token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN);
+    const refresh_token = mmkvStorage.get(STORAGE_KEYS.REFRESH_TOKEN);
+    if (!refresh_token) {
+      throw new Error('No refresh token available');
+    }
+    
     const { access_token, refresh_token: new_refresh_token } = await postRefreshToken({ refresh_token });
 
-    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token);
-    await AsyncStorage.setItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN, new_refresh_token);
+    mmkvStorage.set(STORAGE_KEYS.ACCESS_TOKEN, access_token);
+    mmkvStorage.set(STORAGE_KEYS.REFRESH_TOKEN, new_refresh_token);
 
     instance.defaults.headers.common.Authorization = `${access_token}`;
     notifySubscribers(access_token);
 
-    originalRequest.headers.Authorization = `${access_token}`;
+    if (originalRequest.headers) {
+      originalRequest.headers.Authorization = `${access_token}`;
+    }
     return instance(originalRequest);
   } catch (error) {
     dispatchLogout?.();
@@ -87,7 +93,9 @@ instance.interceptors.response.use(
         return new Promise((resolve, reject) => {
           addSubscriber(async (token: string) => {
             try {
-              originalRequest.headers.Authorization = `${token}`;
+              if (originalRequest.headers) {
+                originalRequest.headers.Authorization = `${token}`;
+              }
               resolve(await instance(originalRequest));
             } catch (err) {
               reject(err);

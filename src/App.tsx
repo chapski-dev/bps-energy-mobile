@@ -17,6 +17,7 @@ import { useAppColorTheme } from './hooks/useAppColorTheme';
 import { navigationRef } from './navigation/navigationRef';
 import { AuthProvider } from './providers/auth';
 import { CameraProvider } from './providers/camera';
+import { AppDarkTheme, AppLightTheme } from './theme/theme';
 import { ModalLayout } from './ui/Layouts/ModalLayout';
 import { CrashHandler } from './utils/helpers/errors/CrashHandler';
 import { NetworkStatusBar } from './widgets/NetworkStatusBar';
@@ -33,7 +34,11 @@ Geocoder.init(Config.GEOCODER_API_KEY);
 
 
 function App(): React.JSX.Element {
-  const { theme } = useAppColorTheme();
+  const { currentTheme } = useAppColorTheme();
+  
+  // Определяем тему для NavigationContainer
+  const theme = currentTheme === 'dark' ? AppDarkTheme : AppLightTheme;
+  
   return (
     <AuthProvider>
       <NavigationContainer

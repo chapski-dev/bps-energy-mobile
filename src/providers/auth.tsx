@@ -9,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { NavigationContainerRef } from '@react-navigation/native';
 import { useImmerReducer } from 'use-immer';
 
@@ -26,7 +25,8 @@ import {
 import app from '@src/service/app';
 import { CrashHandler } from '@src/utils/helpers/errors/CrashHandler';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
-import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { mmkvStorage } from '@src/utils/mmkv';
+import { STORAGE_KEYS } from '@src/utils/vars/storage_keys';
 import { vibrate } from '@src/utils/vibrate';
 
 export enum AuthState {
@@ -94,8 +94,8 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const checkAuthState = useCallback(async () => {
     try {
-      const accessToken = await AsyncStorage.getItem(
-        ASYNC_STORAGE_KEYS.ACCESS_TOKEN,
+      const accessToken = mmkvStorage.get(
+        STORAGE_KEYS.ACCESS_TOKEN,
       );
 
       if (!accessToken) {
@@ -120,11 +120,11 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
     async (data: SignInReq) => {
       authDispatch({ type: AuthActionType.setConnecting });
       const { access_token, refresh_token } = await api.postSignIn(data);
-      await AsyncStorage.multiSet([
-        [ASYNC_STORAGE_KEYS.ACCESS_TOKEN, access_token],
-        [ASYNC_STORAGE_KEYS.REFRESH_TOKEN, refresh_token],
-        [ASYNC_STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady],
-      ]);
+      
+      mmkvStorage.set(STORAGE_KEYS.ACCESS_TOKEN, access_token);
+      mmkvStorage.set(STORAGE_KEYS.REFRESH_TOKEN, refresh_token);
+      mmkvStorage.set(STORAGE_KEYS.AUTH_STATE, AuthActionType.setReady);
+      
       await getUserData();
 
       authDispatch({ type: AuthActionType.setReady });

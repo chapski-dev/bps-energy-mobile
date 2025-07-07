@@ -1,46 +1,45 @@
-import { useCallback, useMemo } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { AppDarkTheme, AppLightTheme } from '@src/theme/theme';
-import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { STORAGE_KEYS } from '@src/utils/vars/storage_keys';
 
-import { useCustomAsyncStorage } from './useAsyncStorage';
+import { useStorage } from './useStorage';
 
 export const useAppColorTheme = () => {
-  const [appThemeKey, setAppThemeKey] = useCustomAsyncStorage(ASYNC_STORAGE_KEYS.ThemeKey);
-  const deviceColorScheme = useColorScheme();
-  
-  // Вычисляем isDarkTheme на основе сохраненного значения или системной темы
-  const isDarkTheme = useMemo(() => {
-    // Если есть явно сохраненная тема - используем её
-    if (appThemeKey === 'dark') return true;
-    if (appThemeKey === 'light') return false;
-    
-    // Если тема не задана (null/undefined) - используем системную
-    return deviceColorScheme === 'dark';
-  }, [appThemeKey, deviceColorScheme]);
+  const [appThemeKey, setAppThemeKey, removeAppThemeKey] = useStorage(STORAGE_KEYS.ThemeKey);
+  const systemColorScheme = useColorScheme();
 
-  // Переключение темы с сохранением в AsyncStorage
-  const onChangeTheme = useCallback(() => {
-    const newTheme = isDarkTheme ? 'light' : 'dark';
-    setAppThemeKey(newTheme);
-  }, [isDarkTheme, setAppThemeKey]);
+  // Определяем текущую тему
+  const currentTheme = appThemeKey || systemColorScheme || 'light';
 
-  // Сброс темы к системной (удаляет из AsyncStorage)
-  const resetToSystemTheme = useCallback(() => {
-    setAppThemeKey(null); // или undefined, зависит от вашего useCustomAsyncStorage
-  }, [setAppThemeKey]);
-  
-  // Мемоизированный объект темы для NavigationContainer
-  const theme = useMemo(() => {
-    return isDarkTheme ? AppDarkTheme : AppLightTheme;
-  }, [isDarkTheme]);
-  
-  return { 
-    appThemeKey, 
-    isDarkTheme, 
-    onChangeTheme, 
+  // Функция для переключения темы
+  const toggleTheme = () => {
+    if (currentTheme === 'light') {
+      setAppThemeKey('dark');
+    } else {
+      setAppThemeKey('light');
+    }
+  };
+
+  // Переключение темы с сохранением в MMKV
+  const setDarkTheme = () => {
+    setAppThemeKey('dark');
+  };
+
+  const setLightTheme = () => {
+    setAppThemeKey('light');
+  };
+
+  // Сброс темы к системной (удаляет из MMKV)
+  const resetToSystemTheme = () => {
+    removeAppThemeKey();
+  };
+
+  return {
+    currentTheme,
+    isSystemTheme: !appThemeKey,
     resetToSystemTheme,
-    theme 
+    setDarkTheme,
+    setLightTheme,
+    toggleTheme,
   };
 };

@@ -13,7 +13,7 @@ import {
 import {
   AppLangEnum,
   LANGUAGE_LIST,
-  saveLanguageAsyncStorage,
+  saveLanguage,
 } from '@src/i18n/config';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Text } from '@src/ui';
@@ -38,7 +38,7 @@ const renderFlag = (type: AppLangEnum) => {
 }
 
 const ChangeLanguageModal = forwardRef<BottomSheetModal, ChangeLanguageModalProps>((
-  { modalClose }
+  { modalClose: _modalClose }
   , ref) => {
   const { colors, insets } = useAppTheme();
   const { t, i18n } = useTranslation('widgets', { keyPrefix: 'change-language-modal' });
@@ -46,7 +46,7 @@ const ChangeLanguageModal = forwardRef<BottomSheetModal, ChangeLanguageModalProp
   const handleChangeLanguage = (value: AppLangEnum) => async () => {
     try {
       await i18n.changeLanguage(value);
-      await saveLanguageAsyncStorage(value);
+      await saveLanguage(value);
     } catch (error) {
       handleCatchError(error)
     }

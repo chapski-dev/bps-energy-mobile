@@ -1,4 +1,4 @@
-export const ASYNC_STORAGE_KEYS = {
+export const STORAGE_KEYS = {
   ACCESS_TOKEN: '@auth/access_token',
   AUTH_STATE: '@app/auth_state',
   CURRENT_LANG: '@i18/current_language',

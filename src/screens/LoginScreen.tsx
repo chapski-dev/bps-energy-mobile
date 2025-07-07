@@ -36,7 +36,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
     },
     mode: 'all',
   });
-  const { onChangeTheme, isDarkTheme } = useAppColorTheme();
+  const { toggleTheme, currentTheme } = useAppColorTheme();
 
   const modal = useRef<BottomSheetModal>(null);
   const modalClose = () => modal?.current?.forceClose();
@@ -75,8 +75,8 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
         keyboardShouldPersistTaps="handled"
       >
         <Box row justifyContent='space-between' mt={insets.top + 22} mx={24}>
-          <Box onPress={onChangeTheme} >
-            {isDarkTheme ?
+          <Box onPress={toggleTheme} >
+            {currentTheme === 'dark' ?
               <SunIcon color={colors.grey_400} width={24} height={24} /> :
               <MoonIcon color={colors.grey_400} width={24} height={24} />}
           </Box>

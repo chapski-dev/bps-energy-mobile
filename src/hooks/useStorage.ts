@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export type AsyncStorageValue = string | null | undefined
+import { mmkvStorage } from '../utils/mmkv';
+
+export type StorageValue = string | null | undefined
 
 type cbType = (value: string | null) => void
 const subscribers = new Map<string, Set<cbType>>();
 
 export function createStorage(key: string) {
-  const getItem = () => AsyncStorage.getItem(key);
+  const getItem = () => Promise.resolve(mmkvStorage.get(key) ?? null);
   const setItem = async (value: string) => {
-    await AsyncStorage.setItem(key, value);
+    mmkvStorage.set(key, value);
     subscribers.get(key)?.forEach((cb) => cb(value));
   };
   const removeItem = async () => {
-    await AsyncStorage.removeItem(key);
+    mmkvStorage.delete(key);
     subscribers.get(key)?.forEach((cb) => cb(null));
   };
 
@@ -37,8 +38,8 @@ export function createStorage(key: string) {
 }
 
 /**
- * Provide asyncStorage value as reactive React state.
- * This hook not only creates value in asyncStorage, but creates react state, that is common for all places
+ * Provide MMKV storage value as reactive React state.
+ * This hook not only creates value in MMKV storage, but creates react state, that is common for all places
  * where we use this hook with the same key.
  * @param key unique string on which we store value
  * @returns [item, setItem, removeItem]
@@ -47,24 +48,24 @@ export function createStorage(key: string) {
  * - null if the storage don't have data on this key
  * - string if we have stored data
  */
-export function useCustomAsyncStorage(key: string) {
+export function useStorage(key: string) {
   const { getItem, setItem, removeItem, subscribe } = createStorage(key);
-  const [value, setValue] = useState<AsyncStorageValue>(undefined);
+  const [value, setValue] = useState<StorageValue>(undefined);
 
   useEffect(() => {
     getItem()
       .then((item) => {
         setValue(item);
       })
-      .catch((e) => console.error('AsyncStorage getItem error', e));
+      .catch((e) => console.error('MMKV getItem error', e));
     return subscribe((val) => setValue(val));
   }, [getItem, subscribe]);
 
-  return [value, setItem, removeItem] as [AsyncStorageValue, (val: string) => Promise<void>, () => Promise<void>];
+  return [value, setItem, removeItem] as [StorageValue, (val: string) => Promise<void>, () => Promise<void>];
 }
 
 export function useParsedStorage<T>(key: string) {
-  const [value, setItem, removeItem] = useCustomAsyncStorage(key);
+  const [value, setItem, removeItem] = useStorage(key);
 
   const json = useMemo(() => {
     if (value === null || value === undefined) {
@@ -80,4 +81,4 @@ export function useParsedStorage<T>(key: string) {
   const setValue = useCallback((v: T) => setItem(JSON.stringify(v)), [setItem]);
 
   return [json, setValue, removeItem] as const;
-}
+} 

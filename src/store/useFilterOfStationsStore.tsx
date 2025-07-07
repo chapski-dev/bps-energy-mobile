@@ -1,7 +1,8 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+
+import { zustandStorage } from '@src/utils/mmkv';
 
 interface ConnectorState {
   ccs: boolean;
@@ -70,7 +71,7 @@ export const useFilterStore = create<FilterStore>()(
     }),
     {
       name: 'filter-storage',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => zustandStorage),
     }
   )
 );

@@ -32,7 +32,7 @@ export enum NotifictationOption {
 
 export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
   const { colors } = useAppTheme();
-  const { onChangeTheme, isDarkTheme } = useAppColorTheme();
+  const { toggleTheme, currentTheme } = useAppColorTheme();
 
   const { t, i18n } = useTranslation('screens', { keyPrefix: 'profile-screen' })
   const openProfileData = () => navigation.navigate('profile-details');
@@ -73,8 +73,8 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         }}
       >
         <Box px={16}>
-          <Box onPress={onChangeTheme} alignItems='flex-end'>
-            {isDarkTheme ?
+          <Box onPress={toggleTheme} alignItems='flex-end'>
+            {currentTheme === 'dark' ?
               <SunIcon color={colors.text} width={24} height={24} /> :
               <MoonIcon color={colors.text} width={24} height={24} />}
           </Box>
