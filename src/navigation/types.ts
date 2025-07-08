@@ -22,7 +22,7 @@ export type RootStackParamList = {
   'change-password': undefined;
   'change-user-fields': { filed: 'name' | 'phone' };
   'charging-history': undefined;
-  'charging-details': undefined;
+  'charging-details': { session: import('../api/types').FinishedSession };
   'recharge-history': undefined;
   'recharge-transaction-detail': { transaction: Transaction };
   'notifications-settings': undefined;

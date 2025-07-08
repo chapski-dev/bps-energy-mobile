@@ -34,7 +34,7 @@ export const ImageProgress: React.FC<ImageProgressProps> = ({ uri,
     <ViewComponent style={[style, styles.loadingImageContainer, loaderIssueStyle]}>
       <View style={styles.loaderOverlay}>
         {loading && <ActivityIndicator size="large" />}
-        {error && <BrokenImageIcon style={{ alignSelf: 'center' }} />}
+        {error && <BrokenImageIcon style={{ alignSelf: 'center' }} color={colors.disabled} />}
       </View>
       {!error && (
         <ImageComponent

@@ -1,1 +1,11 @@
-{}
+{
+  "address-copied": "地址已复制",
+  "received": "已充电量",
+  "battery": "电池",
+  "charging-time": "充电时间",
+  "spent": "花费",
+  "tariff": "费率",
+  "connector": "连接器",
+  "session-id": "会话ID",
+  "route": "路线"
+}

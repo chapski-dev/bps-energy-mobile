@@ -6,6 +6,7 @@ import { AuthState, useAuth } from '@src/providers/auth';
 import AddingCardAndPaymentScreen from '@src/screens/AddingCardAndPaymentScreen';
 import ChangePasswordScreen from '@src/screens/ChangePasswordScreen';
 import ChangeUserFieldsScreen from '@src/screens/ChangeUserFieldsScreen';
+import ChargingDetailsScreen from '@src/screens/ChargingDetailsScreen';
 import ChargingHistoryScreen from '@src/screens/ChargingHistoryScreen';
 import CharginStationScreen from '@src/screens/CharginStationScreen';
 import FiltersOfStationsScreen from '@src/screens/FiltersOfStationsScreen';
@@ -173,6 +174,11 @@ export const RootStack = () => {
             options={{ title: t('charging-history-screen.title') }}
             name='charging-history'
             component={ChargingHistoryScreen}
+          />
+          <Stack.Screen
+            options={({ route }) => ({ title: parseDate(route.params.session.begin) })}
+            name='charging-details'
+            component={ChargingDetailsScreen}
           />
           <Stack.Screen
             options={{ title: t('recharge-history-screen.title') }}

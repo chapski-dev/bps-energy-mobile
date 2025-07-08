@@ -82,7 +82,7 @@ class CrashHandlerService {
       Sentry.init({
         dsn,
         sendDefaultPii: true, // Disable PII sending for privacy protection
-        debug: __DEV__,
+        debug: false,
         environment: __DEV__ ? 'development' : 'production',
         tracesSampleRate: __DEV__ ? 1.0 : 0.1,
         replaysSessionSampleRate: 0.1,

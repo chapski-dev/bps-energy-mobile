@@ -1,1 +1,11 @@
-{}
+{
+  "address-copied": "Адрес скопирован",
+  "received": "Получено",
+  "battery": "Батарея",
+  "charging-time": "Время зарядки",
+  "spent": "Потрачено",
+  "tariff": "Тариф",
+  "connector": "Коннектор",
+  "session-id": "ID Сессии",
+  "route": "Маршрут"
+}

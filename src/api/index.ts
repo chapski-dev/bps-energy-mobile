@@ -1,6 +1,8 @@
 import api from './config';
 import {
   ChangeUserFieldsReq,
+  FinishedSession,
+  FinishedSessionExpanded,
   LocationDetailsRes,
   LocationsRes,
   NotificationSettings,
@@ -145,6 +147,30 @@ export const updateUserProfile = (data: ChangeUserFieldsReq) =>
  */
 export const getCurrentChargingSessions = () =>
   api.get<SessionsRes>('/mobile/current-sessions').then((res) => res.data);
+
+/**
+ * Возвращает список завершенных сессий пользователя
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8/get_mobile_finished_sessions
+ */
+export const getFinishedChargingSessions = (params?:
+  Partial<{
+    date_begin: string,
+    date_end: string,
+    page: string,
+    limit: string
+  }>
+) =>
+  api.get<{ sessions: FinishedSession[] }>('/mobile/finished-sessions', {
+    params
+  }).then((res) => res.data);
+
+/**
+ * Возвращает конкретную завершенную сессию пользователя по ID
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A1%D0%B5%D1%81%D1%81%D0%B8%D0%B8/get_mobile_finished_sessions__session_id_
+ */
+export const getFinishedChargingSession = (session_id: string | number) =>
+  api.get<{ session: FinishedSessionExpanded }>(`/mobile/finished-sessions/${session_id}`)
+    .then((res) => res.data);
 
 /**
  * Запускает новую сессию зарядки по идентификатору коннектора

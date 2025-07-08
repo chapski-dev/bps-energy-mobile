@@ -1,1 +1,11 @@
-{}
+{
+  "address-copied": "Address copied",
+  "received": "Received",
+  "battery": "Battery",
+  "charging-time": "Charging time",
+  "spent": "Spent",
+  "tariff": "Tariff",
+  "connector": "Connector",
+  "session-id": "Session ID",
+  "route": "Route"
+}

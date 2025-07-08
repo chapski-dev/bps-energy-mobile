@@ -9,7 +9,6 @@ import sharedEn from '../en/shared.json';
 import addingCardAndPaymentScreenEn from '../en/screens/adding-card-and-payment-screen.json';
 import changePasswordScreenEn from '../en/screens/change-password-screen.json';
 import changeUserFieldsScreenEn from '../en/screens/change-user-fields-screen.json';
-import charginStationScreenEn from '../en/screens/chargin-station-screen.json';
 import chargingDetailsScreenEn from '../en/screens/charging-details-screen.json';
 import chargingHistoryScreenEn from '../en/screens/charging-history-screen.json';
 import chargingSessionScreenEn from '../en/screens/charging-session-screen.json';
@@ -27,6 +26,7 @@ import registrationScreenEn from '../en/screens/registration-screen.json';
 import setNewPasswordScreenEn from '../en/screens/set-new-password-screen.json';
 import supportServiceScreenEn from '../en/screens/support-service-screen.json';
 import topUpAccountScreenEn from '../en/screens/top-up-account-screen.json';
+import chargingStationScreenEn from '../en/screens/charging-station-screen.json';
 import userBalanceWidgetsEn from '../en/widgets/user-balance.json';
 import сhangeLanguageModalWidgetsEn from '../en/widgets/change-language-modal.json';
 import chargingStationPowerSliderWidgetsEn from '../en/widgets/charging-station-power-slider.json'
@@ -46,7 +46,6 @@ import sharedRu from '../ru/shared.json';
 import addingCardAndPaymentScreenRu from '../ru/screens/adding-card-and-payment-screen.json';
 import changePasswordScreenRu from '../ru/screens/change-password-screen.json';
 import changeUserFieldsScreenRu from '../ru/screens/change-user-fields-screen.json';
-import charginStationScreenRu from '../ru/screens/chargin-station-screen.json';
 import chargingDetailsScreenRu from '../ru/screens/charging-details-screen.json';
 import chargingHistoryScreenRu from '../ru/screens/charging-history-screen.json';
 import chargingSessionScreenRu from '../ru/screens/charging-session-screen.json';
@@ -64,6 +63,7 @@ import registrationScreenRu from '../ru/screens/registration-screen.json';
 import setNewPasswordScreenRu from '../ru/screens/set-new-password-screen.json';
 import supportServiceScreenRu from '../ru/screens/support-service-screen.json';
 import topUpAccountScreenRu from '../ru/screens/top-up-account-screen.json';
+import chargingStationScreenRu from '../ru/screens/charging-station-screen.json';
 import userBalanceWidgetsRu from '../ru/widgets/user-balance.json';
 import сhangeLanguageModalWidgetsRu from '../ru/widgets/change-language-modal.json';
 import chargingStationPowerSliderWidgetsRu from '../ru/widgets/charging-station-power-slider.json';
@@ -81,7 +81,6 @@ import sharedZh from '../zh/shared.json';
 import addingCardAndPaymentScreenZh from '../zh/screens/adding-card-and-payment-screen.json';
 import changePasswordScreenZh from '../zh/screens/change-password-screen.json';
 import changeUserFieldsScreenZh from '../zh/screens/change-user-fields-screen.json';
-import charginStationScreenZh from '../zh/screens/chargin-station-screen.json';
 import chargingDetailsScreenZh from '../zh/screens/charging-details-screen.json';
 import chargingHistoryScreenZh from '../zh/screens/charging-history-screen.json';
 import chargingSessionScreenZh from '../zh/screens/charging-session-screen.json';
@@ -99,6 +98,7 @@ import registrationScreenZh from '../zh/screens/registration-screen.json';
 import setNewPasswordScreenZh from '../zh/screens/set-new-password-screen.json';
 import supportServiceScreenZh from '../zh/screens/support-service-screen.json';
 import topUpAccountScreenZh from '../zh/screens/top-up-account-screen.json';
+import chargingStationScreenZh from '../zh/screens/charging-station-screen.json';
 import userBalanceWidgetsZh from '../zh/widgets/user-balance.json';
 import сhangeLanguageModalWidgetsZh from '../zh/widgets/change-language-modal.json';
 import chargingStationPowerSliderWidgetsZh from '../zh/widgets/charging-station-power-slider.json';
@@ -109,6 +109,7 @@ import deleteAccountModalWidgetZh from '../zh/widgets/delete-account-modal.json'
 import userCardsModalWidgetZh from '../zh/widgets/user-cards-modal.json';
 import stationPreviewModalWidgetZh from '../zh/widgets/station-preview-modal.json';
 
+export const defaultNS = 'shared';
 
 export const resources = {
   [AppLangEnum.EN]: {
@@ -119,10 +120,10 @@ export const resources = {
       'adding-card-and-payment-screen': addingCardAndPaymentScreenEn,
       'change-password-screen': changePasswordScreenEn,
       'change-user-fields-screen': changeUserFieldsScreenEn,
-      'chargin-station-screen': charginStationScreenEn,
       'charging-details-screen': chargingDetailsScreenEn,
       'charging-history-screen': chargingHistoryScreenEn,
       'charging-session-screen': chargingSessionScreenEn,
+      'charging-station-screen': chargingStationScreenEn,
       'filters-of-stations-screen': filtersOfStationsScreenEn,
       'forgot-password-screen': forgotPasswordScreenEn,
       'login-screen': loginScreenEn,
@@ -159,10 +160,10 @@ export const resources = {
       'adding-card-and-payment-screen': addingCardAndPaymentScreenRu,
       'change-password-screen': changePasswordScreenRu,
       'change-user-fields-screen': changeUserFieldsScreenRu,
-      'chargin-station-screen': charginStationScreenRu,
       'charging-details-screen': chargingDetailsScreenRu,
       'charging-history-screen': chargingHistoryScreenRu,
       'charging-session-screen': chargingSessionScreenRu,
+      'charging-station-screen': chargingStationScreenRu,
       'filters-of-stations-screen': filtersOfStationsScreenRu,
       'forgot-password-screen': forgotPasswordScreenRu,
       'login-screen': loginScreenRu,
@@ -200,10 +201,10 @@ export const resources = {
       'adding-card-and-payment-screen': addingCardAndPaymentScreenZh,
       'change-password-screen': changePasswordScreenZh,
       'change-user-fields-screen': changeUserFieldsScreenZh,
-      'chargin-station-screen': charginStationScreenZh,
       'charging-details-screen': chargingDetailsScreenZh,
       'charging-history-screen': chargingHistoryScreenZh,
       'charging-session-screen': chargingSessionScreenZh,
+      'charging-station-screen': chargingStationScreenZh,
       'filters-of-stations-screen': filtersOfStationsScreenZh,
       'forgot-password-screen': forgotPasswordScreenZh,
       'login-screen': loginScreenZh,

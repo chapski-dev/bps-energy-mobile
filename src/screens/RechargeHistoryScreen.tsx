@@ -8,6 +8,7 @@ import RuFlagIcon from '@assets/svg/flags/Russia.svg'
 import MagnifyingIcon from '@assets/svg/magnifying-glass-cross.svg'
 
 import { getTransactionsHistory } from '@src/api';
+import type { Transaction } from '@src/api/types';
 import i18n from '@src/i18n/config';
 import { isIOS } from '@src/misc/platform';
 import { ScreenProps } from '@src/navigation/types';
@@ -17,18 +18,6 @@ import { dateFormat } from '@src/utils/date-format';
 import { parseDate } from '@src/utils/parseDate';
 import { rechargingsSkeletonLayout } from '@src/utils/vars/skeletons';
 import { DatePeriodSelect, initialDates } from '@src/widgets/DatePeriodSelect';
-
-type Transaction = {
-  amount: number,
-  card_mask: string,
-  card_type: string,
-  date: string,
-  id: number,
-  rest_after: number,
-  rest_before: number,
-  state: string,
-  wallet_type: string
-}
 
 type SectionData = {
   title: string;
@@ -94,7 +83,7 @@ const mockTransactions: Transaction[] = Array.from({ length: 9 }).map((_, i) => 
     id: i,
     rest_after: 115,
     rest_before: 100,
-    state: 'completed',
+    state: 'successful',
     wallet_type: 'BY_WALLET'
   }
 ))

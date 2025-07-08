@@ -5,7 +5,7 @@ import i18n from 'i18next';
 
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
-import { resources } from './@types/resources';
+import { defaultNS,resources } from './@types/resources';
 import RNLanguageDetector from './LanguageDetector';
 
 export enum AppLangEnum {
@@ -13,8 +13,6 @@ export enum AppLangEnum {
   EN = 'en',
   ZH = 'zh',
 }
-
-export const defaultNS = 'shared';
 
 export const LANGUAGE_LIST = [
   {

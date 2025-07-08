@@ -97,6 +97,38 @@ export type SessionsRes = {
   sessions: Session[]
 }
 
+export interface FinishedSessionExpanded {
+  begin: string
+  charged_energy: number
+  connector_id: number
+  connector_type: string
+  duration: number
+  end: string
+  id: number
+  location_city: string
+  location_country: string
+  location_photo_url: string
+  location_street: string
+  owner: string
+  price_per_kwh: number
+  soc_begin: number
+  soc_end: number
+  total_price: number
+}
+
+export interface FinishedSession {
+  begin: string
+  charged_energy: number
+  end: string
+  id: number
+  location_city: string
+  location_country: string
+  location_photo_url: string
+  location_street: string
+  owner: string
+  total_price: number
+}
+
 // Базовый тип с обязательными полями
 export type BaseLocation = {
   city: string
