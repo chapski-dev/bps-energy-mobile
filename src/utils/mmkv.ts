@@ -1,12 +1,31 @@
 /* eslint-disable sort-keys-fix/sort-keys-fix */
+import { NativeModules,Platform } from 'react-native';
 import { MMKV } from 'react-native-mmkv';
+
+// Нативный модуль для исключения из iCloud бэкапов
+const { MMKVBackupExclusion } = NativeModules;
+
+// Функция для исключения файлов из iCloud бэкапов (iOS)
+const excludeFromBackup = async () => {
+  if (Platform.OS === 'ios' && MMKVBackupExclusion) {
+    try {
+      await MMKVBackupExclusion.excludeFromBackup();
+      console.log('MMKV: Successfully excluded from iCloud backup');
+    } catch (error) {
+      console.error('MMKV: Failed to exclude from iCloud backup:', error);
+    }
+  }
+};
 
 // Создаем основной экземпляр MMKV для приложения
 export const storage = new MMKV({
   id: 'bpsenergy-storage',
-  // Опционально можно добавить шифрование
-  // encryptionKey: 'your-encryption-key'
+  // Шифрование для дополнительной безопасности
+  encryptionKey: 'bpsenergy-secure-key-2024'
 });
+
+// Исключаем файл из iCloud бэкапов после создания
+excludeFromBackup();
 
 // Основные функции для работы с MMKV
 export const mmkvStorage = {

@@ -71,5 +71,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSURLIsExcludedFromBackupKey</key>
+	<true/>
 </dict>
 </plist>
