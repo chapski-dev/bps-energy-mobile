@@ -26,7 +26,7 @@ const navigationLift = () => {
   app.isNavigationReady = AppServiceStatus.on;
 };
 
-CrashHandler.init(Config.SENTRY_DNS)
+CrashHandler.init(Config.SENTRY_DSN)
 
 YaMap.init(Config.YA_MAP_API_KEY);
 Geocoder.init(Config.GEOCODER_API_KEY);
