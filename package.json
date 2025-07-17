@@ -7,7 +7,11 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "detox:build:android": "detox build --configuration android.emu.debug",
+    "detox:test:android": "detox test --configuration android.emu.debug --record-logs all",
+    "detox:build:ios": "detox build --configuration ios.sim.debug",
+    "detox:test:ios": "detox test --configuration ios.sim.debug"
   },
   "dependencies": {
     "@backpackapp-io/react-native-toast": "^0.14.0",
@@ -83,6 +87,7 @@
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.6.3",
     "babel-plugin-module-resolver": "^5.0.2",
+    "detox": "^20.40.2",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",

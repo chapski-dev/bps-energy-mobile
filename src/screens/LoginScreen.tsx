@@ -119,6 +119,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
                     importantForAutofill="yes"
                     onSubmitEditing={() => secInputRef?.current?.focus()}
                     icon={<EnvelopeIcon color={colors.grey_400} />}
+                    testID='email'
                   />
                 )}
               />
@@ -141,6 +142,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
                     autoComplete="password"
                     type='password'
                     icon={<LockIcon color={colors.grey_400} />}
+                    testID='password'
                   />
                 )}
               />
@@ -157,11 +159,13 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
               onPress={handleSubmit(handleLogIn)}
               loading={loading}
               disabled={loading}
+              testID='submit'
             />
             <Button
               type='outline'
               children={t('login-screen.create-account')}
               onPress={() => navigation.navigate('registration')}
+              testID='create-account'
             />
           </Box>
 
@@ -169,6 +173,7 @@ const LoginScreen = ({ navigation }: ScreenProps<'login'>) => {
             type="clear"
             children={t('login-screen.to-skip')}
             onPress={handleSkip}
+            testID='skip'
           />
         </Box>
       </KeyboardAwareScrollView>

@@ -85,6 +85,7 @@ export const Button: FC<PropsType> = ({
   textColor,
   borderColor,
   icon,
+  ...rest
 }) => {
   const { colors } = useAppTheme();
   const scaleValue = useRef(new Animated.Value(1)).current;
@@ -209,7 +210,7 @@ export const Button: FC<PropsType> = ({
   ), [_textColor, children, colors.background, colors.black, icon, loading, overlayOpacity, textStyle, type])
 
   return (
-    <View style={[styles.wrapper, wrapperStyle]}>
+    <View style={[styles.wrapper, wrapperStyle]} {...rest} testID='btn-container'>
       <Animated.View style={{ transform: [{ scale: scaleValue }], width: buttonWidth }}>
         {type === 'filled' ? (
           <Pressable
@@ -217,7 +218,9 @@ export const Button: FC<PropsType> = ({
             disabled={disabled || loading}
             onPress={onPress}
             onPressIn={handlePressIn}
-            onPressOut={handlePressOut}>
+            onPressOut={handlePressOut}
+            testID={rest.testID}
+          >
             {buttonContent}
           </Pressable>
         ) : (
@@ -228,7 +231,9 @@ export const Button: FC<PropsType> = ({
             disabled={disabled || loading}
             onPress={onPress}
             onPressIn={handlePressIn}
-            onPressOut={handlePressOut}>
+            onPressOut={handlePressOut}
+            testID={rest.testID}
+          >
             {buttonContent}
           </TouchableHighlight>
         )}
