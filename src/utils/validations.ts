@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 
 export const validator = {
   email(val: string) {
@@ -10,7 +11,7 @@ export const validator = {
     // password_does_not_meet_requirements
     // return regex.test(val);
     if (val.length < 6) {
-      return 'Длина пароля должна быть минимум 6 символов';
+      return i18n.t('errors:validations.password');
     }
     return true;
   },

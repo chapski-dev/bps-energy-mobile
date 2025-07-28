@@ -28,5 +28,8 @@
     "error-boundary-title": "哎呀！出现了问题",
     "error-boundary-message": "我们已记录此错误，正在修复中",
     "try-again": "重试"
+  },
+  "validations": {
+    "password": "密码长度必须至少6个字符。" 
   }
 }

@@ -28,5 +28,8 @@
     "error-boundary-title": "Oops! Something went wrong",
     "error-boundary-message": "We've recorded this error and are working on fixing it",
     "try-again": "Try again"
+  },
+  "validations": {
+    "password": "The password length must be at least 6 characters." 
   }
 }
