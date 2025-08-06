@@ -1,86 +1,97 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ClusteredYamap,
-  Marker,
-} from 'react-native-yamap';
+import { Linking } from 'react-native';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
+import { ClusteredYamap, Marker } from 'react-native-yamap';
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
+import BpsLogoLabelDefault from '@assets/svg/stations-map/bps-logo-label-default.svg';
+import DotDefault from '@assets/svg/stations-map/dot-default.svg';
 import { useNavigation } from '@react-navigation/native';
 import lodash from 'lodash';
 
-import { getLocationDetails, getLocations } from '@src/api';
+import { getLocations } from '@src/api';
 import { LocationSummary } from '@src/api/types';
 import { useAppColorTheme } from '@src/hooks/useAppColorTheme';
 import { ScreenProps } from '@src/navigation/types';
 import { AuthState, useAuth } from '@src/providers/auth';
-import { defaultState, useFilterStore } from '@src/store/useFilterOfStationsStore';
+import {
+  defaultState,
+  useFilterStore,
+} from '@src/store/useFilterOfStationsStore';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 import { getHighAccuracyPosition } from '@src/utils/helpers/get-current-geo-position';
-import { handleCatchError } from '@src/utils/helpers/handleCatchError';
+import { handleCatchError, toastError } from '@src/utils/helpers/handleCatchError';
+import { vibrate } from '@src/utils/vibrate';
 import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
+
+const HIDING_MARGIN = 20;
 
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
   const { t } = useTranslation('errors');
-  const { isDarkTheme } = useAppColorTheme()
+  const { isDarkTheme } = useAppColorTheme();
   const [markers, setMarkers] = useState<LocationSummary[]>([]);
   const { insets } = useAppTheme();
+  const { persisted } = useFilterStore();
 
-  const onStationPress = async (location: LocationSummary) => {
-    try {
-      const res = await getLocationDetails(location.id);
+  const onStationPress = (location: LocationSummary) => {
+    vibrate(HapticFeedbackTypes.impactMedium);
+    const Element = <StationPreviewModal location={location} />;
 
-      const Element = (
-        <StationPreviewModal location={res.location} />
-      );
-
-      modal().setupModal?.({
-        element: Element,
-        justifyContent: 'flex-start',
-        marginHorizontal: 12,
-        marginVertical: insets.top + 20,
-      });
-    } catch (error) {
-      handleCatchError(error)
-    }
-  }
+    modal().setupModal?.({
+      element: Element,
+      justifyContent: 'flex-start',
+      marginHorizontal: 12,
+      marginVertical: insets.top + 20,
+    });
+  };
 
   const getCurrentPosition = useCallback(async () => {
     try {
-      const point = await getHighAccuracyPosition()
-
+      const point = await getHighAccuracyPosition();
       mapRef.current?.setCenter(point, 16.5, undefined, undefined, 0.5, 0);
-
     } catch (error) {
-      handleCatchError(
+      toastError(
+        t('location-not-determined-check-settings'), {
+        onPress: () => Linking.openSettings()
+      })
+      console.error(
         t('location-not-determined-check-settings'),
-        'MapScreen - getCurrentPosition')
+        'MapScreen - getCurrentPosition',
+      );
     }
-  }, [t])
-
+  }, [t]);
 
   useLayoutEffect(() => {
-    getCurrentPosition()
-  }, [getCurrentPosition])
-
+    getCurrentPosition();
+  }, [getCurrentPosition]);
 
   useEffect(() => {
-    getLocations().then((r) => {
-      setMarkers(r.locations)
-    }).catch(handleCatchError)
-  }, [])
-
+    getLocations(persisted)
+      .then((r) => {
+        setMarkers(r.locations || []);
+      })
+      .catch(handleCatchError);
+  }, [persisted]);
 
   return (
-    <Box flex={1}>
+    <Box flex={1} mb={-HIDING_MARGIN}>
       <ClusteredYamap
         clusterColor={'black'}
         nightMode={isDarkTheme}
         showUserPosition
+        followUser={false}
         rotateGesturesEnabled={false}
         clusteredMarkers={markers.map((location) => ({
           data: location,
@@ -89,16 +100,18 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
         initialRegion={{ lat: 53.902284, lon: 27.561831 }}
         style={{ flex: 1 }}
         ref={mapRef}
+
         renderMarker={(info, index) => (
           <Marker
             onPress={() => onStationPress(info.data)}
             key={index}
             point={info.point}
-            source={info.data.owner === 'BPS Energy' ?
-              require('@assets/png/bps-logo-label-default.png') :
-              require('@assets/png/dot-default.png')
+            handled={false}
+            children={
+              info.data.owner === 'BPS Energy' ?
+                <BpsLogoLabelDefault /> :
+                <DotDefault />
             }
-            scale={0.6}
           />
         )}
       />
@@ -112,8 +125,8 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 const UserBalance = () => {
   const { insets, colors } = useAppTheme();
   const { authState, user } = useAuth();
-  const navigation = useNavigation()
-  const { t } = useTranslation(['widgets']);
+  const navigation = useNavigation();
+  const { t } = useTranslation('widgets');
 
   return authState === AuthState.ready ? (
     <Box
@@ -128,12 +141,23 @@ const UserBalance = () => {
       style={shadowStyle}
       effect="highlight"
       underlayColor={colors.grey_100}
-      onPress={() => navigation.navigate('top-up-account', { currency: 'BYN' })}
+      onPress={() => {
+        vibrate(HapticFeedbackTypes.impactLight);
+        navigation.navigate('top-up-account', { currency: 'BYN' });
+      }}
     >
       <>
-        <Text children={t('user-balance.current-balance')} fontSize={13} colorName="grey_600" />
-        <Box row gap={4} alignItems="center" justifyContent='flex-start'>
-          <Text children={`${user?.wallets[0].value} BYN`} fontWeight="600" fontSize={20} />
+        <Text
+          children={t('user-balance.current-balance')}
+          fontSize={13}
+          colorName="grey_600"
+        />
+        <Box row gap={4} alignItems="center" justifyContent="flex-start">
+          <Text
+            children={`${user?.wallets[0].value} BYN`}
+            fontWeight="600"
+            fontSize={20}
+          />
           <PlusCircleFillIcon color={colors.primary} width={20} height={20} />
         </Box>
       </>
@@ -146,12 +170,15 @@ const Filters = () => {
   const nav = useNavigation();
   const { persisted } = useFilterStore();
 
-  const isEqual = useMemo(() => lodash.isEqual(defaultState, persisted), [persisted])
+  const isEqual = useMemo(
+    () => lodash.isEqual(defaultState, persisted),
+    [persisted],
+  );
 
   return (
     <Box
       absolute
-      bottom={12}
+      bottom={12 + HIDING_MARGIN}
       left={12}
       borderRadius={8}
       backgroundColor={colors.card}
@@ -162,18 +189,23 @@ const Filters = () => {
       style={shadowStyle}
       effect="highlight"
       underlayColor={colors.grey_100}
-      onPress={() => nav.navigate('filters-of-stations')}
+      onPress={() => {
+        vibrate(HapticFeedbackTypes.impactLight);
+        nav.navigate('filters-of-stations');
+      }}
     >
       <>
-        {!isEqual && <Box
-          absolute
-          w={6}
-          h={6}
-          right={5}
-          top={5}
-          backgroundColor={colors.primary}
-          borderRadius={50}
-        />}
+        {!isEqual && (
+          <Box
+            absolute
+            w={6}
+            h={6}
+            right={5}
+            top={5}
+            backgroundColor={colors.primary}
+            borderRadius={50}
+          />
+        )}
         <Box flex={1} justifyContent="center" alignItems="center">
           <FiltersIcon color={colors.text} />
         </Box>
@@ -187,7 +219,7 @@ const UserLocation = ({ onPress }: { onPress: () => void }) => {
   return (
     <Box
       absolute
-      bottom={12}
+      bottom={12 + HIDING_MARGIN}
       right={12}
       borderRadius={8}
       backgroundColor={colors.card}
@@ -197,7 +229,10 @@ const UserLocation = ({ onPress }: { onPress: () => void }) => {
       h={48}
       justifyContent="center"
       alignItems="center"
-      onPress={onPress}
+      onPress={() => {
+        vibrate(HapticFeedbackTypes.impactLight);
+        onPress();
+      }}
       style={shadowStyle}
     >
       <NavigationArrowIcon color={colors.grey_700} />

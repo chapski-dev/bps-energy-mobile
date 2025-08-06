@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   Modal,
   StatusBar,
   StyleSheet,
@@ -78,7 +79,20 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
     if (visible && !hasPermission) {
       requestPermission().then(granted => {
         if (!granted) {
-          Alert.alert(t('error.camera-access'), t('error.camera-permission'));
+          Alert.alert(
+            t('error.camera-access'),
+            t('error.camera-permission'),
+            [
+              {
+                onPress: onClose,
+                style: 'cancel',
+                text: t('controls.cancel')
+              },
+              {
+                onPress: () => Linking.openSettings(),
+                text: t('permission.open-settings')
+              }
+            ]);
           onClose();
         }
       });
@@ -160,7 +174,7 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
             children={t('permission.request-button')}
             onPress={requestCamera}
             backgroundColor='white'
-            textColor='grey_800'
+            textColor='text'
           />
         </Box>
       </Modal>
@@ -176,7 +190,7 @@ const QrCodeScannerModal = ({ visible, onClose, onScan }: Props) => {
           alignItems='center'
           backgroundColor={colors.grey_800}
           gap={24}>
-          <Text children={t('error.camera-access')}colorName='white' variant='h4' />
+          <Text children={t('error.camera-access')} colorName='white' variant='h4' />
           <Button
             children={t('controls.close')}
             onPress={_handleClose}

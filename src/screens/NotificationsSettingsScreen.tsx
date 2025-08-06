@@ -1,42 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, StyleSheet, Switch } from 'react-native';
 
+import { getNotificationSettings, setNotificationSettings } from '@src/api';
 import { NotificationSettings } from '@src/api/types';
 import { useAppStateChangeWithCallbacks } from '@src/hooks/useAppStateChangeWithCallbacks';
 import { ScreenProps } from '@src/navigation/types';
 import messaging from '@src/service/messaging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
-import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 
 export enum NotifictationOption {
-  start_and_end_of_charging = 'start_and_end_of_charging',
+  start_stop = 'start_stop',
   balance_replenished = 'balance_replenished',
-  balance_less_than_3_byn = 'balance_less_than_3_byn',
+  small_balance = 'small_balance',
   push_notifications = 'push_notifications',
-  special_offers = 'special_offers'
+  special_offer = 'special_offer'
 }
 
 export default function NotificationsSettingsScreen({
   navigation
 }: ScreenProps<'notifications-settings'>) {
   const { colors, insets } = useAppTheme();
-  const { t } = useTranslation('screens', { keyPrefix: 'notifications-settings-screen'});
+  const { t } = useTranslation('screens', { keyPrefix: 'notifications-settings-screen' });
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
     defaultValues: {
       settings: {
-        [NotifictationOption.start_and_end_of_charging]: false,
+        [NotifictationOption.start_stop]: false,
         [NotifictationOption.push_notifications]: messaging.isEnabled(),
         [NotifictationOption.balance_replenished]: false,
-        [NotifictationOption.balance_less_than_3_byn]: false,
-        [NotifictationOption.special_offers]: false,
-      },
+        [NotifictationOption.small_balance]: false,
+        [NotifictationOption.special_offer]: false,
+      }
     },
   })
   const { setValue, getValues } = form
@@ -45,8 +45,7 @@ export default function NotificationsSettingsScreen({
   const handleSave = async (values: NotificationSettings['settings']) => {
     try {
       setLoading(true)
-      await wait(4500)
-      // Здесь будет логика сохранения настроек
+      await setNotificationSettings(values)
       setValue('settings', values)
     } catch (error) {
       handleCatchError(error)
@@ -80,6 +79,25 @@ export default function NotificationsSettingsScreen({
     }
   })
 
+  const refreshSettings = async () => {
+    try {
+      setLoading(true)
+      const settings = await getNotificationSettings()
+      console.log('settings ->', settings);
+      
+      const currentSettings = valuesWithPermission(settings)
+
+      setValue('settings', currentSettings)
+    } catch (e) {
+      handleCatchError(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    void refreshSettings()
+  }, [])
 
   return (
     <FormProvider {...form}>
@@ -95,7 +113,7 @@ export default function NotificationsSettingsScreen({
             <SettingRow
               title={t('options.start_and_end_of_charging')}
               onToggle={handleChangeSettings}
-              name={NotifictationOption.start_and_end_of_charging}
+              name={NotifictationOption.start_stop}
               disabled={loading}
             />
 
@@ -109,14 +127,14 @@ export default function NotificationsSettingsScreen({
             <SettingRow
               title={t('options.balance_less_than_3_byn')}
               onToggle={handleChangeSettings}
-              name={NotifictationOption.balance_less_than_3_byn}
+              name={NotifictationOption.small_balance}
               disabled={loading}
             />
 
             <SettingRow
               title={t('options.special_offers')}
               onToggle={handleChangeSettings}
-              name={NotifictationOption.special_offers}
+              name={NotifictationOption.special_offer}
               disabled={loading}
             />
           </Box>

@@ -21,7 +21,7 @@ async function onMessageReceived(
   console.log('message: ', message);
   
   // TODO check data compatibility
-  if (message.data?.eventType === 'new_order') {
+  if (message.data?.eventType === 'session_complite') {
     vibrate(HapticFeedbackTypes.notificationSuccess);
     void notifications.refresh();
   }

@@ -5,10 +5,12 @@ import Emittery from 'emittery'
 import { onAuthReady } from '@src/actions/onAuthReady';
 import { onFirebaseAuthorize } from '@src/actions/onFirebaseAuthorize';
 import { onNavigationReady } from '@src/actions/onNavigationReady'
+import { postLogout } from '@src/api';
 import { AppServiceStatus, Events, EventsParams } from '@src/events'
 import { dispatchAuth } from '@src/providers/auth'
 import { AuthActionType } from '@src/providers/reducers/authReducer'
 import { CrashHandler } from '@src/utils/helpers/errors/CrashHandler';
+import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
 const logger = (type: string, debugName: string, eventName?: string | symbol, eventData?: any) => {
   const delimiter = ', '
@@ -78,7 +80,9 @@ class App extends Emittery<EventsParams> {
     return this._isAuthReady
   }
 
-  logout = () => {
+  logout = async () => {
+    const refresh_token = await AsyncStorage.getItem(ASYNC_STORAGE_KEYS.REFRESH_TOKEN);
+    postLogout({ refresh_token })
     AsyncStorage.clear().catch((e) => console.log('async storage clear error: ', e))
     this.isFirebaseAuthorized = AppServiceStatus.off
     this.isAuthReady = AppServiceStatus.off

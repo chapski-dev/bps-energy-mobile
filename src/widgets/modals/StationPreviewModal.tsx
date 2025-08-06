@@ -9,6 +9,7 @@ import Type2Icon from '@assets/svg/connector/Type 2.svg';
 import XIcon from '@assets/svg/X.svg';
 import { useNavigation } from '@react-navigation/native';
 
+import { getLocationDetails } from '@src/api';
 import type { ConnectorGroup, ConnectorType, LocationSummary } from '@src/api/types';
 import { CopyToClipboard } from '@src/components/CopyToClipboard';
 import { useAppTheme } from '@src/theme/theme';
@@ -25,26 +26,35 @@ export const StationPreviewModal = ({ location }: {
 }) => {
   const { colors } = useAppTheme();
   const closeModal = () => modal()?.closeModal?.();
-  const [loading, setLoading] = useState(false);
+  const [loadingRoute, setLoadingRoute] = useState(false);
   const navigation = useNavigation();
   const { t } = useTranslation('widgets', { keyPrefix: 'station-preview-modal' })
-
-  const handleMoreDetails = () => {
-    closeModal();
-    navigation.preload('charging-station', { location })
-    navigation.navigate('charging-station', { location })
+  const [loading, setLoading] = useState(false);
+  
+  const handleMoreDetails = async () => {
+    try {
+      setLoading(true)
+      const res = await getLocationDetails(location.id);
+      closeModal();
+      navigation.preload('charging-station', { location: res.location })
+      navigation.navigate('charging-station', { location: res.location })
+    } catch (error) {
+      handleCatchError(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const openRoute = async () => {
     try {
-      setLoading(true);
+      setLoadingRoute(true);
       const userPoint = await getHighAccuracyPosition()
       openYandexMaps(userPoint, location.point)
 
     } catch (error) {
       handleCatchError(error, 'StationPreviewModal')
     } finally {
-      setLoading(false);
+      setLoadingRoute(false);
     }
   }
 
@@ -82,14 +92,16 @@ export const StationPreviewModal = ({ location }: {
           children={t('more-details')}
           borderColor='border'
           onPress={handleMoreDetails}
+          loading={loading}
+          disabled={loading}
         />
         <Button
           wrapperStyle={{ flex: 1 }}
           onPress={openRoute}
           children={t('route')}
           icon={<ShareIcon width={20} height={20} color={colors.white} />}
-          loading={loading}
-          disabled={loading}
+          loading={loadingRoute}
+          disabled={loadingRoute}
         />
       </Box>
     </Box>
