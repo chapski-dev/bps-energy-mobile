@@ -1,10 +1,11 @@
 import React from 'react';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import WarningCircleIcon from '@assets/svg/warning-circle.svg';
-import { toast, ToastPosition } from '@backpackapp-io/react-native-toast';
+import { toast, ToastOptions, ToastPosition } from '@backpackapp-io/react-native-toast';
 import { AxiosError } from 'axios';
 
 import i18n from '@src/i18n/config';
+import { BaseColors } from '@src/theme/colors';
 import { AppLightTheme } from '@src/theme/theme';
 
 import { vibrate } from '../vibrate';
@@ -15,14 +16,16 @@ interface ServerErrorResponse {
   error?: string;
 }
 
-const toastError = (message: string) => {
+export const toastError = (message: string, options?: ToastOptions) => {
   vibrate(HapticFeedbackTypes.notificationError);
   toast(message, {
     icon: <WarningCircleIcon color={AppLightTheme.colors.error_500} />,
     position: ToastPosition.TOP,
     styles: {
       pressable: { backgroundColor: AppLightTheme.colors.background },
+      text: { color: BaseColors.grey_800 },
     },
+    ...options
   });
 };
 
@@ -64,27 +67,27 @@ const isNetworkError = (error: unknown): boolean => {
   if (typeof error === 'string') {
     return error.toLowerCase().includes('network');
   }
-  
+
   if (error && typeof error === 'object' && 'message' in error) {
     const message = (error as Error).message?.toLowerCase() || '';
-    return message.includes('network') || 
-           message.includes('connection') || 
-           message.includes('timeout') ||
-           message.includes('econnrefused') ||
-           message.includes('enotfound');
+    return message.includes('network') ||
+      message.includes('connection') ||
+      message.includes('timeout') ||
+      message.includes('econnrefused') ||
+      message.includes('enotfound');
   }
-  
+
   return false;
 };
 
 export const handleCatchError = (
-  e: AxiosError | unknown | Error | string, 
+  e: AxiosError | unknown | Error | string,
   where: string = ''
 ): string | null => {
   console.error(`${where ? `[${where}]` : ''} Error:`, e);
-  
+
   let errorText: string | null = null;
-  
+
   try {
     // Проверяем сетевые ошибки в первую очередь
     if (isNetworkError(e)) {
@@ -92,14 +95,14 @@ export const handleCatchError = (
       toastError(errorText);
       return errorText;
     }
-    
+
     switch (true) {
       // Обработка AxiosError
       case e instanceof Error && 'response' in e && 'isAxiosError' in e: {
         const axiosError = e as AxiosError;
         const serverError = extractServerError(axiosError);
         const statusCode = axiosError.response?.status;
-        
+
         if (serverError) {
           errorText = serverError;
         } else if (statusCode) {
@@ -109,11 +112,11 @@ export const handleCatchError = (
         }
         break;
       }
-      
+
       // Обработка обычных Error объектов
       case e instanceof Error: {
         const error = e as Error;
-        
+
         if (error.message?.includes('Request failed with status code')) {
           const statusCode = extractStatusCode(error.message);
           if (statusCode) {
@@ -126,7 +129,7 @@ export const handleCatchError = (
         }
         break;
       }
-      
+
       // Обработка строковых ошибок
       case typeof e === 'string': {
         if (e.includes('Request failed with status code')) {
@@ -141,14 +144,14 @@ export const handleCatchError = (
         }
         break;
       }
-      
+
       // Обработка объектов с полем message
       case e && typeof e === 'object' && 'message' in e: {
         const objError = e as { message: string };
         errorText = objError.message || i18n.t('errors:unknown-error');
         break;
       }
-      
+
       // Fallback для неизвестных типов ошибок
       default: {
         errorText = i18n.t('errors:unknown-error');
@@ -156,12 +159,12 @@ export const handleCatchError = (
         break;
       }
     }
-    
+
     // Показываем toast только если есть текст ошибки и это не пустая строка
     if (errorText && errorText.trim()) {
       toastError(errorText);
     }
-    
+
   } catch (handlingError) {
     // Если произошла ошибка при обработке ошибки
     console.error('Error while handling error:', handlingError);
@@ -169,6 +172,6 @@ export const handleCatchError = (
     toastError(fallbackMessage);
     return fallbackMessage;
   }
-  
+
   return errorText;
 };
