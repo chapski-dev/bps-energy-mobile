@@ -6,7 +6,8 @@
   "permission": {
     "request-message": "Предоставьте доступ к камере чтобы продолжить",
     "request-button": "Предоставить",
-    "denied-message": "Не предоставлен доступ к камере"
+    "denied-message": "Не предоставлен доступ к камере",
+    "open-settings": "Открыть настройки"
   },
   "instructions": {
     "scan-message": "Отсканируй QR код что-бы начать зарядку"
@@ -14,6 +15,7 @@
   "controls": {
     "close": "Закрыть",
     "torch-on": "Включить",
-    "torch-off": "Выключить"
+    "torch-off": "Выключить",
+    "cancel": "Отменить"
   }
 }

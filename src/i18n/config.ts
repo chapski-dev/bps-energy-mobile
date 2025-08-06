@@ -5,8 +5,8 @@ import i18n from 'i18next';
 
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
-import { defaultNS,resources } from './@types/resources';
 import RNLanguageDetector from './LanguageDetector';
+import { defaultNS, resources } from './resources';
 
 export enum AppLangEnum {
   RU = 'ru',

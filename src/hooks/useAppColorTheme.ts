@@ -1,8 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { useColorScheme } from 'react-native';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 
 import { AppDarkTheme, AppLightTheme } from '@src/theme/theme';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
+import { vibrate } from '@src/utils/vibrate';
 
 import { useCustomAsyncStorage } from './useAsyncStorage';
 
@@ -24,6 +26,7 @@ export const useAppColorTheme = () => {
   const onChangeTheme = useCallback(() => {
     const newTheme = isDarkTheme ? 'light' : 'dark';
     setAppThemeKey(newTheme);
+    vibrate(HapticFeedbackTypes.impactLight)
   }, [isDarkTheme, setAppThemeKey]);
 
   // Сброс темы к системной (удаляет из AsyncStorage)

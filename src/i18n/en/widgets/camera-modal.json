@@ -6,7 +6,8 @@
   "permission": {
     "request-message": "Grant camera access to continue",
     "request-button": "Grant access",
-    "denied-message": "Camera access was denied"
+    "denied-message": "Camera access was denied",
+    "open-settings": "Open Settings"
   },
   "instructions": {
     "scan-message": "Scan QR code to start charging"
@@ -14,6 +15,7 @@
   "controls": {
     "close": "Close",
     "torch-on": "Turn on",
-    "torch-off": "Turn off"
+    "torch-off": "Turn off",
+    "cancel": "Cancel"
   }
 }
