@@ -18,7 +18,7 @@ import { Box, Button, Text } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { parseDate } from '@src/utils/parseDate';
-import { openTelegram } from '@src/utils/support/openTelegram';
+import { openSupportMessager } from '@src/utils/support/openSupportMessager';
 
 
 export default function ChargingSessionScreen({
@@ -33,9 +33,8 @@ export default function ChargingSessionScreen({
   const activeSession = sessions[activeIndex];
 
   const handleWriteToSupport = async () => {
-    const username = 'Alex_Poleshchuk';
     const message = 'Привет! У меня проблемы со станцией. Помогите';
-    openTelegram(username, message)
+    openSupportMessager({ text: message, variant: 'telegram' })
   };
 
   const nav = useTabNavigation();

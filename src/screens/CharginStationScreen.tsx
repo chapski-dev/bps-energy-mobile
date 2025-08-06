@@ -17,7 +17,7 @@ import { Box, Button, Text } from '@src/ui';
 import { getHighAccuracyPosition } from '@src/utils/helpers/get-current-geo-position';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { openYandexMaps } from '@src/utils/helpers/yandex-maps';
-import { openTelegram } from '@src/utils/support/openTelegram';
+import { openSupportMessager } from '@src/utils/support/openSupportMessager';
 import { CharginAccordion } from '@src/widgets/CharginAccrodion';
 import { Gallery } from '@src/widgets/Gallery';
 
@@ -55,9 +55,8 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
   }
 
   const handleWriteToSupport = async () => {
-    const username = 'Alex_Poleshchuk';
     const message = 'Привет! У меня проблемы со станцией. Помогите';
-    openTelegram(username, message)
+    openSupportMessager({ text: message, variant: 'telegram' })
   };
 
 
@@ -77,7 +76,10 @@ const CharginStationScreen: React.FC<ScreenProps<'charging-station'>> = ({ navig
           <Text variant="h1" children={route.params.location.owner} />
           <Box row gap={6}>
             <Text children={fullAdress} />
-            <CopyToClipboard value={fullAdress} message={t('charging-station-screen.address-copied') + '!'} />
+            <CopyToClipboard
+              value={fullAdress}
+              message={t('charging-station-screen.address-copied') + '!'}
+            />
           </Box>
         </Box>
 

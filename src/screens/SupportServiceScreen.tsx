@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ScreenProps } from '@src/navigation/types'
 import { Box } from '@src/ui'
 import { SectionListItemWithArrow } from '@src/ui/SectionListItemWithArrow'
+import { openSupportMessager } from '@src/utils/support/openSupportMessager'
 
 export default function SupportServiceScreen({
   navigation,
@@ -14,11 +15,11 @@ export default function SupportServiceScreen({
     <Box pt={15} px={16}>
       <SectionListItemWithArrow
         title={t('telegram')}
-        onPress={() => null}
+        onPress={() => openSupportMessager({ variant: 'telegram' })}
       />
       <SectionListItemWithArrow
         title={t('whatsapp')}
-        onPress={() => null}
+        onPress={() => openSupportMessager({ variant: 'whats-app' })}
       />
     </Box>
   )
