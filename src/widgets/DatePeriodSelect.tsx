@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-native-date-picker';
+import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
 import CaretDownIcon from '@assets/svg/caret-down-bold.svg';
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 
@@ -8,6 +9,7 @@ import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Button, Text } from '@src/ui';
 import { dateFormat } from '@src/utils/date-format';
 import { parseDate } from '@src/utils/parseDate';
+import { vibrate } from '@src/utils/vibrate';
 
 // Рассчитываем начальную дату как 31 день назад
 const initialStartDate = new Date();
@@ -42,6 +44,7 @@ export const DatePeriodSelect = ({ filterDates, onSubmit }: IDatePeriodSelect) =
   };
 
   const resetDates = () => {
+    vibrate(HapticFeedbackTypes.impactLight)
     setStartDate(start);
     setEndDate(today);
   };
