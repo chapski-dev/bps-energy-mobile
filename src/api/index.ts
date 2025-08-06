@@ -1,3 +1,5 @@
+import { FilterState } from '@src/store/useFilterOfStationsStore';
+
 import api from './config';
 import {
   ChangeUserFieldsReq,
@@ -30,6 +32,15 @@ export const postSignIn = (body: SignInReq) =>
 export const postSignUp = (body: RegistrationReq) =>
   api
     .post<RegistrationResponse>('/mobile/sign-up', body)
+    .then((res) => res.data);
+
+/**
+ * Удаление токенов пользователя для выхода из системы
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%90%D1%83%D1%82%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B8%20%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F/post_mobile_logout
+ */
+export const postLogout = (body: { refresh_token: string }) =>
+  api
+    .post<RegistrationResponse>('/mobile/logout', body)
     .then((res) => res.data);
 
 /**
@@ -191,8 +202,9 @@ export const postStopChargingSession = (data: { session_id: number }) =>
  * Возвращает список локаций с агрегированной информацией по коннекторам
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%9B%D0%BE%D0%BA%D0%B0%D1%86%D0%B8%D0%B8/get_mobile_locations
  */
-export const getLocations = () =>
-  api.get<LocationsRes>('/mobile/locations').then((res) => res.data);
+export const getLocations = (filters?: FilterState) =>
+  api.get<LocationsRes>(`/mobile/locations?filter=${JSON.stringify(filters)}`)
+    .then((res) => res.data);
 
 /**
  * Возвращает подробную информацию о локации по её идентификатору
@@ -207,15 +219,15 @@ export const getLocationDetails = (id: number) =>
  */
 export const getNotificationSettings = () =>
   api
-    .get<NotificationSettings>('/notification/settings')
+    .get<NotificationSettings['settings']>('/mobile/user-notifications')
     .then((res) => res.data);
 
 /**
  * Updates the notification settings for the authenticated user
  * */
-export const setNotificationSettings = (data: NotificationSettings) =>
+export const setNotificationSettings = (data: NotificationSettings['settings']) =>
   api
-    .put<NotificationSettings>('/notification/settings', data)
+    .put<NotificationSettings>('/mobile/user-notifications', data)
     .then((res) => res.data);
 
 //* Notification
@@ -223,6 +235,6 @@ export const setNotificationSettings = (data: NotificationSettings) =>
  * Registers a new Firebase Cloud Messaging token for push notifications
  */
 export const registerFCMToken = (token: string) =>
-  api.post('/api/v1/notifications/register', { token }).then((res) => res.data);
+  api.post('/mobile/fcm', { token }).then((res) => res.data);
 
 
