@@ -14,6 +14,7 @@ import UserIcon from '@assets/svg/user.svg'
 import WalletIcon from '@assets/svg/wallet.svg'
 import XIcon from '@assets/svg/X.svg'
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import RNRestart from 'react-native-restart';
 
 import { useAppColorTheme } from '@src/hooks/useAppColorTheme';
 import { ScreenProps } from '@src/navigation/types';
@@ -58,7 +59,10 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
       setRefreshing(false);
     }
   };
-
+  const _handleChangeTheme = async () => {
+    onChangeTheme()
+    RNRestart.restart()
+  }
   return (
     <>
       <ScrollView
@@ -73,7 +77,7 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         }}
       >
         <Box px={16}>
-          <Box onPress={onChangeTheme} alignItems='flex-end'>
+          <Box onPress={_handleChangeTheme} alignItems='flex-end'>
             {isDarkTheme ?
               <SunIcon color={colors.text} width={24} height={24} /> :
               <MoonIcon color={colors.text} width={24} height={24} />}
