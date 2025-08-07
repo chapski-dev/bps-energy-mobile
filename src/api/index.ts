@@ -151,6 +151,14 @@ export const getProfileData = () =>
 export const updateUserProfile = (data: ChangeUserFieldsReq) =>
   api.patch<object>('/mobile/user', data).then((res) => res.data);
 
+/**
+ * Удаляет аккаунт пользователя и все связанные данные
+ * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%90%D1%83%D1%82%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B8%20%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%86%D0%B8%D1%8F/delete_mobile_user
+ * @param No-parameters
+ * @returns Пустой обьект
+ */
+export const deleteUserProfile = () =>
+  api.delete<object>('/mobile/user').then((res) => res.data);
 
 /**
  * Возвращает список текущих сессий пользователя

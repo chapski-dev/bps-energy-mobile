@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
@@ -6,15 +6,26 @@ import { useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
+import * as api from '@src/api';
+import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 export const DeleteAccountModal = () => {
   const { colors } = useAppTheme();
   const { t } = useTranslation('widgets', { keyPrefix: 'delete-account-modal' });
   const { onLogout } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const handleRemoveAccount = () => {
-    modal()?.closeModal?.();
-    onLogout();
+  const handleRemoveAccount = async () => {
+    try {
+      setLoading(true)
+      await api.deleteUserProfile()
+      onLogout();
+      modal()?.closeModal?.();
+    } catch (error) {
+      handleCatchError(error);
+    } finally {
+      setLoading(false);
+    }
   };
   const closeModal = () => modal()?.closeModal?.();
 
@@ -35,6 +46,8 @@ export const DeleteAccountModal = () => {
         children={t('delete-account')}
         textColor="error_500"
         backgroundColor="error_500_15"
+        disabled={loading}
+        loading={loading}
       />
       <Button onPress={closeModal} children={t('cancel')} />
     </Box>
