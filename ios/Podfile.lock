@@ -1827,7 +1827,7 @@ PODS:
     - React-Core
   - RNYamap (4.8.3):
     - React
-    - YandexMapsMobile (= 4.8.0-full)
+    - YandexMapsMobile (= 4.19.0-full)
   - Sentry/HybridSDK (8.52.1)
   - SocketRocket (0.7.0)
   - VisionCamera (4.6.4):
@@ -1836,7 +1836,7 @@ PODS:
   - VisionCamera/Core (4.6.4)
   - VisionCamera/React (4.6.4):
     - React-Core
-  - YandexMapsMobile (4.8.0-full)
+  - YandexMapsMobile (4.19.0-full)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2121,9 +2121,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
+  boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
-  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
+  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: ee328dc37246cbe6d45ae4472951c0ca0dd6ffbf
   Firebase: 6a8f201c61eda24e98f1ce2b44b1b9c2caf525cc
   FirebaseCore: 2321536f9c423b1f857e047a82b8a42abc6d9e2c
@@ -2132,7 +2132,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 781e0e37aa0e1c92b44d00e739aba79ad31b2dba
   FirebaseMessaging: c7be9357fd8ba33bc45b9a6c3cdff0b466e1e2a4
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
+  glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   hermes-engine: c9fe5870af65876125fdbbf833071b6f329db30d
@@ -2214,11 +2214,11 @@ SPEC CHECKSUMS:
   RNScreens: adea7e5059df296816014c8a5b2ea0be07c21b51
   RNSentry: 8b841faed40382aa9cab91acc4d1d4b203746e6a
   RNSVG: e3ad69848b6357587545e0a49628b1148acf082c
-  RNYamap: e9e022763db4b546333d68af89f93d3313d028dd
+  RNYamap: 4cbe210280f95d9dd167556bdac26c3ca5d95da8
   Sentry: 2cbbe3592f30050c60e916c63c7f5a2fa584005e
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   VisionCamera: f56eaedde0d3fa095143b78374d29e89e71735f9
-  YandexMapsMobile: 576340ead47bb112b6387eac1e605cfe7565c162
+  YandexMapsMobile: ed53491b09b8cef902329191a65db46e6ab47a12
   Yoga: 929fa3162dc47b68bdbd4b7b794b6353ef9b53c5
 
 PODFILE CHECKSUM: 23bf5cd59f6b7cf61bafb79ab9fb7cdfe4600523

@@ -1,0 +1,247 @@
+diff --git a/node_modules/react-native-yamap/RNYamap.podspec b/node_modules/react-native-yamap/RNYamap.podspec
+index 571f8d2..12ff472 100644
+--- a/node_modules/react-native-yamap/RNYamap.podspec
++++ b/node_modules/react-native-yamap/RNYamap.podspec
+@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
+     # s.requires_arc = true
+ 
+     s.dependency "React"
+-    s.dependency "YandexMapsMobile", "4.8.0-full"
++    s.dependency "YandexMapsMobile", "4.19.0-full"
+ end
+diff --git a/node_modules/react-native-yamap/android/build.gradle b/node_modules/react-native-yamap/android/build.gradle
+index d9de295..b17a8c6 100644
+--- a/node_modules/react-native-yamap/android/build.gradle
++++ b/node_modules/react-native-yamap/android/build.gradle
+@@ -9,6 +9,12 @@ buildscript {
+ apply plugin: 'com.android.library'
+ apply plugin: 'org.jetbrains.kotlin.android'
+ 
++def safeExtGet(prop, fallback) {
++  rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
++}
++
++def GOOGLE_PLAY_SERVICES_LOCATION_VERSION = safeExtGet('playServicesLocationVersion', "+")
++
+ android {
+ 
+     defaultConfig {
+@@ -31,8 +37,8 @@ repositories {
+ }
+ 
+ dependencies {
+-    implementation 'com.google.android.gms:play-services-location:+'
++    implementation 'com.google.android.gms:play-services-location:$GOOGLE_PLAY_SERVICES_LOCATION_VERSION'
+     implementation 'com.facebook.react:react-native:+'
+-    implementation 'com.yandex.android:maps.mobile:4.8.0-full'
++    implementation 'com.yandex.android:maps.mobile:4.19.0-full'
+     implementation 'androidx.core:core-ktx:1.13.1'
+ }
+diff --git a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/ClusteredYamapViewManager.kt b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/ClusteredYamapViewManager.kt
+index 54d8a0f..3223543 100644
+--- a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/ClusteredYamapViewManager.kt
++++ b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/ClusteredYamapViewManager.kt
+@@ -128,7 +128,7 @@ class ClusteredYamapViewManager internal constructor() : ViewGroupManager<Cluste
+             }
+ 
+             "findRoutes" -> if (args != null) {
+-                findRoutes(view, args.getArray(0), args.getArray(1), args.getString(2))
++                findRoutes(view, args.getArray(0), args.getArray(1), args.getString(2)!!)
+             }
+ 
+             "setZoom" -> if (args != null) {
+@@ -152,11 +152,11 @@ class ClusteredYamapViewManager internal constructor() : ViewGroupManager<Cluste
+             }
+ 
+             "getScreenPoints" -> if (args != null) {
+-                view.emitWorldToScreenPoints(args.getArray(0), args.getString(1))
++                view.emitWorldToScreenPoints(args.getArray(0)!!, args.getString(1))
+             }
+ 
+             "getWorldPoints" -> if (args != null) {
+-                view.emitScreenToWorldPoints(args.getArray(0), args.getString(1))
++                view.emitScreenToWorldPoints(args.getArray(0)!!, args.getString(1))
+             }
+ 
+             else -> throw IllegalArgumentException(
+@@ -171,7 +171,7 @@ class ClusteredYamapViewManager internal constructor() : ViewGroupManager<Cluste
+ 
+     @ReactProp(name = "clusteredMarkers")
+     fun setClusteredMarkers(view: View, points: ReadableArray) {
+-        castToYaMapView(view).setClusteredMarkers(points.toArrayList())
++        castToYaMapView(view).setClusteredMarkers(points.toArrayList().filterNotNull() as ArrayList<Any>)
+     }
+ 
+     @ReactProp(name = "clusterColor")
+@@ -243,7 +243,7 @@ class ClusteredYamapViewManager internal constructor() : ViewGroupManager<Cluste
+             val vehicles = ArrayList<String>()
+             if (jsVehicles != null) {
+                 for (i in 0 until jsVehicles.size()) {
+-                    vehicles.add(jsVehicles.getString(i))
++                    vehicles.add(jsVehicles.getString(i)!!)
+                 }
+             }
+             castToYaMapView(view).findRoutes(points, vehicles, id)
+diff --git a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapMarkerManager.kt b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapMarkerManager.kt
+index e32d22c..eedb2d5 100644
+--- a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapMarkerManager.kt
++++ b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapMarkerManager.kt
+@@ -107,7 +107,7 @@ class YamapMarkerManager internal constructor() : ViewGroupManager<YamapMarker>(
+     ) {
+         when (commandType) {
+             "animatedMoveTo" -> {
+-                val markerPoint = args!!.getMap(0)
++                val markerPoint = args!!.getMap(0)!!
+                 val moveDuration = args.getInt(1)
+                 val lon = markerPoint.getDouble("lon").toFloat()
+                 val lat = markerPoint.getDouble("lat").toFloat()
+diff --git a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapViewManager.kt b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapViewManager.kt
+index 8b05905..229c007 100644
+--- a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapViewManager.kt
++++ b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/YamapViewManager.kt
+@@ -128,7 +128,7 @@ class YamapViewManager internal constructor() : ViewGroupManager<YamapView>() {
+             }
+ 
+             "findRoutes" -> if (args != null) {
+-                findRoutes(view, args.getArray(0), args.getArray(1), args.getString(2))
++                findRoutes(view, args.getArray(0), args.getArray(1), args.getString(2)!!)
+             }
+ 
+             "setZoom" -> if (args != null) {
+@@ -152,11 +152,11 @@ class YamapViewManager internal constructor() : ViewGroupManager<YamapView>() {
+             }
+ 
+             "getScreenPoints" -> if (args != null) {
+-                view.emitWorldToScreenPoints(args.getArray(0), args.getString(1))
++                view.emitWorldToScreenPoints(args.getArray(0)!!, args.getString(1))
+             }
+ 
+             "getWorldPoints" -> if (args != null) {
+-                view.emitScreenToWorldPoints(args.getArray(0), args.getString(1))
++                view.emitScreenToWorldPoints(args.getArray(0)!!, args.getString(1))
+             }
+ 
+             else -> throw IllegalArgumentException(
+@@ -237,7 +237,7 @@ class YamapViewManager internal constructor() : ViewGroupManager<YamapView>() {
+ 
+             if (jsVehicles != null) {
+                 for (i in 0 until jsVehicles.size()) {
+-                    vehicles.add(jsVehicles.getString(i))
++                    vehicles.add(jsVehicles.getString(i)!!)
+                 }
+             }
+ 
+diff --git a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/view/YamapView.kt b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/view/YamapView.kt
+index 48c1cdf..11597f6 100644
+--- a/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/view/YamapView.kt
++++ b/node_modules/react-native-yamap/android/src/main/java/ru/vvdev/yamap/view/YamapView.kt
+@@ -84,7 +84,7 @@ open class YamapView(context: Context?) : MapView(context), UserLocationObjectLi
+     private var userLocationIconScale = 1f
+     private var userLocationBitmap: Bitmap? = null
+     private val routeMng = RouteManager()
+-    private var routeOptions: RouteOptions = RouteOptions(FitnessOptions(false))
++    private var routeOptions: RouteOptions = RouteOptions(FitnessOptions())
+     private val masstransitRouter = TransportFactory.getInstance().createMasstransitRouter()
+     private val drivingRouter: DrivingRouter
+     private val pedestrianRouter = TransportFactory.getInstance().createPedestrianRouter()
+@@ -225,7 +225,7 @@ open class YamapView(context: Context?) : MapView(context), UserLocationObjectLi
+         val screenPoints = Arguments.createArray()
+ 
+         for (i in 0 until worldPoints.size()) {
+-            val p = worldPoints.getMap(i)
++            val p = worldPoints.getMap(i)!!
+             val worldPoint = Point(p.getDouble("lat"), p.getDouble("lon"))
+             val screenPoint = mapWindow.worldToScreen(worldPoint)
+             screenPoints.pushMap(screenPointToJSON(screenPoint))
+@@ -244,7 +244,7 @@ open class YamapView(context: Context?) : MapView(context), UserLocationObjectLi
+         val worldPoints = Arguments.createArray()
+ 
+         for (i in 0 until screenPoints.size()) {
+-            val p = screenPoints.getMap(i)
++            val p = screenPoints.getMap(i)!!
+             val screenPoint = ScreenPoint(p.getDouble("x").toFloat(), p.getDouble("y").toFloat())
+             val worldPoint = mapWindow.screenToWorld(screenPoint)
+             worldPoints.pushMap(worldPointToJSON(worldPoint))
+@@ -295,7 +295,7 @@ open class YamapView(context: Context?) : MapView(context), UserLocationObjectLi
+             val _points = ArrayList<RequestPoint>()
+             for (i in points.indices) {
+                 val point = points[i]
+-                val _p = RequestPoint(point!!, RequestPointType.WAYPOINT, null, null)
++                val _p = RequestPoint(point!!, RequestPointType.WAYPOINT, null, null, null)
+                 _points.add(_p)
+             }
+ 
+@@ -310,7 +310,7 @@ open class YamapView(context: Context?) : MapView(context), UserLocationObjectLi
+         val _points = ArrayList<RequestPoint>()
+         for (i in points.indices) {
+             val point = points[i]
+-            _points.add(RequestPoint(point!!, RequestPointType.WAYPOINT, null, null))
++            _points.add(RequestPoint(point!!, RequestPointType.WAYPOINT, null, null, null))
+         }
+         val listener: Session.RouteListener = object : Session.RouteListener {
+             override fun onMasstransitRoutes(routes: List<Route>) {
+@@ -590,10 +590,10 @@ open class YamapView(context: Context?) : MapView(context), UserLocationObjectLi
+         if (show) {
+             userLocationLayer!!.setObjectListener(this)
+             userLocationLayer!!.isVisible = true
+-            userLocationLayer!!.isHeadingEnabled = true
++            userLocationLayer!!.isHeadingModeActive = true
+         } else {
+             userLocationLayer!!.isVisible = false
+-            userLocationLayer!!.isHeadingEnabled = false
++            userLocationLayer!!.isHeadingModeActive = false
+             userLocationLayer!!.setObjectListener(null)
+         }
+     }
+diff --git a/node_modules/react-native-yamap/ios/ClusteredYamapView.m b/node_modules/react-native-yamap/ios/ClusteredYamapView.m
+index ce9fd1e..c3ccb15 100644
+--- a/node_modules/react-native-yamap/ios/ClusteredYamapView.m
++++ b/node_modules/react-native-yamap/ios/ClusteredYamapView.m
+@@ -186,7 +186,7 @@ RCT_EXPORT_METHOD(findRoutes:(nonnull NSNumber*) reactTag json:(NSDictionary*) j
+         NSArray<YMKPoint*>* points = [RCTConvert Points:json[@"points"]];
+         NSMutableArray<YMKRequestPoint*>* requestPoints = [[NSMutableArray alloc] init];
+         for (int i = 0; i < [points count]; ++i) {
+-            YMKRequestPoint * requestPoint = [YMKRequestPoint requestPointWithPoint:[points objectAtIndex:i] type: YMKRequestPointTypeWaypoint pointContext:nil drivingArrivalPointId:nil];
++            YMKRequestPoint * requestPoint = [YMKRequestPoint requestPointWithPoint:[points objectAtIndex:i] type: YMKRequestPointTypeWaypoint pointContext:nil drivingArrivalPointId:nil indoorLevelId:nil];
+             [requestPoints addObject:requestPoint];
+         }
+         NSArray<NSString*>* vehicles = [RCTConvert Vehicles:json[@"vehicles"]];
+diff --git a/node_modules/react-native-yamap/ios/View/RNYMView.m b/node_modules/react-native-yamap/ios/View/RNYMView.m
+index 70691f8..0fe59a3 100644
+--- a/node_modules/react-native-yamap/ios/View/RNYMView.m
++++ b/node_modules/react-native-yamap/ios/View/RNYMView.m
+@@ -64,7 +64,7 @@
+     drivingRouter = [[YMKDirectionsFactory instance] createDrivingRouterWithType:YMKDrivingRouterTypeOnline];
+     pedestrianRouter = [[YMKTransportFactory instance] createPedestrianRouter];
+     transitOptions = [YMKTransitOptions transitOptionsWithAvoid:YMKFilterVehicleTypesNone timeOptions:[[YMKTimeOptions alloc] init]];    acceptVehicleTypes = [[NSMutableArray<NSString *> alloc] init];
+-    routeOptions = [YMKRouteOptions routeOptionsWithFitnessOptions:[YMKFitnessOptions fitnessOptionsWithAvoidSteep:false]];
++    routeOptions = [YMKRouteOptions routeOptionsWithFitnessOptions:[YMKFitnessOptions fitnessOptionsWithAvoidSteep:false avoidStairs:false]];
+     routes = [[NSMutableArray alloc] init];
+     currentRouteInfo = [[NSMutableArray alloc] init];
+     lastKnownRoutePoints = [[NSMutableArray alloc] init];
+diff --git a/node_modules/react-native-yamap/ios/YamapSuggests.swift b/node_modules/react-native-yamap/ios/YamapSuggests.swift
+index a82666c..d2d289d 100644
+--- a/node_modules/react-native-yamap/ios/YamapSuggests.swift
++++ b/node_modules/react-native-yamap/ios/YamapSuggests.swift
+@@ -131,7 +131,7 @@ class YamapSuggests: NSObject {
+ 
+         if let userPosition = options["userPosition"] as? [String: Any] {
+             do {
+-                if let userPoint = try mapPoint(fromDictionary: userPosition, withKey: "userPosition") {
++                if let userPoint = try mapPoint(fromDictionary: options, withKey: "userPosition") {
+                     opt.userPosition = userPoint
+                 }
+             } catch {
+diff --git a/node_modules/react-native-yamap/ios/YamapView.m b/node_modules/react-native-yamap/ios/YamapView.m
+index d9ebae4..e4ddc1b 100644
+--- a/node_modules/react-native-yamap/ios/YamapView.m
++++ b/node_modules/react-native-yamap/ios/YamapView.m
+@@ -212,7 +212,7 @@ RCT_EXPORT_METHOD(findRoutes:(nonnull NSNumber *)reactTag json:(NSDictionary *)j
+         NSMutableArray<YMKRequestPoint *> *requestPoints = [[NSMutableArray alloc] init];
+ 
+         for (int i = 0; i < [points count]; ++i) {
+-            YMKRequestPoint *requestPoint = [YMKRequestPoint requestPointWithPoint:[points objectAtIndex:i] type:YMKRequestPointTypeWaypoint pointContext:nil drivingArrivalPointId:nil];
++            YMKRequestPoint *requestPoint = [YMKRequestPoint requestPointWithPoint:[points objectAtIndex:i] type:YMKRequestPointTypeWaypoint pointContext:nil drivingArrivalPointId:nil indoorLevelId:nil];
+             [requestPoints addObject:requestPoint];
+         }
+ 
