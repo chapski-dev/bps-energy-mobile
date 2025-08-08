@@ -1,4 +1,5 @@
 import React, {
+  ReactNode,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -9,10 +10,13 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import { Linking } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
-import { ClusteredYamap, Marker } from 'react-native-yamap';
+import { CameraPosition, ClusteredYamap, Marker } from 'react-native-yamap';
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
+import PlusIcon from '@assets/svg/plus.svg';
+import MinusIcon from '@assets/svg/minus.svg';
+
 import BpsLogoLabelDefault from '@assets/svg/stations-map/bps-logo-label-default.svg';
 import DotDefault from '@assets/svg/stations-map/dot-default.svg';
 import { useNavigation } from '@react-navigation/native';
@@ -117,6 +121,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
       />
       <UserBalance />
       <Filters />
+      <ZoomButtons mapRef={mapRef} />
       <UserLocation onPress={getCurrentPosition} />
     </Box>
   );
@@ -128,19 +133,11 @@ const UserBalance = () => {
   const navigation = useNavigation();
   const { t } = useTranslation('widgets');
 
-  return authState === AuthState.ready ? (
-    <Box
-      absolute
-      top={insets.top + 8}
-      left={12}
-      borderRadius={8}
-      backgroundColor={colors.card}
-      px={12}
-      py={8}
-      gap={2}
-      style={shadowStyle}
-      effect="highlight"
-      underlayColor={colors.grey_100}
+  if (authState !== AuthState.ready) return null;
+
+  return (
+    <FloatingCard
+      position={{ top: insets.top + 8, left: 12 }}
       onPress={() => {
         vibrate(HapticFeedbackTypes.impactLight);
         navigation.navigate('top-up-account', { currency: 'BYN' });
@@ -161,8 +158,8 @@ const UserBalance = () => {
           <PlusCircleFillIcon color={colors.primary} width={20} height={20} />
         </Box>
       </>
-    </Box>
-  ) : null;
+    </FloatingCard>
+  );
 };
 
 const Filters = () => {
@@ -176,23 +173,15 @@ const Filters = () => {
   );
 
   return (
-    <Box
-      absolute
-      bottom={12 + HIDING_MARGIN}
-      left={12}
-      borderRadius={8}
-      backgroundColor={colors.card}
-      px={12}
-      py={8}
-      w={48}
-      h={48}
-      style={shadowStyle}
-      effect="highlight"
-      underlayColor={colors.grey_100}
+    <FloatingCard
+      position={{ bottom: 12 + HIDING_MARGIN, left: 12 }}
+      size={{ width: 48, height: 48 }}
       onPress={() => {
         vibrate(HapticFeedbackTypes.impactLight);
         nav.navigate('filters-of-stations');
       }}
+      alignItems="center"
+      justifyContent="center"
     >
       <>
         {!isEqual && (
@@ -206,38 +195,107 @@ const Filters = () => {
             borderRadius={50}
           />
         )}
-        <Box flex={1} justifyContent="center" alignItems="center">
-          <FiltersIcon color={colors.text} />
-        </Box>
+        <FiltersIcon color={colors.text} />
       </>
-    </Box>
+    </FloatingCard>
   );
 };
 
+
 const UserLocation = ({ onPress }: { onPress: () => void }) => {
   const { colors } = useAppTheme();
+
   return (
-    <Box
-      absolute
-      bottom={12 + HIDING_MARGIN}
-      right={12}
-      borderRadius={8}
-      backgroundColor={colors.card}
-      px={12}
-      py={8}
-      w={48}
-      h={48}
-      justifyContent="center"
-      alignItems="center"
+    <FloatingCard
+      position={{ bottom: 12 + HIDING_MARGIN, right: 12 }}
+      size={{ width: 48, height: 48 }}
       onPress={() => {
         vibrate(HapticFeedbackTypes.impactLight);
         onPress();
       }}
-      style={shadowStyle}
+      alignItems="center"
+      justifyContent="center"
     >
       <NavigationArrowIcon color={colors.grey_700} />
-    </Box>
+    </FloatingCard>
   );
+};
+
+type ZoomButtonsProps = {
+  mapRef: React.RefObject<ClusteredYamap>;
+}
+const ZoomButtons = ({
+  mapRef,
+}: ZoomButtonsProps) => {
+  const { colors } = useAppTheme();
+
+  const getCameraPosition = () => {
+    return new Promise<CameraPosition>((resolve) => {
+      if (mapRef.current) {
+        mapRef.current.getCameraPosition((position) => {
+          resolve(position);
+        });
+      }
+    });
+  }
+  const zoomUp = async () => {
+    const position = await getCameraPosition()
+    if (mapRef.current) {
+      mapRef.current.setZoom(position.zoom * 1.1, 0.2);
+    }
+  };
+
+  const zoomDown = async () => {
+    const position = await getCameraPosition();
+    if (mapRef.current) {
+      mapRef.current.setZoom(position.zoom * 0.9, 0.2);
+    }
+  };
+
+  return (
+    <Box absolute gap={15} right={12} top={'50%'} bottom={'50%'}>
+      <FloatingCard
+        absolute={false}
+        alignItems="center"
+        justifyContent="center"
+        size={{ width: 48, height: 48 }}
+        onPress={zoomUp}
+      >
+        <PlusIcon color={colors.grey_700} />
+      </FloatingCard>
+      <FloatingCard
+        absolute={false}
+        alignItems="center"
+        justifyContent="center"
+        size={{ width: 48, height: 48 }}
+        onPress={zoomDown}
+      >
+        <MinusIcon color={colors.grey_700} />
+      </FloatingCard>
+    </Box>
+  )
+}
+
+type FloatingCardProps = {
+  children: ReactNode;
+  position?: {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  };
+  size?: {
+    width?: number | string;
+    height?: number | string;
+  };
+  onPress?: () => void;
+  padding?: {
+    horizontal?: number;
+    vertical?: number;
+  };
+  alignItems?: 'flex-start' | 'center' | 'flex-end';
+  justifyContent?: 'flex-start' | 'center' | 'flex-end';
+  absolute?: boolean;
 };
 
 const shadowStyle = {
@@ -248,6 +306,42 @@ const shadowStyle = {
     width: 0,
   },
   shadowOpacity: 0.3,
-
   shadowRadius: 4.65,
+};
+
+export const FloatingCard: React.FC<FloatingCardProps> = ({
+  children,
+  position = {},
+  size = {},
+  onPress,
+  padding = { horizontal: 12, vertical: 8 },
+  alignItems = 'flex-start',
+  justifyContent = 'flex-start',
+  absolute = true
+}) => {
+  const { colors } = useAppTheme();
+
+  return (
+    <Box
+      absolute={absolute}
+      top={position.top}
+      bottom={position.bottom}
+      left={position.left}
+      right={position.right}
+      borderRadius={8}
+      backgroundColor={colors.card}
+      px={padding.horizontal}
+      py={padding.vertical}
+      w={size.width}
+      h={size.height}
+      justifyContent={justifyContent}
+      alignItems={alignItems}
+      onPress={onPress}
+      style={{ ...shadowStyle, opacity: 0.9 }}
+      effect={onPress ? 'highlight' : undefined}
+      underlayColor={colors.grey_100}
+    >
+      {children}
+    </Box>
+  );
 };

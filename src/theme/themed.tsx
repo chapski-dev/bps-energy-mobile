@@ -7,7 +7,7 @@ import {
   View as DefaultView,
   ViewProps as DefaultViewProps,
 } from 'react-native';
-import { TouchableOpacity as TouchableOpacityGH } from 'react-native-gesture-handler';
+import { Pressable as PressableGH } from 'react-native-gesture-handler';
 
 import { useAppTheme } from './theme';
 
@@ -20,8 +20,8 @@ type ThemeProps = {
 }
 
 type MyViewProps = {
-  relative?: true
-  absolute?: true
+  relative?: boolean
+  absolute?: boolean
   onPress?: () => void
   effect?: 'opacity' | 'scale' | 'none' | 'highlight' | 'ripple' | 'gestureHandler'
 }
@@ -73,7 +73,7 @@ function ViewWithRef(
         case 'highlight':
           return TouchableHighlight;
         case 'gestureHandler':
-          return TouchableOpacityGH;
+          return PressableGH;
         default:
           return TouchableOpacity;
       }
