@@ -16,5 +16,9 @@
   "charged-label": "Заряжено",
   "time-label": "Время",
   "kilowatt-hour": "кВт·ч",
-  "kilowatt": "кВт"
+  "kilowatt": "кВт",
+  "session-complited-title": "Зарядка завершена!",
+  "session-complited-description": "Спасибо что выбираете BPS Energy",
+  "money-spent": "Потрачено",
+  "done": "Готово"
 }

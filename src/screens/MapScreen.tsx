@@ -1,4 +1,5 @@
 import React, {
+  Fragment,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -31,9 +32,14 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Text } from '@src/ui';
 import { modal } from '@src/ui/Layouts/ModalLayout';
 import { getHighAccuracyPosition } from '@src/utils/helpers/get-current-geo-position';
-import { handleCatchError, toastError } from '@src/utils/helpers/handleCatchError';
+import {
+  handleCatchError,
+  toastError,
+} from '@src/utils/helpers/handleCatchError';
 import { vibrate } from '@src/utils/vibrate';
 import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
+import { useChargingSessions } from '@src/service/charging';
+import { windowWidth } from '@src/utils';
 
 const HIDING_MARGIN = 20;
 
@@ -62,10 +68,9 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
       const point = await getHighAccuracyPosition();
       mapRef.current?.setCenter(point, 16.5, undefined, undefined, 0.5, 0);
     } catch (error) {
-      toastError(
-        t('location-not-determined-check-settings'), {
-        onPress: () => Linking.openSettings()
-      })
+      toastError(t('location-not-determined-check-settings'), {
+        onPress: () => Linking.openSettings(),
+      });
       console.error(
         t('location-not-determined-check-settings'),
         'MapScreen - getCurrentPosition',
@@ -100,7 +105,6 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
         initialRegion={{ lat: 53.902284, lon: 27.561831 }}
         style={{ flex: 1 }}
         ref={mapRef}
-
         renderMarker={(info, index) => (
           <Marker
             onPress={() => onStationPress(info.data)}
@@ -108,14 +112,17 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
             point={info.point}
             handled={false}
             children={
-              info.data.owner === 'BPS Energy' ?
-                <BpsLogoLabelDefault /> :
+              info.data.owner === 'BPS Energy' ? (
+                <BpsLogoLabelDefault />
+              ) : (
                 <DotDefault />
+              )
             }
           />
         )}
       />
       <UserBalance />
+      <ChargingStatus />
       <Filters />
       <UserLocation onPress={getCurrentPosition} />
     </Box>
@@ -139,8 +146,6 @@ const UserBalance = () => {
       py={8}
       gap={2}
       style={shadowStyle}
-      effect="highlight"
-      underlayColor={colors.grey_100}
       onPress={() => {
         vibrate(HapticFeedbackTypes.impactLight);
         navigation.navigate('top-up-account', { currency: 'BYN' });
@@ -187,8 +192,6 @@ const Filters = () => {
       w={48}
       h={48}
       style={shadowStyle}
-      effect="highlight"
-      underlayColor={colors.grey_100}
       onPress={() => {
         vibrate(HapticFeedbackTypes.impactLight);
         nav.navigate('filters-of-stations');
@@ -236,6 +239,88 @@ const UserLocation = ({ onPress }: { onPress: () => void }) => {
       style={shadowStyle}
     >
       <NavigationArrowIcon color={colors.grey_700} />
+    </Box>
+  );
+};
+
+const ChargingStatus = () => {
+  const { colors, insets } = useAppTheme();
+  const navigation = useNavigation();
+  const { sessions } = useChargingSessions();
+  const { t } = useTranslation('widgets');
+
+  if (!sessions.length) return null;
+
+  const renderSessions = () => {
+    if (sessions.length === 1) {
+      return sessions.map((el, i) => (
+        <Fragment key={i}>
+          <Text>
+            <Text
+              variant="p4"
+              children={t('map-charging-widget.battery', {
+                count: sessions.length,
+              })}
+              colorName="white"
+            />
+            <Text variant="p4" children=" / " colorName="white_90" />
+            <Text
+              variant="p4"
+              children={t('map-charging-widget.recived')}
+              colorName="white"
+            />
+          </Text>
+          <Text
+            variant="h4"
+            children={`${el?.soc}% / ${parseFloat(el?.charged.toFixed(2))} ${t('map-charging-widget.kilowatt-hour')}`}
+            colorName="white"
+          />
+        </Fragment>
+      ));
+    }
+    if (sessions.length > 1) {
+      return (
+        <>
+          <Text
+            variant="p4"
+            children={t('map-charging-widget.battery', {
+              count: sessions.length,
+            })}
+            colorName="white"
+          />
+          <Text>
+            {sessions.map((el, i) => (
+              <Fragment key={i}>
+                <Text variant="h4" children={`${el?.soc}%`} colorName="white" />
+                {i !== sessions.length - 1 && (
+                  <Text variant="h4" children=" / " colorName="white_90" />
+                )}
+              </Fragment>
+            ))}
+          </Text>
+        </>
+      );
+    }
+  };
+  return (
+    <Box
+      absolute
+      top={insets.top + 8}
+      right={12}
+      borderRadius={8}
+      px={12}
+      py={8}
+      maxWidth={windowWidth * 0.6}
+      backgroundColor={colors.success_500}
+      style={shadowStyle}
+      effect="scale"
+      underlayColor={colors.success_500}
+      onPress={() => {
+        vibrate(HapticFeedbackTypes.impactLight);
+        navigation.navigate('charging-session');
+      }}
+    >
+      {renderSessions()}
     </Box>
   );
 };

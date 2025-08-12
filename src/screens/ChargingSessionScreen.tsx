@@ -8,6 +8,7 @@ import LightningIcon from '@assets/svg/lightning.svg';
 import LogoIcon from '@assets/svg/logo.svg';
 import QrCodeIcon from '@assets/svg/qr-code.svg';
 import TelegramLogoIcon from '@assets/svg/telegram-logo.svg';
+import WalletIcon from '@assets/svg/wallet.svg';
 
 import { useTabNavigation } from '@src/hooks/useTabNavigation';
 import { ScreenProps } from '@src/navigation/types';
@@ -17,16 +18,17 @@ import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Text } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
-import { parseDate } from '@src/utils/parseDate';
 import { openSupportMessager } from '@src/utils/support/openSupportMessager';
-
+import moment from 'moment';
 
 export default function ChargingSessionScreen({
-  navigation
+  navigation,
 }: ScreenProps<'charging-session'>) {
   const { colors, insets } = useAppTheme();
   const { openCamera } = useCameraModal();
-  const { t } = useTranslation('screens', { keyPrefix: 'charging-session-screen' });
+  const { t } = useTranslation('screens', {
+    keyPrefix: 'charging-session-screen',
+  });
   const { sessions, stopSession, loading } = useChargingSessions();
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -34,16 +36,19 @@ export default function ChargingSessionScreen({
 
   const handleWriteToSupport = async () => {
     const message = 'Привет! У меня проблемы со станцией. Помогите';
-    openSupportMessager({ text: message, variant: 'telegram' })
+    openSupportMessager({ message, variant: 'telegram' });
   };
 
   const nav = useTabNavigation();
 
   useEffect(() => {
     if (!sessions.length) {
-      nav.navigateToTab('map')
+      nav.navigateToTab('map');
     }
-  }, [nav, sessions.length])
+    if (sessions.length - 1 < activeIndex) {
+      setActiveIndex(0);
+    }
+  }, [nav, sessions]);
 
   const handleEndSession = () => {
     Alert.alert(
@@ -57,16 +62,16 @@ export default function ChargingSessionScreen({
               await stopSession(activeSession.id);
               setActiveIndex(0);
               if (!sessions.length) {
-                nav.navigateToTab('map')
+                nav.navigateToTab('map');
               }
             } catch (error) {
-              handleCatchError(error)
+              handleCatchError(error);
             }
           },
           style: 'destructive',
           text: t('confirm-button'),
         },
-      ]
+      ],
     );
   };
 
@@ -74,37 +79,28 @@ export default function ChargingSessionScreen({
     openCamera({
       onQrCodeScan: (code) => {
         // startSession(Math.random().toString())
-      }
-    })
-  }
+      },
+    });
+  };
 
-  const renderInProgressView = () => (
+  const formatTime = (totalSeconds: number) => {
+    return moment.utc(totalSeconds * 1000).format('HH:mm:ss');
+  };
+
+  const renderBeginsView = () => (
     <>
-      {sessions.length < 3 &&
-        <Box alignItems='flex-end' mb={44} onPress={handleOpenCamera}>
-          <QrCodeIcon />
-        </Box>}
-      <Box alignItems="center" mb={64}>
-        <LogoIcon color={colors.text} />
-      </Box>
-      {activeSession?.power === 0 ? (
-        <Text
-          variant="p3"
-          center
-          mb={32}
-          mx={52}
-          colorName='grey_600'
-          children={t('session-starting')}
-        />
-      ) : (
-        <Text
-          variant="h4"
-          center
-          mb={32}
-          children={t('charging-session-title', { count: sessions.length })}
-        />
-      )}
-      <StationSelector activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
+      <Text
+        variant="p3"
+        center
+        mb={32}
+        mx={52}
+        colorName="grey_600"
+        children={t('session-starting')}
+      />
+      <StationSelector
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+      />
       <Box gap={12} mb={24}>
         <Box row gap={12}>
           <InfoCard
@@ -130,36 +126,160 @@ export default function ChargingSessionScreen({
           />
           <InfoCard
             title={t('time-label')}
-            value={parseDate(new Date(), 'timeOnly', true)}
+            value={formatTime(activeSession?.duration)}
             unit=""
             icon={<ClockIcon color={colors.green} />}
           />
         </Box>
       </Box>
+    </>
+  );
 
-      <Box gap={12}>
-        <Button
-          onPress={handleWriteToSupport}
-          children={t('write-to-support')}
-          icon={<TelegramLogoIcon color={colors.text} />}
-          type='outline'
+  const renderChargingView = () => (
+    <>
+      <Text
+        variant="h4"
+        center
+        mb={32}
+        children={t('charging-session-title', { count: sessions.length })}
+      />
+      <StationSelector
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+      />
+      <Box gap={12} mb={24}>
+        <Box row gap={12}>
+          <InfoCard
+            title={t('power-label')}
+            value={activeSession?.power}
+            unit={t('kilowatt')}
+            icon={<LightningIcon color={colors.green} />}
+          />
+          <InfoCard
+            title={t('battery-label')}
+            value={activeSession?.soc}
+            unit="%"
+            icon={<BatteryChargingIcon color={colors.green} />}
+          />
+        </Box>
+
+        <Box row gap={12}>
+          <InfoCard
+            title={t('charged-label')}
+            value={parseFloat(activeSession?.charged.toFixed(2))}
+            unit={t('kilowatt-hour')}
+            icon={<CheckCircleIcon color={colors.green} />}
+          />
+          <InfoCard
+            title={t('time-label')}
+            value={formatTime(activeSession?.duration)}
+            unit=""
+            icon={<ClockIcon color={colors.green} />}
+          />
+        </Box>
+      </Box>
+    </>
+  );
+
+  const renderFinishingView = () => (
+    <>
+      {sessions.length > 1 && <Text
+        variant="h4"
+        center
+        mb={32}
+        children={t('charging-session-title', { count: sessions.length })}
+      />}
+      <StationSelector
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+      />
+      <Text children={t('session-complited-title')} variant='p2-semibold' center mb={8} />
+      <Text children={t('session-complited-description')} variant='p4' colorName='grey_600' center mb={16} />
+      <Box gap={12} mb={24}>
+        <InfoCardFinished
+          title={t('charged-label')}
+          value={parseFloat(activeSession?.charged.toFixed(2))}
+          unit={t('kilowatt-hour')}
+          icon={<CheckCircleIcon color={colors.green} />}
         />
-        <Button
-          onPress={handleEndSession}
-          backgroundColor={'success_500'}
-          children={t('end-session')}
-          disabled={loading}
+        <InfoCardFinished
+          title={t('battery-label')}
+          soc_begin={activeSession?.soc_begin}
+          soc_end={activeSession?.soc_end}
+          unit="%"
+          icon={<BatteryChargingIcon color={colors.green} />}
+        />
+        <InfoCardFinished
+          title={t('time-label')}
+          value={formatTime(activeSession?.duration)}
+          unit=""
+          icon={<ClockIcon color={colors.green} />}
+        />
+        <InfoCardFinished
+          title={t('money-spent')}
+          value={activeSession?.spent}
+          unit="BYN"
+          icon={<WalletIcon color={colors.green} />}
         />
       </Box>
     </>
   );
 
+  const renderContent = () => {
+    if (!activeSession) return null;
+
+    switch (activeSession.state) {
+      case 'begins':
+        return renderBeginsView();
+      case 'charging':
+        return renderChargingView();
+      case 'finishing':
+        return renderFinishingView();
+      default:
+        return renderChargingView();
+    }
+  };
+
   return (
     <ScrollView
-      contentContainerStyle={{ ...styles.container, paddingTop: insets.top + 12 }}
+      contentContainerStyle={{
+        ...styles.container,
+        paddingTop: insets.top + sessions.length < 3 ? 0 : 90,
+      }}
       showsVerticalScrollIndicator={false}
     >
-      {renderInProgressView()}
+      {sessions.length < 3 && (
+        <Box alignItems="flex-end" mb={44} onPress={handleOpenCamera}>
+          <QrCodeIcon />
+        </Box>
+      )}
+      <Box alignItems="center" mb={48}>
+        <LogoIcon color={colors.text} />
+      </Box>
+      {renderContent()}
+      <Box gap={12}>
+        <Button
+          onPress={handleWriteToSupport}
+          children={t('write-to-support')}
+          icon={<TelegramLogoIcon color={colors.text} />}
+          type="outline"
+        />
+        {activeSession?.state !== 'finishing' ? (
+          <Button
+            onPress={handleEndSession}
+            backgroundColor={'success_500'}
+            children={t('end-session')}
+            disabled={loading}
+          />
+        ) : (
+          <Button
+            onPress={() => navigation.navigate('tabs', { screen: 'map' })}
+            backgroundColor="success_500"
+            children={t('done')}
+            disabled={loading}
+          />
+        )}
+      </Box>
     </ScrollView>
   );
 }
@@ -171,13 +291,25 @@ const styles = StyleSheet.create({
   },
 });
 
-
-const StationSelector = ({ setActiveIndex, activeIndex }) => {
+const StationSelector = ({
+  setActiveIndex,
+  activeIndex,
+}: {
+  setActiveIndex: (index: number) => void;
+  activeIndex: number;
+}) => {
   const { loading, sessions } = useChargingSessions();
   const { colors } = useAppTheme();
   if (sessions.length > 1) {
     return (
-      <Box row gap={12} mb={24} p={4} borderRadius={8} backgroundColor={colors.grey_50}>
+      <Box
+        row
+        gap={12}
+        mb={24}
+        p={4}
+        borderRadius={8}
+        backgroundColor={colors.grey_50}
+      >
         {sessions.map((station, i) => (
           <Box
             key={station.id}
@@ -185,7 +317,7 @@ const StationSelector = ({ setActiveIndex, activeIndex }) => {
             backgroundColor={activeIndex === i ? colors.white : undefined}
             px={10}
             py={7}
-            alignItems='center'
+            alignItems="center"
             borderRadius={4}
             style={shadowStyle}
             disabled={loading}
@@ -199,7 +331,7 @@ const StationSelector = ({ setActiveIndex, activeIndex }) => {
           </Box>
         ))}
       </Box>
-    )
+    );
   }
   return null;
 };
@@ -226,13 +358,95 @@ const InfoCard = ({
       flex={1}
       gap={4}
     >
-      <Box row alignItems="center" mb={8} justifyContent='space-between'>
+      <Box row alignItems="center" mb={8} justifyContent="space-between">
         <Text variant="p3" colorName="grey_600" children={title} />
-        {loading || Number(value) === 0 ? <Box><ActivityIndicator size={24} /></Box> : icon}
+        {loading || Number(value) === 0 ? (
+          <Box>
+            <ActivityIndicator size={24} />
+          </Box>
+        ) : (
+          icon
+        )}
       </Box>
-      {loading ?
-        <Text variant="h4" colorName="grey_200" children="—" /> :
-        <Text variant="h4" colorName="grey_800" children={`${value} ${unit}`} />}
+      {loading ? (
+        <Text variant="h4" colorName="grey_600" children="—" />
+      ) : (
+        <Text variant="h4" colorName="grey_800" children={`${value} ${unit}`} />
+      )}
+    </Box>
+  );
+};
+
+const InfoCardFinished = ({
+  title,
+  value,
+  unit,
+  icon,
+  soc_begin,
+  soc_end,
+}: {
+  title: string;
+  value?: string | number;
+  unit?: string;
+  icon: React.ReactNode;
+  soc_begin?: number;
+  soc_end?: number;
+}) => {
+  const { colors } = useAppTheme();
+  const { loading } = useChargingSessions();
+
+  const renderValueText = () => {
+    if (loading) {
+      return <Text variant="h4" colorName="grey_200" children="—" />;
+    }
+    if (soc_begin) {
+      return (
+        <Text>
+          <Text
+            variant="p2-semibold"
+            colorName="grey_600"
+            children={`${soc_begin}% → `}
+          />
+          <Text
+            variant="p2-semibold"
+            colorName="grey_800"
+            children={`${soc_end}%`}
+          />
+        </Text>
+      );
+    }
+    return (
+      <Text
+        variant="p2-semibold"
+        colorName="grey_800"
+        children={`${value} ${unit}`}
+      />
+    );
+  };
+
+  return (
+    <Box
+      backgroundColor={colors.grey_50}
+      borderRadius={12}
+      justifyContent="space-between"
+      alignItems="center"
+      px={12}
+      py={16}
+      flex={1}
+      gap={4}
+      row
+    >
+      <Box row alignItems="center" justifyContent="center" gap={8}>
+        {loading || Number(value) === 0 ? (
+          <Box>
+            <ActivityIndicator size={24} />
+          </Box>
+        ) : (
+          icon
+        )}
+        <Text variant="p2" colorName="grey_600" children={title} />
+      </Box>
+      {renderValueText()}
     </Box>
   );
 };

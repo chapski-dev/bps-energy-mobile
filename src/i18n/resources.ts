@@ -35,6 +35,7 @@ import contectorNotInsertedModalWidgetsEn from './en/widgets/contector-not-inser
 import cameraModalWidgetEn from './en/widgets/camera-modal.json';
 import deleteAccountModalWidgetEn from './en/widgets/delete-account-modal.json';
 import userCardsModalWidgetEn from './en/widgets/user-cards-modal.json';
+import mapChargingWidgetEn from './en/widgets/map-charging-widget.json';
 import stationPreviewModalWidgetEn from './en/widgets/station-preview-modal.json';
 
 
@@ -72,6 +73,7 @@ import contectorNotInsertedModalWidgetRu from './ru/widgets/contector-not-insert
 import cameraModalWidgetRu from './ru/widgets/camera-modal.json';
 import deleteAccountModalWidgetRu from './ru/widgets/delete-account-modal.json';
 import userCardsModalWidgetRu from './ru/widgets/user-cards-modal.json';
+import mapChargingWidgetRu from './ru/widgets/map-charging-widget.json';
 import stationPreviewModalWidgetRu from './ru/widgets/station-preview-modal.json';
 
 import actionsZh from './zh/actions.json';
@@ -107,6 +109,7 @@ import contectorNotInsertedModalWidgetsZh from './zh/widgets/contector-not-inser
 import cameraModalWidgetZh from './zh/widgets/camera-modal.json';
 import deleteAccountModalWidgetZh from './zh/widgets/delete-account-modal.json';
 import userCardsModalWidgetZh from './zh/widgets/user-cards-modal.json';
+import mapChargingWidgetZh from './zh/widgets/map-charging-widget.json';
 import stationPreviewModalWidgetZh from './zh/widgets/station-preview-modal.json';
 
 export const defaultNS = 'shared';
@@ -149,7 +152,8 @@ export const resources = {
       'delete-account-modal': deleteAccountModalWidgetEn,
       'station-preview-modal': stationPreviewModalWidgetEn,
       'user-balance': userBalanceWidgetsEn,
-      'user-cards-modal': userCardsModalWidgetEn
+      'user-cards-modal': userCardsModalWidgetEn,
+      'map-charging-widget': mapChargingWidgetEn,
     },
   },
   [AppLangEnum.RU]: {
@@ -190,7 +194,7 @@ export const resources = {
       'station-preview-modal': stationPreviewModalWidgetRu,
       'user-balance': userBalanceWidgetsRu,
       'user-cards-modal': userCardsModalWidgetRu,
-
+      'map-charging-widget': mapChargingWidgetRu,
     },
   },
   [AppLangEnum.ZH]: {
@@ -231,6 +235,7 @@ export const resources = {
       'station-preview-modal': stationPreviewModalWidgetZh,
       'user-balance': userBalanceWidgetsZh,
       'user-cards-modal': userCardsModalWidgetZh,
+      'map-charging-widget': mapChargingWidgetZh,
     },
   }
 };
