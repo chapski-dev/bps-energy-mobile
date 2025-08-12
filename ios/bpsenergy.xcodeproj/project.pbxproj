@@ -53,6 +53,7 @@
 		93C37E75434F4281B7071F6E /* BootSplash.storyboard */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = BootSplash.storyboard; path = bpsenergy/BootSplash.storyboard; sourceTree = "<group>"; };
 		A28BEF01E2DD5ADD637A874B /* Pods-bpsenergy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bpsenergy.release.xcconfig"; path = "Target Support Files/Pods-bpsenergy/Pods-bpsenergy.release.xcconfig"; sourceTree = "<group>"; };
 		B9A5225563C66C4C0C201CC5 /* Pods-bpsenergy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bpsenergy.debug.xcconfig"; path = "Target Support Files/Pods-bpsenergy/Pods-bpsenergy.debug.xcconfig"; sourceTree = "<group>"; };
+		D615E4CA2E4B942600DDCAB5 /* bpsenergyRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bpsenergyRelease.entitlements; path = bpsenergy/bpsenergyRelease.entitlements; sourceTree = "<group>"; };
 		D681C01F2DD65FA10072240E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D681C0222DD7424B0072240E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D6FE56D12DF30BE6005EBACD /* bpsenergy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bpsenergy.entitlements; path = bpsenergy/bpsenergy.entitlements; sourceTree = "<group>"; };
@@ -100,6 +101,7 @@
 		13B07FAE1A68108700A75B9A /* bpsenergy */ = {
 			isa = PBXGroup;
 			children = (
+				D615E4CA2E4B942600DDCAB5 /* bpsenergyRelease.entitlements */,
 				D6FE56D12DF30BE6005EBACD /* bpsenergy.entitlements */,
 				D681C0222DD7424B0072240E /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -235,11 +237,12 @@
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "bpsenergy" */;
 			compatibilityVersion = "Xcode 12.0";
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -525,6 +528,7 @@
 				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergy.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P6QSDN32LC;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TNSZA9Q8HS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = bpsenergy/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "BPS Energy";
@@ -541,6 +545,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bpsenergy.charging;
 				PRODUCT_NAME = "BPS Energy";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Alexey Chapski";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -553,9 +558,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergy.entitlements;
+				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergyRelease.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P6QSDN32LC;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TNSZA9Q8HS;
 				INFOPLIST_FILE = bpsenergy/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "BPS Energy";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -571,6 +579,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bpsenergy.charging;
 				PRODUCT_NAME = "BPS Energy";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Alexey Chapski";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -660,10 +670,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -747,10 +754,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
