@@ -16,6 +16,7 @@ import {
   SignInResponse,
   TransactionsRes,
 } from './types';
+import DeviceInfo from 'react-native-device-info';
 
 // Authentication API
 /**
@@ -242,7 +243,7 @@ export const setNotificationSettings = (data: NotificationSettings['settings']) 
 /**
  * Registers a new Firebase Cloud Messaging token for push notifications
  */
-export const registerFCMToken = (token: string) =>
-  api.post('/mobile/fcm', { token }).then((res) => res.data);
+export const registerFCMToken = async (token: string) =>
+  await api.post('/mobile/fcm-token', { token, device_id: await DeviceInfo.getUniqueId() }).then((res) => res.data);
 
 
