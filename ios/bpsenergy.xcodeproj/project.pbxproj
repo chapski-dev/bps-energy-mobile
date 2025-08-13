@@ -21,6 +21,7 @@
 		D681C0242DD7424B0072240E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D681C0222DD7424B0072240E /* GoogleService-Info.plist */; };
 		E8036F7A562748ECB1B45985 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 678FA779E7B5467AAD60CF50 /* Colors.xcassets */; };
 		FFF1CD40096392E498C550AC /* Pods_bpsenergy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32B2C188CE888A75CF47D349 /* Pods_bpsenergy.framework */; };
+		1A2B3C4D5E6F708090A0B0C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,9 @@
 		D6FE56D12DF30BE6005EBACD /* bpsenergy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bpsenergy.entitlements; path = bpsenergy/bpsenergy.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F195BCEC23D1331C2437A865 /* Pods-bpsenergy-bpsenergyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bpsenergy-bpsenergyTests.release.xcconfig"; path = "Target Support Files/Pods-bpsenergy-bpsenergyTests/Pods-bpsenergy-bpsenergyTests.release.xcconfig"; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708090A0B0C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = bpsenergy/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708090A0B0C2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = bpsenergy/ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708090A0B0C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = bpsenergy/Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +118,7 @@
 				223A311B43A937F6C6FFBB5F /* PrivacyInfo.xcprivacy */,
 				93C37E75434F4281B7071F6E /* BootSplash.storyboard */,
 				678FA779E7B5467AAD60CF50 /* Colors.xcassets */,
+				1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */,
 			);
 			name = bpsenergy;
 			sourceTree = "<group>";
@@ -276,10 +281,24 @@
 				E8036F7A562748ECB1B45985 /* Colors.xcassets in Resources */,
 				D681C0202DD65FA10072240E /* GoogleService-Info.plist in Resources */,
 				D681C0232DD7424B0072240E /* GoogleService-Info.plist in Resources */,
+				1A2B3C4D5E6F708090A0B0C4 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A2B3C4D5E6F708090A0B0C1 /* en */,
+				1A2B3C4D5E6F708090A0B0C2 /* ru */,
+				1A2B3C4D5E6F708090A0B0C3 /* Base */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
