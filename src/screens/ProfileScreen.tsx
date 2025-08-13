@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RefreshControl, ScrollView } from 'react-native';
+import { Linking, RefreshControl, ScrollView } from 'react-native';
 import BatteryChargingIcon from '@assets/svg/battery-charging.svg'
 import BellIcon from '@assets/svg/bell.svg'
 import ChatIcon from '@assets/svg/chat-text.svg'
@@ -25,6 +25,8 @@ import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import ChangeLanguageModal from '@src/widgets/modals/ChangeLanguageModal';
 import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 import UserBalance from '@src/widgets/UserBalance';
+import DeviceInfo from 'react-native-device-info';
+import { FAQ_LINK, OFFERS, RULES } from '@src/misc/documents';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
@@ -38,15 +40,17 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
   const openProfileData = () => navigation.navigate('profile-details');
   const [refreshing, setRefreshing] = useState(false);
   const { insets } = useAppTheme();
-  const modal = useRef<BottomSheetModal>(null);
-  const modalClose = () => modal?.current?.forceClose();
-  const modalOpen = () => modal?.current?.present();
+  const modalLanguage = useRef<BottomSheetModal>(null);
+  const modalLanguageClose = () => modalLanguage?.current?.forceClose();
+  const modalLanguageOpen = () => modalLanguage?.current?.present();
 
   const modalCards = useRef<BottomSheetModal>(null);
   const modalCardsClose = () => modalCards?.current?.forceClose();
   const modalCardsOpen = () => modalCards?.current?.present();
 
   const { user, getUserData } = useAuth();
+
+  const handleOpenLink = (url: string) => Linking.openURL(url);
 
   const onRefresh = async () => {
     try {
@@ -132,12 +136,12 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
             onPress={() => navigation.navigate('notifications-settings')}
           />
           <SectionListItemWithArrow
-            alignItems='center'
-            icon={<TranslateIcon color={colors.text} />}
             title={t('app-language')}
-            onPress={modalOpen}
+            icon={<TranslateIcon color={colors.text} />}
+            onPress={modalLanguageOpen}
             rightText={i18n.t(`widgets:change-language-modal.lang.${i18n.language}`)}
             borderBottom={false}
+            alignItems='center'
           />
         </Box>
 
@@ -145,22 +149,23 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
 
         <Box px={16}>
           <SectionListItemWithArrow
-            alignItems="center"
             title={t('support-service')}
             icon={<ChatIcon color={colors.text} />}
             onPress={() => navigation.navigate('support-service')}
+            alignItems="center"
           />
           <SectionListItemWithArrow
-            alignItems="center"
             title={t('charging-rules')}
             icon={<InfoIcon color={colors.text} />}
-            onPress={() => null}
-          />
-          <SectionListItemWithArrow
+            onPress={() => handleOpenLink(RULES[i18n.language as keyof typeof RULES])}
+
             alignItems="center"
+            />
+          <SectionListItemWithArrow
             title={'FAQ'}
             icon={<QuestionMarkCircledIcon color={colors.text} />}
-            onPress={() => null}
+            onPress={() => handleOpenLink(FAQ_LINK[i18n.language as keyof typeof OFFERS])}
+            alignItems="center"
           />
           {__DEV__ && (
             <SectionListItemWithArrow
@@ -175,11 +180,11 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
             variant='p4'
             colorName='promting'
             my={24}
-            children={t('app-version', { version: '1.74.0' })}
+            children={t('app-version', { version: DeviceInfo.getVersion() })}
           />
         </Box>
       </ScrollView>
-      <ChangeLanguageModal ref={modal} modalClose={modalClose} />
+      <ChangeLanguageModal ref={modalLanguage} modalClose={modalLanguageClose} />
       <UserCardsModal
         mode="saved-cards"
         ref={modalCards}

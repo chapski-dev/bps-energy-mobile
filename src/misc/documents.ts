@@ -1,16 +1,26 @@
 import { AppLangEnum } from '@src/i18n/config';
+import Config from 'react-native-config';
 
 export const OFFERS = {
-  [AppLangEnum.EN]: 'https://api.test-bpsenergy.net.by/static/oferta.html',
-  [AppLangEnum.RU]: 'https://api.test-bpsenergy.net.by/static/oferta.html',
+  [AppLangEnum.RU]: Config.API_HOST + '/static/oferta.html',
+  [AppLangEnum.EN]: Config.API_HOST + '/static/oferta_en.html',
+  [AppLangEnum.ZH]: Config.API_HOST + '/static/oferta_en.html',
 };
 
 export const PRIVACY_POLICY = {
-  [AppLangEnum.EN]: 'https://api.test-bpsenergy.net.by/static/policy.html',
-  [AppLangEnum.RU]: 'https://api.test-bpsenergy.net.by/static/policy.html',
+  [AppLangEnum.RU]: Config.API_HOST + '/static/policy.html',
+  [AppLangEnum.EN]: Config.API_HOST + '/static/policy_en.html',
+  [AppLangEnum.ZH]: Config.API_HOST + '/static/policy_en.html',
 };
 
-export const STANDART_CONTRACT = {
-  [AppLangEnum.EN]: 'https://www.google.pl/?hl=pl',
-  [AppLangEnum.RU]: 'https://www.google.pl/?hl=pl',
+export const FAQ_LINK = {
+  [AppLangEnum.RU]: Config.API_HOST + '/static/faq.html',
+  [AppLangEnum.EN]: Config.API_HOST + '/static/faq_en.html',
+  [AppLangEnum.ZH]: Config.API_HOST + '/static/faq_en.html',
+};
+
+export const RULES = {
+  [AppLangEnum.RU]: Config.API_HOST + '/static/rules_en.html',
+  [AppLangEnum.EN]: Config.API_HOST + '/static/rules_en.html',
+  [AppLangEnum.ZH]: Config.API_HOST + '/static/rules_en.html',
 };
