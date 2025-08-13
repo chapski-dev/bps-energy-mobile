@@ -19,6 +19,7 @@ import { Box, Button, Text } from '@src/ui';
 import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { openSupportMessager } from '@src/utils/support/openSupportMessager';
+import { deepLinkingService } from '@src/service/deepLinking';
 import moment from 'moment';
 
 export default function ChargingSessionScreen({
@@ -50,6 +51,18 @@ export default function ChargingSessionScreen({
     }
   }, [nav, sessions]);
 
+  // Подписываемся на глубокие ссылки
+  useEffect(() => {
+    const unsubscribe = deepLinkingService.addListener((data) => {
+      if (data.type === 'start-session') {
+        console.log(`сессия ${data.sessionId} началась`);
+        // Здесь можно добавить дополнительную логику для обработки сессии
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   const handleEndSession = () => {
     Alert.alert(
       t('end-session-confirm-title'),
@@ -78,6 +91,10 @@ export default function ChargingSessionScreen({
   const handleOpenCamera = () => {
     openCamera({
       onQrCodeScan: (code) => {
+        // Проверяем, является ли QR-код глубокой ссылкой
+        if (code.value && code.value.startsWith('https://bps-energy.by/qr/start-session/')) {
+          deepLinkingService.handleDeepLink(code.value);
+        }
         // startSession(Math.random().toString())
       },
     });

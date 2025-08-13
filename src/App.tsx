@@ -21,6 +21,7 @@ import { ModalLayout } from './ui/Layouts/ModalLayout';
 import { CrashHandler } from './utils/helpers/errors/CrashHandler';
 import { NetworkStatusBar } from './widgets/NetworkStatusBar';
 import { AppServiceStatus } from './events';
+import { deepLinkingService } from './service/deepLinking';
 
 const navigationLift = () => {
   app.isNavigationReady = AppServiceStatus.on;
@@ -30,6 +31,8 @@ CrashHandler.init(Config.SENTRY_DSN)
 
 YaMap.init(Config.YA_MAP_API_KEY);
 Geocoder.init(Config.GEOCODER_API_KEY);
+
+deepLinkingService.init();
 
 
 function App(): React.JSX.Element {

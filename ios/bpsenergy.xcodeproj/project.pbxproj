@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		164A298049837237B803F2E2 /* Pods_bpsenergy_bpsenergyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B4F88E02676C7F099A2EA6D /* Pods_bpsenergy_bpsenergyTests.framework */; };
+		1A2B3C4D5E6F708090A0B0C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A710D6E09812401FAFA129C6 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93C37E75434F4281B7071F6E /* BootSplash.storyboard */; };
 		AD9C8F8CE35F8620934E45A7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 223A311B43A937F6C6FFBB5F /* PrivacyInfo.xcprivacy */; };
@@ -21,7 +22,6 @@
 		D681C0242DD7424B0072240E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D681C0222DD7424B0072240E /* GoogleService-Info.plist */; };
 		E8036F7A562748ECB1B45985 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 678FA779E7B5467AAD60CF50 /* Colors.xcassets */; };
 		FFF1CD40096392E498C550AC /* Pods_bpsenergy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32B2C188CE888A75CF47D349 /* Pods_bpsenergy.framework */; };
-		1A2B3C4D5E6F708090A0B0C4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +46,9 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = bpsenergy/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = bpsenergy/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = bpsenergy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708090A0B0C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = bpsenergy/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708090A0B0C2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = bpsenergy/ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1A2B3C4D5E6F708090A0B0C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = bpsenergy/Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		223A311B43A937F6C6FFBB5F /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = bpsenergy/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		32B2C188CE888A75CF47D349 /* Pods_bpsenergy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bpsenergy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48E9C9556D798325B6D90162 /* Pods-bpsenergy-bpsenergyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bpsenergy-bpsenergyTests.debug.xcconfig"; path = "Target Support Files/Pods-bpsenergy-bpsenergyTests/Pods-bpsenergy-bpsenergyTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -60,9 +63,6 @@
 		D6FE56D12DF30BE6005EBACD /* bpsenergy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bpsenergy.entitlements; path = bpsenergy/bpsenergy.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F195BCEC23D1331C2437A865 /* Pods-bpsenergy-bpsenergyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bpsenergy-bpsenergyTests.release.xcconfig"; path = "Target Support Files/Pods-bpsenergy-bpsenergyTests/Pods-bpsenergy-bpsenergyTests.release.xcconfig"; sourceTree = "<group>"; };
-		1A2B3C4D5E6F708090A0B0C1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = bpsenergy/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1A2B3C4D5E6F708090A0B0C2 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = bpsenergy/ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		1A2B3C4D5E6F708090A0B0C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = bpsenergy/Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,19 +287,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXVariantGroup section */
-		1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1A2B3C4D5E6F708090A0B0C1 /* en */,
-				1A2B3C4D5E6F708090A0B0C2 /* ru */,
-				1A2B3C4D5E6F708090A0B0C3 /* Base */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -486,6 +473,19 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		1A2B3C4D5E6F708090A0B0C0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A2B3C4D5E6F708090A0B0C1 /* en */,
+				1A2B3C4D5E6F708090A0B0C2 /* ru */,
+				1A2B3C4D5E6F708090A0B0C3 /* Base */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -545,9 +545,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergy.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = P6QSDN32LC;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TNSZA9Q8HS;
+				DEVELOPMENT_TEAM = TNSZA9Q8HS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = bpsenergy/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "BPS Energy";
@@ -564,7 +565,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.bpsenergy.charging;
 				PRODUCT_NAME = "BPS Energy";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Alexey Chapski";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -578,11 +579,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergyRelease.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TNSZA9Q8HS;
+				DEVELOPMENT_TEAM = TNSZA9Q8HS;
 				INFOPLIST_FILE = bpsenergy/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "BPS Energy";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -599,7 +599,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bpsenergy.charging;
 				PRODUCT_NAME = "BPS Energy";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Alexey Chapski";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -689,7 +688,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -773,7 +775,10 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

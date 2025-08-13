@@ -8,6 +8,7 @@ import React, {
 import { Code } from 'react-native-vision-camera';
 
 import CameraModal from '@src/widgets/modals/CameraModal';
+import { deepLinkingService } from '@src/service/deepLinking';
 
 type CameraCallbacks = {
   onPhotoTaken?: (uri: string) => void;
@@ -51,6 +52,11 @@ export const CameraProvider = ({ children }: PropsWithChildren) => {
 
   const _handleScanQr = useCallback(
     (code: Code) => {
+      // Проверяем, является ли QR-код глубокой ссылкой
+      if (code.value && code.value.startsWith('https://bps-energy.by/qr/start-session/')) {
+        deepLinkingService.handleDeepLink(code.value);
+      }
+      
       if (callbacks.onQrCodeScan) {
         callbacks.onQrCodeScan(code);
       }
