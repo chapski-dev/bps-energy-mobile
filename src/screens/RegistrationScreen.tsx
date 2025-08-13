@@ -43,6 +43,7 @@ const RegistrationScreen = ({ navigation }: ScreenProps<'registration'>) => {
       navigation.navigate('otp-verify', {
         email: data.email,
         verify: 'registration',
+        password: data.password,
       })
     } catch (error) {
       handleCatchError(error, 'RegistrationScreen')
