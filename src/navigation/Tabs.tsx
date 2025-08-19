@@ -26,6 +26,7 @@ import { vibrate } from '@src/utils/vibrate';
 import { withProtectedScreen } from './guards/withProtectedScreen';
 import { navigationRef } from './navigationRef';
 import { TabsParamList } from './types';
+import { handleDeepLink } from '@src/service/linking';
 
 
 const Tab = createBottomTabNavigator<TabsParamList>();
@@ -106,9 +107,17 @@ const ChargingTabButton = ({
       openCamera({
         onQrCodeScan: async (code) => {
           try {
-            startSession(Math.random().toString())
-            navigationRef.preload('charging-session')
-            navigationRef.navigate('charging-session')
+            // Проверяем, является ли QR-код глубокой ссылкой
+            if (code.value && (
+              code.value.startsWith('https://bps-energy.by/') ||
+              code.value.startsWith('bpsenergy://')
+            )) {
+              await handleDeepLink(code.value);
+            } else {
+              // Если это не глубокая ссылка, запускаем сессию как раньше
+              navigationRef.preload('charging-session')
+              navigationRef.navigate('charging-session')
+            }
           } catch (error) {
             handleCatchError(error)
           }

@@ -20,6 +20,7 @@ import { ActivityIndicator } from '@src/ui/ActivityIndicator';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 import { openSupportMessager } from '@src/utils/support/openSupportMessager';
 import moment from 'moment';
+import { handleDeepLink } from '@src/service/linking';
 
 export default function ChargingSessionScreen({
   navigation,
@@ -77,8 +78,14 @@ export default function ChargingSessionScreen({
 
   const handleOpenCamera = () => {
     openCamera({
-      onQrCodeScan: (code) => {
-        // startSession(Math.random().toString())
+      onQrCodeScan: async (code) => {
+        try {
+          if (code.value && (code.value.startsWith('https://bps-energy.by/'))) {
+            await handleDeepLink(code.value);
+          }
+        } catch (error) {
+          handleCatchError(error)
+        }
       },
     });
   };

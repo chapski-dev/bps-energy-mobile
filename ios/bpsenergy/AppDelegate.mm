@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
-
+#import <React/RCTLinkingManager.h> // Добавляем для обработки deeplink'ов
 #import "RNBootSplash.h"
 #import <React/RCTBundleURLProvider.h>
 #import <Firebase.h>
@@ -13,7 +13,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
   [FIRApp configure];
   [YMKMapKit setLocale:@"ru_RU"];
   [YMKMapKit setApiKey:@"API_KEY"];
@@ -24,6 +23,27 @@
   self.initialProps = @{};
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+// Обработка deeplink'ов (bpsenergy://)
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
+}
+
+// Обработка Universal Links (https://bps-energy.by)
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+  if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+    return [RCTLinkingManager application:application
+                     continueUserActivity:userActivity
+                       restorationHandler:restorationHandler];
+  }
+  return YES;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

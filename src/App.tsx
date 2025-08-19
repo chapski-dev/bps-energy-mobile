@@ -2,7 +2,7 @@ import React from 'react';
 import Config from 'react-native-config';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import YaMap, { Geocoder } from 'react-native-yamap';
+import YaMap from 'react-native-yamap';
 import { Toasts } from '@backpackapp-io/react-native-toast';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,16 +21,14 @@ import { ModalLayout } from './ui/Layouts/ModalLayout';
 import { CrashHandler } from './utils/helpers/errors/CrashHandler';
 import { NetworkStatusBar } from './widgets/NetworkStatusBar';
 import { AppServiceStatus } from './events';
+import { linking } from './service/linking';
+
+CrashHandler.init(Config.SENTRY_DSN);
+YaMap.init(Config.YA_MAP_API_KEY);
 
 const navigationLift = () => {
   app.isNavigationReady = AppServiceStatus.on;
 };
-
-CrashHandler.init(Config.SENTRY_DSN)
-
-YaMap.init(Config.YA_MAP_API_KEY);
-Geocoder.init(Config.GEOCODER_API_KEY);
-
 
 function App(): React.JSX.Element {
   const { theme } = useAppColorTheme();
@@ -40,12 +38,13 @@ function App(): React.JSX.Element {
         onReady={navigationLift}
         theme={theme}
         ref={navigationRef}
+        linking={linking}
       >
-        <SafeAreaProvider >
+        <SafeAreaProvider>
           <CameraProvider>
             <GestureHandlerRootView>
               <BottomSheetModalProvider>
-                <NetworkStatusBar/>
+                <NetworkStatusBar />
                 <RootStack />
                 <Toasts />
                 <ModalLayout />
