@@ -16,7 +16,6 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 
 import { postCreateTransaction, postTopUpBalance } from '@src/api';
 import { Card } from '@src/api/types';
-import { useLocalization } from '@src/hooks/useLocalization';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { checkAuthOrRedirect, useAuth } from '@src/providers/auth';
@@ -157,7 +156,7 @@ export default TopUpAccountScreen;
 
 const CurrencySwitcher = ({ initialCurr }: { initialCurr?: 'BYN' | 'RUB' }) => {
   const { colors } = useAppTheme();
-  const { t } = useLocalization('screens', { keyPrefix: 'top-up-account-screen' })
+  const { t } = useTranslation('screens', { keyPrefix: 'top-up-account-screen' })
   const [selectedCurrency, setSelectedCurrency] = useState<'BY' | 'RU'>(
     initialCurr === 'RUB' ? 'RU' : 'BY',
   );

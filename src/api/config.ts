@@ -79,10 +79,10 @@ instance.interceptors.response.use(
   },
   async (error: AxiosError) => {
     const originalRequest = error.config as CustomAxiosRequestConfig;
+    console.log(`Response Error Status] ${error.response?.status}`)
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           addSubscriber(async (token: string) => {

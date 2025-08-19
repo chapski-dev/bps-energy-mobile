@@ -11,13 +11,13 @@ import {
 } from '@gorhom/bottom-sheet';
 
 import {
-  AppLangEnum,
   LANGUAGE_LIST,
   saveLanguageAsyncStorage,
 } from '@src/i18n/config';
 import { useAppTheme } from '@src/theme/theme';
 import { BottomSlideModal, Box, Text } from '@src/ui';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
+import { AppLangEnum } from '@src/i18n/resources';
 
 type ChangeLanguageModalProps = Omit<BottomSheetModalProps, 'children'> & {
   modalClose: () => void;

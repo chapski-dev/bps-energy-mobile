@@ -1,4 +1,4 @@
-import { AppLangEnum } from '@src/i18n/config';
+import { AppLangEnum } from '@src/i18n/resources';
 import Config from 'react-native-config';
 
 export const OFFERS = {

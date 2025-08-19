@@ -1,5 +1,4 @@
 /* eslint-disable simple-import-sort/imports */
-import { AppLangEnum } from './config';
 
 // English translations
 import actionsEn from './en/actions.json';
@@ -112,7 +111,12 @@ import userCardsModalWidgetZh from './zh/widgets/user-cards-modal.json';
 import mapChargingWidgetZh from './zh/widgets/map-charging-widget.json';
 import stationPreviewModalWidgetZh from './zh/widgets/station-preview-modal.json';
 
-export const defaultNS = 'shared';
+export enum AppLangEnum {
+  RU = 'ru',
+  EN = 'en',
+  ZH = 'zh',
+}
+
 
 export const resources = {
   [AppLangEnum.EN]: {

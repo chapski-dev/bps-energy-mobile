@@ -6,13 +6,10 @@ import i18n from 'i18next';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 
 import RNLanguageDetector from './LanguageDetector';
-import { defaultNS, resources } from './resources';
+import { AppLangEnum, resources } from './resources';
 
-export enum AppLangEnum {
-  RU = 'ru',
-  EN = 'en',
-  ZH = 'zh',
-}
+export const defaultNS = 'shared';
+
 
 export const LANGUAGE_LIST = [
   {
@@ -41,7 +38,7 @@ export const initializeI18n = async () => {
     .use(RNLanguageDetector)
     .use(initReactI18next)
     .init({
-      debug: __DEV__,
+      debug: false,
       resources,
       defaultNS,
       ns,

@@ -7,12 +7,12 @@ import { CountryCode, getCountries, getExampleNumber } from 'libphonenumber-js'
 import examples from 'libphonenumber-js/examples.mobile.json'
 import { AsYouType, parsePhoneNumberWithError } from 'libphonenumber-js/max'
 
-import { useLocalization } from '@src/hooks/useLocalization'
 import { useAppTheme } from '@src/theme/theme'
 import { BottomSlideModal, Box, Input, Text } from '@src/ui'
 import { animate } from '@src/utils/animate'
 
 import { countryCallingCode, countryCodeEmoji, countryName, validatePhone } from './utils'
+import { useTranslation } from 'react-i18next'
 
 export type EnterPhoneT = { phone: string; countryIso: CountryCode }
 
@@ -25,7 +25,7 @@ const allCountries = getCountries().slice(1)
 
 export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
   const { colors, insets } = useAppTheme()
-  const { t } = useLocalization()
+  const { t } = useTranslation()
   const { setValue, control, getValues, resetField } = useFormContext<EnterPhoneT>()
   const modal = useRef<BottomSheetModal>(null)
   const phoneInput = useRef<TextInput>(null)
@@ -155,7 +155,7 @@ export const PhoneInput: FC<IPhoneInputProps> = ({ validateCallback }) => {
 const CountryItem = memo(
   ({ item, handleSelectCountry }: { item: CountryCode; handleSelectCountry: (country: CountryCode) => () => void }) => {
     const { colors } = useAppTheme()
-    const { t } = useLocalization('countries');
+    const { t } = useTranslation('countries');
 
 
     return countryName(item) && (
