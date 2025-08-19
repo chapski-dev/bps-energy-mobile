@@ -55,7 +55,7 @@ export const ProfileDetailsScreen = ({
             icon={<EnvelopeIcon color={colors.text} />}
           >
             <Box gap={3}>
-              <Text variant="p3-semibold" children={user?.email} />
+              <Text variant="p3-semibold" children={user?.email} selectable />
               <Text colorName="promting" children={t('profile-details-screen.email-label')} />
             </Box>
           </SectionListItemWithArrow>
