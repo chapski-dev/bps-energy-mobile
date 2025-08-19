@@ -9,6 +9,7 @@
     "start": "react-native start",
     "test": "jest",
     "build:apk": "cd android && ./gradlew assembleRelease",
+    "build:aab": "cd android && ./gradlew bundleRelease",
     "open-apk": "open ./android/app/build/outputs/apk/release/",
     "open-aab": "open ./android/app/build/outputs/bundle/release/",
     "toc": "i18next-resources-for-ts toc -i ./src/i18n/ru -o ./src/i18n/@types/resources.ts",
