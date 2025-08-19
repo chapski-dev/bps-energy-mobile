@@ -65,6 +65,13 @@ class ChargingService extends EventEmitter<ServiceEvents> {
   getCachedSessions() {
     return this.sessions;
   }
+
+  clearSessions() {
+    this.sessions = [];
+    this.emit('sessionsUpdated', this.sessions);
+    clearInterval(this.pollInterval);
+    this.pollInterval = undefined;
+  }
 }
 const chargingService = new ChargingService();
 

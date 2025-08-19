@@ -8,7 +8,6 @@ import messaging, {
 } from '@react-native-firebase/messaging';
 import { registerFCMToken } from '@src/api';
 import { isIOS } from '@src/misc/platform';
-import notifications from '@src/service/notifications';
 import { AppStatus, getAppStatus } from '@src/utils/system';
 import { ASYNC_STORAGE_KEYS } from '@src/utils/vars/async_storage_keys';
 import { vibrate } from '@src/utils/vibrate';
@@ -33,7 +32,6 @@ async function onMessageReceived(
   // TODO check data compatibility
   if (message.data?.eventType === 'session_complite') {
     vibrate(HapticFeedbackTypes.notificationSuccess);
-    void notifications.refresh();
   }
 
   const appStatus = getAppStatus();
