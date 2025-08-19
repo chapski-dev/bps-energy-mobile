@@ -14,8 +14,8 @@ import { ClusteredYamap, Marker } from 'react-native-yamap';
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
-import BpsLogoLabelDefault from '@assets/svg/stations-map/bps-logo-label-default.svg';
-import DotDefault from '@assets/svg/stations-map/dot-default.svg';
+import BpsLogoLabelDefault from '@assets/png/bps-logo-label-default.png';
+// import DotDefault from '@assets/svg/stations-map/dot-default.svg';
 import { useNavigation } from '@react-navigation/native';
 import lodash from 'lodash';
 
@@ -111,13 +111,7 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
             key={index}
             point={info.point}
             handled={false}
-            children={
-              info.data.owner === 'BPS Energy' ? (
-                <BpsLogoLabelDefault />
-              ) : (
-                <DotDefault />
-              )
-            }
+            source={BpsLogoLabelDefault}
           />
         )}
       />
