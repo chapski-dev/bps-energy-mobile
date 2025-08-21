@@ -45,11 +45,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Отсканируем QR-code?</string>
+	<string>Камера используется для сканирования QR-кода на станции, чтобы начать и управлять процессом зарядки.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Использование функции геолокации позволяет точно определять ваше местоположение.</string>
+	<string>Чтобы мы показывали самые актуальные зарядные станции рядом с вами и помогли проложить к ним маршрут.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Использование функции геолокации позволяет точно определять ваше местоположение.</string>
+	<string>Разрешите постоянный доступ, чтобы мы могли уведомлять вас о подходящих станциях рядом с вами, даже когда приложение не запущено. Это поможет в долгих поездках.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
