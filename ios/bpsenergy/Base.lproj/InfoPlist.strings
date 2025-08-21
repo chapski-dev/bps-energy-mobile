@@ -1,4 +1,3 @@
-"NSCameraUsageDescription" = "Scan a QR code?";
-"NSLocationWhenInUseUsageDescription" = "Using location lets the app determine your position.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Using location lets the app determine your position.";
-
+"NSCameraUsageDescription" = "The camera is used to scan a QR code at the station to initiate and manage the charging process.";
+"NSLocationWhenInUseUsageDescription" = "This allows us to show you the most up-to-date charging stations near you and help navigate to them.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Allow constant access so we can notify you about suitable stations near you, even when the app is not running. This is helpful for long trips.";
