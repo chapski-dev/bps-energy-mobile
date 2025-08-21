@@ -44,6 +44,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+  <key>ITSAppUsesNonExemptEncryption</key>
+	<false />
 	<key>NSCameraUsageDescription</key>
 	<string>Камера используется для сканирования QR-кода на станции, чтобы начать и управлять процессом зарядки.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
