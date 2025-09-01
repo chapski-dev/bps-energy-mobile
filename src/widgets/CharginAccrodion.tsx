@@ -17,7 +17,7 @@ import LightningIcon from '@assets/svg/lightning.svg';
 
 import type { Connector, ConnectorType } from '@src/api/types';
 import { useTabNavigation } from '@src/hooks/useTabNavigation';
-import { checkAuthOrRedirect,useAuth } from '@src/providers/auth';
+import { checkAuthOrRedirect, useAuth } from '@src/providers/auth';
 import chargingService from '@src/service/charging';
 import { useAppTheme } from '@src/theme/theme';
 import { Box, Button, Chip, Text } from '@src/ui';
@@ -26,6 +26,8 @@ import { modal } from '@src/ui/Layouts/ModalLayout';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
 
 import { ContectorNotInsertedModal } from './modals/ContectorNotInsertedModal';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface ChargerHeaderData {
   type: ConnectorType;
@@ -94,6 +96,7 @@ interface ChargerHeaderProps {
 
 const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
   const { colors } = useAppTheme();
+  const { t } = useTranslation('widgets', { keyPrefix: 'chargin-accordion' });
 
   const arrowStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: withTiming(isOpen.value ? '180deg' : '0deg', { duration: 200 }) }],
@@ -131,19 +134,19 @@ const ChargerHeader: FC<ChargerHeaderProps> = ({ isOpen, data }) => {
         <Box gap={4}>
           <Box row gap={6} alignItems="center">
             <Text children={data.type} fontSize={17} fontWeight="600" />
-            <Text children={`· ${data.power}`} colorName="grey_600" fontSize={16} />
+            <Text children={`· ${data.power} ${t('kW')}`} colorName="grey_600" fontSize={16} />
           </Box>
           <Chip style={{ paddingHorizontal: 9, paddingVertical: 4 }} >
             <Text>
-              <Text children={`${data.rate}`} fontWeight='400' fontSize={12} colorName="grey_800" />
-              <Text children=" / кВт·ч" fontWeight='400' fontSize={12} colorName="grey_600" />
+              <Text children={`${data.rate} BYN`} fontWeight='400' fontSize={12} colorName="grey_800" />
+              <Text children={t('kW-h')} fontWeight='400' fontSize={12} colorName="grey_600" />
             </Text>
           </Chip>
         </Box>
       </Box>
       <Box row gap={8} alignItems="center">
         <Text
-          children={`Доступно ${data.availableCount}/${data.totalCount}`}
+          children={t('available-count', { total: data.totalCount, available: data.availableCount })}
           fontSize={16}
           fontWeight="600"
           colorName={data.availableCount > 0 ? 'green' : 'grey_400'}
@@ -196,6 +199,7 @@ const ConnectorElement = ({
   disbledConnectors,
   setDisbledConnectors
 }: ConnectorElementProps) => {
+  const { t } = useTranslation('widgets', { keyPrefix: 'chargin-accordion' });
   const { colors } = useAppTheme();
   const [loading, setLoading] = useState(false);
   const nav = useTabNavigation();
@@ -236,17 +240,17 @@ const ConnectorElement = ({
           colorName={isAvalible ? 'grey_800' : 'grey_400'}
         />
         <Text
-          children={isAvalible ? 'Доступен' : 'Занят'}
+          children={isAvalible ? t('available') : t('busy')}
           fontSize={14}
           colorName={isAvalible ? 'green' : 'grey_600'}
         />
       </Box>
       {isAvalible && (
         <Button
-          children="Заряжаться"
+          children={t('charge-up')}
           onPress={handleStartCharging}
           backgroundColor='green'
-          wrapperStyle={{width: 147}}
+          wrapperStyle={{ width: 147 }}
           icon={<LightningIcon color={colors.white} />}
           loading={loading}
           disabled={loading || disbledConnectors}

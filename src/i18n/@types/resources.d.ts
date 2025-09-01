@@ -1,647 +1,674 @@
-interface Resources {
-  'actions': {
-    'add': 'Добавить',
-    'download': 'Скачать',
-    'to-accept': 'Принять',
-    'to-cancel': 'Отменить',
-    'to-change': 'Изменить',
-    'to-choose-different-photo': 'Выбрать другое фото',
-    'to-confirm': 'Подтвердить',
-    'to-continue': 'Продолжить',
-    'to-decline': 'Отклонить',
-    'to-delete': 'Удалить',
-    'to-enter-phone-number': 'Введите телефон',
-    'to-log-out': 'Выйти',
-    'to-login': 'Войти',
-    'to-pay': 'Оплатить',
-    'to-reset': 'Сбросить',
-    'to-save': 'Сохранить',
-    'to-send': 'Отправить',
-    'to-show': 'Показать',
-    'to-skip': 'Пропустить',
-    'to-upload': 'Загрузить',
-    'to-upload-photo': 'Загрузить фото',
-    'to-download-check': 'Скачать чек',
-    'to-top-up': 'Пополнить',
-    'to-logout-from-account': 'Выйти из аккаунта',
-    'to-reset-filter': 'Сбросить фильтр',
-    'to-apply': 'Применить'
-  },
-  'countries': {
-    'Andorra': 'Андорра',
-    'United Arab Emirates': 'Объединённые Арабские Эмираты',
-    'Afghanistan': 'Афганистан',
-    'Antigua and Barbuda': 'Антигуа и Барбуда',
-    'Anguilla': 'Ангилья',
-    'Albania': 'Албания',
-    'Armenia': 'Армения',
-    'Angola': 'Ангола',
-    'Argentina': 'Аргентина',
-    'American Samoa': 'Американское Самоа',
-    'Austria': 'Австрия',
-    'Australia': 'Австралия',
-    'Aruba': 'Аруба',
-    'Åland Islands': 'Аландские острова',
-    'Azerbaijan': 'Азербайджан',
-    'Bosnia and Herzegovina': 'Босния и Герцеговина',
-    'Barbados': 'Барбадос',
-    'Bangladesh': 'Бангладеш',
-    'Belgium': 'Бельгия',
-    'Burkina Faso': 'Буркина-Фасо',
-    'Bulgaria': 'Болгария',
-    'Bahrain': 'Бахрейн',
-    'Burundi': 'Бурунди',
-    'Benin': 'Бенин',
-    'Saint Barthélemy': 'Сен-Бартелеми',
-    'Bermuda': 'Бермуды',
-    'Brunei': 'Бруней',
-    'Bolivia': 'Боливия',
-    'Bonaire': 'Бонайре',
-    'Brazil': 'Бразилия',
-    'The Bahamas': 'Багамы',
-    'Bhutan': 'Бутан',
-    'Botswana': 'Ботсвана',
-    'Belarus': 'Беларусь',
-    'Belize': 'Белиз',
-    'Canada': 'Канада',
-    'Cocos (Keeling) Islands': 'Кокосовые острова',
-    'Democratic Republic of the Congo': 'Демократическая Республика Конго',
-    'Central African Republic': 'Центральноафриканская Республика',
-    'Republic of the Congo': 'Республика Конго',
-    'Switzerland': 'Швейцария',
-    'Cote d\'Ivoire': 'Кот-д\'Ивуар',
-    'Cook Islands': 'Острова Кука',
-    'Chile': 'Чили',
-    'Cameroon': 'Камерун',
-    'China': 'Китай',
-    'Colombia': 'Колумбия',
-    'Costa Rica': 'Коста-Рика',
-    'Cuba': 'Куба',
-    'Cape Verde': 'Кабо-Верде',
-    'Curaçao': 'Кюрасао',
-    'Christmas Island': 'Остров Рождества',
-    'Cyprus': 'Кипр',
-    'Czechia': 'Чехия',
-    'Germany': 'Германия',
-    'Djibouti': 'Джибути',
-    'Denmark': 'Дания',
-    'Dominica': 'Доминика',
-    'Dominican Republic': 'Доминиканская Республика',
-    'Algeria': 'Алжир',
-    'Ecuador': 'Эквадор',
-    'Estonia': 'Эстония',
-    'Egypt': 'Египет',
-    'Western Sahara': 'Западная Сахара',
-    'Eritrea': 'Эритрея',
-    'Spain': 'Испания',
-    'Ethiopia': 'Эфиопия',
-    'Finland': 'Финляндия',
-    'Fiji': 'Фиджи',
-    'Falkland Islands (Islas Malvinas)': 'Фолклендские острова',
-    'Federated States of Micronesia': 'Федеративные Штаты Микронезии',
-    'Faroe Islands': 'Фарерские острова',
-    'France': 'Франция',
-    'Gabon': 'Габон',
-    'United Kingdom': 'Великобритания',
-    'Grenada': 'Гренада',
-    'Georgia': 'Грузия',
-    'French Guiana': 'Французская Гвиана',
-    'Guernsey': 'Гернси',
-    'Ghana': 'Гана',
-    'Gibraltar': 'Гибралтар',
-    'Greenland': 'Гренландия',
-    'The Gambia': 'Гамбия',
-    'Guinea': 'Гвинея',
-    'Guadeloupe': 'Гваделупа',
-    'Equatorial Guinea': 'Экваториальная Гвинея',
-    'Greece': 'Греция',
-    'Guatemala': 'Гватемала',
-    'Guam': 'Гуам',
-    'Guinea-Bissau': 'Гвинея-Бисау',
-    'Guyana': 'Гайана',
-    'Hong Kong': 'Гонконг',
-    'Honduras': 'Гондурас',
-    'Croatia': 'Хорватия',
-    'Haiti': 'Гаити',
-    'Hungary': 'Венгрия',
-    'Indonesia': 'Индонезия',
-    'Ireland': 'Ирландия',
-    'Israel': 'Израиль',
-    'Isle of Man': 'Остров Мэн',
-    'India': 'Индия',
-    'British Indian Ocean Territory': 'Британская территория в Индийском океане',
-    'Iraq': 'Ирак',
-    'Iran': 'Иран',
-    'Iceland': 'Исландия',
-    'Italy': 'Италия',
-    'Jersey': 'Джерси',
-    'Jamaica': 'Ямайка',
-    'Jordan': 'Иордания',
-    'Japan': 'Япония',
-    'Kenya': 'Кения',
-    'Kyrgyzstan': 'Киргизия',
-    'Cambodia': 'Камбоджа',
-    'Kiribati': 'Кирибати',
-    'Comoros': 'Коморы',
-    'Saint Kitts and Nevis': 'Сент-Китс и Невис',
-    'North Korea': 'КНДР (Корейская Народно-Демократическая Республика)',
-    'South Korea': 'Республика Корея',
-    'Kuwait': 'Кувейт',
-    'Cayman Islands': 'Острова Кайман',
-    'Kazakhstan': 'Казахстан',
-    'Laos': 'Лаос',
-    'Lebanon': 'Ливан',
-    'Saint Lucia': 'Сент-Люсия',
-    'Liechtenstein': 'Лихтенштейн',
-    'Sri Lanka': 'Шри-Ланка',
-    'Liberia': 'Либерия',
-    'Lesotho': 'Лесото',
-    'Lithuania': 'Литва',
-    'Luxembourg': 'Люксембург',
-    'Latvia': 'Латвия',
-    'Libya': 'Ливия',
-    'Morocco': 'Марокко',
-    'Monaco': 'Монако',
-    'Moldova': 'Молдова',
-    'Montenegro': 'Черногория',
-    'Saint Martin': 'Сен-Мартен',
-    'Madagascar': 'Мадагаскар',
-    'Marshall Islands': 'Маршалловы Острова',
-    'North Macedonia': 'Северная Македония',
-    'Mali': 'Мали',
-    'Myanmar (Burma)': 'Мьянма (Бирма)',
-    'Mongolia': 'Монголия',
-    'Macau': 'Макао',
-    'Northern Mariana Islands': 'Северные Марианские острова',
-    'Martinique': 'Мартиника',
-    'Mauritania': 'Мавритания',
-    'Montserrat': 'Монтсеррат',
-    'Malta': 'Мальта',
-    'Mauritius': 'Маврикий',
-    'Maldives': 'Мальдивы',
-    'Malawi': 'Малави',
-    'Mexico': 'Мексика',
-    'Malaysia': 'Малайзия',
-    'Mozambique': 'Мозамбик',
-    'Namibia': 'Намибия',
-    'New Caledonia': 'Новая Каледония',
-    'Niger': 'Нигер',
-    'Norfolk Island': 'Остров Норфолк',
-    'Nigeria': 'Нигерия',
-    'Nicaragua': 'Никарагуа',
-    'Netherlands': 'Нидерланды',
-    'Norway': 'Норвегия',
-    'Nepal': 'Непал',
-    'Nauru': 'Науру',
-    'Niue': 'Ниуэ',
-    'New Zealand': 'Новая Зеландия',
-    'Oman': 'Оман',
-    'Panama': 'Панама',
-    'Peru': 'Перу',
-    'French Polynesia': 'Французская Полинезия',
-    'Papua New Guinea': 'Папуа — Новая Гвинея',
-    'Philippines': 'Филиппины',
-    'Pakistan': 'Пакистан',
-    'Poland': 'Польша',
-    'Saint Pierre and Miquelon': 'Сен-Пьер и Микелон',
-    'Puerto Rico': 'Пуэрто-Рико',
-    'Palestinian Territory': 'Палестинские территории',
-    'Portugal': 'Португалия',
-    'Palau': 'Палау',
-    'Paraguay': 'Парагвай',
-    'Qatar': 'Катар',
-    'Reunion': 'Реюньон',
-    'Romania': 'Румыния',
-    'Serbia': 'Сербия',
-    'Russia': 'Россия',
-    'Rwanda': 'Руанда',
-    'Saudi Arabia': 'Саудовская Аравия',
-    'Solomon Islands': 'Соломоновы Острова',
-    'Seychelles': 'Сейшелы',
-    'Sudan': 'Судан',
-    'Sweden': 'Швеция',
-    'Singapore': 'Сингапур',
-    'Saint Helena': 'Остров Святой Елены',
-    'Slovenia': 'Словения',
-    'Svalbard': 'Шпицберген',
-    'Slovakia': 'Словакия',
-    'Sierra Leone': 'Сьерра-Леоне',
-    'San Marino': 'Сан-Марино',
-    'Senegal': 'Сенегал',
-    'Somalia': 'Сомали',
-    'Suriname': 'Суринам',
-    'South Sudan': 'Южный Судан',
-    'Sao Tome and Principe': 'Сан-Томе и Принсипи',
-    'El Salvador': 'Сальвадор',
-    'Sint Maarten': 'Синт-Мартен',
-    'Syria': 'Сирия',
-    'Eswatini': 'Эсватини',
-    'Turks and Caicos Islands': 'Тёркс и Кайкос',
-    'Chad': 'Чад',
-    'Togo': 'Того',
-    'Thailand': 'Таиланд',
-    'Tajikistan': 'Таджикистан',
-    'Tokelau': 'Токелау',
-    'Timor-Leste': 'Восточный Тимор',
-    'Turkmenistan': 'Туркменистан',
-    'Tunisia': 'Тунис',
-    'Tonga': 'Тонга',
-    'Turkey': 'Турция',
-    'Trinidad and Tobago': 'Тринидад и Тобаго',
-    'Tuvalu': 'Тувалу',
-    'Taiwan': 'Тайвань',
-    'Tanzania': 'Танзания',
-    'Ukraine': 'Украина',
-    'Uganda': 'Уганда',
-    'United States': 'Соединённые Штаты',
-    'Uruguay': 'Уругвай',
-    'Uzbekistan': 'Узбекистан',
-    'Holy See (Vatican City)': 'Ватикан',
-    'Saint Vincent and the Grenadines': 'Сент-Винсент и Гренадины',
-    'Venezuela': 'Венесуэла',
-    'British Virgin Islands': 'Британские Виргинские острова',
-    'Virgin Islands': 'Виргинские острова',
-    'Vietnam': 'Вьетнам',
-    'Vanuatu': 'Вануату',
-    'Wallis and Futuna': 'Уоллис и Футуна',
-    'Western Samoa': 'Западное Самоа',
-    'Republic of Kosovo': 'Республика Косово',
-    'Yemen': 'Йемен',
-    'Mayotte': 'Майотта',
-    'South Africa': 'Южная Африка',
-    'Zambia': 'Замбия',
-    'Zimbabwe': 'Зимбабве'
-  },
-  'errors': {
-    'low-location-accuracy': 'Точность геопозиции недостаточна. Включите GPS и попробуйте снова',
-    'unknown-error': 'Неизвестная ошибка',
-    'location-not-determined-check-settings': 'Не удалось определить ваше местоположение. Убедитесь что включили доступ в настройках вашего устройства.',
-    'payment-error': 'При произведении оплаты возникли неполадки. Попробуйте снова.',
-    'the-session-has-timed-out-please-log-in': 'Время сессии истекло. Пожалуйста авторизуйтесь.',
-    'network-connection-lost': 'Неполадки сети интернет. Попробуйте пожалуйста позже.',
-    'api': {
-      'server-error': 'Неполадки на сервере. Попробуйте пожалуйста позже.',
-      'bad-request': 'Неверный запрос',
-      'unauthorized': 'Необходима авторизация',
-      'forbidden': 'Доступ запрещен',
-      'not-found': 'Не найдено',
-      'request-timeout': 'Время ожидания истекло',
-      'too-many-requests': 'Слишком много запросов',
-      'client-error': 'Ошибка клиента'
-    },
-    'critical': {
-      'critical-error-title': 'Критическая ошибка',
-      'critical-error-occurred': 'Приложение столкнулось с критической ошибкой и требует перезапуска',
-      'send-report': 'Отправить отчёт',
-      'restart-app': 'Перезапустить',
-      'close-app': 'Закрыть приложение',
-      'close-app-title': 'Закройте приложение вручную',
-      'close-app-ios-instruction': 'Дважды нажмите кнопку Home и смахните приложение вверх для закрытия',
-      'manual-report-title': 'Не удалось отправить отчет',
-      'manual-report-message': 'Пожалуйста, отправьте отчет об ошибке на:',
-      'error-boundary-title': 'Упс! Что-то пошло не так',
-      'error-boundary-message': 'Мы зафиксировали эту ошибку и работаем над её исправлением',
-      'try-again': 'Попробовать снова'
-    },
-    'validations': {
-      'password': 'Длина пароля должна быть минимум 6 символов.'
-    }
-  },
-  'shared': {
-    'active': 'Активные',
-    'add-photo': 'Добавить фото',
-    'archive': 'Архив',
-    'city': 'Город',
-    'completed': 'Завершённые',
-    'documents': 'Документы',
-    'email': 'Email',
-    'filters': 'Фильтры',
-    'finances': 'Финансы',
-    'forgot-password': 'Забыли пароль?',
-    'later': 'Позже',
-    'map': 'Карта',
-    'notification': 'Уведомления',
-    'password': 'Пароль',
-    'phone': 'Телефон',
-    'profile': 'Профиль',
-    'give-feedback': 'Дать обратную связь',
-    'registration': 'Регистрация',
-    'route': 'Маршрут',
-    'search': 'Поиск',
-    'top-up-balance': 'Пополнить баланс',
-    'address-copied': 'Адрес скопирован',
-    'support-service': 'Служба поддержки',
-    'change-password': 'Изменить пароль',
-    'balance-topped-up': 'Баланс пополнен!',
-    'next': 'Далее',
-    'phone-number-support-promting': 'Указанный номер телефона позволит нам быстрее помочь вам в случае обращения в службу поддержки',
-    'do-you-want-to-logout?': 'Желаете выйти?',
-    'no-internet-connection': 'Нет соединения с интернетом'
-  },
-  'adding-card-and-payment-screen': {
-    'title': 'Пополнение счета'
-  },
-  'change-password-screen': {
-    'title': 'Изменить пароль',
-    'current-password-placeholder': 'Текущий пароль',
-    'new-password-placeholder': 'Новый пароль',
-    'reset-password-button': 'Сбросить пароль',
-    'password-changed-success': 'Пароль успешно изменен!',
-    'password-requirements': 'Пароль должен содержать минимум 8 символов, включая заглавные буквы, строчные буквы и цифры'
-  },
-  'change-user-fields-screen': {
-    'actions': {
-      'to-delete': 'Удалить',
-      'to-cancel': 'Отмена',
-      'to-save': 'Сохранить',
-      'name-updated': 'Имя обновлено!',
-      'phone-updated': 'Телефон обновлен!'
-    },
-    'change-user-fields': {
-      'name-placeholder': 'Имя',
-      'delete-number': 'Удалить номер',
-      'confirmation-title': 'Удалить?'
-    }
-  },
-  'charging-details-screen': {
-    'address-copied': 'Адрес скопирован',
-    'received': 'Получено',
-    'battery': 'Батарея',
-    'charging-time': 'Время зарядки',
-    'spent': 'Потрачено',
-    'tariff': 'Тариф',
-    'connector': 'Коннектор',
-    'session-id': 'ID Сессии',
-    'route': 'Маршрут'
-  },
-  'charging-history-screen': {
-    'title': 'История зарядок',
-    'reset-filters': 'Сбросить фильтры',
-    'received': 'Получено',
-    'spent': 'Потрачено',
-    'no-chargings-found': 'Зарядок не найдено',
-    'no-chargings-description': 'За выбранный период вы не заряжались через наше приложение',
-    'kilowatt-hour': 'кВт·ч'
-  },
-  'charging-session-screen': {
-    'title': 'Сессия зарядки',
-    'charging-session-title_one': 'Сессия зарядки',
-    'charging-session-title_few': 'Сессии зарядки',
-    'charging-session-title_many': 'Сессий зарядки',
-    'charging-session-title_other': 'Сессии зарядки',
-    'end-session': 'Завершить сессию',
-    'write-to-support': 'Связаться с поддержкой',
-    'session-starting': 'Сессия скоро начнется, подготовка...',
-    'end-session-confirm-title': 'Завершить зарядку?',
-    'end-session-confirm-message': 'Вы уверены, что хотите завершить текущую сессию?',
-    'cancel-button': 'Отмена',
-    'confirm-button': 'Завершить',
-    'power-label': 'Мощность',
-    'battery-label': 'Батарея',
-    'charged-label': 'Заряжено',
-    'time-label': 'Время',
-    'kilowatt-hour': 'кВт·ч',
-    'kilowatt': 'кВт'
-  },
-  'charging-station-screen': {
-    'address-copied': 'Адрес скопирован',
-    'build-route': 'Построить маршрут',
-    'need-top-up': 'Для начала зарядки требуется пополнение баланса.',
-    'owner': 'Владелец',
-    'give-feedback': 'Дать обратную связь',
-    'top-up': 'Пополнить',
-    'city': 'Город',
-    'route': 'Маршрут'
-  },
-  'filters-of-stations-screen': {
-    'title': 'Фильтры',
-    'connector-type': 'Тип коннектора',
-    'fast': 'Быстрая',
-    'hide-disabled': 'Скрывать выключенные коннекторы из описания станций',
-    'other-networks': 'Другие сети',
-    'other': 'Другое',
-    'busy': 'Занятые',
-    'broken': 'Неисправные',
-    'reset-default': 'Сбросить по умолчанию',
-    'apply-filters': 'Применить фильтры',
-    'connectors': {
-      'ccs': 'CCS',
-      'gbt': 'GB/T',
-      'gbt-ac': 'GB/T AC',
-      'type-2-socket': 'Type 2 (Socket)',
-      'type-2-plug': 'Type 2 (Plug)'
-    },
-    'networks': {
-      'malanka': 'Malanka',
-      'battery-fly': 'BatteryFly'
-    }
-  },
-  'forgot-password-screen': {
-    'title': 'Восстановление пароля',
-    'input-promting': 'Укажите E-mail на который создавали аккаунт и мы вышлем на него ссылку для восстановления пароля'
-  },
-  'login-screen': {
-    'email-placeholder': 'E-mail',
-    'password-placeholder': 'Пароль',
-    'forgot-password': 'Забыли пароль?',
-    'create-account': 'Создать аккаунт',
-    'to-login': 'Войти',
-    'to-skip': 'Пропустить'
-  },
-  'map-screen': {
-    'title': 'Карта'
-  },
-  'notifications-settings-screen': {
-    'title': 'Настройки уведомлений',
-    'options': {
-      'start_and_end_of_charging': 'Начало и окончание зарядки',
-      'balance_replenished': 'Баланс пополнен',
-      'balance_less_than_3_byn': 'Баланс меньше 3 BYN',
-      'special_offers': 'Спецпредложения',
-      'push_notifications': 'Push-уведомления'
-    },
-    'status': {
-      'saving': 'Сохранение настроек...',
-      'saved': 'Настройки сохранены',
-      'error': 'Ошибка сохранения настроек'
-    },
-    'permission_warning': 'Включите уведомления в настройках устройства для получения оповещений'
-  },
-  'otp-verify-screen': {
-    'title': 'Восстановление пароля',
-    'confirm-the-email': 'Подтвердите E-mail',
-    'sent-code': 'Мы отправили код подтверждения на ',
-    'enter-below': 'Введите его ниже',
-    'resend-code': 'Выслать код повторно',
-    'resend-success': 'Мы повторно выслали код. Проверьте почту!',
-    'timer-format': '(0:{{seconds}})'
-  },
-  'profile-details-screen': {
-    'title': 'Профиль',
-    'email-label': 'E-mail',
-    'name-label': 'Имя',
-    'phone-number': 'Номер телефона',
-    'change-password': 'Изменить пароль',
-    'how-to-address-you': 'Как к вам обращаться?',
-    'add-phone-number': 'Добавить номер телефона',
-    'logout-button': 'Выйти из аккаунта',
-    'delete-account-button': 'Удалить аккаунт'
-  },
-  'profile-screen': {
-    'title': 'Профиль',
-    'profile': 'Профиль',
-    'charging-history': 'История зарядок',
-    'recharge-history': 'История пополнений',
-    'saved-cards': 'Сохранённые карты',
-    'notifications': 'Уведомления',
-    'support-service': 'Служба поддержки',
-    'charging-rules': 'Правила зарядки',
-    'faq': 'FAQ',
-    'app-language': 'Язык приложения',
-    'app-version': 'Версия {{version}}'
-  },
-  'recharge-history-screen': {
-    'title': 'История пополнений',
-    'reset-filters': 'Сбросить фильтры',
-    'no-transactions': 'Пополнений не найдено',
-    'no-transactions-description': 'За выбранный период вы не пополняли внутренний баланс',
-    'wallet-names': {
-      'by': 'BY Кошелёк',
-      'ru': 'RU Кошелёк'
-    },
-    'payment-method': {
-      'unknown': 'Неизвестно'
-    },
-    'transaction-states': {
-      'completed': 'Исполнена'
-    }
-  },
-  'recharge-transaction-detail-screen': {
-    'title': 'Пополнение BY баланса',
-    'status': {
-      'completed': 'Исполнена',
-      'pending': 'В обработке',
-      'failed': 'Ошибка'
-    },
-    'labels': {
-      'operation-status': 'Статус операции',
-      'payment-method': 'Метод оплаты',
-      'balance-before': 'Баланс до пополнения',
-      'balance-after': 'Баланс после пополнения',
-      'download-receipt': 'Скачать чек'
-    },
-    'currency': {
-      'byn': 'BYN',
-      'rub': 'RUB'
-    }
-  },
-  'registration-screen': {
-    'title': 'Регистрация',
-    'phone-placeholder': 'Телефон (опционально)',
-    'password-placeholder': 'Пароль',
-    'user-agreement-checkbox': '<agree><0>Ознакомлен и согласен с </0></agree><user_agreement><0>Пользовательским соглашением</0></user_agreement><agree><0> и </0><privacy_policy><0>Политикой конфеденциальности</0></privacy_policy>'
-  },
-  'set-new-password-screen': {
-    'title': 'Новый пароль',
-    'password-changed-success': 'Пароль успешно изменен!',
-    'password-placeholder': 'Пароль'
-  },
-  'support-service-screen': {
-    'title': 'Служба поддержки',
-    'telegram': 'Написать в Telegram',
-    'whatsapp': 'Написать в WhatsApp'
-  },
-  'top-up-account-screen': {
-    'title': 'Пополнение счета',
-    'amount-placeholder': 'Сумма',
-    'by-wallet': 'BY Кошелёк',
-    'ru-wallet': 'RU Кошелёк',
-    'balance-topped-up': 'Баланс пополнен!'
-  },
-  'camera-modal': {
-    'error': {
-      'camera-permission': 'Нужно разрешение камеры',
-      'camera-access': 'Камера недоступна'
-    },
-    'permission': {
-      'request-message': 'Предоставьте доступ к камере чтобы продолжить',
-      'request-button': 'Предоставить',
-      'denied-message': 'Не предоставлен доступ к камере'
-    },
-    'instructions': {
-      'scan-message': 'Отсканируй QR код что-бы начать зарядку'
-    },
-    'controls': {
-      'close': 'Закрыть',
-      'torch-on': 'Включить',
-      'torch-off': 'Выключить'
-    }
-  },
-  'change-language-modal': {
-    'title': 'Язык приложения',
-    'lang': {
-      'russian': 'Русский',
-      'english': 'English',
-      'china': '中国人',
-      'ru': 'Русский',
-      'en': 'English',
-      'zh': '中国人'
-    }
-  },
-  'charging-station-power-slider': {
-    'min-power': 'Минимальная мощность',
-    'kilowatt': 'кВт'
-  },
-  'contector-not-inserted-modal': {
-    'title': 'Коннектор не вставлен',
-    'description': 'Для начала зарядки необходимо вставить коннектор.',
-    'ok-button': 'OK'
-  },
-  'date-period-select': {
-    'to-apply': 'Применить',
-    'to-confirm': 'Подтвердить',
-    'to-reset': 'Сбросить',
-    'start': 'Начало',
-    'end': 'Конец',
-    'select-period': 'Выберите период'
-  },
-  'delete-account-modal': {
-    'delete-account': 'Удалить аккаунт',
-    'consequences': 'Последствия:',
-    'consequences-list': '· Вы не сможете запускать зарядные сессии.\n· Все ваши пользовательские данные будут удалены.\n· История зарядок и пополнений пропадет.\n· Привязанные карты открепяться.\n· Средства с текущего баланса будут возвращены на выбранную карту в течении пяти банковских дней.',
-    'action-irreversible': 'Это действие нельзя отменить.',
-    'cancel': 'Отменить',
-    'alert': {
-      'title': 'Желаете удалить аккаунт?',
-      'cancel': 'Отменить',
-      'delete': 'Удалить'
-    }
-  },
-  'station-preview-modal': {
-    'address-copied': 'Адрес скопирован!',
-    'station-unavailable-title': 'Станция временно недоступна',
-    'station-unavailable-description': 'Мы уже работаем над устранением неисправности.',
-    'more-details': 'Подробнее',
-    'route': 'Маршрут',
-    'available': 'Доступно {{available}}/{{from}}',
-    'power-unit': 'кВт'
-  },
-  'user-balance': {
-    'current-balance': 'Текущий баланс',
-    'deposit': 'Пополнить'
-  },
-  'user-cards-modal': {
-    'to-cancel': 'Отменить',
-    'to-delete': 'Удалить',
-    'title-card-selection': 'Выберите метод оплаты',
-    'title-saved-cards': 'Сохранённые карты',
-    'other-payment-methods': 'Другие методы',
-    'no-saved-cards': 'У вас пока нет сохраненных карт.',
-    'delete-card-title': 'Вы точно хотите удалить карту?',
-    'delete-card-message': 'Карта будет удалена из вашего аккаунта. Это действие нельзя отменить.',
-    'visa-card': 'Visa',
-    'mastercard': 'Mastercard'
+/* AUTO-GENERATED FILE — DO NOT EDIT MANUALLY */
+  interface Resources {
+  actions: {
+    add: string;
+    download: string;
+    "to-accept": string;
+    "to-cancel": string;
+    "to-change": string;
+    "to-choose-different-photo": string;
+    "to-confirm": string;
+    "to-continue": string;
+    "to-decline": string;
+    "to-delete": string;
+    "to-enter-phone-number": string;
+    "to-log-out": string;
+    "to-login": string;
+    "to-pay": string;
+    "to-reset": string;
+    "to-save": string;
+    "to-send": string;
+    "to-show": string;
+    "to-skip": string;
+    "to-upload": string;
+    "to-upload-photo": string;
+    "to-download-check": string;
+    "to-top-up": string;
+    "to-logout-from-account": string;
+    "to-reset-filter": string;
+    "to-apply": string;
   }
-}
+  countries: {
+    Andorra: string;
+    "United Arab Emirates": string;
+    Afghanistan: string;
+    "Antigua and Barbuda": string;
+    Anguilla: string;
+    Albania: string;
+    Armenia: string;
+    Angola: string;
+    Argentina: string;
+    "American Samoa": string;
+    Austria: string;
+    Australia: string;
+    Aruba: string;
+    "Åland Islands": string;
+    Azerbaijan: string;
+    "Bosnia and Herzegovina": string;
+    Barbados: string;
+    Bangladesh: string;
+    Belgium: string;
+    "Burkina Faso": string;
+    Bulgaria: string;
+    Bahrain: string;
+    Burundi: string;
+    Benin: string;
+    "Saint Barthélemy": string;
+    Bermuda: string;
+    Brunei: string;
+    Bolivia: string;
+    Bonaire: string;
+    Brazil: string;
+    "The Bahamas": string;
+    Bhutan: string;
+    Botswana: string;
+    Belarus: string;
+    Belize: string;
+    Canada: string;
+    "Cocos (Keeling) Islands": string;
+    "Democratic Republic of the Congo": string;
+    "Central African Republic": string;
+    "Republic of the Congo": string;
+    Switzerland: string;
+    "Cote d'Ivoire": string;
+    "Cook Islands": string;
+    Chile: string;
+    Cameroon: string;
+    China: string;
+    Colombia: string;
+    "Costa Rica": string;
+    Cuba: string;
+    "Cape Verde": string;
+    "Curaçao": string;
+    "Christmas Island": string;
+    Cyprus: string;
+    Czechia: string;
+    Germany: string;
+    Djibouti: string;
+    Denmark: string;
+    Dominica: string;
+    "Dominican Republic": string;
+    Algeria: string;
+    Ecuador: string;
+    Estonia: string;
+    Egypt: string;
+    "Western Sahara": string;
+    Eritrea: string;
+    Spain: string;
+    Ethiopia: string;
+    Finland: string;
+    Fiji: string;
+    "Falkland Islands (Islas Malvinas)": string;
+    "Federated States of Micronesia": string;
+    "Faroe Islands": string;
+    France: string;
+    Gabon: string;
+    "United Kingdom": string;
+    Grenada: string;
+    Georgia: string;
+    "French Guiana": string;
+    Guernsey: string;
+    Ghana: string;
+    Gibraltar: string;
+    Greenland: string;
+    "The Gambia": string;
+    Guinea: string;
+    Guadeloupe: string;
+    "Equatorial Guinea": string;
+    Greece: string;
+    Guatemala: string;
+    Guam: string;
+    "Guinea-Bissau": string;
+    Guyana: string;
+    "Hong Kong": string;
+    Honduras: string;
+    Croatia: string;
+    Haiti: string;
+    Hungary: string;
+    Indonesia: string;
+    Ireland: string;
+    Israel: string;
+    "Isle of Man": string;
+    India: string;
+    "British Indian Ocean Territory": string;
+    Iraq: string;
+    Iran: string;
+    Iceland: string;
+    Italy: string;
+    Jersey: string;
+    Jamaica: string;
+    Jordan: string;
+    Japan: string;
+    Kenya: string;
+    Kyrgyzstan: string;
+    Cambodia: string;
+    Kiribati: string;
+    Comoros: string;
+    "Saint Kitts and Nevis": string;
+    "North Korea": string;
+    "South Korea": string;
+    Kuwait: string;
+    "Cayman Islands": string;
+    Kazakhstan: string;
+    Laos: string;
+    Lebanon: string;
+    "Saint Lucia": string;
+    Liechtenstein: string;
+    "Sri Lanka": string;
+    Liberia: string;
+    Lesotho: string;
+    Lithuania: string;
+    Luxembourg: string;
+    Latvia: string;
+    Libya: string;
+    Morocco: string;
+    Monaco: string;
+    Moldova: string;
+    Montenegro: string;
+    "Saint Martin": string;
+    Madagascar: string;
+    "Marshall Islands": string;
+    "North Macedonia": string;
+    Mali: string;
+    "Myanmar (Burma)": string;
+    Mongolia: string;
+    Macau: string;
+    "Northern Mariana Islands": string;
+    Martinique: string;
+    Mauritania: string;
+    Montserrat: string;
+    Malta: string;
+    Mauritius: string;
+    Maldives: string;
+    Malawi: string;
+    Mexico: string;
+    Malaysia: string;
+    Mozambique: string;
+    Namibia: string;
+    "New Caledonia": string;
+    Niger: string;
+    "Norfolk Island": string;
+    Nigeria: string;
+    Nicaragua: string;
+    Netherlands: string;
+    Norway: string;
+    Nepal: string;
+    Nauru: string;
+    Niue: string;
+    "New Zealand": string;
+    Oman: string;
+    Panama: string;
+    Peru: string;
+    "French Polynesia": string;
+    "Papua New Guinea": string;
+    Philippines: string;
+    Pakistan: string;
+    Poland: string;
+    "Saint Pierre and Miquelon": string;
+    "Puerto Rico": string;
+    "Palestinian Territory": string;
+    Portugal: string;
+    Palau: string;
+    Paraguay: string;
+    Qatar: string;
+    Reunion: string;
+    Romania: string;
+    Serbia: string;
+    Russia: string;
+    Rwanda: string;
+    "Saudi Arabia": string;
+    "Solomon Islands": string;
+    Seychelles: string;
+    Sudan: string;
+    Sweden: string;
+    Singapore: string;
+    "Saint Helena": string;
+    Slovenia: string;
+    Svalbard: string;
+    Slovakia: string;
+    "Sierra Leone": string;
+    "San Marino": string;
+    Senegal: string;
+    Somalia: string;
+    Suriname: string;
+    "South Sudan": string;
+    "Sao Tome and Principe": string;
+    "El Salvador": string;
+    "Sint Maarten": string;
+    Syria: string;
+    Eswatini: string;
+    "Turks and Caicos Islands": string;
+    Chad: string;
+    Togo: string;
+    Thailand: string;
+    Tajikistan: string;
+    Tokelau: string;
+    "Timor-Leste": string;
+    Turkmenistan: string;
+    Tunisia: string;
+    Tonga: string;
+    Turkey: string;
+    "Trinidad and Tobago": string;
+    Tuvalu: string;
+    Taiwan: string;
+    Tanzania: string;
+    Ukraine: string;
+    Uganda: string;
+    "United States": string;
+    Uruguay: string;
+    Uzbekistan: string;
+    "Holy See (Vatican City)": string;
+    "Saint Vincent and the Grenadines": string;
+    Venezuela: string;
+    "British Virgin Islands": string;
+    "Virgin Islands": string;
+    Vietnam: string;
+    Vanuatu: string;
+    "Wallis and Futuna": string;
+    "Western Samoa": string;
+    "Republic of Kosovo": string;
+    Yemen: string;
+    Mayotte: string;
+    "South Africa": string;
+    Zambia: string;
+    Zimbabwe: string;
+  }
+  errors: {
+    "low-location-accuracy": string;
+    "unknown-error": string;
+    "location-not-determined-check-settings": string;
+    "payment-error": string;
+    "the-session-has-timed-out-please-log-in": string;
+    "network-connection-lost": string;
+    api: {
+      "server-error": string;
+      "bad-request": string;
+      unauthorized: string;
+      forbidden: string;
+      "not-found": string;
+      "request-timeout": string;
+      "too-many-requests": string;
+      "client-error": string;
+    }
+    critical: {
+      "critical-error-title": string;
+      "critical-error-occurred": string;
+      "send-report": string;
+      "restart-app": string;
+      "close-app": string;
+      "close-app-title": string;
+      "close-app-ios-instruction": string;
+      "manual-report-title": string;
+      "manual-report-message": string;
+      "error-boundary-title": string;
+      "error-boundary-message": string;
+      "try-again": string;
+    }
+    validations: {
+      password: string;
+    }
+  }
+  screens: {
+    "adding-card-and-payment-screen": {
+      title: string;
+    }
+    "change-password-screen": {
+      title: string;
+      "current-password-placeholder": string;
+      "new-password-placeholder": string;
+      "reset-password-button": string;
+      "password-changed-success": string;
+      "password-requirements": string;
+    }
+    "change-user-fields-screen": {
+      actions: {
+        "to-delete": string;
+        "to-cancel": string;
+        "to-save": string;
+        "name-updated": string;
+        "phone-updated": string;
+      }
+      "change-user-fields": {
+        "name-placeholder": string;
+        "delete-number": string;
+        "confirmation-title": string;
+      }
+    }
+    "charging-details-screen": {
+      "address-copied": string;
+      received: string;
+      battery: string;
+      "charging-time": string;
+      spent: string;
+      tariff: string;
+      connector: string;
+      "session-id": string;
+      route: string;
+    }
+    "charging-history-screen": {
+      title: string;
+      "reset-filters": string;
+      received: string;
+      spent: string;
+      "no-chargings-found": string;
+      "no-chargings-description": string;
+      "kilowatt-hour": string;
+    }
+    "charging-session-screen": {
+      title: string;
+      "charging-session-title_one": string;
+      "charging-session-title_few": string;
+      "charging-session-title_many": string;
+      "charging-session-title_other": string;
+      "end-session": string;
+      "write-to-support": string;
+      "session-starting": string;
+      "end-session-confirm-title": string;
+      "end-session-confirm-message": string;
+      "cancel-button": string;
+      "confirm-button": string;
+      "power-label": string;
+      "battery-label": string;
+      "charged-label": string;
+      "time-label": string;
+      "kilowatt-hour": string;
+      kilowatt: string;
+      "session-complited-title": string;
+      "session-complited-description": string;
+      "money-spent": string;
+      done: string;
+    }
+    "charging-station-screen": {
+      "address-copied": string;
+      "build-route": string;
+      "need-top-up": string;
+      owner: string;
+      "give-feedback": string;
+      "top-up": string;
+      city: string;
+      route: string;
+    }
+    "filters-of-stations-screen": {
+      title: string;
+      "connector-type": string;
+      fast: string;
+      "hide-disabled": string;
+      "other-networks": string;
+      other: string;
+      busy: string;
+      broken: string;
+      "reset-default": string;
+      "apply-filters": string;
+      connectors: {
+        ccs: string;
+        gbt: string;
+        "gbt-ac": string;
+        "type-2-socket": string;
+        "type-2-plug": string;
+      }
+      networks: {
+        malanka: string;
+        "battery-fly": string;
+      }
+    }
+    "forgot-password-screen": {
+      title: string;
+      "input-promting": string;
+    }
+    "login-screen": {
+      "email-placeholder": string;
+      "password-placeholder": string;
+      "forgot-password": string;
+      "create-account": string;
+      "to-login": string;
+      "to-skip": string;
+    }
+    "map-screen": {
+      title: string;
+    }
+    "notifications-settings-screen": {
+      title: string;
+      options: {
+        start_and_end_of_charging: string;
+        balance_replenished: string;
+        balance_less_than_3_byn: string;
+        special_offers: string;
+        push_notifications: string;
+      }
+      status: {
+        saving: string;
+        saved: string;
+        error: string;
+      }
+      permission_warning: string;
+    }
+    "otp-verify-screen": {
+      title: string;
+      "confirm-the-email": string;
+      "sent-code": string;
+      "enter-below": string;
+      "resend-code": string;
+      "resend-success": string;
+      "timer-format": string;
+    }
+    "profile-details-screen": {
+      title: string;
+      "email-label": string;
+      "name-label": string;
+      "phone-number": string;
+      "change-password": string;
+      "how-to-address-you": string;
+      "add-phone-number": string;
+      "logout-button": string;
+      "delete-account-button": string;
+    }
+    "profile-screen": {
+      title: string;
+      profile: string;
+      "charging-history": string;
+      "recharge-history": string;
+      "saved-cards": string;
+      notifications: string;
+      "support-service": string;
+      "charging-rules": string;
+      faq: string;
+      "app-language": string;
+      "app-version": string;
+    }
+    "recharge-history-screen": {
+      title: string;
+      "reset-filters": string;
+      "no-transactions": string;
+      "no-transactions-description": string;
+      "wallet-names": {
+        by: string;
+        ru: string;
+      }
+      "payment-method": {
+        unknown: string;
+      }
+      "transaction-states": {
+        completed: string;
+      }
+    }
+    "recharge-transaction-detail-screen": {
+      title: string;
+      status: {
+        completed: string;
+        pending: string;
+        failed: string;
+      }
+      labels: {
+        "operation-status": string;
+        "payment-method": string;
+        "balance-before": string;
+        "balance-after": string;
+        "download-receipt": string;
+      }
+      currency: {
+        byn: string;
+        rub: string;
+      }
+    }
+    "registration-screen": {
+      title: string;
+      "phone-placeholder": string;
+      "password-placeholder": string;
+      "user-agreement-checkbox": string;
+    }
+    "set-new-password-screen": {
+      title: string;
+      "password-changed-success": string;
+      "password-placeholder": string;
+    }
+    "support-service-screen": {
+      title: string;
+      telegram: string;
+      whatsapp: string;
+    }
+    "top-up-account-screen": {
+      title: string;
+      "amount-placeholder": string;
+      "by-wallet": string;
+      "ru-wallet": string;
+      "balance-topped-up": string;
+    }
+  }
+  shared: {
+    active: string;
+    "add-photo": string;
+    archive: string;
+    city: string;
+    completed: string;
+    documents: string;
+    email: string;
+    filters: string;
+    finances: string;
+    "forgot-password": string;
+    later: string;
+    map: string;
+    notification: string;
+    password: string;
+    phone: string;
+    profile: string;
+    "give-feedback": string;
+    registration: string;
+    route: string;
+    search: string;
+    "top-up-balance": string;
+    "address-copied": string;
+    "support-service": string;
+    "change-password": string;
+    "balance-topped-up": string;
+    next: string;
+    "phone-number-support-promting": string;
+    "do-you-want-to-logout?": string;
+    "no-internet-connection": string;
+  }
+  widgets: {
+    "camera-modal": {
+      error: {
+        "camera-permission": string;
+        "camera-access": string;
+      }
+      permission: {
+        "request-message": string;
+        "request-button": string;
+        "denied-message": string;
+        "open-settings": string;
+      }
+      instructions: {
+        "scan-message": string;
+      }
+      controls: {
+        close: string;
+        "torch-on": string;
+        "torch-off": string;
+        cancel: string;
+      }
+    }
+    "change-language-modal": {
+      title: string;
+      lang: {
+        russian: string;
+        english: string;
+        china: string;
+        ru: string;
+        en: string;
+        zh: string;
+      }
+    }
+    "chargin-accordion": {
+      "charge-up": string;
+      available: string;
+      busy: string;
+      "available-count": string;
+      "kW-h": string;
+      kW: string;
+    }
+    "charging-station-power-slider": {
+      "min-power": string;
+      kilowatt: string;
+    }
+    "contector-not-inserted-modal": {
+      title: string;
+      description: string;
+      "ok-button": string;
+    }
+    "date-period-select": {
+      "to-apply": string;
+      "to-confirm": string;
+      "to-reset": string;
+      start: string;
+      end: string;
+      "select-period": string;
+    }
+    "delete-account-modal": {
+      "delete-account": string;
+      consequences: string;
+      "consequences-list": string;
+      "action-irreversible": string;
+      cancel: string;
+      alert: {
+        title: string;
+        cancel: string;
+        delete: string;
+      }
+    }
+    "map-charging-widget": {
+      battery_one: string;
+      battery_few: string;
+      battery_many: string;
+      battery_other: string;
+      recived: string;
+      "kilowatt-hour": string;
+    }
+    "station-preview-modal": {
+      "address-copied": string;
+      "station-unavailable-title": string;
+      "station-unavailable-description": string;
+      "more-details": string;
+      route: string;
+      available: string;
+      "power-unit": string;
+    }
+    "user-balance": {
+      "current-balance": string;
+      deposit: string;
+    }
+    "user-cards-modal": {
+      "to-cancel": string;
+      "to-delete": string;
+      "title-card-selection": string;
+      "title-saved-cards": string;
+      "other-payment-methods": string;
+      "no-saved-cards": string;
+      "delete-card-title": string;
+      "delete-card-message": string;
+      "visa-card": string;
+      mastercard: string;
+    }
+  }
+};
 
-export default Resources;
+  export default Resources;

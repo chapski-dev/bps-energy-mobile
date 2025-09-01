@@ -1,0 +1,8 @@
+{
+  "charge-up": "Charging",
+  "available": "Available",
+  "busy": "Busy",
+  "available-count": "Available {{available}}/{{total}}",
+  "kW-h": " / kW·h",
+  "kW": "kW"
+}

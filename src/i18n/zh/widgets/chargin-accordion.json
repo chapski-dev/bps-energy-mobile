@@ -1,0 +1,9 @@
+{
+  "charge-up": "充电中",
+  "available": "空闲",
+  "busy": "忙碌",
+  "available-count": "可用 {{available}}/{{total}}",
+  "kW-h": " / 千瓦时",
+  "kW": "千瓦"
+
+}

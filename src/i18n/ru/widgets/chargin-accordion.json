@@ -1,0 +1,8 @@
+{
+  "charge-up": "Заряжаться",
+  "available": "Доступен",
+  "busy": "Занят",
+  "available-count": "Доступно {{available}}/{{total}}",
+  "kW-h": " / кВт·ч",
+  "kW": "кВт"
+}
