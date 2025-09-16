@@ -21,6 +21,8 @@
 		D681C0212DD65FA10072240E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D681C01F2DD65FA10072240E /* GoogleService-Info.plist */; };
 		D681C0232DD7424B0072240E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D681C0222DD7424B0072240E /* GoogleService-Info.plist */; };
 		D681C0242DD7424B0072240E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D681C0222DD7424B0072240E /* GoogleService-Info.plist */; };
+		D6ECC8AB2E65DCC800BB4453 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D6ECC8AA2E65DCC800BB4453 /* Config.xcconfig */; };
+		D6ECC8AC2E65DCC800BB4453 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D6ECC8AA2E65DCC800BB4453 /* Config.xcconfig */; };
 		E8036F7A562748ECB1B45985 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 678FA779E7B5467AAD60CF50 /* Colors.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +62,7 @@
 		D615E4CA2E4B942600DDCAB5 /* bpsenergyRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bpsenergyRelease.entitlements; path = bpsenergy/bpsenergyRelease.entitlements; sourceTree = "<group>"; };
 		D681C01F2DD65FA10072240E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D681C0222DD7424B0072240E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D6ECC8AA2E65DCC800BB4453 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		D6FE56D12DF30BE6005EBACD /* bpsenergy.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = bpsenergy.entitlements; path = bpsenergy/bpsenergy.entitlements; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FDDBEDF7BCAEB7F2541AA611 /* Pods_bpsenergy_bpsenergyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_bpsenergy_bpsenergyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +146,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D6ECC8AA2E65DCC800BB4453 /* Config.xcconfig */,
 				D681C01F2DD65FA10072240E /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* bpsenergy */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -266,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D681C0212DD65FA10072240E /* GoogleService-Info.plist in Resources */,
+				D6ECC8AB2E65DCC800BB4453 /* Config.xcconfig in Resources */,
 				D681C0242DD7424B0072240E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,6 +283,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				AD9C8F8CE35F8620934E45A7 /* PrivacyInfo.xcprivacy in Resources */,
 				A710D6E09812401FAFA129C6 /* BootSplash.storyboard in Resources */,
+				D6ECC8AC2E65DCC800BB4453 /* Config.xcconfig in Resources */,
 				E8036F7A562748ECB1B45985 /* Colors.xcassets in Resources */,
 				D681C0202DD65FA10072240E /* GoogleService-Info.plist in Resources */,
 				D681C0232DD7424B0072240E /* GoogleService-Info.plist in Resources */,
@@ -547,7 +553,7 @@
 				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = TNSZA9Q8HS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = bpsenergy/Info.plist;
@@ -557,7 +563,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -581,7 +587,7 @@
 				CODE_SIGN_ENTITLEMENTS = bpsenergy/bpsenergyRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = TNSZA9Q8HS;
 				INFOPLIST_FILE = bpsenergy/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "BPS Energy";
@@ -590,7 +596,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -688,10 +694,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -775,10 +778,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
