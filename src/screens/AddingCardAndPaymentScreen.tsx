@@ -6,6 +6,13 @@ import WebView from 'react-native-webview';
 import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { useAuth } from '@src/providers/auth';
+import { Text } from '@src/ui';
+
+function getOriginWhitelist(hosts: string[]): string[] {
+  return hosts.map((h) =>
+    h.trim().replace(/\/+$/, "")
+  );
+}
 
 function AddingCardAndPaymentScreen({
   navigation,
@@ -29,7 +36,7 @@ function AddingCardAndPaymentScreen({
 
   return (
     <WebView
-      originWhitelist={['https://checkout.bepaid.by', Config.API_HOST]}
+      originWhitelist={getOriginWhitelist(['https://checkout.bepaid.by', Config.API_HOST])}
       source={{ uri: route.params.url }}
       style={{ flex: 1 }}
       onNavigationStateChange={handleNavigationChange}
