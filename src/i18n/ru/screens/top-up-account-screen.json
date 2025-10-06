@@ -3,5 +3,6 @@
   "amount-placeholder": "Сумма",
   "by-wallet": "BY Кошелёк",
   "ru-wallet": "RU Кошелёк",
-  "balance-topped-up": "Баланс пополнен!"
+  "balance-topped-up": "Баланс пополнен!",
+  "save-card": "Сохранить карту для следующих платежей"
 }

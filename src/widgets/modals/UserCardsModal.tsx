@@ -90,7 +90,6 @@ const UserCardsModal = forwardRef<BottomSheetModal, UserCardsModalProps>(
 
     const handleDeleteCard = useCallback(async (cardId: number) => {
       try {
-        modalClose()
         await deleteCreditCard({ card_id: cardId })
         await getUserData()
       } catch (error) {

@@ -532,6 +532,7 @@
       "by-wallet": string;
       "ru-wallet": string;
       "balance-topped-up": string;
+      "save-card": string;
     }
   }
   shared: {

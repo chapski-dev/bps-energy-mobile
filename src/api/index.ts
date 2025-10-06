@@ -94,16 +94,16 @@ export const postChangePassword = (body: {
  * Удаляет карту пользователя по её идентификатору
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%BE%D0%BF%D0%BB%D0%B0%D1%82%D0%BE%D0%B9/post_mobile_delete_card
  */
-export const deleteCreditCard = (body: { card_id: number }) =>
+export const deleteCreditCard = ({ card_id }: { card_id: number }) =>
   api
-    .delete<{ url: string }>('/mobile/card', { data: { body } })
+    .delete<{ url: string }>('/mobile/card', { data: { card_id } })
     .then((res) => res.data);
 
 /**
  * Создание транзакции для пополнения баланса
  * @link https://api.test-bpsenergy.net.by/swagger/index.html#/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0%20%D1%81%20%D0%B1%D0%B0%D0%BB%D0%B0%D0%BD%D1%81%D0%BE%D0%BC/post_mobile_create_transaction
  */
-export const postCreateTransaction = (body: { amount: number }) =>
+export const postCreateTransaction = (body: { amount: number, save_card: boolean }) =>
   api
     .post<{ url: string }>('/mobile/create-transaction', body)
     .then((res) => res.data);

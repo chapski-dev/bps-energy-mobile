@@ -20,7 +20,7 @@ import { useThemedToasts } from '@src/hooks/useThemedToasts.';
 import { ScreenProps } from '@src/navigation/types';
 import { checkAuthOrRedirect, useAuth } from '@src/providers/auth';
 import { useAppTheme } from '@src/theme/theme';
-import { Box, Button, Input, Text } from '@src/ui';
+import { Box, Button, Checkbox, Input, Text } from '@src/ui';
 import { AnimatedBox } from '@src/ui/Box';
 import { wait } from '@src/utils';
 import { handleCatchError } from '@src/utils/helpers/handleCatchError';
@@ -37,6 +37,8 @@ const TopUpAccountScreen = ({
   const { t } = useTranslation(['screens', 'actions']);
 
   const [amount, setAmount] = useState('');
+  const [saveCard, setSaveCard] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const modalCards = useRef<BottomSheetModal>(null);
@@ -47,7 +49,7 @@ const TopUpAccountScreen = ({
     try {
       modalCardsClose();
       setLoading(true);
-      const { url } = await postCreateTransaction({ amount: Number(amount) });
+      const { url } = await postCreateTransaction({ amount: Number(amount), save_card: saveCard });
       navigation.navigate('adding-card-and-payment', { url });
     } catch (error) {
       handleCatchError(error, 'TopUpAccountScreen');
@@ -129,6 +131,12 @@ const TopUpAccountScreen = ({
               loading={loading}
               children={t('actions:to-pay')}
               onPress={() => submitPay()}
+            />
+            <Checkbox
+              checked={saveCard}
+              children={t('top-up-account-screen.save-card')}
+              onPress={() => setSaveCard(!saveCard)}
+              wrapperStyle={{ paddingVertical: 18 }}
             />
           </Box>
         </Box>
