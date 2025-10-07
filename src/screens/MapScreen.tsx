@@ -7,9 +7,9 @@ import React, {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Linking } from 'react-native';
+import { Dimensions, Linking, PixelRatio } from 'react-native';
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback/src/types';
-import { ClusteredYamap, Marker } from 'react-native-yamap';
+import { ClusteredYamap, Marker, ScreenPoint } from 'react-native-yamap';
 import FiltersIcon from '@assets/svg/faders-horizontal.svg';
 import NavigationArrowIcon from '@assets/svg/navigation-arrow.svg';
 import PlusCircleFillIcon from '@assets/svg/plus-circle-fill.svg';
@@ -36,6 +36,7 @@ import { vibrate } from '@src/utils/vibrate';
 import { StationPreviewModal } from '@src/widgets/modals/StationPreviewModal';
 
 const HIDING_MARGIN = 20;
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export default function MapScreen({ navigation }: ScreenProps<'map'>) {
   const mapRef = useRef<ClusteredYamap>(null);
@@ -47,13 +48,20 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
 
   const onStationPress = (location: LocationSummary) => {
     vibrate(HapticFeedbackTypes.impactMedium);
-    const Element = <StationPreviewModal location={location} />;
+    
+    mapRef.current?.getScreenPoints([location.point], (screenPoint) => {
+      const touchX = screenPoint.screenPoints[0].x || SCREEN_WIDTH / 2;
+      const touchY = screenPoint.screenPoints[0].y || SCREEN_HEIGHT / 3;
+      const ratio = PixelRatio.get();
 
-    modal().setupModal?.({
-      element: Element,
-      justifyContent: 'flex-start',
-      marginHorizontal: 12,
-      marginVertical: insets.top + 20,
+      const Element = <StationPreviewModal location={location} />;
+      modal().setupModal?.({
+        element: Element,
+        justifyContent: "flex-start",
+        marginHorizontal: 12,
+        marginVertical: insets.top + 20,
+        animationOrigin: { x: touchX / ratio , y: touchY / 2 },
+      });
     });
   };
 
@@ -107,11 +115,11 @@ export default function MapScreen({ navigation }: ScreenProps<'map'>) {
             key={index}
             point={info.point}
             handled={false}
-            children={
-              info.data.owner === 'BPS Energy' ?
-                <BpsLogoLabelDefault /> :
-                <DotDefault />
-            }
+          children={
+            info.data.owner === 'BPS Energy' ?
+              <BpsLogoLabelDefault /> :
+              <DotDefault />
+          }
           />
         )}
       />

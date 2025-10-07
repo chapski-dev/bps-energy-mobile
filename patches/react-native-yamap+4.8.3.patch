@@ -194,10 +194,38 @@ index 48c1cdf..11597f6 100644
          }
      }
 diff --git a/node_modules/react-native-yamap/ios/ClusteredYamapView.m b/node_modules/react-native-yamap/ios/ClusteredYamapView.m
-index ce9fd1e..c3ccb15 100644
+index ce9fd1e..29df16a 100644
 --- a/node_modules/react-native-yamap/ios/ClusteredYamapView.m
 +++ b/node_modules/react-native-yamap/ios/ClusteredYamapView.m
-@@ -186,7 +186,7 @@ RCT_EXPORT_METHOD(findRoutes:(nonnull NSNumber*) reactTag json:(NSDictionary*) j
+@@ -6,6 +6,7 @@
+ #import "RNYamap.h"
+ #import "View/RNCYMView.h"
+ 
++
+ #ifndef MAX
+ #import <NSObjCRuntime.h>
+ #endif
+@@ -22,7 +23,9 @@ RCT_EXPORT_MODULE()
+         @"onCameraPositionChange",
+         @"onMapPress",
+         @"onMapLongPress",
+-        @"onCameraPositionChangeEnd"
++        @"onCameraPositionChangeEnd",
++        @"onWorldToScreenPointsReceived",
++        @"onScreenToWorldPointsReceived"
+     ];
+ }
+ 
+@@ -53,6 +56,8 @@ RCT_EXPORT_VIEW_PROPERTY(onCameraPositionChange, RCTBubblingEventBlock)
+ RCT_EXPORT_VIEW_PROPERTY(onMapPress, RCTBubblingEventBlock)
+ RCT_EXPORT_VIEW_PROPERTY(onMapLongPress, RCTBubblingEventBlock)
+ RCT_EXPORT_VIEW_PROPERTY(onCameraPositionChangeEnd, RCTBubblingEventBlock)
++RCT_EXPORT_VIEW_PROPERTY(onWorldToScreenPointsReceived, RCTBubblingEventBlock)
++RCT_EXPORT_VIEW_PROPERTY(onScreenToWorldPointsReceived, RCTBubblingEventBlock)
+ 
+ RCT_CUSTOM_VIEW_PROPERTY(initialRegion, NSDictionary, RNYMView) {
+     if (json && view) {
+@@ -186,7 +191,7 @@ RCT_EXPORT_METHOD(findRoutes:(nonnull NSNumber*) reactTag json:(NSDictionary*) j
          NSArray<YMKPoint*>* points = [RCTConvert Points:json[@"points"]];
          NSMutableArray<YMKRequestPoint*>* requestPoints = [[NSMutableArray alloc] init];
          for (int i = 0; i < [points count]; ++i) {
@@ -206,6 +234,151 @@ index ce9fd1e..c3ccb15 100644
              [requestPoints addObject:requestPoint];
          }
          NSArray<NSString*>* vehicles = [RCTConvert Vehicles:json[@"vehicles"]];
+@@ -238,4 +243,39 @@ RCT_EXPORT_METHOD(getVisibleRegion:(nonnull NSNumber*) reactTag _id:(NSString*_N
+     }];
+ }
+ 
++RCT_EXPORT_METHOD(setTrafficVisible:(nonnull NSNumber*) reactTag traffic:(BOOL)traffic) {
++    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView*> *viewRegistry) {
++        RNCYMView *view = (RNCYMView *)viewRegistry[reactTag];
++        if (![view isKindOfClass:[RNCYMView class]]) {
++            RCTLogError(@"Cannot find RNCYMView with tag #%@", reactTag);
++            return;
++        }
++        [view setTrafficVisible:traffic];
++    }];
++}
++
++RCT_EXPORT_METHOD(getScreenPoints:(nonnull NSNumber *)reactTag json:(id)json _id:(NSString *_Nonnull)_id) {
++    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
++        RNCYMView *view = (RNCYMView *)viewRegistry[reactTag];
++        if (![view isKindOfClass:[RNCYMView class]]) {
++            RCTLogError(@"Cannot find RNCYMView with tag #%@", reactTag);
++            return;
++        }
++        NSArray<YMKPoint *> *mapPoints = [RCTConvert Points:json];
++        [view emitWorldToScreenPoint:mapPoints withId:_id];
++    }];
++}
++
++RCT_EXPORT_METHOD(getWorldPoints:(nonnull NSNumber *)reactTag json:(id)json _id:(NSString *_Nonnull)_id) {
++    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
++        RNCYMView *view = (RNCYMView *)viewRegistry[reactTag];
++        if (![view isKindOfClass:[RNCYMView class]]) {
++            RCTLogError(@"Cannot find RNCYMView with tag #%@", reactTag);
++            return;
++        }
++        NSArray<YMKScreenPoint *> *screenPoints = [RCTConvert ScreenPoints:json];
++        [view emitScreenToWorldPoint:screenPoints withId:_id];
++    }];
++}
++
+ @end
+diff --git a/node_modules/react-native-yamap/ios/View/RNCYMView.h b/node_modules/react-native-yamap/ios/View/RNCYMView.h
+index 89222a3..d9fac53 100644
+--- a/node_modules/react-native-yamap/ios/View/RNCYMView.h
++++ b/node_modules/react-native-yamap/ios/View/RNCYMView.h
+@@ -1,19 +1,25 @@
+ #ifndef RNCYMView_h
+ #define RNCYMView_h
+-#import <React/RCTComponent.h>
+ 
++#import <React/RCTComponent.h>
+ #import <MapKit/MapKit.h>
+ #import <RNYMView.h>
+ @import YandexMapsMobile;
+ 
+ @class RCTBridge;
+ 
+-@interface RNCYMView: RNYMView<YMKClusterListener, YMKClusterTapListener>
++@interface RNCYMView : RNYMView <YMKClusterListener, YMKClusterTapListener>
++
++- (void)setClusterColor:(UIColor * _Nullable)color;
++- (void)setClusteredMarkers:(NSArray<YMKRequestPoint *> * _Nonnull)points;
++- (void)setInitialRegion:(NSDictionary * _Nullable)initialRegion;
++
++@property (nonatomic, copy) RCTBubblingEventBlock _Nullable onWorldToScreenPointsReceived;
++@property (nonatomic, copy) RCTBubblingEventBlock _Nullable onScreenToWorldPointsReceived;
+ 
+-- (void)setClusterColor:(UIColor*_Nullable)color;
+-- (void)setClusteredMarkers:(NSArray<YMKRequestPoint*>*_Nonnull)points;
+-- (void)setInitialRegion:(NSDictionary *_Nullable)initialRegion;
++// ✅ Новый метод для JS — безопасное объявление
++- (NSArray * _Nonnull)getScreenPoints:(NSArray * _Nonnull)coordinates;
+ 
+ @end
+ 
+-#endif /* RNYMView_h */
++#endif /* RNCYMView_h */
+diff --git a/node_modules/react-native-yamap/ios/View/RNCYMView.m b/node_modules/react-native-yamap/ios/View/RNCYMView.m
+index b055faa..c319a5e 100644
+--- a/node_modules/react-native-yamap/ios/View/RNCYMView.m
++++ b/node_modules/react-native-yamap/ios/View/RNCYMView.m
+@@ -152,6 +152,7 @@
+     [super removeMarkerReactSubview:subview];
+ }
+ 
++
+ -(UIImage*)clusterImage:(NSNumber*) clusterSize {
+     float FONT_SIZE = 45;
+     float MARGIN_SIZE = 9;
+@@ -217,6 +218,56 @@
+ }
+ 
+ 
++- (NSDictionary *)worldPointToJSON:(YMKPoint *)point {
++    return @{
++        @"lat": [NSNumber numberWithDouble:point.latitude],
++        @"lon": [NSNumber numberWithDouble:point.longitude]
++    };
++}
++
++- (NSDictionary *)screenPointToJSON:(YMKScreenPoint *)point {
++    return @{
++        @"x": [NSNumber numberWithFloat:point.x],
++        @"y": [NSNumber numberWithFloat:point.y]
++    };
++}
++
++- (void)emitWorldToScreenPoint:(NSArray<YMKPoint *> *)worldPoints withId:(NSString *)_id {
++    NSMutableArray *screenPoints = [[NSMutableArray alloc] init];
++
++    for (int i = 0; i < [worldPoints count]; ++i) {
++        // Важно: правильный вызов — через mapWindow (а не mapWindow.map)
++        YMKScreenPoint *screenPoint = [self.mapWindow worldToScreenWithWorldPoint:[worldPoints objectAtIndex:i]];
++        [screenPoints addObject:[self screenPointToJSON:screenPoint]];
++    }
++
++    NSMutableDictionary *response = [[NSMutableDictionary alloc] init];
++    [response setValue:_id forKey:@"id"];
++    [response setValue:screenPoints forKey:@"screenPoints"];
++
++    if (self.onWorldToScreenPointsReceived) {
++        self.onWorldToScreenPointsReceived(response);
++    }
++}
++
++- (void)emitScreenToWorldPoint:(NSArray<YMKScreenPoint *> *)screenPoints withId:(NSString *)_id {
++    NSMutableArray *worldPoints = [[NSMutableArray alloc] init];
++
++    for (int i = 0; i < [screenPoints count]; ++i) {
++        YMKPoint *worldPoint = [self.mapWindow screenToWorldWithScreenPoint:[screenPoints objectAtIndex:i]];
++        [worldPoints addObject:[self worldPointToJSON:worldPoint]];
++    }
++
++    NSMutableDictionary *response = [[NSMutableDictionary alloc] init];
++    [response setValue:_id forKey:@"id"];
++    [response setValue:worldPoints forKey:@"worldPoints"];
++
++    if (self.onScreenToWorldPointsReceived) {
++        self.onScreenToWorldPointsReceived(response);
++    }
++}
++
++
+ @synthesize reactTag;
+ 
+ @end
 diff --git a/node_modules/react-native-yamap/ios/View/RNYMView.m b/node_modules/react-native-yamap/ios/View/RNYMView.m
 index 70691f8..0fe59a3 100644
 --- a/node_modules/react-native-yamap/ios/View/RNYMView.m
@@ -245,3 +418,42 @@ index d9ebae4..e4ddc1b 100644
              [requestPoints addObject:requestPoint];
          }
  
+diff --git a/node_modules/react-native-yamap/src/components/ClusteredYamap.tsx b/node_modules/react-native-yamap/src/components/ClusteredYamap.tsx
+index d057c33..c26c55c 100644
+--- a/node_modules/react-native-yamap/src/components/ClusteredYamap.tsx
++++ b/node_modules/react-native-yamap/src/components/ClusteredYamap.tsx
+@@ -26,7 +26,8 @@ import {
+   MapLoaded,
+   InitialRegion,
+   YandexLogoPosition,
+-  YandexLogoPadding
++  YandexLogoPadding,
++  ScreenPointEvent
+ } from '../interfaces';
+ import { processColorProps } from '../utils';
+ import { YaMap } from './Yamap';
+@@ -182,7 +183,7 @@ export class ClusteredYamap extends React.Component<ClusteredYaMapProps> {
+     );
+   }
+ 
+-  public getScreenPoints(points: Point[], callback: (screenPoint: ScreenPoint) => void) {
++  public getScreenPoints(points: Point[], callback: (screenPoint: ScreenPointEvent) => void) {
+     const cbId = CallbacksManager.addCallback(callback);
+     UIManager.dispatchViewManagerCommand(
+       findNodeHandle(this),
+diff --git a/node_modules/react-native-yamap/src/interfaces.ts b/node_modules/react-native-yamap/src/interfaces.ts
+index 735442b..21c83ca 100644
+--- a/node_modules/react-native-yamap/src/interfaces.ts
++++ b/node_modules/react-native-yamap/src/interfaces.ts
+@@ -13,6 +13,11 @@ export interface ScreenPoint {
+   y: number;
+ }
+ 
++export interface ScreenPointEvent {
++  screenPoints: ScreenPoint[];
++  target: number;
++}
++
+ export interface MapLoaded {
+   renderObjectCount: number;
+   curZoomModelsLoaded: number;

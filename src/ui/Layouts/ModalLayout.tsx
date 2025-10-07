@@ -2,7 +2,6 @@ import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react
 import { Keyboard, ViewStyle } from 'react-native';
 
 import { useKeyboard } from '@src/hooks/useKeyboard';
-
 import { ModalWrapper } from './ModalWrapper';
 
 export interface IModalParams {
@@ -10,6 +9,7 @@ export interface IModalParams {
   justifyContent: ViewStyle['justifyContent']
   marginHorizontal?: number
   marginVertical?: number
+  animationOrigin?: { x: number; y: number }
 }
 
 let setupModalRef: ((modalData: IModalParams) => void) | undefined;
@@ -23,7 +23,6 @@ export const modal = () => {
 };
 
 export const ModalLayout: FC = () => {
-
   const { keyboardShown } = useKeyboard();
   const [modalVisible, setModalVisible] = useState(false);
   const [_modalVisible, _setModalVisible] = useState(false);
@@ -50,7 +49,6 @@ export const ModalLayout: FC = () => {
   closeModalRef = closeModal;
 
   useEffect(() => {
-    // TODO check interactions
     if (!keyboardShown && modalVisible && !_modalVisible) {
       setTimeout(() => {
         _setModalVisible(true);
@@ -65,6 +63,7 @@ export const ModalLayout: FC = () => {
       justifyContent={modalState.justifyContent}
       marginHorizontal={modalState.marginHorizontal}
       marginVertical={modalState.marginVertical}
+      animationOrigin={modalState.animationOrigin}
     >
       {modalState.element}
     </ModalWrapper>
