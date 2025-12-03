@@ -46,11 +46,11 @@ function App(): React.JSX.Element {
               <BottomSheetModalProvider>
                 <NetworkStatusBar />
                 <RootStack />
-                <Toasts />
                 <ModalLayout />
               </BottomSheetModalProvider>
             </GestureHandlerRootView>
           </CameraProvider>
+          <Toasts />
         </SafeAreaProvider>
       </NavigationContainer>
     </AuthProvider>

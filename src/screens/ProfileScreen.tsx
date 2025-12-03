@@ -27,6 +27,7 @@ import UserCardsModal from '@src/widgets/modals/UserCardsModal';
 import UserBalance from '@src/widgets/UserBalance';
 import DeviceInfo from 'react-native-device-info';
 import { FAQ_LINK, OFFERS, RULES } from '@src/misc/documents';
+import LegalInfoBottomSheet from '@src/widgets/modals/LegalInfoBottomSheet';
 
 export enum NotifictationOption {
   push_notifications = 'push_notifications',
@@ -47,6 +48,10 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
   const modalCards = useRef<BottomSheetModal>(null);
   const modalCardsClose = () => modalCards?.current?.forceClose();
   const modalCardsOpen = () => modalCards?.current?.present();
+
+  const modalLegalInfo = useRef<BottomSheetModal>(null);
+  const modalLegalInfoClose = () => modalLegalInfo?.current?.forceClose();
+  const modalLegalInfoOpen = () => modalLegalInfo?.current?.present();
 
   const { user, getUserData } = useAuth();
 
@@ -158,9 +163,14 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
             title={t('charging-rules')}
             icon={<InfoIcon color={colors.text} />}
             onPress={() => handleOpenLink(RULES[i18n.language as keyof typeof RULES])}
-
             alignItems="center"
-            />
+          />
+          <SectionListItemWithArrow
+            title={'Юредическая информация'}
+            icon={<QuestionMarkCircledIcon color={colors.text} />}
+            onPress={modalLegalInfoOpen}
+            alignItems="center"
+          />
           <SectionListItemWithArrow
             title={'FAQ'}
             icon={<QuestionMarkCircledIcon color={colors.text} />}
@@ -189,6 +199,10 @@ export const ProfileScreen = ({ navigation }: ScreenProps<'profile'>) => {
         mode="saved-cards"
         ref={modalCards}
         modalClose={modalCardsClose}
+      />
+      <LegalInfoBottomSheet
+        ref={modalLegalInfo}
+        modalClose={modalLegalInfoClose}
       />
     </>
   );
